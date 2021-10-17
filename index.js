@@ -1,5 +1,18 @@
-import locs from "mastercard-locations";
-import places from "mastercard-places";
+const locs = require("mastercard-locations");
+const places = require("mastercard-places");
+const cors = require("cors")({
+  origin: true,
+  allowedHeaders: [
+    "Access-Control-Allow-Origin",
+    "Access-Control-Allow-Methods",
+    "Content-Type",
+    "Origin",
+    "X-Requested-With",
+    "Accept"
+  ],
+  methods: ["POST", "OPTIONS"],
+  credentials: true
+});
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
@@ -32,7 +45,7 @@ const mastercardRoute = async (req, func) => {
       PageLength, //"5"
       PostalCode, //"11101"
       PageOffset //"0"
-    } = req.query;
+    } = req.body;//query
     rs = await locs.ATMLocations.query(
       {
         PageLength,
@@ -42,7 +55,7 @@ const mastercardRoute = async (req, func) => {
       cb
     );
   } else if (func === "getMerchants") {
-    const { countryCode, latitude, longitude, distance } = req.query;
+    const { countryCode, latitude, longitude, distance } = req.body;//query
     const q = {
       pageOffset: 0,
       pageLength: 10,
@@ -64,37 +77,76 @@ const mastercardRoute = async (req, func) => {
   return rs && rs;
 };
 
-const handleRequest = async (event, context, callback) => {
-  var event = JSON.parse(event);
-  const dataHead = {
-    "Content-Type": "application/json"
-  };
-  if (event.pathParameters === "/deposit") {
-    rs = await mastercardRoute(req, "getAtms");
-  } else if (event.pathParameters === "/merchant_names") {
-    rs = await mastercardRoute(req, "getNames");
-  } else if (event.pathParameters === "/merchant_types") {
-    rs = await mastercardRoute(req, "getTypes");
-  } else if (event.pathParameters === "/merchants") {
-    rs = await mastercardRoute(req, "getMerchants");
-  }
-  if (rs) {
-    var response = {
-      //isBase64Encoded: false,
-      //statusCode: '200',
-      headers: dataHead,
-      //body: content
+const handleRequest = async (req) => {
+  var origin = req.get("Origin");
+  var allowedOrigins = [
+    "https://vau.money",
+    "https://jwi5k.csb.app"
+  ];
+  if (allowedOrigins.indexOf(origin) > -1) {
+    // Origin Allowed!!
+    const dataHead = {
+      "Content-Type": "application/json"
     };
+    if (req.method === "OPTIONS") {
+      // Method accepted for next request
+      return new Response({
+      }, {
+          status: "200",
+          statusText: "successful header check for POST process: " + req.url,
+          headers: {
+            ...dataHead,
+            "Access-Control-Allow-Methods": "POST"
+          }
+        })
+    } else {
+      if (req.url === "/deposit") {
+        rs = await mastercardRoute(req, "getAtms");
+      } else if (req.url === "/merchant_names") {
+        rs = await mastercardRoute(req, "getNames");
+      } else if (req.url === "/merchant_types") {
+        rs = await mastercardRoute(req, "getTypes");
+      } else if (req.url === "/merchants") {
+        rs = await mastercardRoute(req, "getMerchants");
+      }
+      if (rs) {
+        //isBase64Encoded: false,
 
-    return new Response({
-      status: "200",
-      message: "success: " + event.pathParameters,
-      data: rs
-    }, response)
-  } else {
-    return new Response({
-      status: "500",
-      message: "no success doof: " + event.pathParameters
-    }, response)
-  }
+        return new Response({
+          data: rs
+        }, {
+            status: "200",
+            message: "success: " + req.url,
+            headers: dataHead
+          })
+      } else {
+        return new Response({
+        }, {
+            status: "500",
+            message: "no success doof: " + req.url,
+            headers: dataHead
+          })
+      }
+    }
+  } else return new Response({}, {
+    status: "400",
+    message: "no access for this origin: " + origin,
+    headers: dataHead
+  })
 }
+
+/**
+ * addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+/**
+ * Respond with hello worker text
+ * @ param {Request} request
+ *
+async function handleRequest(request) {
+  return new Response('Hello worker!', {
+    headers: { 'content-type': 'text/plain' },
+  })
+}
+
+ */
