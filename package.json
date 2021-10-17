@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "mastercard-backbank",
+  "version": "1.0.0",
+  "description": "mastercard worker for vaumoney of vaults.biz",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write '**/*.{js,css,json,md}'"
+  },
+  "author": "Nick <nmcarducci@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "mastercard-locations": "1.0.3",
+    "mastercard-places": "1.0.5",
+    "prettier": "^1.18.2"
+  }
+}
