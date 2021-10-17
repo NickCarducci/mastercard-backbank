@@ -1,0 +1,7 @@
+name = "mastercard-backbank"
+type = "webpack"
+account_id = "abcd..."
+workers_dev = true
+[site]
+bucket = "./index.js"
+entry-point = "workers-site"
