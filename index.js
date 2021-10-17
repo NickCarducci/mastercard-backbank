@@ -95,6 +95,6 @@ const handleRequest = async (event, context, callback) => {
     return new Response({
       status: "500",
       message: "no success doof: " + event.pathParameters
-    })
+    }, response)
   }
 }
