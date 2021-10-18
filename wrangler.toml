@@ -1,5 +1,5 @@
 name = "mastercard-backbank"
-type = "javascript"
+type = "webpack"
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
 workers_dev = true
 [site]
