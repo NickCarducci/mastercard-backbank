@@ -9,7 +9,7 @@ bucket = "./index.js"
 entry-point = "workers-site"
 
 [env.production]
-name = "mastercard-backbank-staging"
+name = "mastercard-backbank"
 
 [env.staging]
-name = "mastercard-backbank"
+name = "mastercard-backbank-staging"
