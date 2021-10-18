@@ -20,10 +20,5 @@ module.exports = {
   },
   plugins: [
     new ProvidePlugin({ process: 'process/browser' }), // util requires this internally
-  ],
-  node: {
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty'
-  }
+  ]
 };
