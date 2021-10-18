@@ -19,14 +19,11 @@ module.exports = {
     }
   },
   plugins: [
-    new ProvidePlugin({ process: 'process/browser' }), // util requires this internally,
-    new LoaderOptionsPlugin({
-      // test: /\.xxx$/, // may apply this only for some modules
-      options: {
-        externalsPresets: {
-          node: true,
-        }
-      }
-    })
+    new ProvidePlugin({ process: 'process/browser' }), // util requires this internally
   ],
+  externals: {
+    "tls":"tls",
+    "net":"net",
+    "fs":"fs"
+  }
 };
