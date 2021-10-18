@@ -15,4 +15,5 @@ name = "mastercard-backbank"
 name = "mastercard-backbank-staging"
 
 [build]
+include = ["src","index.js"]
 command = "parcel src/index.js"
