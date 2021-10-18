@@ -1,3 +1,4 @@
+compatibility_date = "2021-10-18"
 name = "mastercard-backbank"
 type = "webpack"
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
