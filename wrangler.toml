@@ -1,5 +1,5 @@
 compatibility_date = "2021-10-18"
-name = "mastercard-backbank"
+name = "mastercard-backbank-dev"
 type = "webpack"
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
 workers_dev = true
@@ -7,3 +7,9 @@ webpack_config = "webpack.config.js"
 [site]
 bucket = "./index.js"
 entry-point = "workers-site"
+
+[env.production]
+name = "mastercard-backbank-staging"
+
+[env.staging]
+name = "mastercard-backbank"
