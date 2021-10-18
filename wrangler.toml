@@ -13,3 +13,6 @@ name = "mastercard-backbank"
 
 [env.staging]
 name = "mastercard-backbank-staging"
+
+[build]
+command = "parcel src/index.js"
