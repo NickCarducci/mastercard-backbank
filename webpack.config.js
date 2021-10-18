@@ -4,7 +4,7 @@ module.exports = {
   target: 'webworker',
   mode: "production",
   resolve:{
-    fallback: { 
+    alias: { 
       "assert": require.resolve("assert/"),
       "buffer": require.resolve("buffer/"),
       "crypto": require.resolve("crypto-browserify"),
