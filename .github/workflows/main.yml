@@ -5,15 +5,15 @@ on:
       - published
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
       - name: Navigate to repo
         run: cd $GITHUB_WORKSPACE
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@main
         with:
           node-version: "14.x"
       - name: Install deps
