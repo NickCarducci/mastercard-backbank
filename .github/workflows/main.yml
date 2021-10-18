@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@master
       - name: Navigate to repo
         run: cd $GITHUB_WORKSPACE
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@master
         with:
           node-version: "10.x"
       - name: Install deps
