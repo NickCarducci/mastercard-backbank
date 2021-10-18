@@ -1,4 +1,4 @@
-const { ProvidePlugin } = require('webpack');
+const { ProvidePlugin, LoaderOptionsPlugin } = require('webpack');
 
 module.exports = {
   target: 'webworker',
@@ -19,9 +19,14 @@ module.exports = {
     }
   },
   plugins: [
-    new ProvidePlugin({ process: 'process/browser' }), // util requires this internally
+    new ProvidePlugin({ process: 'process/browser' }), // util requires this internally,
+    new LoaderOptionsPlugin({
+      // test: /\.xxx$/, // may apply this only for some modules
+      options: {
+        externalsPresets: {
+          node: true,
+        }
+      }
+    })
   ],
-  externalsPresets: {
-    node: true,
-  }
 };
