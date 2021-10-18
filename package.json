@@ -11,7 +11,7 @@
   },
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED",
-  "devDependencies": {
+  "dependencies": {
     "assert": "2.0.0",
     "browserify-zlib": "0.2.0",
     "buffer": "6.0.3",
