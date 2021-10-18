@@ -19,7 +19,7 @@ module.exports = {
     }
   },
   plugins: [
-    new ProvidePlugin({ process: 'process/browser' }), // util requires this internally
+    new ProvidePlugin({ Buffer: ["buffer", "Buffer"], process: 'process/browser' }), // util requires this internally
   ],
   externals: {
     "tls":"tls",
