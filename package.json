@@ -5,6 +5,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write '**/*.{js,css,json,md}'"
   },
