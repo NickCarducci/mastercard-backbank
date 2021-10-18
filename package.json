@@ -15,6 +15,7 @@
     "mastercard-locations": "1.0.3",
     "mastercard-places": "1.0.5",
     "prettier": "^1.18.2",
-    "webpack": "5.58.2"
+    "webpack": "5.58.2",
+    "webpack-cli": "4.9.0"
   }
 }
