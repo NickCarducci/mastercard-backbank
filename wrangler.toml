@@ -17,5 +17,5 @@ name = "mastercard-backbank"
 name = "mastercard-backbank-staging"
 
 [build]
-command = "parcel src/index.js"
+command = "npx parcel build src/index.js"
 upload.format = "service-worker"
