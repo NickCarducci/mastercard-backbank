@@ -3,6 +3,7 @@
   "name": "mastercard-backbank",
   "version": "1.0.0",
   "description": "mastercard worker for vaumoney of vaults.biz",
+  "type": "module"
   "main": "dist/index.js",
   "scripts": {
     "build": "npx parcel build src/index.js",
