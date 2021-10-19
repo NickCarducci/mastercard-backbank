@@ -25,7 +25,7 @@ jobs:
         with:
           email: "nmcarducci@gmail.com"
           apiKey: ${{ secrets.CF_API_KEY }}
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          # apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: "production"
         env:
           USER: root
