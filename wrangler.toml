@@ -5,12 +5,12 @@ account_id = "9ddca7c9df604668fc6d14f079b2f066"
 workers_dev = true
 # webpack_config = "webpack.config.js"
 [site]
-bucket = "./dist"
+bucket = "./dir"
 entry-point = "workers-site"
 
 [env.production]
 exclude = ["node_modules","*"]
-include = ["src","index.js"]
+include = ["dir/index.js","src/index.js"]
 name = "mastercard-backbank"
 
 [env.staging]
@@ -19,5 +19,5 @@ name = "mastercard-backbank-staging"
 [build]
 command = "npx parcel build src/index.js"
 upload.format = "service-worker"
-upload.dir = "dist/worker"
+upload.dir = "dir/worker"
 # upload.main = "src/index.js"
