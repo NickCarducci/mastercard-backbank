@@ -18,6 +18,6 @@ name = "mastercard-backbank-staging"
 
 [build]
 command = "npx parcel build src/index.js"
-upload.format = "service-worker"
+upload.format = "modules"
 upload.dir = "dist/worker"
 upload.main = "dist/worker/index.js"
