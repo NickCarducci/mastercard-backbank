@@ -5,7 +5,7 @@ account_id = "9ddca7c9df604668fc6d14f079b2f066"
 workers_dev = true
 # webpack_config = "webpack.config.js"
 [site]
-bucket = "./index.js"
+bucket = "./dist"
 entry-point = "workers-site"
 
 [env.production]
