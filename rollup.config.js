@@ -8,7 +8,7 @@ export default {
   output: {
     strict: false,
     file: "dist/index.js",
-    format: "cjs",
+    format: "iife",
     sourcemap: false
   },
   plugins: [
