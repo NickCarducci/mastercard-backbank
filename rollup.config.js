@@ -6,6 +6,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 export default {
   input: "src/index.js",
   output: {
+    name: "app",
     strict: false,
     file: "dist/index.js",
     format: "iife",
