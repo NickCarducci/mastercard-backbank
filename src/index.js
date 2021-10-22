@@ -1,3 +1,4 @@
+const { Buffer } = require('buffer');
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
 const cors = require("cors")({
