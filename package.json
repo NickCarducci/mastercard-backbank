@@ -37,7 +37,9 @@
   "targets": {
     "browser": {
       "scopeHoist":true,
-      "browsers": "> 0.25%"
+      "engines": {
+        "browsers": "> 0.25%"
+      }
     }
   }
 }
