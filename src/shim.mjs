@@ -15,4 +15,26 @@ const app = {
   "zlib": require.resolve("browserify-zlib")
 }
 
+/*export class Stripe {
+    checkout: typeof checkout
+
+    constructor(
+        stripe_secret: string,
+        params?: {
+            apiVersion?: string
+            fetch?: Function
+            userAgent?: string
+        },
+    ) {
+        let client = new HTTPClient(
+            stripe_secret,
+            params?.apiVersion,
+            params?.userAgent,
+            params?.fetch,
+        )
+
+        this.checkout = checkout
+        this.checkout.client = client.request
+    }
+}*/
 export { handlers as default }
