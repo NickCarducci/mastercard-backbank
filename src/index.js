@@ -1,4 +1,4 @@
-const { Buffer } = require('buffer/');
+const buffer = require('buffer/');
 const assert = require('assert/');
 const crypto = require("crypto-browserify");
 const http = require("stream-http");
