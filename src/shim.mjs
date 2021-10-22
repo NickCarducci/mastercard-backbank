@@ -15,4 +15,4 @@ const app = {
   "zlib": require.resolve("browserify-zlib")
 }
 
-export { handlers as default,  ...app}
+export { handlers as default }
