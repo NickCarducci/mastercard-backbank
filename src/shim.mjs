@@ -1,7 +1,18 @@
-import { createRequire } from 'module';
+import bundle from './index.js';
+import { createRequire } from 'module'
+const handlers = bundle.handlers;;
 const require = createRequire(import.meta.url);
-import bundle from './index.js'
-const handlers = bundle.handlers
+const buffer = require('buffer/');
+const assert = require('assert/');
+const crypto = require("crypto-browserify");
+const http = require("stream-http");
+const https = require("https-browserify");
+const path = require("path-browserify");
+const querystring = require("querystring-es3");
+const stream = require("stream-browserify");
+const url = require('url/');
+const util = require('util/');
+const zlib = require("browserify-zlib");
 
 const app = { 
   "assert": require.resolve("assert/"),
