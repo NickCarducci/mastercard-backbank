@@ -22,3 +22,6 @@ command = "npx parcel build src/index.js"
 upload.format = "modules" # "service-workers"
 upload.dir = "src"
 upload.main = "dist"
+[[build.upload.rules]]
+type = "Text"
+globs = ["**/*.txt"]
