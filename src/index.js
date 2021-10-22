@@ -1,4 +1,14 @@
-const { Buffer } = require('buffer');
+const { Buffer } = require('buffer/');
+const assert = require('assert/');
+const crypto = require("crypto-browserify");
+const http = require("stream-http");
+const https = require("https-browserify");
+const path = require("path-browserify");
+const querystring = require("querystring-es3");
+const stream = require("stream-browserify");
+const url = require('url/');
+const util = require('util/');
+const zlib = require("browserify-zlib");
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
 const cors = require("cors")({
