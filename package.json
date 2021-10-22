@@ -6,8 +6,8 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npx rollup src/index.js --file dist/index.js --format es",
-    "parcel": "npx parcel build src/index.js",
+    "rollup": "npx rollup src/index.js --file dist/index.js --format es",
+    "build": "npx parcel build src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write '**/*.{js,css,json,md}'"
   },
