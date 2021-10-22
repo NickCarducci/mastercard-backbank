@@ -14,6 +14,7 @@
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "@swc/helpers": "0.2.13",
     "buffer": "6.0.3",
     "assert": "2.0.0",
     "browserify-zlib": "0.2.0",
