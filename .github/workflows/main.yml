@@ -21,7 +21,7 @@ jobs:
       - name: Build docs
         run: npm run build
       - name: Publish
-        uses: cloudflare/wrangler-action@1.3.0
+        uses: cloudflare/wrangler-action@latest
         with:
           email: "nmcarducci@gmail.com"
           apiKey: ${{ secrets.CF_API_KEY }}
