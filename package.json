@@ -33,5 +33,11 @@
   },
   "devDependencies": {
     "parcel": "2.0.0"
+  },
+  "targets": {
+    "browser": {
+      "scopeHoist":true,
+      "browsers": "> 0.25%"
+    }
   }
 }
