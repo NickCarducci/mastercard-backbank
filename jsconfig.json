@@ -4,11 +4,17 @@
     "allowSyntheticDefaultImports": false,
     "baseUrl": "./",
     "paths": {
-      "Config/*": ["src/config/*"],
-      "Components/*": ["src/components/*"],
-      "Ducks/*": ["src/ducks/*"],
-      "Shared/*": ["src/shared/*"],
-      "App/*": ["src/*"]
+      "assert": "assert/",
+      "buffer": "buffer/",
+      "crypto": "crypto-browserify",
+      "http": "stream-http",
+      "https": "https-browserify",
+      "path": "path-browserify",
+      "querystring": "querystring-es3",
+      "stream": "stream-browserify",
+      "url": "url/",
+      "util": "util/",
+      "zlib": "browserify-zlib"
     }
   },
   "exclude": ["node_modules", "dist"]
