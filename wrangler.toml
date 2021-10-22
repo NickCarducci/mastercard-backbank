@@ -20,8 +20,8 @@ name = "mastercard-backbank-staging"
 command = "npx parcel build src/index.js"
 # command = "npx rollup src/index.js --file dist/index.js --format es"
 upload.format = "modules" # "service-workers"
-upload.dir = "src"
-upload.main = "src"
+upload.dir = "dist"
+upload.main = "shim.mjs"
 [upload.rules]
 type = "Text"
 globs = ["**/*.txt"]
