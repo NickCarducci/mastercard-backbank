@@ -37,18 +37,5 @@
     "parcel": "2.0.0",
     "rollup": "2.56.3",
     "rollup-plugin-auto-external": "2.0.0"
-  },
-  "alias": { 
-    "assert": "assert/",
-    "buffer": "buffer/",
-    "crypto": "crypto-browserify",
-    "http": "stream-http",
-    "https": "https-browserify",
-    "path": "path-browserify",
-    "querystring": "querystring-es3",
-    "stream": "stream-browserify",
-    "url": "url/",
-    "util": "util/",
-    "zlib": "browserify-zlib"
   }
 }
