@@ -1,4 +1,4 @@
-import bundle from 'index.js'
+import bundle from './index.js'
 const handlers = bundle.handlers
 
 const app = { 
