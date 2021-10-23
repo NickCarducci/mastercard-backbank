@@ -2,7 +2,7 @@
 const { build, watch } = require("estrella");
 
 build({
-  entry: "src/index.ts",
+  entry: "src/index.js",
   outfile: "dist/worker.mjs",
   bundle: true,
   platform: "browser",
