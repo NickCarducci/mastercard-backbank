@@ -1,7 +1,20 @@
+
+import buffer from 'buffer/';
+import assert from 'assert/';
+import crypto from "crypto-browserify";
+import http from "stream-http";
+import https from "https-browserify";
+import path from "path-browserify";
+import querystring from "querystring-es3";
+import stream from "stream-browserify";
+import url from 'url/';
+import util from 'util/';
+import zlib from "browserify-zlib";
 import bundle from './index.js';
 import { createRequire } from 'module'
 const handlers = bundle.handlers;;
-const require = createRequire(import.meta.url);
+//const require = createRequire(import.meta.url);
+/*
 const buffer = require('buffer/');
 const assert = require('assert/');
 const crypto = require("crypto-browserify");
@@ -13,7 +26,7 @@ const stream = require("stream-browserify");
 const url = require('url/');
 const util = require('util/');
 const zlib = require("browserify-zlib");
-
+*/
 
 /*export class Stripe {
     checkout: typeof checkout
