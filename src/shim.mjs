@@ -10,9 +10,9 @@ import stream from "stream-browserify";
 import url from 'url/';
 import util from 'util/';
 import zlib from "browserify-zlib";
-import bundle from './index.js';
+import {handlers} from './index.js';
 import { createRequire } from 'module'
-const handlers = bundle.handlers;;
+//const handlers = bundle.handlers;
 //const require = createRequire(import.meta.url);
 /*
 const buffer = require('buffer/');
