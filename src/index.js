@@ -36,11 +36,14 @@ const cors = require("cors")({
     }
 }*/
 exports.handlers = {
-  () => addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request))
-  })
+  async fetch(request, env) {
+    handleRequest(request)
+  }
 }
-
+/*addEventListener('fetch', event => {
+    event.respondWith(handleRequest(event.request))
+})*/
+    
 var iMCard = null,
   mc = null;
 const initializeMCard = () => {
