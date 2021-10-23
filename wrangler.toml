@@ -19,7 +19,7 @@ name = "mastercard-backbank-staging"
 [build]
 # command = "browserify src/index.js > dist/index.js"
 # command = "npm install && npm run build"
-command = "npx parcel build dist/shim.js"
+command = "npx parcel build dist/index.js"
 # command = "npx rollup src/index.js --file dist/index.js --format es"
 upload.format = "modules" # "service-workers"
 upload.dir = "dist"
