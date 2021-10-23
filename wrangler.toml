@@ -23,7 +23,7 @@ command = "npx parcel build src/index.js && npx parcel build src/shim.mjs"
 # command = "npx rollup src/index.js --file dist/index.js --format es"
 upload.format = "modules" # "service-workers"
 upload.dir = "dist"
-upload.main = "shim.mjs"
+upload.main = "worker.js"
 [upload.rules]
 type = "Text"
 globs = ["**/*.txt"]
