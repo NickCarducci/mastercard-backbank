@@ -36,7 +36,7 @@ const cors = require("cors")({
     }
 }*/
 exports.handlers = {
-  addEventListener('fetch', event => {
+  () => addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
   })
 }
