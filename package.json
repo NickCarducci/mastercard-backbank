@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "browserify": "17.0.0",
+    "estrella": "1.4.1",
     "parcel": "2.0.0"
   },
   "targets": {
