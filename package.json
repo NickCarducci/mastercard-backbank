@@ -15,6 +15,7 @@
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "@rollup/plugin-json": "4.1.0",
     "@swc/helpers": "0.2.13",
     "buffer": "6.0.3",
     "assert": "2.0.0",
@@ -37,7 +38,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "20.0.0",
-    "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "13.0.4",
     "browserify": "17.0.0",
     "estrella": "1.4.1",
