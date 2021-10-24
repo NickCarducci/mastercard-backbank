@@ -8,7 +8,7 @@ export default {
   output: {
     exports: 'named',
     //name: "app",
-    strict: false,
+    //strict: false,
     file: "dist/index.mjs",
     format: "es",
     sourcemap: true
