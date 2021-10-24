@@ -11,7 +11,7 @@ export default {
     //strict: false,
     file: "dist/index.mjs",
     format: "es",
-    sourcemap: true
+    //sourcemap: true
   },
   plugins: [
     //autoExternal(),
