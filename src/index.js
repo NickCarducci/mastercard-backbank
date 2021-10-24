@@ -35,22 +35,6 @@ const cors = require("cors")({
         this.checkout.client = client.request
     }
 }*/
-export class DurableObjectExample {
-  constructor(state, env) {
-    this.state = state;
-    this.state.blockConcurrencyWhile(async () => {
-        let stored = await this.state.storage.get("value");
-        // After initialization, future reads do not need to access storage.
-        this.value = stored || 0;
-    })
-  }
-  async fetch(request, env) {
-    return async handleRequest(request)
-  }
-}
-/*addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request))
-})*/
     
 var iMCard = null,
   mc = null;
@@ -184,3 +168,20 @@ async function handleRequest(request) {
 }
 
  */
+
+export class DurableObjectExample {
+  constructor(state, env) {
+    this.state = state;
+    this.state.blockConcurrencyWhile(async () => {
+        let stored = await this.state.storage.get("value");
+        // After initialization, future reads do not need to access storage.
+        this.value = stored || 0;
+    })
+  }
+  async fetch(request, env) {
+     async handleRequest(request)
+  }
+}
+/*addEventListener('fetch', event => {
+    event.respondWith(handleRequest(event.request))
+})*/
