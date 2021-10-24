@@ -179,7 +179,7 @@ export class DurableObjectExample {
     })
   }
   async fetch(request, env) {
-     async handleRequest(request)
+     return async handleRequest(request)
   }
 }
 /*addEventListener('fetch', event => {
