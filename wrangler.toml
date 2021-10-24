@@ -17,7 +17,7 @@ name = "mastercard-backbank"
 name = "mastercard-backbank-staging"
 
 [build]
-command = "browserify src/index.js > src/index.js && npx parcel build src/index.js"
+command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
 # command = "npm install && npm run build"
 # command = "npx parcel build src/index.js && npx parcel build src/shim.mjs"
 # command = "node build.js"
