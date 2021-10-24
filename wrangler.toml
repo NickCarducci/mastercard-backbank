@@ -11,7 +11,7 @@ entry-point = "workers-site"
 
 [env.production]
 # exclude = ["node_modules","*"]
-# include = ["dist/index.js","src/index.js"]
+# include = ["dist/*","src/*"]
 name = "mastercard-backbank"
 
 [env.staging]
@@ -23,7 +23,7 @@ globs = ["**/*.js", "**/*.cjs"]
 [build.upload]
 format = "modules" # "service-workers"
 dir = "dist"
-main = "./index.mjs"
+main = "./shim.mjs"
 [build]
 # command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
 command = "npm install && npm run build"
