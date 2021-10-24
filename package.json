@@ -7,8 +7,8 @@
   "module": "./dist/index.mjs",
   "scripts": {
     "rollup": "npx rollup src/index.js --file dist/index.js --format es",
-    "build2": "browserify src/shim.mjs -p esmify > src/shim.mjs && rollup -c",
-    "build": "rollup -c",
+    "build": "browserify src/shim.mjs -p esmify > src/shim.mjs && rollup -c",
+    "build2": "rollup -c",
     "echo": "echo \"Build placeholder\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write '**/*.{js,css,json,md}'"
