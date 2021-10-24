@@ -16,8 +16,8 @@ export default {
   plugins: [
     //autoExternal(),
     commonjs({
-      include: ["node_modules/**"],
-      exclude: ["node_modules/process-es6/**"]
+      //include: ["node_modules/**"],
+      //exclude: ["node_modules/process-es6/**"]
     }),
     nodeResolve({
       browser: true,
