@@ -35,9 +35,9 @@ const cors = require("cors")({
         this.checkout.client = client.request
     }
 }*/
-export const handlers = {
+exports.handlers = {
   async fetch(request, env) {
-    handleRequest(request)
+    async handleRequest(request)
   }
 }
 /*addEventListener('fetch', event => {
