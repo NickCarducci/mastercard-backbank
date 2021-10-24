@@ -1,6 +1,6 @@
 import locs from "mastercard-locations";
 import places from "mastercard-places";
-import crs from "cors"
+import crs from "cors";
 const cors = crs({
   origin: true,
   allowedHeaders: [
@@ -13,7 +13,7 @@ const cors = crs({
   ],
   methods: ["POST", "OPTIONS"],
   credentials: true
-})
+});
 
 /*export class Stripe {
     checkout: typeof checkout
@@ -35,7 +35,7 @@ const cors = crs({
         this.checkout.client = client.request
     }
 }*/
-    
+
 var iMCard = null,
   mc = null;
 const initializeMCard = () => {
@@ -63,7 +63,7 @@ const mastercardRoute = async (req, func) => {
       PageLength, //"5"
       PostalCode, //"11101"
       PageOffset //"0"
-    } = req.body;//query
+    } = req.body; //query
     rs = await locs.ATMLocations.query(
       {
         PageLength,
@@ -73,7 +73,7 @@ const mastercardRoute = async (req, func) => {
       cb
     );
   } else if (func === "getMerchants") {
-    const { countryCode, latitude, longitude, distance } = req.body;//query
+    const { countryCode, latitude, longitude, distance } = req.body; //query
     const q = {
       pageOffset: 0,
       pageLength: 10,
@@ -115,68 +115,77 @@ export class DurableObjectExample {
   constructor(state, env) {
     this.state = state;
     this.state.blockConcurrencyWhile(async () => {
-        let stored = await this.state.storage.get("value");
-        // After initialization, future reads do not need to access storage.
-        this.value = stored || 0;
-    })
+      let stored = await this.state.storage.get("value");
+      // After initialization, future reads do not need to access storage.
+      this.value = stored || 0;
+    });
   }
-  async fetch(request, env) {
-     //return async handleRequest(request)async (req) => {
-  var origin = req.get("Origin");
-  var allowedOrigins = [
-    "https://vau.money",
-    "https://jwi5k.csb.app"
-  ];
-  if (allowedOrigins.indexOf(origin) > -1) {
-    // Origin Allowed!!
+  async fetch(req, env) {
     const dataHead = {
       "Content-Type": "application/json"
     };
-    if (req.method === "OPTIONS") {
-      // Method accepted for next request
-      return new Response({
-      }, {
-          status: "200",
-          statusText: "successful header check for POST process: " + req.url,
-          headers: {
-            ...dataHead,
-            "Access-Control-Allow-Methods": "POST"
-          }
-        })
-    } else {
-      if (req.url === "/deposit") {
-        rs = await mastercardRoute(req, "getAtms");
-      } else if (req.url === "/merchant_names") {
-        rs = await mastercardRoute(req, "getNames");
-      } else if (req.url === "/merchant_types") {
-        rs = await mastercardRoute(req, "getTypes");
-      } else if (req.url === "/merchants") {
-        rs = await mastercardRoute(req, "getMerchants");
-      }
-      if (rs) {
-        //isBase64Encoded: false,
-
-        return new Response({
-          data: rs
-        }, {
+    //return async handleRequest(request)async (req) => {
+    var origin = req.get("Origin");
+    var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
+    if (allowedOrigins.indexOf(origin) > -1) {
+      // Origin Allowed!!
+      if (req.method === "OPTIONS") {
+        // Method accepted for next request
+        return new Response(
+          {},
+          {
             status: "200",
-            message: "success: " + req.url,
-            headers: dataHead
-          })
+            statusText: "successful header check for POST process: " + req.url,
+            headers: {
+              ...dataHead,
+              "Access-Control-Allow-Methods": "POST"
+            }
+          }
+        );
       } else {
-        return new Response({
-        }, {
-            status: "500",
-            message: "no success doof: " + req.url,
-            headers: dataHead
-          })
+        let rs = null;
+        if (req.url === "/deposit") {
+          rs = await mastercardRoute(req, "getAtms");
+        } else if (req.url === "/merchant_names") {
+          rs = await mastercardRoute(req, "getNames");
+        } else if (req.url === "/merchant_types") {
+          rs = await mastercardRoute(req, "getTypes");
+        } else if (req.url === "/merchants") {
+          rs = await mastercardRoute(req, "getMerchants");
+        }
+        if (rs) {
+          //isBase64Encoded: false,
+
+          return new Response(
+            {
+              data: rs
+            },
+            {
+              status: "200",
+              message: "success: " + req.url,
+              headers: dataHead
+            }
+          );
+        } else {
+          return new Response(
+            {},
+            {
+              status: "500",
+              message: "no success doof: " + req.url,
+              headers: dataHead
+            }
+          );
+        }
       }
-    }
-  } else return new Response({}, {
-    status: "400",
-    message: "no access for this origin: " + origin,
-    headers: dataHead
-  })
+    } else
+      return new Response(
+        {},
+        {
+          status: "400",
+          message: "no access for this origin: " + origin,
+          headers: dataHead
+        }
+      );
   }
 }
 /*addEventListener('fetch', event => {
