@@ -16,6 +16,7 @@
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "@babel/core": "7.15.8",
     "@rollup/plugin-json": "4.1.0",
     "@swc/helpers": "0.2.13",
     "buffer": "6.0.3",
