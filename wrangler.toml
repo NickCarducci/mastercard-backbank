@@ -17,9 +17,9 @@ name = "mastercard-backbank"
 [env.staging]
 name = "mastercard-backbank-staging"
 
-[build.upload.rules]
-type = "CommonJS"
-globs = ["**/*.js", "**/*.cjs"]
+# [build.upload.rules]
+# type = "CommonJS"
+# globs = ["**/*.js", "**/*.cjs"]
 [build.upload]
 format = "modules" # "service-workers"
 dir = "dist"
