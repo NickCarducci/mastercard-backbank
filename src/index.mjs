@@ -1,6 +1,7 @@
-const locs = require("mastercard-locations");
-const places = require("mastercard-places");
-const cors = require("cors")({
+import locs from "mastercard-locations");
+import places from "mastercard-places");
+import crs from "cors"
+const cors = crs({
   origin: true,
   allowedHeaders: [
     "Access-Control-Allow-Origin",
@@ -12,8 +13,7 @@ const cors = require("cors")({
   ],
   methods: ["POST", "OPTIONS"],
   credentials: true
-});
-
+})
 
 /*export class Stripe {
     checkout: typeof checkout
