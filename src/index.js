@@ -48,11 +48,6 @@ export class DurableObjectExample {
     return async handleRequest(request)
   }
 }
-export default { 
-  async fetch(request, env) {
-    return async handleRequest(request)
-  }
-}
 /*addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
 })*/
