@@ -1,5 +1,4 @@
-
-import buffer from 'buffer/';
+/*import buffer from 'buffer/';
 import assert from 'assert/';
 import crypto from "crypto-browserify";
 import http from "stream-http";
@@ -9,9 +8,9 @@ import querystring from "querystring-es3";
 import stream from "stream-browserify";
 import url from 'url/';
 import util from 'util/';
-import zlib from "browserify-zlib";
+import zlib from "browserify-zlib";*/
 import {DurableObjectExample} from './index.mjs';
-import { createRequire } from 'module'
+//import { createRequire } from 'module'
 //const handlers = bundle.handlers;
 //const require = createRequire(import.meta.url);
 /*
@@ -56,7 +55,7 @@ const zlib = require("browserify-zlib");
 //w.postMessage(4); // send the worker a message
 export { 
   DurableObjectExample as default,
-  assert,
+  /*assert,
   buffer,
   crypto,
   http,
@@ -66,5 +65,5 @@ export {
   stream,
   url,
   util,
-  zlib
+  zlib*/
 }
