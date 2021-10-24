@@ -36,9 +36,15 @@
     "util": "0.12.4"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "20.0.0",
+    "@rollup/plugin-node-resolve": "13.0.4",
     "browserify": "17.0.0",
     "estrella": "1.4.1",
     "parcel": "2.0.0",
+    "parcel": "2.0.0",
+    "rollup": "2.56.3",
+    "rollup-plugin-auto-external": "2.0.0",
+    "rollup-plugin-terser": "7.0.2",
     "webworkify": "1.5.0"
   },
   "targets": {
