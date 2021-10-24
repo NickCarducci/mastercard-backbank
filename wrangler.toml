@@ -10,8 +10,8 @@ bucket = "./dist"
 entry-point = "workers-site"
 
 [env.production]
-exclude = ["node_modules","*"]
-include = ["dist/index.js","src/index.js"]
+# exclude = ["node_modules","*"]
+# include = ["dist/index.js","src/index.js"]
 name = "mastercard-backbank"
 
 [env.staging]
