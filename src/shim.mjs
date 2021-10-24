@@ -53,7 +53,7 @@ const zlib = require("browserify-zlib");
     console.log(ev.data);
 });*/
 //w.postMessage(4); // send the worker a message
-export { 
+/*export { 
   DurableObjectExample as default,
   /*assert,
   buffer,
@@ -65,5 +65,18 @@ export {
   stream,
   url,
   util,
-  zlib*/
+  zlib*
+}*/
+export default {
+  async fetch(request, env) {
+    try {
+      return await handleRequest(request, env)
+    } catch (e) {
+      return new Response(e.message)
+    }
+  },
+}
+
+async function handleRequest(request, env) {
+  return new Response({})
 }
