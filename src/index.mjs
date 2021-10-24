@@ -1,5 +1,5 @@
-import locs from "mastercard-locations");
-import places from "mastercard-places");
+import locs from "mastercard-locations";
+import places from "mastercard-places";
 import crs from "cors"
 const cors = crs({
   origin: true,
