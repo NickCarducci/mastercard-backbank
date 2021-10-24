@@ -20,7 +20,7 @@ export default {
       //exclude: ["node_modules/process-es6/**"]
     }),
     nodeResolve({
-      preferBuiltins: false,
+      //preferBuiltins: false,
       browser: true,
       //only: [/^\.{0,2}\//],
       //extensions: [".js", ".ts"],
