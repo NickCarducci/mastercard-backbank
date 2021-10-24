@@ -35,7 +35,15 @@ const cors = require("cors")({
         this.checkout.client = client.request
     }
 }*/
-exports.handlers = {
+export class DurableObjectExample {
+  constructor(state, env) {
+    this.state = state;
+    this.state.blockConcurrencyWhile(async () => {
+        let stored = await this.state.storage.get("value");
+        // After initialization, future reads do not need to access storage.
+        this.value = stored || 0;
+    })
+  }
   async fetch(request, env) {
     async handleRequest(request)
   }
