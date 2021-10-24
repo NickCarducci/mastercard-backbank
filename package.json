@@ -7,7 +7,7 @@
   "module": "./dist/index.mjs",
   "scripts": {
     "rollup": "npx rollup src/index.js --file dist/index.js --format es",
-    "build": "browserify src/index.mjs -p esmify > src/index.mjs && rollup -c",
+    "build": "browserify src/index.mjs > src/index.mjs -t [ babelify --presets [  ] --plugins [ @babel/plugin-transform-class-properties && rollup -c",
     "build2": "rollup -c",
     "echo": "echo \"Build placeholder\"",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -40,6 +40,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "20.0.0",
     "@rollup/plugin-node-resolve": "13.0.4",
+    "babelify": "10.0.0",
     "browserify": "17.0.0",
     "esmify": "2.1.1",
     "estrella": "1.4.1",
