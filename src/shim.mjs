@@ -10,7 +10,7 @@ import stream from "stream-browserify";
 import url from 'url/';
 import util from 'util/';
 import zlib from "browserify-zlib";
-import {DurableObjectExample} from './index.js';
+import {DurableObjectExample} from './index.mjs';
 import { createRequire } from 'module'
 //const handlers = bundle.handlers;
 //const require = createRequire(import.meta.url);
