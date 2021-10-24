@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "dist/worker.js",
+  "module": "./dist/shim.mjs",
   "scripts": {
     "rollup": "npx rollup src/index.js --file dist/index.js --format es",
     "build": "echo \"Build placeholder\"",
