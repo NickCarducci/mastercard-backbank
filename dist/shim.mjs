@@ -48,14 +48,14 @@ const zlib = require("browserify-zlib");
         this.checkout.client = client.request
     }
 }*/
-var work = require('webworkify');
-var worker = work(handlers);//require('./worker.js')
+//var work = require('webworkify');
+//var worker = work(handlers);//require('./worker.js')
 /*w.addEventListener('message', function (ev) {
     console.log(ev.data);
 });*/
 //w.postMessage(4); // send the worker a message
 export { 
-  worker as default,
+  handlers as default,
   assert,
   buffer,
   crypto,
