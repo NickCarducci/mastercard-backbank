@@ -10,7 +10,7 @@ import stream from "stream-browserify";
 import url from 'url/';
 import util from 'util/';
 import zlib from "browserify-zlib";
-import {handlers} from './index.js';
+import {DurableObjectExample} from './index.js';
 import { createRequire } from 'module'
 //const handlers = bundle.handlers;
 //const require = createRequire(import.meta.url);
@@ -55,7 +55,7 @@ const zlib = require("browserify-zlib");
 });*/
 //w.postMessage(4); // send the worker a message
 export { 
-  handlers as default,
+  DurableObjectExample as default,
   assert,
   buffer,
   crypto,
