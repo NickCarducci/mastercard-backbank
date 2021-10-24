@@ -95,7 +95,33 @@ const mastercardRoute = async (req, func) => {
   return rs && rs;
 };
 
-const handleRequest = async (req) => {
+/**
+ * addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+/**
+ * Respond with hello worker text
+ * @ param {Request} request
+ *
+async function handleRequest(request) {
+  return new Response('Hello worker!', {
+    headers: { 'content-type': 'text/plain' },
+  })
+}
+
+ */
+
+export class DurableObjectExample {
+  constructor(state, env) {
+    this.state = state;
+    this.state.blockConcurrencyWhile(async () => {
+        let stored = await this.state.storage.get("value");
+        // After initialization, future reads do not need to access storage.
+        this.value = stored || 0;
+    })
+  }
+  async fetch(request, env) {
+     //return async handleRequest(request)async (req) => {
   var origin = req.get("Origin");
   var allowedOrigins = [
     "https://vau.money",
@@ -151,35 +177,6 @@ const handleRequest = async (req) => {
     message: "no access for this origin: " + origin,
     headers: dataHead
   })
-}
-
-/**
- * addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
-/**
- * Respond with hello worker text
- * @ param {Request} request
- *
-async function handleRequest(request) {
-  return new Response('Hello worker!', {
-    headers: { 'content-type': 'text/plain' },
-  })
-}
-
- */
-
-export class DurableObjectExample {
-  constructor(state, env) {
-    this.state = state;
-    this.state.blockConcurrencyWhile(async () => {
-        let stored = await this.state.storage.get("value");
-        // After initialization, future reads do not need to access storage.
-        this.value = stored || 0;
-    })
-  }
-  async fetch(request, env) {
-     return async handleRequest(request)
   }
 }
 /*addEventListener('fetch', event => {
