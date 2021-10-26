@@ -110,12 +110,12 @@ async function handleRequest(request) {
 }
 
  */
-
 export class DurableObjectExample {
-  constructor(state, env) {
-    this.state = state;
-    this.state.blockConcurrencyWhile(async () => {
-      let stored = await this.state.storage.get("value");
+  constructor(el, env) {
+    console.log(el.textContent, '- From the example module')
+    this.el = el;
+    this.el.blockConcurrencyWhile(async () => {
+      let stored = await this.el.storage.get("value");
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
     });
