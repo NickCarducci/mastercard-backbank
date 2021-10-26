@@ -54,14 +54,17 @@
     "webworkify": "1.5.0"
   },
   "browser": {
-    "jquery": "./js/vendor/jquery.js"
   },
   "browserify-shim": {
-    "global": true,
-    "jquery": "global:$"
+    "global": true
   },
   "browserify": {
-    "transform": [ "browserify-shim" ]
+    "transform": [ "babelify","browserify-shim" ]
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
   },
   "targets": {
     "browser": {
