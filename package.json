@@ -68,6 +68,11 @@
       "env"
     ]
   },
+  "babelify", {
+    "global": true,
+    "only": /^(?:.*\/node_modules\/(?:a|b)\/|(?!.*\/node_modules\/)).*$/,
+    "presets": ["env"]
+  },
   "targets": {
     "browser": {
       "scopeHoist":true,
