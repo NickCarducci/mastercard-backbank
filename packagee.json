@@ -62,7 +62,21 @@
     "jquery": "global:$"
   },
   "browserify": {
-    "transform": [ "babelify","browserify-shim" ]
+    "entries": ["src/index.mjs","src/shim.mjs"],
+    "transform": [ 
+      "brfs",
+      [
+        "babelify": {
+          "global": true,
+          "presets": ["env"]
+        }
+      ],
+      [
+        "browserify-shim": {
+        "global": true
+        }
+      ]
+    ]
   },
   "babel": {
     "presets": [
