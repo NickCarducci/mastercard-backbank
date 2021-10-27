@@ -7,7 +7,7 @@
   "module": "./dist/index.mjs",
   "scripts": {
     "rollup": "npx rollup src/index.js --file dist/index.js --format es",
-    "build": "browserify -d src/shim.mjs > src/shim.mjs && rollup -c",
+    "build": "browserify src/shim.mjs --s module > src/shim.mjs && rollup -c",
     "build3": "browserify src/shim.mjs > src/shim.mjs -t [ babelify --presets [  ] --plugins [ @babel/plugin-transform-class-properties && rollup -c",
     "build2": "rollup -c",
     "echo": "echo \"Build placeholder\"",
@@ -55,22 +55,6 @@
     "rollup-plugin-terser": "7.0.2",
     "webworkify": "1.5.0"
   },
-  "browserify": {
-    "transform": [ 
-      [
-        "babelify": {
-          "global": true,
-          "presets": ["env"]
-        }
-      ],
-      [
-        "browserify-shim": {
-        "global": true
-        }
-      ]
-    ]
-  },
-  "entries": ["src/index.mjs","src/shim.mjs"],
   "targets": {
     "browser": {
       "scopeHoist":true,
