@@ -15,7 +15,7 @@ const cors = crs({
   credentials: true
 });
 
-export {
+export default {
   locs,
   places,
   crs
