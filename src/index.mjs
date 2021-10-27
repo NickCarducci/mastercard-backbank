@@ -1,6 +1,6 @@
-import locs from "mastercard-locations";
-import places from "mastercard-places";
-import crs from "cors";
+import locs from "./browseri";
+import places from "./browseri";
+import crs from "./browseri";
 const cors = crs({
   origin: true,
   allowedHeaders: [
