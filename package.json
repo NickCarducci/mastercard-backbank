@@ -58,7 +58,7 @@
   "browserify": {
     "transform": [ 
       [
-        "babelify", {
+        "babelify": {
           "global": true,
           "presets": ["env"]
         }
