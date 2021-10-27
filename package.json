@@ -55,24 +55,23 @@
     "rollup-plugin-terser": "7.0.2",
     "webworkify": "1.5.0"
   },
-  "browser": {
-  },
-  "browserify-shim": {
-    "global": true
-  },
   "browserify": {
-    "transform": [ "babelify","browserify-shim" ]
-  },
-  "babel": {
-    "presets": [
-      "env"
+    "transform": [ 
+      [
+        "babelify", {
+          "global": true,
+          "only": `/^(?:.*\/node_modules\/(?:a|b)\/|(?!.*\/node_modules\/)).*$/`,
+          "presets": ["env"]
+        }
+      ],
+      [
+        "browserify-shim": {
+        "global": true
+        }
+      ]
     ]
   },
-  "babelify": {
-    "global": true,
-    "only": `/^(?:.*\/node_modules\/(?:a|b)\/|(?!.*\/node_modules\/)).*$/`,
-    "presets": ["env"]
-  },
+  "entries": ["src/index.mjs","src/shim.mjs"],
   "targets": {
     "browser": {
       "scopeHoist":true,
