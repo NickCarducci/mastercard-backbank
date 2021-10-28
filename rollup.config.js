@@ -1,7 +1,7 @@
 import { terser } from 'rollup-plugin-terser'
-import commonjs from "@rollup/plugin-commonjs";
+//import commonjs from "@rollup/plugin-commonjs";
 //import autoExternal from "rollup-plugin-auto-external";
-import nodeResolve from "@rollup/plugin-node-resolve";
+//import nodeResolve from "@rollup/plugin-node-resolve";
 
 export default {
   input: "src/shim.mjs",
@@ -19,13 +19,13 @@ export default {
       //include: ["node_modules/**"],
       //exclude: ["node_modules/process-es6/**"]
     }),*/
-    nodeResolve({
+    /*nodeResolve({
       //preferBuiltins: false,
       browser: true,
       //only: [/^\.{0,2}\//],
       //extensions: [".js", ".ts"],
       //mainFields: ["module", "main"]
     }),
-    terser()
+    terser()*/
   ]
 };
