@@ -3,7 +3,7 @@ const {
   locs,
   places,
   crs
-} = eval(Browseri)
+} = Browseri()
 const cors = crs({
   origin: true,
   allowedHeaders: [
