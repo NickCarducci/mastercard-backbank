@@ -1,3 +1,5 @@
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url);
 const Browseri = require("./browserii.js");
 const {
   locs,
