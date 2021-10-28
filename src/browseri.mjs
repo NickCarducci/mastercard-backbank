@@ -18,5 +18,5 @@ const cors = crs({
 export default {
   locs,
   places,
-  crs
+  cors
 }
