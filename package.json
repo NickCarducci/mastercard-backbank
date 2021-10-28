@@ -7,7 +7,8 @@
   "module": "./dist/index.mjs",
   "scripts": {
     "rollup": "npx rollup src/index.js --file dist/index.js --format es",
-    "build": "browserify src/browseri.js -p [ @jsdevtools/browserify-banner --template \"export default \" ] > src/browserii.mjs && npm run roll",
+    "build": "browserify src/browseri.js > src/browserii.mjs && npm run roll",
+    "build4": "browserify src/browseri.js -p [ @jsdevtools/browserify-banner --template \"export default \" ] > src/browserii.mjs && npm run roll",
     "roll": "rollup -c",
     "build3": "browserify src/shim.mjs --s module > src/shim.mjs -t [ babelify --presets [  ] --plugins [ @babel/plugin-transform-class-properties && rollup -c",
     "build2": "rollup -c",
