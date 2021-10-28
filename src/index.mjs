@@ -1,8 +1,9 @@
-import {
+import Browseri from "./browseri";
+const {
   locs,
   places,
   crs
-} from "./browseri";
+} = Browseri()
 const cors = crs({
   origin: true,
   allowedHeaders: [
@@ -16,6 +17,7 @@ const cors = crs({
   methods: ["POST", "OPTIONS"],
   credentials: true
 });
+
 
 /*export class Stripe {
     checkout: typeof checkout
