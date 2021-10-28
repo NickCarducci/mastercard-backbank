@@ -48,6 +48,7 @@
     "babelify": "10.0.0",
     "browserify": "17.0.0",
     "browserify-shim": "3.8.14",
+    "derequire": "2.1.1",
     "esmify": "2.1.1",
     "estrella": "1.4.1",
     "parcel": "2.0.0",
