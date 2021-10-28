@@ -1,6 +1,8 @@
-import locs from "./browseri";
-import places from "./browseri";
-import crs from "./browseri";
+import {
+  locs,
+  places,
+  crs
+} from "./browseri";
 const cors = crs({
   origin: true,
   allowedHeaders: [
