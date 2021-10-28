@@ -2,7 +2,7 @@
 //import commonjs from "@rollup/plugin-commonjs";
 //import autoExternal from "rollup-plugin-auto-external";
 //import nodeResolve from "@rollup/plugin-node-resolve";
-
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 export default {
   input: "src/shim.mjs",
   output: {
@@ -14,6 +14,7 @@ export default {
     sourcemap: true
   },
   plugins: [
+    nodePolyfills( /* options */ )
     //autoExternal(),
     /*commonjs({
       //include: ["node_modules/**"],
