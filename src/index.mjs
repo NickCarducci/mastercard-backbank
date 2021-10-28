@@ -1,4 +1,4 @@
-import Browseri from "./browserii.js";
+const Browseri = require("./browserii.js");
 const {
   locs,
   places,
