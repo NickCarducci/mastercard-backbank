@@ -2,7 +2,7 @@ import locs from "mastercard-locations";
 import places from "mastercard-places";
 import crs from "cors";
 
-export {
+export default {
   locs,
   places,
   crs
