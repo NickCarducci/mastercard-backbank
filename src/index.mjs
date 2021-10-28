@@ -1,4 +1,4 @@
-import Browseri from "./browseri";
+import Browseri from "./browserii.mjs";
 const {
   locs,
   places,
