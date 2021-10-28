@@ -1,4 +1,4 @@
-import { terser } from 'rollup-plugin-terser'
+//import { terser } from 'rollup-plugin-terser'
 //import commonjs from "@rollup/plugin-commonjs";
 //import autoExternal from "rollup-plugin-auto-external";
 //import nodeResolve from "@rollup/plugin-node-resolve";
@@ -8,7 +8,7 @@ export default {
   output: {
     exports: 'named',
     //name: "app",
-    //strict: false,
+    strict: false,
     file: "dist/shim.mjs",
     format: "es",
     sourcemap: true
