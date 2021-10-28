@@ -15,10 +15,10 @@ export default {
   },
   plugins: [
     //autoExternal(),
-    commonjs({
+    /*commonjs({
       //include: ["node_modules/**"],
       //exclude: ["node_modules/process-es6/**"]
-    }),
+    }),*/
     nodeResolve({
       //preferBuiltins: false,
       browser: true,
