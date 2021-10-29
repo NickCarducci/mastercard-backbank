@@ -3,25 +3,6 @@ const require = createRequire(import.meta.url);
 const Browseri = require("./browserii.js");
 */
 
-const {
-  locs,
-  places,
-  crs
-} = window.Browseri()
-const cors = crs({
-  origin: true,
-  allowedHeaders: [
-    "Access-Control-Allow-Origin",
-    "Access-Control-Allow-Methods",
-    "Content-Type",
-    "Origin",
-    "X-Requested-With",
-    "Accept"
-  ],
-  methods: ["POST", "OPTIONS"],
-  credentials: true
-});
-
 
 /*export class Stripe {
     checkout: typeof checkout
@@ -128,10 +109,45 @@ export class DurableObjectExample {
       this.value = stored || 0;
     });
   }
+
   async fetch(req, env) {
     const dataHead = {
       "Content-Type": "application/json"
     };
+  
+    require.config({
+      baseUrl: "src"/*,
+      paths: {
+          "src": "src/index.js"
+      },
+      waitSeconds: 15*/
+    });
+    require( ["browserii.js"],
+      function(someModule,    myModule) {
+          //This function will be called when all the dependencies
+          //listed above are loaded. Note that this function could
+          //be called before the page is loaded.
+          //This callback is optional.
+      }
+    );
+    const {
+      locs,
+      places,
+      crs
+    } = window.Browseri()
+    const cors = crs({
+      origin: true,
+      allowedHeaders: [
+        "Access-Control-Allow-Origin",
+        "Access-Control-Allow-Methods",
+        "Content-Type",
+        "Origin",
+        "X-Requested-With",
+        "Accept"
+      ],
+      methods: ["POST", "OPTIONS"],
+      credentials: true
+    });
     //return async handleRequest(request)async (req) => {
     var origin = req.get("Origin");
     var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
