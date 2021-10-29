@@ -1,11 +1,13 @@
-import { createRequire } from 'module'
+/*import { createRequire } from 'module'
 const require = createRequire(import.meta.url);
 const Browseri = require("./browserii.js");
+*/
+
 const {
   locs,
   places,
   crs
-} = Browseri()
+} = window.Browseri()
 const cors = crs({
   origin: true,
   allowedHeaders: [
