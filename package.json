@@ -54,6 +54,7 @@
     "estrella": "1.4.1",
     "module": "1.2.5",
     "parcel": "2.0.0",
+    "requirejs": "2.3.6",
     "rollup": "2.56.3",
     "rollup-plugin-auto-external": "2.0.0",
     "rollup-plugin-polyfill-node": "0.7.0",
