@@ -15,6 +15,7 @@
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "cors": "2.8.5",
     "mastercard-locations": "1.0.3",
     "mastercard-places": "1.0.5"
   },
