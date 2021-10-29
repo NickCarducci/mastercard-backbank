@@ -18,6 +18,7 @@
     "@jsdevtools/browserify-banner": "2.0.4",
     "@rollup/plugin-commonjs": "20.0.0",
     "@rollup/plugin-node-resolve": "13.0.4",
+    "browserify": "17.0.0",
     "requirejs": "2.3.6",
     "rollup": "2.56.3",
     "rollup-plugin-auto-external": "2.0.0",
