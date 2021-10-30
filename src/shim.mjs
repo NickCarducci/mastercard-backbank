@@ -10,7 +10,6 @@ import url from 'url/';
 import util from 'util/';
 import zlib from "browserify-zlib";*/
 export {DurableObjectExample} from './index.js';
-exports.DurableObjectExample
 //import { createRequire } from 'module'
 //const handlers = bundle.handlers;
 //const require = createRequire(import.meta.url);
