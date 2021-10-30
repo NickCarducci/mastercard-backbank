@@ -3,16 +3,14 @@ export {DurableObjectExample} from './index.mjs';
 export default {
   async fetch(request, env) {
     try {
-      return await handleRequest(request, env)
+      return new Response({})
     } catch (e) {
       return new Response(e.message)
     }
   },
 }
 
-async function handleRequest(request, env) {
-  return new Response({})
-}
+
 /*import buffer from 'buffer/';
 import assert from 'assert/';
 import crypto from "crypto-browserify";
