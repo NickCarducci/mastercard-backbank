@@ -3,6 +3,7 @@ export {DurableObjectExample} from './index.mjs';
 export default {
   async fetch(request, env) {
     const noException = async (req,env) => new Response({})
+    //Response class must be a promise
     try {
       return await noException(request, env)
       // wrap the body of your callback in a try/catch block to ensure it cannot throw an exception.
