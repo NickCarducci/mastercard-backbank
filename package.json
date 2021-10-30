@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "dist/worker.mjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/shim.mjs",
   "scripts": {
     "build": "browserify src/browseri.js > src/browserii.js && npm run roll",
     "build2": "browserify src/browseri.js -p [ @jsdevtools/browserify-banner --template \"module.exports = \" ] > src/browserii.js && npm run roll",
