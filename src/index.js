@@ -40,7 +40,7 @@ async function handleRequest(request) {
 
  */
 
-export class DurableObjectExample {
+module.exports = class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
     this.el = el;
