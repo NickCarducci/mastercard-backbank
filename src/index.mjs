@@ -1,45 +1,3 @@
-/*import { createRequire } from 'module'
-const require = createRequire(import.meta.url);
-const Browseri = require("./browserii.js");
-*/
-
-/*export class Stripe {
-    checkout: typeof checkout
-    constructor(
-        stripe_secret: string,
-        params?: {
-            apiVersion?: string
-            fetch?: Function
-            userAgent?: string
-        },
-    ) {
-        let client = new HTTPClient(
-            stripe_secret,
-            params?.apiVersion,
-            params?.userAgent,
-            params?.fetch,
-        )
-        this.checkout = checkout
-        this.checkout.client = client.request
-    }
-}*/
-
-/**
- * addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
-/**
- * Respond with hello worker text
- * @ param {Request} request
- *
-async function handleRequest(request) {
-  return new Response('Hello worker!', {
-    headers: { 'content-type': 'text/plain' },
-  })
-}
-
- */
-
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
@@ -211,3 +169,43 @@ export class DurableObjectExample {
 /*addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
 })*/
+/*import { createRequire } from 'module'
+const require = createRequire(import.meta.url);
+const Browseri = require("./browserii.js");
+*/
+
+/*export class Stripe {
+    checkout: typeof checkout
+    constructor(
+        stripe_secret: string,
+        params?: {
+            apiVersion?: string
+            fetch?: Function
+            userAgent?: string
+        },
+    ) {
+        let client = new HTTPClient(
+            stripe_secret,
+            params?.apiVersion,
+            params?.userAgent,
+            params?.fetch,
+        )
+        this.checkout = checkout
+        this.checkout.client = client.request
+    }
+}*/
+
+/**
+ * addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+/**
+ * Respond with hello worker text
+ * @ param {Request} request
+ *
+async function handleRequest(request) {
+  return new Response('Hello worker!', {
+    headers: { 'content-type': 'text/plain' },
+  })
+}
+*/
