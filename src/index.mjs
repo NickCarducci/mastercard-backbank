@@ -8,8 +8,8 @@ export class DurableObjectExample {
       this.value = stored || 0;
     });
   }
-
-  async fetch(req, env) {
+  //'86 await: simply by omitting the await for the POST request. The request will complete before the Durable Object exits
+  fetch(req, env) {
     const dataHead = {
       "Content-Type": "application/json"
     };
