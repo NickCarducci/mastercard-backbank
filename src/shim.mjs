@@ -2,19 +2,15 @@ export {DurableObjectExample} from './index.mjs';
 
 export default {
   async fetch(request, env, ctx)  {
-    //Non-Durable-Object-Worker protocol:
-    // Send a non-blocking POST request.
-    // ~> Completes before the Worker exits.
-    /*ctx.waitUntil(
-      fetch('https://.../logs', {
-        method: 'POST',
-        body: JSON.stringify({
-          url: req.url,
-          // ...
-        })
-      })
-    );*/
-    const noException = async (req,env) => new Response({})
+    const noException = async (req,env) => {
+      // key => Object ID
+      const backbank = env.MyObjectNamespace.idFromName('mastercard-backbank')
+      // boot instance, if necessary
+      const instance = await env.MyObjectNamespace.get(backbank)
+      // Forward the current HTTP request to it
+      return instance.fetch(req,env)
+      //new Response({})
+    }
     //Response class must be a promise
     try {
       return await noException(request, env)
@@ -25,6 +21,19 @@ export default {
     }
   },
 }
+//new instance class fetch waits without await
+//Non-Durable-Object-Worker protocol:
+// Send a non-blocking POST request.
+// ~> Completes before the Worker exits.
+/*ctx.waitUntil(
+  fetch('https://.../logs', {
+    method: 'POST',
+    body: JSON.stringify({
+      url: req.url,
+      // ...
+    })
+  })
+);*/
 
 
 /*import buffer from 'buffer/';
