@@ -1,3 +1,18 @@
+export {DurableObjectExample} from './index.mjs';
+
+export default {
+  async fetch(request, env) {
+    try {
+      return await handleRequest(request, env)
+    } catch (e) {
+      return new Response(e.message)
+    }
+  },
+}
+
+async function handleRequest(request, env) {
+  return new Response({})
+}
 /*import buffer from 'buffer/';
 import assert from 'assert/';
 import crypto from "crypto-browserify";
@@ -9,7 +24,6 @@ import stream from "stream-browserify";
 import url from 'url/';
 import util from 'util/';
 import zlib from "browserify-zlib";*/
-export {DurableObjectExample} from './index.mjs';
 //import { createRequire } from 'module'
 //const handlers = bundle.handlers;
 //const require = createRequire(import.meta.url);
@@ -67,16 +81,3 @@ const zlib = require("browserify-zlib");
   util,
   zlib*
 }*/
-export default {
-  async fetch(request, env) {
-    try {
-      return await handleRequest(request, env)
-    } catch (e) {
-      return new Response(e.message)
-    }
-  },
-}
-
-async function handleRequest(request, env) {
-  return new Response({})
-}
