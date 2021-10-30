@@ -5,9 +5,9 @@ export default {
     const noException = async (req,env) => {
       // key => Object ID
       //https://linc.sh/blog/durable-objects-in-production
-      const backbank = env.DurableObjectExample.idFromName('mastercard-backbank')
-      // boot instance, if necessary
-      const instance = await env.DurableObjectExample.get(backbank)
+      const backbank = env.backbank.idFromName('mastercard-backbank')
+      // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
+      const instance = await env.backbank.get(backbank)
       // Forward the current HTTP request to it
       return instance.fetch(req,env)
       //new Response({})
