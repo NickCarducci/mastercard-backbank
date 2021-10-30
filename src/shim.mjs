@@ -1,7 +1,19 @@
 export {DurableObjectExample} from './index.mjs';
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx)  {
+    //Non-Durable-Object-Worker protocol:
+    // Send a non-blocking POST request.
+    // ~> Completes before the Worker exits.
+    /*ctx.waitUntil(
+      fetch('https://.../logs', {
+        method: 'POST',
+        body: JSON.stringify({
+          url: req.url,
+          // ...
+        })
+      })
+    );*/
     const noException = async (req,env) => new Response({})
     //Response class must be a promise
     try {
