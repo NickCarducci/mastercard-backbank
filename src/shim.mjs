@@ -4,6 +4,7 @@ export default {
   async fetch(request, env, ctx)  {
     const noException = async (req,env) => {
       // key => Object ID
+      //https://linc.sh/blog/durable-objects-in-production
       const backbank = env.MyObjectNamespace.idFromName('mastercard-backbank')
       // boot instance, if necessary
       const instance = await env.MyObjectNamespace.get(backbank)
