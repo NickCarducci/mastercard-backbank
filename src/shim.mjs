@@ -1,14 +1,13 @@
-import {DurableObjectExample} from './index.mjs';
-export {DurableObjectExample}
+export {DurableObjectExample} from './index.mjs';
 
 export default {
   async fetch(request, env, ctx)  {
     const noException = async (req,env) => {
       // key => Object ID
       //https://linc.sh/blog/durable-objects-in-production
-      const backbank = /*env.EXAMPLE_CLASS*/DurableObjectExample.idFromName('mastercard-backbank')
+      const backbank = env.EXAMPLE_CLASS.idFromName('mastercard-backbank')
       // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
-      const instance = await /*env.EXAMPLE_CLASS*/DurableObjectExample.get(backbank)
+      const instance = await env.EXAMPLE_CLASS.get(backbank)
       // Forward the current HTTP request to it
       return instance.fetch(req,env)
       //new Response({})
