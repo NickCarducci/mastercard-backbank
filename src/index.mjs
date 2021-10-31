@@ -8,6 +8,15 @@ export class DurableObjectExample {
       this.value = stored || 0;
     });
   }
+  /*static toRouteParams(pathname) {
+    const match = pathname.match(
+      /^\/((client)|(server))\/([\w-]+)\/([a-f0-9]{15})\/ws$/
+    )
+    if (!match) return { match: false }
+    const [_, __, client, server, sitename, tree_id] = match
+
+    return { match: true, client, server, sitename, tree_id }
+  }*/
   //'86 await: simply by omitting the await for the POST request. The request will complete before the Durable Object exits
   fetch(req, env) {
     const dataHead = {
