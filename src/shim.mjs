@@ -1,27 +1,27 @@
-export {DurableObjectExample} from './index.mjs';
+export { DurableObjectExample } from "./index.mjs";
 
+async function noException(req, env) {
+  // key => Object ID
+  //https://linc.sh/blog/durable-objects-in-production
+  const backbank = env.EXAMPLE_CLASS.idFromName("mastercard-backbank");
+  // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
+  const instance = await env.EXAMPLE_CLASS.get(backbank);
+  // Forward the current HTTP request to it
+  return instance.fetch(req, env);
+  //new Response({})
+}
 export default {
-  async fetch(request, env, ctx)  {
-      async function noException (req,env) {
-      // key => Object ID
-      //https://linc.sh/blog/durable-objects-in-production
-      const backbank = env.EXAMPLE_CLASS.idFromName('mastercard-backbank')
-      // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
-      const instance = await env.EXAMPLE_CLASS.get(backbank)
-      // Forward the current HTTP request to it
-      return instance.fetch(req,env)
-      //new Response({})
-    }
+  async fetch(request, env, ctx) {
     //Response class must be a promise
     try {
-      return await noException(request, env)
+      return await noException(request, env);
       // wrap the body of your callback in a try/catch block to ensure it cannot throw an exception.
       // is return, "the body?"
     } catch (e) {
-      return new Response(e.message)
+      return new Response(e.message);
     }
-  },
-}
+  }
+};
 //new instance class fetch waits without await
 //Non-Durable-Object-Worker protocol:
 // Send a non-blocking POST request.
@@ -35,7 +35,6 @@ export default {
     })
   })
 );*/
-
 
 /*import buffer from 'buffer/';
 import assert from 'assert/';
