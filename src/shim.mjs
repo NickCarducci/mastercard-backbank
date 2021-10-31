@@ -2,7 +2,7 @@ export {DurableObjectExample} from './index.mjs';
 
 export default {
   async fetch(request, env, ctx)  {
-    const noException = async (req,env) => {
+      async function noException (req,env) {
       // key => Object ID
       //https://linc.sh/blog/durable-objects-in-production
       const backbank = env.EXAMPLE_CLASS.idFromName('mastercard-backbank')
