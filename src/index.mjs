@@ -19,7 +19,7 @@ export class DurableObjectExample {
     return { match: true, client, server, sitename, tree_id }
   }*/
   //'86 await: simply by omitting the await for the POST request. The request will complete before the Durable Object exits
-  fetch(req, env) {
+  async fetch(req, env) {
     const dataHead = {
       "Content-Type": "application/json"
     };
