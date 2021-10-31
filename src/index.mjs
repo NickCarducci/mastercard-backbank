@@ -2,6 +2,7 @@ export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
     this.el = el;
+    this.env = env;
     this.el.blockConcurrencyWhile(async () => {
       let stored = await this.el.storage.get("value");
       // After initialization, future reads do not need to access storage.
