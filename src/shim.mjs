@@ -3,7 +3,7 @@ export { DurableObjectExample } from "./index.mjs";
 async function noException(req, env) {
   // key => Object ID
   //https://linc.sh/blog/durable-objects-in-production
-  const backbank = env.EXAMPLE_CLASS.idFromName(new URL(request.url).pathname);
+  const backbank = env.EXAMPLE_CLASS.idFromName(new URL(req.url).pathname);
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   const instance = await env.EXAMPLE_CLASS.get(backbank);
   // Forward the current HTTP request to it
