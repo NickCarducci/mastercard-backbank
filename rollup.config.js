@@ -8,7 +8,7 @@ export default {
   output: {
     exports: 'named',
     //name: "app",
-    strict: false,
+    //strict: false,
     file: "dist/shim.mjs",
     format: "es",
     sourcemap: true
