@@ -11,7 +11,7 @@ async function noException(req, env) {
   //new Response({})
 }
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env/*, ctx*/) {
     //Response class must be a promise
     try {
       return await noException(request, env);
