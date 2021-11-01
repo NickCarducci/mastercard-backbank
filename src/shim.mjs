@@ -1,7 +1,7 @@
 export { DurableObjectExample } from "./index.mjs";
 
 async function noException(req, env) {
-      return new Response(env);
+      return new Response(JSON.stringify(env));
   // key => Object ID
   //https://linc.sh/blog/durable-objects-in-production
   const backbank = env.EXAMPLE_CLASS.idFromName(new URL(req.url).pathname);
