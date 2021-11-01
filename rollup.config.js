@@ -14,19 +14,19 @@ export default {
     sourcemap: true
   },
   plugins: [
-    nodePolyfills( /* options */ )
+    nodePolyfills( /* options */ ),
     //autoExternal(),
     /*commonjs({
       //include: ["node_modules/**"],
       //exclude: ["node_modules/process-es6/**"]
     }),*/
-    /*nodeResolve({
+    nodeResolve({
       //preferBuiltins: false,
       browser: true,
       //only: [/^\.{0,2}\//],
       //extensions: [".js", ".ts"],
       //mainFields: ["module", "main"]
-    }),
+    })/*,
     terser()*/
   ]
 };
