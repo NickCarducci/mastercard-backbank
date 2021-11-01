@@ -13,7 +13,7 @@
     "format": "prettier --write '**/*.{js,css,json,md}'"
   },
   "author": "Nick <nmcarducci@gmail.com>",
-  "license": "UNLICENSED",
+  "license": "UNLICENSED", 
   "dependencies": {
     "cors": "2.8.5",
     "mastercard-locations": "1.0.3",
