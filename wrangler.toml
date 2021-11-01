@@ -6,9 +6,9 @@ workers_dev = true #if using default subdomain, here: api ok
 # webpack_config = "webpack.config.js"
 route = "" #if not using default subdomain, here: api not needed, defaults err
 zone_id = "" #if not using default subdomain, here: api not needed
-[site]
-bucket = "./dist"
-entry-point = "workers-site"
+# [site]
+# bucket = "./dist"
+# entry-point = "workers-site"
 
 [env.production]
 # exclude = ["node_modules","*"]
