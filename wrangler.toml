@@ -10,13 +10,13 @@ zone_id = "" #if not using default subdomain, here: api not needed
 # bucket = "./dist"
 # entry-point = "workers-site"
 
-[env.production]
-# exclude = ["node_modules","*"]
-# include = ["dist/*","src/*"]
-name = "mastercard-backbank"
+# [env.production]
+# /exclude = ["node_modules","*"]
+# /include = ["dist/*","src/*"]
+# name = "mastercard-backbank"
 
-[env.staging]
-name = "mastercard-backbank-staging"
+# [env.staging]
+# name = "mastercard-backbank-staging"
 
 # [build.upload.rules]
 # type = "CommonJS"
