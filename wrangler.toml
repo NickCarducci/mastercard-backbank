@@ -10,20 +10,20 @@ zone_id = "" #if not using default subdomain, here: api not needed
 # bucket = "./dist"
 # entry-point = "workers-site"
 
-# [env.production]
-# /exclude = ["node_modules","*"]
-# /include = ["dist/*","src/*"]
-# name = "mastercard-backbank"
+[env.production]
+# exclude = ["node_modules","*"]
+# include = ["dist/*","src/*"]
+name = "mastercard-backbank"
 
-# [env.staging]
-# name = "mastercard-backbank-staging"
+[env.staging]
+name = "mastercard-backbank-staging"
 
 # [build.upload.rules]
 # type = "CommonJS"
 # globs = ["**/*.js", "**/*.cjs"]
 [build.upload]
 format = "modules" # "service-workers"
-# dir = "dist"
+dir = "src"
 main = "./shim.mjs"
 [build]
 # command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
