@@ -28,7 +28,7 @@ export class DurableObjectExample {
     
     //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
     
-    import("./require.js");
+    import("./require.js").then(()=>{
     if(require){
       require.config({
         baseUrl:
@@ -179,6 +179,7 @@ export class DurableObjectExample {
               headers: dataHead
             }
           );
+      });
       });
     }
   }
