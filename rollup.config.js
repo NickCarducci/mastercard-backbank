@@ -4,6 +4,7 @@
 //import nodeResolve from "@rollup/plugin-node-resolve";
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 export default {
+  inlineDynamicImports:true,
   input: "src/shim.mjs",
   output: {
     exports: 'named',
