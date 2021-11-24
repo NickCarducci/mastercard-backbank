@@ -1,5 +1,5 @@
 import { terser } from 'rollup-plugin-terser'
-//import commonjs from "@rollup/plugin-commonjs";
+import commonjs from "@rollup/plugin-commonjs";
 //import autoExternal from "rollup-plugin-auto-external";//https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
 import nodeResolve from "@rollup/plugin-node-resolve";
 import nodePolyfills from 'rollup-plugin-polyfill-node';
