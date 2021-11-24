@@ -33,7 +33,7 @@ export class DurableObjectExample {
       waitSeconds: 15*/
     });
       //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require
-    require(["browserii.js"], async (m) => {
+    require(["browserii.mjs"], async (m) => {
       //This function will be called when all the dependencies
       //listed above are loaded. Note that this function could
       //be called before the page is loaded.
