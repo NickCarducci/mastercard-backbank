@@ -14,10 +14,11 @@ export default {
   }
 };
 async function noException(req, env) {
-      return new Response(JSON.stringify(env));
   // key => Object ID
   //https://linc.sh/blog/durable-objects-in-production
   const backbank = env["__mastercard-backbank-workers_sites_assets"].idFromName("durableObjectExample")//(new URL(req.url).pathname);
+ 
+      return new Response(JSON.stringify(backbank));
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   const instance = env["__mastercard-backbank-workers_sites_assets"].get(backbank);
   // Forward the current HTTP request to it
