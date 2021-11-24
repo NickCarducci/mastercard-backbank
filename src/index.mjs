@@ -1,7 +1,8 @@
 //importScripts('./require.js');
 //https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 //import m from "browserii.mjs";
-import m from "./browserii.mjs"//'webworkify';
+import { locs, places, crs } from "./browserii.mjs"//'webworkify';
+    //const { locs, places, crs } = Browseri();
 
 //var m = new work//work(import("./browserii.mjs"));
 /*w.addEventListener('message', function (ev) {
@@ -62,7 +63,6 @@ export class DurableObjectExample {
     //listed above are loaded. Note that this function could
     //be called before the page is loaded.
     //This callback is optional.
-    const { locs, places, crs } = m.Browseri();
     var iMCard = null,
       mc = null;
     const initializeMCard = () => {
