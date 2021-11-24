@@ -19,9 +19,14 @@ async function noException(req, env) {
   //https://linc.sh/blog/durable-objects-in-production
   const backbank = env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName("durableObjectExample")//(new URL(req.url).pathname);
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
-  const instance = await env.EXAMPLE_CLASS_DURABLE_OBJECT.get(backbank);
+  const instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(backbank);
   // Forward the current HTTP request to it
-  return instance.fetch(req, env);
+  const resp = await instance.fetch(req, env);
+  const r = await resp.json();
+  return {
+      ok: true,
+      data: r
+  };
   //new Response({})
 }
 //new instance class fetch waits without await
