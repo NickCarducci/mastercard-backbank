@@ -17,7 +17,6 @@ export class DurableObjectExample {
     )
     if (!match) return { match: false }
     const [_, __, client, server, sitename, tree_id] = match
-
     return { match: true, client, server, sitename, tree_id }
   }*/
   //'86 await: simply by omitting the await for the POST request. The request will complete before the Durable Object exits
@@ -28,17 +27,17 @@ export class DurableObjectExample {
 
     //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
 
-   return import("./require.js").then(() => {
+    /*return import("./require.js").then(() => {
       if (!require) {
         return new Response(
-              {},
-              {
-                status: "400",
-                message: "./require.js not working, is dev error",
-                headers: dataHead
-              }
-            );
-      }else{
+          {},
+          {
+            status: "400",
+            message: "./require.js not working, is dev error",
+            headers: dataHead
+          }
+        );
+      } else {*/
         require.config({
           baseUrl:
             "src" /*,
@@ -48,7 +47,7 @@ export class DurableObjectExample {
         waitSeconds: 15*/
         });
         //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require
-       return require(["browserii.mjs"], async (m) => {
+        return import("browserii.mjs").then(async (m) => {
           //This function will be called when all the dependencies
           //listed above are loaded. Note that this function could
           //be called before the page is loaded.
@@ -189,8 +188,8 @@ export class DurableObjectExample {
               }
             );
         });
-      }
-    });
+     // }
+ //   });
   }
 }
 /*addEventListener('fetch', event => {
