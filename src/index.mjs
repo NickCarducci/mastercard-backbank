@@ -28,7 +28,7 @@ export class DurableObjectExample {
 
     //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
 
-    import("./require.js").then(() => {
+   return import("./require.js").then(() => {
       if (require) {
         require.config({
           baseUrl:
@@ -39,7 +39,7 @@ export class DurableObjectExample {
         waitSeconds: 15*/
         });
         //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require
-        require(["browserii.mjs"], async (m) => {
+       return require(["browserii.mjs"], async (m) => {
           //This function will be called when all the dependencies
           //listed above are loaded. Note that this function could
           //be called before the page is loaded.
