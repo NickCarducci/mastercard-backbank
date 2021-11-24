@@ -19,7 +19,7 @@ name = "mastercard-backbank"
 name = "mastercard-backbank-staging"
 
 [durable_objects]
-bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
+bindings = [{ name = "__mastercard-backbank-workers_sites_assets", class_name = "DurableObjectExample" }]
 [[migrations]]
 tag = "v1" # Should be unique for each entry
 new_classes = ["DurableObjectExample"]
