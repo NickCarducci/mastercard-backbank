@@ -19,13 +19,13 @@ name = "mastercard-backbank"
 name = "mastercard-backbank-staging"
 
 [durable_objects]
-bindings = [{ name = "DurableObjectExample", class_name = "DurableObjectExample" }]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
 
 [env.staging.durable_objects]
-bindings = [{ name = "DurableObjectExample", class_name = "DurableObjectExample" }]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
 
 [env.production.durable_objects]
-bindings = [{ name = "DurableObjectExample", class_name = "DurableObjectExample" }]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
 
 [[migrations]]
 tag = "v1" # Should be unique for each entry
