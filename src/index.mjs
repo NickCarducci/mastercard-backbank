@@ -27,7 +27,7 @@ export class DurableObjectExample {
     };
     
     //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
-    const require = await fetch("./require.js);
+    const require = await fetch("./require.js");
     
     if(require){
       require.config({
