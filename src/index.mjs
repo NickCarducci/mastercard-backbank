@@ -27,7 +27,7 @@ export class DurableObjectExample {
 
     //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
 
-    /*return import("./require.js").then(() => {
+    return import("./require.js").then(() => {
       if (!require) {
         return new Response(
           {},
@@ -37,17 +37,17 @@ export class DurableObjectExample {
             headers: dataHead
           }
         );
-      } else {*
+      } else {
         require.config({
           baseUrl:
             "src" /*,
         paths: {
             "src": "src/index.js"
         },
-        waitSeconds: 15*
-        });*/
+        waitSeconds: 15*/
+        });
         //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require
-        return import("./browserii.mjs").then(async (m) => {
+        return require(["browserii.mjs"], async (m) => {
           //This function will be called when all the dependencies
           //listed above are loaded. Note that this function could
           //be called before the page is loaded.
@@ -188,8 +188,8 @@ export class DurableObjectExample {
               }
             );
         });
-     // }
- //   });
+      }
+    });
   }
 }
 /*addEventListener('fetch', event => {
