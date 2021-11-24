@@ -1,6 +1,15 @@
 //importScripts('./require.js');
 //https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 import m from "browserii.mjs";
+var work = require('webworkify');
+
+var m = work(require("./browserii.mjs"));
+/*w.addEventListener('message', function (ev) {
+    console.log(ev.data);
+});
+
+w.postMessage(4); // send the worker a message
+*/
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
