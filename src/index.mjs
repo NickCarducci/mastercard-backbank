@@ -37,15 +37,15 @@ export class DurableObjectExample {
             headers: dataHead
           }
         );
-      } else {*/
+      } else {*
         require.config({
           baseUrl:
             "src" /*,
         paths: {
             "src": "src/index.js"
         },
-        waitSeconds: 15*/
-        });
+        waitSeconds: 15*
+        });*/
         //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require
         return import("browserii.mjs").then(async (m) => {
           //This function will be called when all the dependencies
