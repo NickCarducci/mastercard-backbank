@@ -1,4 +1,5 @@
 //importScripts('./require.js');
+import require from "./require.js";
 //https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 export class DurableObjectExample {
   constructor(el, env) {
@@ -27,7 +28,6 @@ export class DurableObjectExample {
     };
     
     //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
-    const require = await fetch("./require.js");
     
     if(require){
       require.config({
