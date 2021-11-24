@@ -3,6 +3,8 @@ import { terser } from 'rollup-plugin-terser'
 //import autoExternal from "rollup-plugin-auto-external";//https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
 import nodeResolve from "@rollup/plugin-node-resolve";
 import nodePolyfills from 'rollup-plugin-polyfill-node';
+//import globals from 'rollup-plugin-node-globals';
+//import builtins from 'rollup-plugin-node-builtins';
 export default {
   inlineDynamicImports:true,
   input: "src/shim.mjs",
@@ -17,10 +19,6 @@ export default {
   plugins: [
     nodePolyfills( /* options */ ),
     //autoExternal(),
-    /*commonjs({
-      //include: ["node_modules/**"],
-      //exclude: ["node_modules/process-es6/**"]
-    }),*/
     nodeResolve({
       preferBuiltins: false,
       browser: true,
@@ -28,6 +26,12 @@ export default {
       //extensions: [".js", ".ts"],
       //mainFields: ["module", "main"]
     }),
-    terser()
+    commonjs({
+      //include: ["node_modules/**"],
+      //exclude: ["node_modules/process-es6/**"]
+    }),
+    terser(),
+    //globals(),
+    //builtins()
   ]
 };
