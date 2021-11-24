@@ -29,7 +29,16 @@ export class DurableObjectExample {
     //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
 
    return import("./require.js").then(() => {
-      if (require) {
+      if (!require) {
+        return new Response(
+              {},
+              {
+                status: "400",
+                message: "./require.js not working, is dev error",
+                headers: dataHead
+              }
+            );
+      }else{
         require.config({
           baseUrl:
             "src" /*,
