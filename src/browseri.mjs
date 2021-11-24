@@ -1,6 +1,6 @@
-const locs = require("mastercard-locations");
-const places = require("mastercard-places");
-const crs = require("cors");
+import locs from "mastercard-locations";
+import places from "mastercard-places";
+import crs from "cors";
 
 module.exports = function Browseri() {
     return {
