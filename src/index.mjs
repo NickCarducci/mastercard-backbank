@@ -27,8 +27,8 @@ export class DurableObjectExample {
 
     //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
     var require = null;
-    return import("./require.js").then(obj => {
-      require = obj.require
+    return import("./require.js").then(async obj => {
+      require = await obj.require
       if (!require) {
         return new Response(
           {},
