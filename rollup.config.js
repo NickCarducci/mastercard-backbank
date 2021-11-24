@@ -21,7 +21,7 @@ export default {
       //include: ["node_modules/**"],
       //exclude: ["node_modules/process-es6/**"]
     }),*/
-    /*nodeResolve({
+    nodeResolve({
       preferBuiltins: false,
       browser: true,
       //only: [/^\.{0,2}\//],
