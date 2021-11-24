@@ -28,6 +28,6 @@ export default {
       //extensions: [".js", ".ts"],
       //mainFields: ["module", "main"]
     }),
-    terser()*/
+    terser()
   ]
 };
