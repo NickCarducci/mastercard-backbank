@@ -1,5 +1,5 @@
 //importScripts('./require.js');
-import {require} from "./require.js";
+import "./require.js";
 //https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 export class DurableObjectExample {
   constructor(el, env) {
