@@ -1,3 +1,4 @@
+import json from '@rollup/plugin-json';
 import { terser } from 'rollup-plugin-terser'
 import commonjs from "@rollup/plugin-commonjs";
 //import autoExternal from "rollup-plugin-auto-external";//https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -18,6 +19,7 @@ export default {
     sourcemap: true
   },
   plugins: [
+    json(),
      //webworkify(),
     nodePolyfills( /* options */ ),
     //autoExternal(),
