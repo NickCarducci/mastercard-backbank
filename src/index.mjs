@@ -32,7 +32,8 @@ export class DurableObjectExample {
         //const { locs, places, crs } = window
         this.modules = { ...window };
       });
-    });
+    })
+    //.pipe(fs.createWriteStream('./lib/bundle.js'));
   }
   /*static toRouteParams(pathname) {
     const match = pathname.match(
