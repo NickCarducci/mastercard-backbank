@@ -22,6 +22,7 @@
   "devDependencies": {
     "@jsdevtools/browserify-banner": "2.0.4",
     "@rollup/plugin-commonjs": "20.0.0",
+    "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "13.0.4",
     "browserify": "17.0.0",
     "exorcist": "2.0.0",
