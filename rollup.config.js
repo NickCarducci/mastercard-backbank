@@ -19,7 +19,6 @@ export default {
     sourcemap: true
   },
   plugins: [
-    json(),
      //webworkify(),
     nodePolyfills( /* options */ ),
     //autoExternal(),
@@ -34,6 +33,7 @@ export default {
       //include: ["node_modules/**"],
       //exclude: ["node_modules/process-es6/**"]
     }),
+    json(),
     terser(),
     //globals(),
     //builtins()
