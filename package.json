@@ -5,7 +5,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "build": "browserify src/browseri.mjs --standalone Browseri > src/browserii.mjs && npm run roll",
+    "build": "browserify src/browseri.mjs --debug | exorcist browserii.js.map > src/browserii.mjs && npm run roll",
     "build2": "browserify src/browseri.js -p [ @jsdevtools/browserify-banner --template \"module.exports = \" ] > src/browserii.js && npm run roll",
     "roll": "rollup -c",
     "echo": "echo \"Build placeholder\"",
@@ -24,6 +24,7 @@
     "@rollup/plugin-commonjs": "20.0.0",
     "@rollup/plugin-node-resolve": "13.0.4",
     "browserify": "17.0.0",
+    "exorcist": "2.0.0",
     "requirejs": "2.3.6",
     "rollup": "2.56.3",
     "rollup-plugin-auto-external": "2.0.0",
