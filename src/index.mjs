@@ -29,8 +29,8 @@ export class DurableObjectExample {
     .bundle(function(err) {
       if(err) throw err;
       import("./browserii.js").then((window) => {
-        //const { locs, places, crs } = window
-        this.modules = { ...window };
+        //const { locs, places, crs } = window.Browseri()
+        this.modules = { ...window.Browseri() };
       });
     })
     //.pipe(fs.createWriteStream('./lib/bundle.js'));
