@@ -6,14 +6,10 @@
 /*import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const browserify = require("browserify");*/
+const locs = require("mastercard-locations");
+const places = require("mastercard-places");
+const crs = require("cors");
 
-//var m = new work//work(import("./browserii.mjs"));
-/*w.addEventListener('message', function (ev) {
-    console.log(ev.data);
-});
-
-w.postMessage(4); // send the worker a message
-*/
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
@@ -40,10 +36,10 @@ export class DurableObjectExample {
           });
         } /*fs.createWriteStream("./browserii.js")*
       ); /*.then(()=>{*/
-    import("./browserii.js").then((window) => {
+    /*import("./browserii.js").then((window) => {
       //const { locs, places, crs } = window.Browseri()
       this.modules = { ...window.Browseri() };
-    });
+    });*/
     //})
   }
   /*static toRouteParams(pathname) {
