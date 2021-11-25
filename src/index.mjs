@@ -21,10 +21,13 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
     });
-    browserify({
+    browserify("./browserii.js"/*, {
       entry: "./browseri.js",
       output: "./browserii.js"
-    }).then(() => {
+    }*/)
+    .add("./browseri.js")
+    .bundle(function(err) {
+      if(err) throw err;
       import("./browserii.js").then((window) => {
         //const { locs, places, crs } = window
         this.modules = { ...window };
