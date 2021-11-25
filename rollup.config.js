@@ -5,7 +5,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 //import globals from 'rollup-plugin-node-globals';
 //import builtins from 'rollup-plugin-node-builtins';
-import webworkify from 'rollup-plugin-webworkify'
+//import webworkify from 'rollup-plugin-webworkify'
 export default {
   inlineDynamicImports:true,
   input: "src/shim.mjs",
@@ -18,7 +18,7 @@ export default {
     sourcemap: true
   },
   plugins: [
-     webworkify(),
+     //webworkify(),
     nodePolyfills( /* options */ ),
     //autoExternal(),
     nodeResolve({
