@@ -1,7 +1,6 @@
 const browserify = require("browserify");
 
-module.exports = function Browseri() {
-  return browserify({
+browserify({
     standalone:"window"
   })
     .add("./browseri.js")
@@ -9,4 +8,3 @@ module.exports = function Browseri() {
       if (err) throw err;
     })
     .pipe(fs.createWriteStream("./browserii.js"));
-}
