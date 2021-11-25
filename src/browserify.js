@@ -1,7 +1,9 @@
 const browserify = require("browserify");
 
 module.exports = function Browseri() {
-  return browserify()
+  return browserify({
+    standalone:"window"
+  })
     .add("./browseri.js")
     .bundle(function (err) {
       if (err) throw err;
