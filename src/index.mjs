@@ -1,7 +1,7 @@
 //importScripts('./require.js');
 //https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 //import m from "browserii.mjs";
-import Browseri from "./browserii.mjs.map"//'webworkify';
+import Browseri from "./browserii.js.map"//'webworkify';
 const { locs, places, crs } = Browseri.sourcesContent()
 
 //var m = new work//work(import("./browserii.mjs"));
