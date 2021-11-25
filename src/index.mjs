@@ -1,7 +1,8 @@
 //importScripts('./require.js');
 //https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 //import m from "browserii.mjs";
-import m from "./browserii.js.map"; //'webworkify';
+//import m from "./browserii.js.map"; //'webworkify';
+import browserify from 'browserify';
 
 //var m = new work//work(import("./browserii.mjs"));
 /*w.addEventListener('message', function (ev) {
@@ -20,6 +21,15 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
     });
+    browserify({
+      entry: "./browseri.js",
+      output: "./browserii.js"
+    }).then(() => {
+      import("./browserii.js").then((window) => {
+        //const { locs, places, crs } = window
+        this.modules = { ...window };
+      });
+    });
   }
   /*static toRouteParams(pathname) {
     const match = pathname.match(
@@ -31,25 +41,24 @@ export class DurableObjectExample {
   }*/
   //'86 await: simply by omitting the await for the POST request. The request will complete before the Durable Object exits
   async fetch(req, env) {
-    const Browseri = await m.json();
-    if (!Browseri) {
+    if (!this.modules) {
       return new Response(
         {},
         {
           status: "400",
-          message: "no access for this origin: " + origin,
+          message: "not ready for use",
           headers: dataHead
         }
       );
     } else {
-      const { locs, places, crs } = Browseri.sourcesContent();
+      const { locs, places, crs } = this.modules//Browseri.sourcesContent();
       const dataHead = {
         "Content-Type": "application/json"
       }; /*,
         paths: {
             "src": "src/index.js"
         },
-        waitSeconds: 15*/ //});
+        waitSeconds: 15*/ //}); //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require
 
       //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
       /*var require = null;
@@ -67,8 +76,7 @@ export class DurableObjectExample {
       } else {
         require.config({
           baseUrl:
-            "src" */ //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require
-      //return require(["browserii.mjs"], async (m) => {
+            "src" */ //return require(["browserii.mjs"], async (m) => {
       //This function will be called when all the dependencies
       //listed above are loaded. Note that this function could
       //be called before the page is loaded.
