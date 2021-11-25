@@ -5,7 +5,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "build": "browserify src/browseri.mjs --debug | exorcist browserii.mjs.map > src/browserii.mjs && npm run roll",
+    "build": "browserify src/browseri.js --debug | exorcist browserii.js.map > src/browserii.js && npm run roll",
     "build2": "browserify src/browseri.js -p [ @jsdevtools/browserify-banner --template \"module.exports = \" ] > src/browserii.js && npm run roll",
     "roll": "rollup -c",
     "echo": "echo \"Build placeholder\"",
