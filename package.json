@@ -5,9 +5,9 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "roll": "browserify src/browseri.mjs > src/browserii.mjs && npm run roll",
+    "build": "browserify src/browseri.mjs --standalone Browseri > src/browserii.mjs && npm run roll",
     "build2": "browserify src/browseri.js -p [ @jsdevtools/browserify-banner --template \"module.exports = \" ] > src/browserii.js && npm run roll",
-    "build": "rollup -c",
+    "roll": "rollup -c",
     "echo": "echo \"Build placeholder\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write '**/*.{js,css,json,md}'"
