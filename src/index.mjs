@@ -2,7 +2,10 @@
 //https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 //import m from "browserii.mjs";
 //import m from "./browserii.js.map"; //'webworkify';
-import * as browserify from "browserify";
+//import * as browserify from "browserify";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const browserify = require("browserify");
 
 //var m = new work//work(import("./browserii.mjs"));
 /*w.addEventListener('message', function (ev) {
