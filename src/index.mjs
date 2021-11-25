@@ -3,9 +3,9 @@
 //import m from "browserii.mjs";
 //import m from "./browserii.js.map"; //'webworkify';
 //import * as browserify from "browserify";
-import { createRequire } from "module";
+/*import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const browserify = require("browserify");
+const browserify = require("browserify");*/
 
 //var m = new work//work(import("./browserii.mjs"));
 /*w.addEventListener('message', function (ev) {
@@ -24,10 +24,10 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
     });
-    browserify(/*"./browserii.js"/*, {
+    /*browserify(/*"./browserii.js"/*, {
       entry: "./browseri.js",
       output: "./browserii.js"
-    }*/)
+    }*)
       .add("./browseri.js")
       .bundle(function (err) {
         if (err) throw err;
@@ -38,13 +38,13 @@ export class DurableObjectExample {
             //const { locs, places, crs } = window.Browseri()
             this.modules = { ...window.Browseri() };
           });
-        } /*fs.createWriteStream("./browserii.js")*/
-      ); /*.then(()=>{
-      import("./browserii.js").then((window) => {
-        //const { locs, places, crs } = window.Browseri()
-        this.modules = { ...window.Browseri() };
-      });
-    })*/
+        } /*fs.createWriteStream("./browserii.js")*
+      ); /*.then(()=>{*/
+    import("./browserii.js").then((window) => {
+      //const { locs, places, crs } = window.Browseri()
+      this.modules = { ...window.Browseri() };
+    });
+    //})
   }
   /*static toRouteParams(pathname) {
     const match = pathname.match(
@@ -73,7 +73,7 @@ export class DurableObjectExample {
         paths: {
             "src": "src/index.js"
         },
-        waitSeconds: 15*/ //}); //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require //return require(["browserii.mjs"], async (m) => {
+        waitSeconds: 15*/ //}); //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require //return require(["browserii.mjs"], async (m) => { //This function will be called when all the dependencies
 
       //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
       /*var require = null;
@@ -91,8 +91,7 @@ export class DurableObjectExample {
       } else {
         require.config({
           baseUrl:
-            "src" */ //This function will be called when all the dependencies
-      //listed above are loaded. Note that this function could
+            "src" */ //listed above are loaded. Note that this function could
       //be called before the page is loaded.
       //This callback is optional.
       var iMCard = null,
