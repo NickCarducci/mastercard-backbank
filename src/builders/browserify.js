@@ -2,7 +2,7 @@ const browserify = require("browserify");
 const fs = require('fs');
 
 browserify({
-    standalone:"window"
+    standalone:"Window"
   })
     .add("src/browseri.js")
     .bundle(function (err) {
