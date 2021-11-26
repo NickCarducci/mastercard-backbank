@@ -20,7 +20,7 @@ export default {
   },
   plugins: [
      //webworkify(),
-    nodePolyfills( /* options */ ),
+    nodePolyfills( "fs"/* options */ ),
     //autoExternal(),
     nodeResolve({
       preferBuiltins: false,
