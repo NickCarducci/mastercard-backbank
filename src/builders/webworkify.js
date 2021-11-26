@@ -11,7 +11,7 @@ const work = require('webworkify');
 });*/
 var goToWork=null;
 browserify(/*{
-    standalone:"window"
+    standalone:"Window"
   }*/)
     .add("./index.mjs")
     .bundle(function (err) {
