@@ -9,8 +9,8 @@ const browserify = require("browserify");*/
 //const places = require("mastercard-places");
 //const crs = require("cors");
 //const work = require('webworkify');
-import m from "./browserii.js";
-const { locs, places, crs } = m.window(); //Browseri.sourcesContent();
+//import m from "./browserii.js";
+//const { locs, places, crs } = m.window(); //Browseri.sourcesContent();
 
 export class DurableObjectExample {
   constructor(el, env) {
@@ -22,26 +22,29 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
     });
-    /*browserify(/*"./browserii.js"/*, {
+    browserify(/*"./browserii.js"/*, {
       entry: "./browseri.js",
       output: "./browserii.js"
-    }*)
+    }*/)
       .add("./browseri.js")
       .bundle(function (err) {
         if (err) throw err;
       })
       .pipe(
+        /*
         (path) => {
           import(path).then((window) => {
             //const { locs, places, crs } = window.Browseri()
             this.modules = { ...window.Browseri() };
           });
-        } /*fs.createWriteStream("./browserii.js")*
+        } */ fs.createWriteStream(
+          "./browserii.js"
+        )
       ); /*.then(()=>{*/
-    /*import("./browserii.js").then((window) => {
+    import("./browserii.js").then((window) => {
       //const { locs, places, crs } = window.Browseri()
       this.modules = { ...window.Browseri() };
-    });*/
+    });
     //})
   }
   /*static toRouteParams(pathname) {
@@ -71,7 +74,7 @@ export class DurableObjectExample {
         paths: {
             "src": "src/index.js"
         },
-        waitSeconds: 15*/ //}); //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require //return require(["browserii.mjs"], async (m) => { //This function will be called when all the dependencies
+        waitSeconds: 15*/ //}); //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require //return require(["browserii.mjs"], async (m) => { //This function will be called when all the dependencies //listed above are loaded. Note that this function could
 
       //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
       /*var require = null;
@@ -89,8 +92,7 @@ export class DurableObjectExample {
       } else {
         require.config({
           baseUrl:
-            "src" */ //listed above are loaded. Note that this function could
-      //be called before the page is loaded.
+            "src" */ //be called before the page is loaded.
       //This callback is optional.
       var iMCard = null,
         mc = null;
