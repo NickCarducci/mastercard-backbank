@@ -10,7 +10,7 @@ const browserify = require("browserify");*/
 //const crs = require("cors");
 //const work = require('webworkify');
 import m from "./browserii.js";
-const { locs, places, crs } = m; //Browseri.sourcesContent();
+const { locs, places, crs } = m.window(); //Browseri.sourcesContent();
 
 export class DurableObjectExample {
   constructor(el, env) {
