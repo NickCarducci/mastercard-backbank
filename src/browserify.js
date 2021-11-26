@@ -4,8 +4,8 @@ const fs = require('fs');
 browserify({
     standalone:"window"
   })
-    .add("./browseri.js")
+    .add("src/browseri.js")
     .bundle(function (err) {
       if (err) throw err;
     })
-    .pipe(fs.createWriteStream("./browserii.js"));
+    .pipe(fs.createWriteStream("src/browserii.js"));
