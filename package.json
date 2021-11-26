@@ -8,7 +8,7 @@
     "roll": "browserify src/browseri.js > src/browserii.js && npm run roll",
     "sourcemap": "browserify src/browseri.js --debug | exorcist src/browserii.js.map > src/browserii.js && npm run roll",
     "build2": "browserify src/browseri.js -p [ @jsdevtools/browserify-banner --template \"module.exports = \" ] > src/browserii.js && npm run roll",
-    "build": "node src/webworkify.js && rollup -c",
+    "build": "rollup -c",
     "build3": "node src/browserify.js && rollup -c",
     "echo": "echo \"Build placeholder\"",
     "test": "echo \"Error: no test specified\" && exit 1",
