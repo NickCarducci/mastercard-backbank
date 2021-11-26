@@ -9,8 +9,9 @@ const browserify = require("browserify");*/
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
 const crs = require("cors");
+const work = require('webworkify');
 
-export class DurableObjectExample {
+class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
     this.el = el;
@@ -273,3 +274,5 @@ async function handleRequest(request) {
   })
 }
 */
+
+export work(DurableObjectExample)
