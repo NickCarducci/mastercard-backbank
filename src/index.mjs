@@ -10,7 +10,7 @@ const browserify = require("browserify");*/
 //const crs = require("cors");
 //const work = require('webworkify');
 //import m from "./browserii.js";
-//const { locs, places, crs } = m.window(); //Browseri.sourcesContent();
+//const { locs, places, crs } = m.window(); //Window.sourcesContent();
 
 export class DurableObjectExample {
   constructor(el, env) {
@@ -33,13 +33,13 @@ export class DurableObjectExample {
         if (err) throw err;
       })
     /*(path,opts) => import(path).then((window) => 
-    //const { locs, places, crs } = window.Browseri()
-    this.modules = { ...window.Browseri() })*/
+    //const { locs, places, crs } = window.Window()
+    this.modules = { ...window.Window() })*/
       .pipe(fs.createWriteStream("./browserii.js")); 
     
     import("./browserii.js").then((window) => {
-      //const { locs, places, crs } = window.Browseri()
-      this.modules = { ...window.Browseri() };
+      //const { locs, places, crs } = window.Window()
+      this.modules = { ...window.Window() };
     });
   }
   /*static toRouteParams(pathname) {
@@ -62,7 +62,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-      //const { locs, places, crs } = this.modules; //Browseri.sourcesContent();
+      //const { locs, places, crs } = this.modules; //Window.sourcesContent();
       const dataHead = {
         "Content-Type": "application/json"
       }; 
