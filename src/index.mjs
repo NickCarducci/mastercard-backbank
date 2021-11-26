@@ -22,30 +22,25 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
     });
-    browserify(/*"./browserii.js"/*, {
+    
+    /*"./browserii.js", {
       entry: "./browseri.js",
       output: "./browserii.js"
-    }*/)
+    } best guess https://stackoverflow.com/questions/34752771/how-can-i-get-browserifys-bundle-function-to-emit-an-end-event*/
+    browserify()
       .add("./browseri.js")
       .bundle(function (err) {
         if (err) throw err;
       })
-      .pipe(
-        /*
-        (path) => {
-          import(path).then((window) => {
-            //const { locs, places, crs } = window.Browseri()
-            this.modules = { ...window.Browseri() };
-          });
-        } */ fs.createWriteStream(
-          "./browserii.js"
-        )
-      ); /*.then(()=>{*/
+    /*(path,opts) => import(path).then((window) => 
+    //const { locs, places, crs } = window.Browseri()
+    this.modules = { ...window.Browseri() })*/
+      .pipe(fs.createWriteStream("./browserii.js")); 
+    
     import("./browserii.js").then((window) => {
       //const { locs, places, crs } = window.Browseri()
       this.modules = { ...window.Browseri() };
     });
-    //})
   }
   /*static toRouteParams(pathname) {
     const match = pathname.match(
@@ -70,30 +65,25 @@ export class DurableObjectExample {
       //const { locs, places, crs } = this.modules; //Browseri.sourcesContent();
       const dataHead = {
         "Content-Type": "application/json"
-      }; /*,
-        paths: {
-            "src": "src/index.js"
-        },
-        waitSeconds: 15*/ //}); //https://stackoverflow.com/questions/35902490/requirejs-difference-between-global-require-and-module-require //return require(["browserii.mjs"], async (m) => { //This function will be called when all the dependencies //listed above are loaded. Note that this function could
-
-      //return fetch(sentryUrl, { body: JSON.stringify(b), method: 'POST' })
+      }; 
+      
       /*var require = null;
-    return await import("./require.js").then(async obj => {
-      require = await obj.require
-      if (!require) {
-        return new Response(
-          {},
-          {
-            status: "400",
-            message: "./require.js not working, is dev error",
-            headers: dataHead
-          }
-        );
-      } else {
-        require.config({
-          baseUrl:
-            "src" */ //be called before the page is loaded.
-      //This callback is optional.
+        return await import("./require.js").then(async obj => {
+          require = await obj.require
+          if (!require) {
+            return new Response(
+              {},
+              {
+                status: "400",
+                message: "./require.js not working, is dev error",
+                headers: dataHead
+              }
+            );
+          } else {
+            require.config({
+              baseUrl:
+                "src" */
+      
       var iMCard = null,
         mc = null;
       const initializeMCard = () => {
@@ -228,19 +218,12 @@ export class DurableObjectExample {
             headers: dataHead
           }
         );
-      //});
-      //}
-      //});
     }
   }
 }
 /*addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
 })*/
-/*import { createRequire } from 'module'
-const require = createRequire(import.meta.url);
-const Browseri = require("./browserii.js");
-*/
 
 /*export class Stripe {
     checkout: typeof checkout
@@ -262,18 +245,3 @@ const Browseri = require("./browserii.js");
         this.checkout.client = client.request
     }
 }*/
-
-/**
- * addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
-/**
- * Respond with hello worker text
- * @ param {Request} request
- *
-async function handleRequest(request) {
-  return new Response('Hello worker!', {
-    headers: { 'content-type': 'text/plain' },
-  })
-}
-*/
