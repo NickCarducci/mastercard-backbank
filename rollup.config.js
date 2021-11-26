@@ -7,7 +7,7 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 //import globals from 'rollup-plugin-node-globals';
 //import builtins from 'rollup-plugin-node-builtins';
 //import webworkify from 'rollup-plugin-webworkify'
-import replace from 'rollup-plugin-replace';
+import replace from '@rollup/plugin-replace';
 export default {
   inlineDynamicImports:true,
   input: "src/shim.mjs",
