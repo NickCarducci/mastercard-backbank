@@ -1,7 +1,7 @@
 
 const browserify = require("browserify");
 const work = require('webworkify');
-   
+   var fs = require('fs');
 browserify(/*{
     standalone:"window"
   }*/)
