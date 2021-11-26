@@ -1,6 +1,5 @@
 //importScripts('./require.js');
 //https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
-//import m from "browserii.mjs";
 //import m from "./browserii.js.map"; //'webworkify';
 //import * as browserify from "browserify";
 /*import { createRequire } from "module";
@@ -10,6 +9,8 @@ const browserify = require("browserify");*/
 //const places = require("mastercard-places");
 //const crs = require("cors");
 //const work = require('webworkify');
+import m from "./browserii.js";
+const { locs, places, crs } = m; //Browseri.sourcesContent();
 
 export class DurableObjectExample {
   constructor(el, env) {
@@ -63,7 +64,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-      const { locs, places, crs } = this.modules; //Browseri.sourcesContent();
+      //const { locs, places, crs } = this.modules; //Browseri.sourcesContent();
       const dataHead = {
         "Content-Type": "application/json"
       }; /*,
