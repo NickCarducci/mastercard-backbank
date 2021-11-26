@@ -1,2 +1,2 @@
 var work = require('webworkify');
-var w = work(require('./index.mjs'));
+var w = work(import('./index.mjs'));
