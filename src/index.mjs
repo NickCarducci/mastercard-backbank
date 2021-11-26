@@ -6,12 +6,12 @@
 /*import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const browserify = require("browserify");*/
-const locs = require("mastercard-locations");
-const places = require("mastercard-places");
-const crs = require("cors");
-const work = require('webworkify');
+//const locs = require("mastercard-locations");
+//const places = require("mastercard-places");
+//const crs = require("cors");
+//const work = require('webworkify');
 
-class DurableObjectExample {
+export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
     this.el = el;
@@ -274,5 +274,3 @@ async function handleRequest(request) {
   })
 }
 */
-
-export work(DurableObjectExample)
