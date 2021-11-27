@@ -9,8 +9,8 @@ const browserify = require("browserify");*/
 //const places = require("mastercard-places");
 //const crs = require("cors");
 //const work = require('webworkify');
-//import m from "./browserii.js";
-//const { locs, places, crs } = m.window(); //Window.sourcesContent();
+//import module from "./browserii.js";
+//const { locs, places, crs } = module.Window(); //Window.sourcesContent();
 
 export class DurableObjectExample {
   constructor(el, env) {
@@ -32,14 +32,14 @@ export class DurableObjectExample {
       .bundle(function (err) {
         if (err) throw err;
       })
-    /*(path,opts) => import(path).then((window) => 
-    //const { locs, places, crs } = window.Window()
-    this.modules = { ...window.Window() })*/
+    /*(path,opts) => import(path).then((module) => 
+    //const { locs, places, crs } = module.Window()
+    this.modules = { ...module.Window() })*/
       .pipe(fs.createWriteStream("./browserii.js")); 
     
-    import("./browserii.js").then((window) => {
-      //const { locs, places, crs } = window.Window()
-      this.modules = { ...window.Window() };
+    import("./browserii.js").then((module) => {
+      //const { locs, places, crs } = module.Window()
+      this.modules = { ...module.Window() };
     });
   }
   /*static toRouteParams(pathname) {
