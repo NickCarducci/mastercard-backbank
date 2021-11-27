@@ -21,7 +21,7 @@ const presets = [
 const plugins = [
     replace({
       include: './src/browseri.js',
-      values: {
+      values: {//https://stackoverflow.com/questions/40568580/rollup-js-how-import-a-js-file-not-es6-module-without-any-change-myvarextras
         'module.exports =': 'export default'
       }
     }),
