@@ -4,15 +4,10 @@ import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
-import npm from '@rollup/plugin-node-resolve';
 
 const plugins = [
-    npm({
-      //jsnext: true,
-      //main: true,
-      browser: true
-    }),
   nodeResolve({
+      browser: true,
     only: [/^\.{0,2}\//],
     extensions: [".js"],
     mainFields: ["module", "main"]
