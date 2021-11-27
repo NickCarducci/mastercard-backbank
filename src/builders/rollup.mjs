@@ -10,7 +10,7 @@ import legacy from '@rollup/plugin-legacy';
 const presets = [
   [
     "@babel/preset-env",
-    {
+    {target: 'universal'
        // "esmodules": false,
 }
   ],
