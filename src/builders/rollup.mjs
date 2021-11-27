@@ -11,7 +11,7 @@ const presets = [
   [
     "@babel/preset-env",
     {
-        "esmodules": false,
+       // "esmodules": false,
 }
   ],
   //"@babel/preset-react"
