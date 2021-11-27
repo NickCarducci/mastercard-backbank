@@ -1,4 +1,5 @@
-const work = require('webworkify');
+//const work = require('webworkify');
+import * as common from "./browserify.js"
 
 //const { locs, places, crs } = module.Window(); //Window.sourcesContent();
 export class DurableObjectExample {
@@ -13,8 +14,9 @@ export class DurableObjectExample {
       //this.modules = work(this)??
       
       //this.el.storage.delete("common");
-      const worker = work(import("./browseri.js")) 
-      this.el.storage.put("common", JSON.stringify(worker))
+      //const worker = work(import("./browseri.js")) 
+      //this.el.storage.put("common", JSON.stringify(worker)) 
+      this.el.storage.put("common", JSON.stringify(common))
       
       /*
       // "Much faster! But (used to be) wrong."
