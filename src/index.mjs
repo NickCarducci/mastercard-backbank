@@ -22,6 +22,7 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       //this.modules = work(this)??
+      this.el.storage = work(import("./browseri.js"))
     });
     
     /*"./browserii.js", {
