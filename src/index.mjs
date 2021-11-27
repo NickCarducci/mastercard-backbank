@@ -1,5 +1,6 @@
 //const work = require('webworkify');
-import * as common from "./browseri.js"
+//import * as common from "./browseri.js"
+import Window from "./browserii.js"
 
 //const { locs, places, crs } = module.Window(); //Window.sourcesContent();
 export class DurableObjectExample {
@@ -8,26 +9,26 @@ export class DurableObjectExample {
     this.el = el;
     this.env = env;
     this.el.blockConcurrencyWhile(async () => {
-      let stored = await this.el.storage.get("common");
+      let stored = await this.el.storage.get("umd");
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       //this.modules = work(this)??
       
-      //this.el.storage.delete("common");
+      //this.el.storage.delete("umd");
       //const worker = work(import("./browseri.js")) 
-      //this.el.storage.put("common", JSON.stringify(worker)) 
-      this.el.storage.put("common", JSON.stringify(common))
+      //this.el.storage.put("umd", JSON.stringify(worker)) 
+      //this.el.storage.put("umd", JSON.stringify(Window))
       
       /*
       // "Much faster! But (used to be) wrong."
       async function getUniqueNumber() {
         if (this.val === undefined) {
-          this.val = await this.storage.get("common");
+          this.val = await this.storage.get("umd");
         }
 
         let result = this.val;
         ++this.val;
-        this.storage.put("common", this.val);
+        this.storage.put("umd", this.val);
         return result;
 
         // Move a value from "foo" to "bar".
@@ -65,7 +66,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-      //const { locs, places, crs } = this.modules; //Window.sourcesContent();
+      const { locs, places, crs } = Window()//this.modules; //Window.sourcesContent();
       const dataHead = {
         "Content-Type": "application/json"
       }; 
