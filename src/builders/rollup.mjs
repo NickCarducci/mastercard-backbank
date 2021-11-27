@@ -3,8 +3,10 @@ import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
+import json from "@rollup/plugin-json";
 
 const plugins = [
+  json(),
   nodeResolve({
     only: [/^\.{0,2}\//],
     extensions: [".js"],
