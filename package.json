@@ -26,13 +26,5 @@
     "rollup": "2.56.3",
     "rollup-plugin-polyfill-node": "0.7.0",
     "rollup-plugin-terser": "7.0.2"
-  },
-  "targets": {
-    "browser": {
-      "scopeHoist":true,
-      "engines": {
-        "browsers": "> 0.25%"
-      }
-    }
   }
 }
