@@ -21,6 +21,7 @@ export class DurableObjectExample {
       let stored = await this.el.storage.get("value");
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
+      //this.modules = work(this)??
     });
     
     /*"./browserii.js", {
