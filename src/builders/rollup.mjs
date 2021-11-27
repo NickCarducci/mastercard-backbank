@@ -13,7 +13,7 @@ const plugins = [
   }),
   commonjs({
     include: ["node_modules/**"],
-    exclude: ["node_modules/process-es6/**","notes/**/*","src/builders/**/*]
+    exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
   }),
   terser()
 ];
@@ -36,7 +36,7 @@ const watchOptions = {
     chokidar: {},
     clearScreen: true,
     skipWrite: false,
-    exclude: ["node_modules/**/*","notes/**/*","src/builders/**/*],
+    exclude: ["node_modules/**/*","notes/**/*","src/builders/**/*"],
     include: "src/**/*"
   }
 };
