@@ -13,7 +13,7 @@ export class DurableObjectExample {
       //this.modules = work(this)??
       
       //this.el.storage.delete("common");
-      const worker = work(import("./browseri.js"))
+      const worker = work(import("./browseri.js")) 
       this.el.storage.put("common", JSON.stringify(worker))
       
       /*
