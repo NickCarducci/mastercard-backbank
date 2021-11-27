@@ -12,7 +12,7 @@ const presets = [
   [
     "@babel/preset-env",
     {
-      "useBuiltIns": "entry"
+      "useBuiltIns": "entry",
       //include: "src/index.js", //path.resolve(__dirname, "./src", "index.js"),
       //exclude: /(node_modules)/,
       targets
