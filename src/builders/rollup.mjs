@@ -5,6 +5,7 @@ import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
 import { babel } from "@rollup/plugin-babel";
+import legacy from '@rollup/plugin-legacy';
 
 const presets = [
   [
