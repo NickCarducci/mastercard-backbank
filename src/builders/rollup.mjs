@@ -9,7 +9,9 @@ import { babel } from "@rollup/plugin-babel";
 const presets = [
   [
     "@babel/preset-env",
-    {}
+    {
+        "esmodules": false,
+}
   ],
   //"@babel/preset-react"
 ];
