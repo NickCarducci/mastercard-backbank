@@ -23,6 +23,7 @@ const plugins = [
     extensions: [".js"],
     mainFields: ["module", "main"]
   }),
+  legacy({  'browserii.js': 'Window' }),
   commonjs({
     include: ["node_modules/**"],
     exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
