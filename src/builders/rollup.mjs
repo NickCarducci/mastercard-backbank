@@ -6,7 +6,6 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
 
 const plugins = [
-  json(),
   nodeResolve({
     only: [/^\.{0,2}\//],
     extensions: [".js"],
@@ -16,6 +15,7 @@ const plugins = [
     include: ["node_modules/**"],
     exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
   }),
+  json(),
   terser()
 ];
 const inputOptions = {
