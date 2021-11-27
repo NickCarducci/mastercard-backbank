@@ -11,7 +11,7 @@ import replace from '@rollup/plugin-replace';
 const presets = [
   [
     "@babel/preset-env",
-    {targets: 'universal'
+    {targets: 'default'
        // "esmodules": false,
 }
   ],
