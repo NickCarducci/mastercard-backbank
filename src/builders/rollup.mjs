@@ -6,7 +6,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
 import { babel } from "@rollup/plugin-babel";
 
-const targets = "web"//{ node: "current" }; //"web"
+//const targets = "web"//{ node: "current" }; //"web"
 
 const presets = [
   [
@@ -15,7 +15,7 @@ const presets = [
       "useBuiltIns": "entry",
       //include: "src/index.js", //path.resolve(__dirname, "./src", "index.js"),
       //exclude: /(node_modules)/,
-      targets
+      //targets
     }
   ],
   //"@babel/preset-react"
