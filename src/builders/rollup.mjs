@@ -6,6 +6,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
 import { babel } from "@rollup/plugin-babel";
 import legacy from '@rollup/plugin-legacy';
+import replace from '@rollup/plugin-replace';
 
 const presets = [
   [
@@ -18,6 +19,12 @@ const presets = [
 ];
 
 const plugins = [
+    replace({
+      include: './src/browseri.js',
+      values: {
+        'module.exports =': 'export default'
+      }
+    }),
   nodeResolve({
     browser: true,
     only: [/^\.{0,2}\//],
