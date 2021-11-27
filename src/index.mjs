@@ -1,48 +1,47 @@
-//importScripts('./require.js');
-//https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
-//import m from "./browserii.js.map"; //'webworkify';
-//import * as browserify from "browserify";
-/*import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const browserify = require("browserify");*/
-//const locs = require("mastercard-locations");
-//const places = require("mastercard-places");
-//const crs = require("cors");
-//const work = require('webworkify');
-//import module from "./browserii.js";
-//const { locs, places, crs } = module.Window(); //Window.sourcesContent();
+const work = require('webworkify');
 
+//const { locs, places, crs } = module.Window(); //Window.sourcesContent();
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
     this.el = el;
     this.env = env;
     this.el.blockConcurrencyWhile(async () => {
-      let stored = await this.el.storage.get("value");
+      let stored = await this.el.storage.get("common");
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       //this.modules = work(this)??
-      this.el.storage = work(import("./browseri.js"))
+      
+      //this.el.storage.delete("common");
+      const worker = work(import("./browseri.js"))
+      this.el.storage.put("common", JSON.stringify(worker))
+      
+      /*
+      // "Much faster! But (used to be) wrong."
+      async function getUniqueNumber() {
+        if (this.val === undefined) {
+          this.val = await this.storage.get("common");
+        }
+
+        let result = this.val;
+        ++this.val;
+        this.storage.put("common", this.val);
+        return result;
+
+        // Move a value from "foo" to "bar".
+      let val = await this.storage.get("foo");
+
+      this.storage.delete("foo");
+      this.storage.put("bar", val);
+      // There's no possibility of data loss, because the delete() and the
+      // following put() are automatically coalesced into one atomic
+      // operation. This is true as long as you do not `await` anything
+      // in between.
+      
+      //https://blog.cloudflare.com/durable-objects-easy-fast-correct-choose-three/
+      */
     });
     
-    /*"./browserii.js", {
-      entry: "./browseri.js",
-      output: "./browserii.js"
-    } best guess https://stackoverflow.com/questions/34752771/how-can-i-get-browserifys-bundle-function-to-emit-an-end-event*/
-    browserify()
-      .add("./browseri.js")
-      .bundle(function (err) {
-        if (err) throw err;
-      })
-    /*(path,opts) => import(path).then((module) => 
-    //const { locs, places, crs } = module.Window()
-    this.modules = { ...module.Window() })*/
-      .pipe(fs.createWriteStream("./browserii.js")); 
-    
-    import("./browserii.js").then((module) => {
-      //const { locs, places, crs } = module.Window()
-      this.modules = { ...module.Window() };
-    });
   }
   /*static toRouteParams(pathname) {
     const match = pathname.match(
