@@ -7,7 +7,7 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 //import globals from 'rollup-plugin-node-globals';
 //import builtins from 'rollup-plugin-node-builtins';
 //import webworkify from 'rollup-plugin-webworkify'
-import replace from '@rollup/plugin-replace';
+//import replace from '@rollup/plugin-replace';
 export default {
   inlineDynamicImports:true,
   input: "src/shim.mjs",
@@ -32,15 +32,15 @@ export default {
     }),
     commonjs({
       //include: ["node_modules/**"],
-      //exclude: ["node_modules/process-es6/**"]
+      //exclude: ["notes/**/*","node_modules/process-es6/**"]
     }),
     /*babel({
       exclude: 'node_modules/**',
     }),*/
-    replace({
+    /*replace({
       exclude: 'src/browserii.js',
       //ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-    }),
+    }),*/
     json(),
     terser(),
     //globals(),
