@@ -42,6 +42,7 @@ const inputOptions = {
   plugins
 };
 const output = {
+  globalObject: "Window",
   name: "Window",
   strict: false,
   file: "src/browserii.js",
