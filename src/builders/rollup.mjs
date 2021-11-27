@@ -4,8 +4,14 @@ import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
+import npm from '@rollup/plugin-node-resolve';
 
 const plugins = [
+    npm({
+      //jsnext: true,
+      //main: true,
+      browser: true
+    }),
   nodeResolve({
     only: [/^\.{0,2}\//],
     extensions: [".js"],
@@ -23,7 +29,7 @@ const inputOptions = {
   plugins
 };
 const output = {
-  //name: "Window",
+  name: "Window",
   strict: false,
   file: "src/browserii.js",
   format: "umd",
