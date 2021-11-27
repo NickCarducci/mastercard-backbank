@@ -1,5 +1,5 @@
 //const work = require('webworkify');
-import * as common from "./browserify.js"
+import * as common from "./browseri.js"
 
 //const { locs, places, crs } = module.Window(); //Window.sourcesContent();
 export class DurableObjectExample {
