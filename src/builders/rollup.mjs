@@ -21,7 +21,7 @@ const inputOptions = {
   plugins
 };
 const output = {
-  name: "Window",
+  //name: "Window",
   strict: false,
   file: "src/browserii.js",
   format: "umd",
