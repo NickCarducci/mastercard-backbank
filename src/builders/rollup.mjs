@@ -45,6 +45,7 @@ const plugins = [
   terser()
 ];
 const inputOptions = {
+  external: ['cors', 'mastercard-locations',"mastercard-places],
   input: "src/browseri.js",
   plugins
 };
