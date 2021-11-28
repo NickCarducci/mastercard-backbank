@@ -77,8 +77,8 @@ const watcher = watch(watchOptions);
 console.log("WATCHER INITIALIZED");
 watcher.on("event", (event) => {
   //event.result.cache.modules.ast.sourceType = "module"
-  event.result.cache.modules.ast.body
-  
+  //event.result.cache.modules.ast.body
+  /*
  [
               {
                 "type": "VariableDeclaration",
@@ -329,7 +329,7 @@ watcher.on("event", (event) => {
               }
             ],
             "sourceType": "module"
-          },
+          },*/
   console.log("G-FORCE:rollup: ", JSON.stringify(event));
   if (event.code === "BUNDLE_START") {
     //   BUNDLE_START — building an individual bundle
