@@ -56,8 +56,9 @@ const output = {
   name: "Window",
   strict: false,
   file: "src/browserii.js",
-  format: "umd",
-  sourcemap: false
+  format: "iife",
+  sourcemap: false,
+  //globals:{"Window":this.storage
 };
 const watchOptions = {
   ...inputOptions,
@@ -75,6 +76,260 @@ console.log("PLUGINS PASSED");
 const watcher = watch(watchOptions);
 console.log("WATCHER INITIALIZED");
 watcher.on("event", (event) => {
+  //event.result.cache.modules.ast.sourceType = "module"
+  event.result.cache.modules.ast.body
+  
+ [
+              {
+                "type": "VariableDeclaration",
+                "start": 0,
+                "end": 43,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 4,
+                    "end": 42,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 4,
+                      "end": 8,
+                      "name": "locs"
+                    },
+                    "init": {
+                      "type": "CallExpression",
+                      "start": 11,
+                      "end": 42,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 11,
+                        "end": 18,
+                        "name": "require"
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "start": 19,
+                          "end": 41,
+                          "value": "mastercard-locations",
+                          "raw": "\"mastercard-locations\""
+                        }
+                      ],
+                      "optional": false
+                    }
+                  }
+                ],
+                "kind": "var"
+              },
+              {
+                "type": "VariableDeclaration",
+                "start": 45,
+                "end": 87,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 49,
+                    "end": 86,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 49,
+                      "end": 55,
+                      "name": "places"
+                    },
+                    "init": {
+                      "type": "CallExpression",
+                      "start": 58,
+                      "end": 86,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 58,
+                        "end": 65,
+                        "name": "require"
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "start": 66,
+                          "end": 85,
+                          "value": "mastercard-places",
+                          "raw": "\"mastercard-places\""
+                        }
+                      ],
+                      "optional": false
+                    }
+                  }
+                ],
+                "kind": "var"
+              },
+              {
+                "type": "VariableDeclaration",
+                "start": 89,
+                "end": 115,
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 93,
+                    "end": 114,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 93,
+                      "end": 96,
+                      "name": "crs"
+                    },
+                    "init": {
+                      "type": "CallExpression",
+                      "start": 99,
+                      "end": 114,
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 99,
+                        "end": 106,
+                        "name": "require"
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "start": 107,
+                          "end": 113,
+                          "value": "cors",
+                          "raw": "\"cors\""
+                        }
+                      ],
+                      "optional": false
+                    }
+                  }
+                ],
+                "kind": "var"
+              },
+              {
+                "type": "ExpressionStatement",
+                "start": 117,
+                "end": 221,
+                "expression": {
+                  "type": "AssignmentExpression",
+                  "start": 117,
+                  "end": 220,
+                  "operator": "=",
+                  "left": {
+                    "type": "MemberExpression",
+                    "start": 117,
+                    "end": 131,
+                    "object": {
+                      "type": "Identifier",
+                      "start": 117,
+                      "end": 123,
+                      "name": "module"
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start": 124,
+                      "end": 131,
+                      "name": "exports"
+                    },
+                    "computed": false,
+                    "optional": false
+                  },
+                  "right": {
+                    "type": "FunctionExpression",
+                    "start": 134,
+                    "end": 220,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 143,
+                      "end": 149,
+                      "name": "Window"
+                    },
+                    "expression": false,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 152,
+                      "end": 220,
+                      "body": [
+                        {
+                          "type": "ReturnStatement",
+                          "start": 156,
+                          "end": 218,
+                          "argument": {
+                            "type": "ObjectExpression",
+                            "start": 163,
+                            "end": 217,
+                            "properties": [
+                              {
+                                "type": "Property",
+                                "start": 169,
+                                "end": 179,
+                                "method": false,
+                                "shorthand": false,
+                                "computed": false,
+                                "key": {
+                                  "type": "Identifier",
+                                  "start": 169,
+                                  "end": 173,
+                                  "name": "locs"
+                                },
+                                "value": {
+                                  "type": "Identifier",
+                                  "start": 175,
+                                  "end": 179,
+                                  "name": "locs"
+                                },
+                                "kind": "init"
+                              },
+                              {
+                                "type": "Property",
+                                "start": 185,
+                                "end": 199,
+                                "method": false,
+                                "shorthand": false,
+                                "computed": false,
+                                "key": {
+                                  "type": "Identifier",
+                                  "start": 185,
+                                  "end": 191,
+                                  "name": "places"
+                                },
+                                "value": {
+                                  "type": "Identifier",
+                                  "start": 193,
+                                  "end": 199,
+                                  "name": "places"
+                                },
+                                "kind": "init"
+                              },
+                              {
+                                "type": "Property",
+                                "start": 205,
+                                "end": 213,
+                                "method": false,
+                                "shorthand": false,
+                                "computed": false,
+                                "key": {
+                                  "type": "Identifier",
+                                  "start": 205,
+                                  "end": 208,
+                                  "name": "crs"
+                                },
+                                "value": {
+                                  "type": "Identifier",
+                                  "start": 210,
+                                  "end": 213,
+                                  "name": "crs"
+                                },
+                                "kind": "init"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ],
+            "sourceType": "module"
+          },
   console.log("G-FORCE:rollup: ", JSON.stringify(event));
   if (event.code === "BUNDLE_START") {
     //   BUNDLE_START — building an individual bundle
