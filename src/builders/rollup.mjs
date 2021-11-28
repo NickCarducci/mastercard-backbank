@@ -77,7 +77,9 @@ const watcher = watch(watchOptions);
 console.log("WATCHER INITIALIZED");
 watcher.on("event", (event) => {
   //event.result.cache.modules.ast.sourceType = "module"
-  //event.result.cache.modules.ast.body
+  //const ast = event.result.cache.modules.ast//.body
+  //import { generate } from 'astring'
+  //generate(ast)
   /*
  [
               {
