@@ -12,10 +12,8 @@ const presets = [
   [
     "@babel/preset-env",
     {
-      targets: {
-        'defaults',
-        //"esmodules": true,
-      },
+      targets: 'defaults',
+      //"esmodules": true,
       modules: "auto"
     }
   ],
