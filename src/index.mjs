@@ -99,8 +99,8 @@ export class DurableObjectExample {
       this.el.storage.put("umd", JSON.stringify(esm)) 
 
         console.log("G-FORCE:rollup: ", JSON.stringify(event));
-        if (event.code === "BUNDLE_START") 
-        } else if (event.code === "START") 
+        if (event.code === "BUNDLE_START") {
+        } else if (event.code === "START") {
           //   START        — the watcher is (re)starting
         } else if (event.code === "END") {
           watcher.close();
