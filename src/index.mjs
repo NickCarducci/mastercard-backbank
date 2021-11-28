@@ -19,7 +19,7 @@ export class DurableObjectExample {
     this.el = el;
     this.env = env;
     this.el.blockConcurrencyWhile(async () => {
-      let stored = await this.el.storage.get("umd");
+      let stored = await this.el.storage.get("esm");
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       //this.modules = work(this)??
@@ -96,7 +96,7 @@ export class DurableObjectExample {
         const ast = event.result.cache.modules.ast//.body
         
         const esm = generate(ast)
-      this.el.storage.put("umd", JSON.stringify(esm)) 
+      this.el.storage.put("esm", JSON.stringify(esm)) 
 
         console.log("G-FORCE:rollup: ", JSON.stringify(event));
         if (event.code === "BUNDLE_START") {
@@ -119,21 +119,21 @@ export class DurableObjectExample {
         .catch((err) => console.log("rollup.rollup error", err.message));
 
       
-      //this.el.storage.delete("umd");
+      //this.el.storage.delete("esm");
       //const worker = work(import("./browseri.js")) 
-      //this.el.storage.put("umd", JSON.stringify(worker)) 
-      //this.el.storage.put("umd", JSON.stringify(Window))
+      //this.el.storage.put("esm", JSON.stringify(worker)) 
+      //this.el.storage.put("esm", JSON.stringify(Window))
       
       /*
       // "Much faster! But (used to be) wrong."
       async function getUniqueNumber() {
         if (this.val === undefined) {
-          this.val = await this.storage.get("umd");
+          this.val = await this.storage.get("esm");
         }
 
         let result = this.val;
         ++this.val;
-        this.storage.put("umd", this.val);
+        this.storage.put("esm", this.val);
         return result;
 
         // Move a value from "foo" to "bar".
