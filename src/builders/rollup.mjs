@@ -74,7 +74,7 @@ console.log("PLUGINS PASSED");
 const watcher = watch(watchOptions);
 console.log("WATCHER INITIALIZED");
 watcher.on("event", (event) => {
-  console.log("G-FORCE:rollup: ", event);
+  console.log("G-FORCE:rollup: ", JSON.stringify(event));
   if (event.code === "BUNDLE_START") {
     //   BUNDLE_START — building an individual bundle
     //                  * event.input will be the input options object if present
