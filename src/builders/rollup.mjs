@@ -25,7 +25,7 @@ const plugins = [
       include: './src/browseri.js',
       values: {//https://stackoverflow.com/questions/40568580/rollup-js-how-import-a-js-file-not-es6-module-without-any-change-myvarextras
         'module.exports =': 'export default'
-      }
+      }//like banner, footer
     }),
   nodeResolve({
     browser: true,
@@ -52,6 +52,7 @@ const inputOptions = {
   plugins
 };
 const output = {
+  //banner,footer,
   name: "Window",
   strict: false,
   file: "src/browserii.js",
