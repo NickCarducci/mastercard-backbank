@@ -1,6 +1,6 @@
 //const work = require('webworkify');
 //import * as common from "./browseri.js"
-import Window from "./browserii.js"
+//import Window from "./browserii.js"
 import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
@@ -38,7 +38,7 @@ export class DurableObjectExample {
 
       const plugins = [
           replace({ 
-            include: './src/browseri.js',
+            include: 'src/browseri.js',
             values: {//https://stackoverflow.com/questions/40568580/rollup-js-how-import-a-js-file-not-es6-module-without-any-change-myvarextras
               'module.exports =': 'export default'
             }//like banner, footer
@@ -49,7 +49,7 @@ export class DurableObjectExample {
           extensions: [".js"],
           mainFields: ["module", "main"]
         }),
-        legacy({  'browserii.js': 'Window' }),
+        legacy({  'src/browserii.js': 'Window' }),
         commonjs({
           include: ["node_modules/**"],
           exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
