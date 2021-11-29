@@ -72,7 +72,7 @@ export class DurableObjectExample {
         name: "Window",
         strict: false,
         file: "src/browserii.js",
-        format: "iife",//"umd"
+        format: "es",//"umd"
         sourcemap: false,
         //globals:{"Window":this.storage
       };
