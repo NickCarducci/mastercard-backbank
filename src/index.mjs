@@ -12,6 +12,32 @@ import legacy from '@rollup/plugin-legacy';
 import replace from '@rollup/plugin-replace';
 import { generate } from 'astring'
 
+
+/*
+https://github.com/rokid/node-webworker/blob/d6092272f9f49447e067eaa2603585251bc23368/src/bootstrap_worker.js#L133
+function __importExternal__(filename, dirname, mName) {
+    // for external modules, allows the name without .js
+    // TODO(Yorkie): walk for package.json?
+    if (!/.js$/.test(filename)) {
+      filename += '.js';
+    }
+    const module = {
+      dirname,
+      exports: {},
+    };
+
+    const func = $compile(filename);
+    if (typeof func !== 'function')
+      throw new Error(`Cannot find module '${mName}' from ${filename}`);
+
+    func(
+      module.exports, 
+      module, 
+      require.bind(module), // require
+      dirname);             // __dirname
+    return module.exports;
+  }
+*/
 //const { locs, places, crs } = module.Window(); //Window.sourcesContent();
 export class DurableObjectExample {
   constructor(el, env) {
