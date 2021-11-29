@@ -1,7 +1,17 @@
 import { terser } from 'rollup-plugin-terser'
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
-//nodePolyfills() => -assert 
+//nodePolyfills() => -assert node_modules/resolve/lib/core.json (2:9)
+/*1: {
+2:   "assert": true,
+             ^
+3:   "assert/strict": ">= 15",
+  +builtin  node_modules/globals/globals.json (2:10)
+15
+1: {
+16
+2:   "builtin": {*/
+
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 
 export default {
