@@ -1,7 +1,7 @@
 import { terser } from 'rollup-plugin-terser'
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
-import nodePolyfills from 'rollup-plugin-polyfill-node';
+//import nodePolyfills from 'rollup-plugin-polyfill-node';
 
 export default {
   inlineDynamicImports:true,
@@ -14,16 +14,5 @@ export default {
     format: "es",
     sourcemap: true
   },
-  plugins: [
-    nodePolyfills( "fs"/* options */ ),
-    nodeResolve({
-      preferBuiltins: false,
-      browser: true,
-    }),
-    commonjs({
-      //include: ["node_modules/**"],
-      exclude: ["notes/**/*","node_modules/process-es6/**"]
-    }),
-    terser()
-  ]
+  plugins: [commonjs(),/*nodePolyfills(),*/nodeResolve({browser: true,}),terser()]
 };
