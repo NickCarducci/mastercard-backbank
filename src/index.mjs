@@ -5,11 +5,11 @@ import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
-import nodeResolve from "@rollup/plugin-node-resolve";
-import json from "@rollup/plugin-json";
-import { babel } from "@rollup/plugin-babel";
+//import nodeResolve from "@rollup/plugin-node-resolve";
+//import json from "@rollup/plugin-json";
+//import { babel } from "@rollup/plugin-babel";
 import legacy from '@rollup/plugin-legacy';
-import replace from '@rollup/plugin-replace';
+//import replace from '@rollup/plugin-replace';
 import { generate } from 'astring'
 
 
@@ -63,7 +63,7 @@ export class DurableObjectExample {
       ];
 
       const plugins = [
-          replace({ 
+          /*replace({ 
             include: 'src/browseri.js',
             values: {//https://stackoverflow.com/questions/40568580/rollup-js-how-import-a-js-file-not-es6-module-without-any-change-myvarextras
               'module.exports =': 'export default'
@@ -74,18 +74,18 @@ export class DurableObjectExample {
           only: [/^\.{0,2}\//],
           extensions: [".js"],
           mainFields: ["module", "main"]
-        }),
+        }),*/
         legacy({  'src/browserii.js': 'Window' }),
         commonjs({
           include: ["node_modules/**"],
           exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
         }),
-        babel({
+        /*babel({
           babelHelpers: "bundled",
           presets,
           exclude: "node_modules/**" // only transpile our source code
         }),
-        json(),
+        json(),*/
         terser()
       ];
       const inputOptions = {
