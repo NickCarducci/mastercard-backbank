@@ -1,7 +1,7 @@
 //const work = require('webworkify');
 //import * as common from "./browseri.js"
-//import Window from "./browserii.js"
-import { rollup, watch } from "rollup";
+import Window from "./browserii.js"
+/*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
@@ -10,7 +10,7 @@ import json from "@rollup/plugin-json";
 import { babel } from "@rollup/plugin-babel";
 import legacy from '@rollup/plugin-legacy';
 import replace from '@rollup/plugin-replace';
-import { generate } from 'astring'
+import { generate } from 'astring'*/
 
 
 /*
@@ -50,7 +50,7 @@ export class DurableObjectExample {
       this.value = stored || 0;
       //this.modules = work(this)??
 
-      const presets = [
+      /*const presets = [
         [
           "@babel/preset-env",
           {
@@ -78,8 +78,8 @@ export class DurableObjectExample {
         legacy({  'src/browserii.js': 'Window' }),
         commonjs({
           include: ["node_modules/**"],
-          exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
-        }),
+          *///exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
+        /*}),
         babel({
           babelHelpers: "bundled",
           presets,
@@ -110,9 +110,9 @@ export class DurableObjectExample {
           chokidar: {},
           clearScreen: true,
           skipWrite: false,
-          exclude: ["node_modules/**/*","notes/**/*","src/builders/**/*"],
-          include: "src/**/*"
-        }
+          *///exclude: ["node_modules/**/*","notes/**/*","src/builders/**/*"],
+          //include: "src/**/*"
+        /*}
       };
       console.log("PLUGINS PASSED");
       const watcher = watch(watchOptions);
@@ -143,7 +143,7 @@ export class DurableObjectExample {
           await bundle.write(output);
         })
         .catch((err) => console.log("rollup.rollup error", err.message));
-
+*/
       
       //this.el.storage.delete("esm");
       //const worker = work(import("./browseri.js")) 
