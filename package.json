@@ -5,7 +5,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "build": "cjs-to-es6 src/browseri.js && rollup -c"
+    "build": "rollup -c"
   },
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED", 
@@ -24,7 +24,6 @@
     "@rollup/plugin-legacy": "2.2.0",
     "@rollup/plugin-node-resolve": "13.0.4",
     "@rollup/plugin-replace": "3.0.0",
-    "cjs-to-es6": "1.1.1",
     "rollup": "2.56.3",
     "rollup-plugin-polyfill-node": "0.7.0",
     "rollup-plugin-terser": "7.0.2"
