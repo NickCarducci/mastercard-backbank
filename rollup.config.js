@@ -25,5 +25,5 @@ export default {
     format: "es",
     sourcemap: true
   },
-  plugins: [commonjs(),nodePolyfills(),nodeResolve({browser: true,}),terser()]
+  plugins: [commonjs({include: 'node_modules/**'}),nodePolyfills(),nodeResolve({browser: true,}),terser()]
 };
