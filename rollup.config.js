@@ -19,7 +19,7 @@ const exportType = moduleId=>{
   
   
   return {//export as sourceMap<Object> or Promise?
-    "src/index.mjs": function
+    "src/index.mjs": "function"
   }
     
 }
