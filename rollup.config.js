@@ -14,6 +14,7 @@ import cjs from "rollup-plugin-cjs-es";
 2:   "builtin": {*/
 
 import nodePolyfills from 'rollup-plugin-polyfill-node';
+import legacy from '@rollup/plugin-legacy';
 
 const exportType = moduleId=>{
   
@@ -38,5 +39,7 @@ export default {
   plugins: [
     cjs({exportType,
       nested: true
-    }),commonjs({include: 'node_modules/**'}),nodePolyfills(),nodeResolve({browser: true,}),terser()]
+    }),
+  legacy({  'browserii.js': 'Window' }),
+    commonjs({include: 'node_modules/**'}),nodePolyfills(),nodeResolve({browser: true,}),terser()]
 };
