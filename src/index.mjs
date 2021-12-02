@@ -1,6 +1,6 @@
 //const work = require('webworkify');
 //import * as common from "./browseri.js"
-//import Window from "./browserii.js"
+import Window from "./browseri.js"
 /*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
@@ -11,7 +11,6 @@ import { terser } from "rollup-plugin-terser";
 import legacy from '@rollup/plugin-legacy';
 //import replace from '@rollup/plugin-replace';
 import { generate } from 'astring';*/
-import cjs from "pure-cjs";
 
 /*
 https://github.com/rokid/node-webworker/blob/d6092272f9f49447e067eaa2603585251bc23368/src/bootstrap_worker.js#L133
@@ -50,17 +49,6 @@ export class DurableObjectExample {
       this.value = stored || 0;
       //this.modules = work(this)??
 
-      cjs.transform(options).then(
-        function (result) {
-          // handle successful result        
-            console.log(result);
-            //const esm = generate(ast)
-            //this.el.storage.put("esm", JSON.stringify(esm)) 
-        },
-        function (err) {
-          // handle error
-        }
-      );
       /*const presets = [
         [
           "@babel/preset-env",
