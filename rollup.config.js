@@ -27,7 +27,7 @@ export default {
     sourcemap: true
   },
   plugins: [
-    cjs({
+    cjs({exportType:"default",
       nested: true
     }),commonjs({include: 'node_modules/**'}),nodePolyfills(),nodeResolve({browser: true,}),terser()]
 };
