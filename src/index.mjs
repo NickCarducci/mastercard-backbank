@@ -1,7 +1,7 @@
 //const work = require('webworkify');
 //import * as common from "./browseri.js"
 //import Window from "./browserii.js"
-import { rollup, watch } from "rollup";
+/*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
@@ -10,8 +10,8 @@ import { terser } from "rollup-plugin-terser";
 //import { babel } from "@rollup/plugin-babel";
 import legacy from '@rollup/plugin-legacy';
 //import replace from '@rollup/plugin-replace';
-import { generate } from 'astring'
-
+import { generate } from 'astring';*/
+import cjs from "pure-cjs";
 
 /*
 https://github.com/rokid/node-webworker/blob/d6092272f9f49447e067eaa2603585251bc23368/src/bootstrap_worker.js#L133
@@ -50,7 +50,18 @@ export class DurableObjectExample {
       this.value = stored || 0;
       //this.modules = work(this)??
 
-      const presets = [
+      cjs.transform(options).then(
+        function (result) {
+          // handle successful result        
+            console.log(result);
+            //const esm = generate(ast)
+            //this.el.storage.put("esm", JSON.stringify(esm)) 
+        },
+        function (err) {
+          // handle error
+        }
+      );
+      /*const presets = [
         [
           "@babel/preset-env",
           {
@@ -74,18 +85,18 @@ export class DurableObjectExample {
           only: [/^\.{0,2}\//],
           extensions: [".js"],
           mainFields: ["module", "main"]
-        }),*/
+        }),*
         legacy({  'src/browserii.js': 'Window' }),
         commonjs({
           include: ["node_modules/**"],
-          exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
+          exclude: ["node_modules/process-es6/** /*","notes/** /*","src/builders/** /*"]
         }),
         /*babel({
           babelHelpers: "bundled",
           presets,
           exclude: "node_modules/**" // only transpile our source code
         }),
-        json(),*/
+        json(),*
         terser()
       ];
       const inputOptions = {
@@ -110,8 +121,8 @@ export class DurableObjectExample {
           chokidar: {},
           clearScreen: true,
           skipWrite: false,
-          exclude: ["node_modules/**/*","notes/**/*","src/builders/**/*"],
-          include: "src/**/*"
+          exclude: ["node_modules/** /*","notes/** /*","src/builders/** /*"],
+          include: "src/** /*"
         }
       };
       console.log("PLUGINS PASSED");
@@ -143,13 +154,13 @@ export class DurableObjectExample {
           await bundle.write(output);
         })
         .catch((err) => console.log("rollup.rollup error", err.message));
+*/
 
-      
       //this.el.storage.delete("esm");
-      //const worker = work(import("./browseri.js")) 
-      //this.el.storage.put("esm", JSON.stringify(worker)) 
+      //const worker = work(import("./browseri.js"))
+      //this.el.storage.put("esm", JSON.stringify(worker))
       //this.el.storage.put("esm", JSON.stringify(Window))
-      
+
       /*
       // "Much faster! But (used to be) wrong."
       async function getUniqueNumber() {
@@ -175,7 +186,6 @@ export class DurableObjectExample {
       //https://blog.cloudflare.com/durable-objects-easy-fast-correct-choose-three/
       */
     });
-    
   }
   /*static toRouteParams(pathname) {
     const match = pathname.match(
@@ -197,11 +207,11 @@ export class DurableObjectExample {
         }
       );
     } else {
-      const { locs, places, crs } = Window()//this.modules; //Window.sourcesContent();
+      const { locs, places, crs } = Window(); //this.modules; //Window.sourcesContent();
       const dataHead = {
         "Content-Type": "application/json"
-      }; 
-      
+      };
+
       /*var require = null;
         return await import("./require.js").then(async obj => {
           require = await obj.require
@@ -218,7 +228,7 @@ export class DurableObjectExample {
             require.config({
               baseUrl:
                 "src" */
-      
+
       var iMCard = null,
         mc = null;
       const initializeMCard = () => {
