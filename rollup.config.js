@@ -15,6 +15,15 @@ import cjs from "rollup-plugin-cjs-es";
 
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 
+const exportType = moduleId=>{
+  
+  
+  return {//export as sourceMap<Object> or Promise?
+    "src/index.mjs": function
+  }
+    
+}
+
 export default {
   //inlineDynamicImports:true,
   input: "src/shim.mjs",
@@ -27,7 +36,7 @@ export default {
     sourcemap: true
   },
   plugins: [
-    cjs({exportType:"default",
+    cjs({exportType,
       nested: true
     }),commonjs({include: 'node_modules/**'}),nodePolyfills(),nodeResolve({browser: true,}),terser()]
 };
