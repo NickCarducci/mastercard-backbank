@@ -1,6 +1,6 @@
 //const work = require('webworkify');
 //import * as common from "./browseri.js"
-import Window from "./browserii.js"
+import Window from "./browseri.js"
 /*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
