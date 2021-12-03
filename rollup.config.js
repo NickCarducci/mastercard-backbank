@@ -15,6 +15,7 @@ import cjs from "rollup-plugin-cjs-es";
 
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 import legacy from '@rollup/plugin-legacy';
+import { dependencies } from './package.json';
 
 const exportType = moduleId=>{
   
@@ -28,6 +29,7 @@ const exportType = moduleId=>{
 export default {
   //inlineDynamicImports:true,
   input: "src/shim.mjs",
+    external: Object.keys(dependencies),
   output: {
     exports: 'named',
     //name: "app",
