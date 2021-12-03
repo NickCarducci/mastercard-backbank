@@ -29,7 +29,7 @@ const exportType = moduleId=>{
 export default {
   //inlineDynamicImports:true,
   input: "src/shim.mjs",
-    external: Object.keys(dependencies),
+    //external: Object.keys(dependencies),
   output: {
     exports: 'named',
     //name: "app",
