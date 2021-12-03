@@ -30,6 +30,9 @@ export default {
   //inlineDynamicImports:true,
   input: "src/shim.mjs",
     //external: Object.keys(dependencies),
+  manualChunks: {
+    'vendor': ['mastercard-locations', 'mastercard-places', 'cors']
+  },
   output: {
     exports: 'named',
     //name: "app",
