@@ -37,9 +37,9 @@ export default {
     sourcemap: true
   },
   plugins: [
-  legacy({  'browserii.js': 'Window' }),
     cjs({exportType,
       nested: true
     }),
+  legacy({  'browserii.js': 'Window' }),
     commonjs({include: 'node_modules/**'}),nodePolyfills(),nodeResolve({browser: true,}),terser()]
 };
