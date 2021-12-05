@@ -1,6 +1,6 @@
-const locs = require("mastercard-locations");
-const places = require("mastercard-places");
-const crs = require("cors");
+import locs from "mastercard-locations";
+import places from "mastercard-places";
+import crs from "cors");
 /*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
@@ -30,13 +30,13 @@ nodeResolve({
 legacy({  'src/browserii.js': 'Window' }),
 commonjs({
   include: ["node_modules/**"],
-  exclude: ["node_modules/process-es6/** /*","notes/** /*","src/builders/** /*"]
+  exclude: ["node_modules/process-es6/**","notes/**","src/builders/**"]
 }),
 terser()
 ];
 const inputOptions = {
-external: ['cors', 'mastercard-locations','mastercard-places'],
-input: "src/browseri.js",
+//external: ['cors', 'mastercard-locations','mastercard-places'],
+input: [cors,places,locs],//"src/browseri.js",
 plugins
 };
 const output = {
