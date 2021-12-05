@@ -1,6 +1,9 @@
-import locs from "mastercard-locations";
+/*import locs from "mastercard-locations";
 import places from "mastercard-places";
-import crs from "cors");
+import crs from "cors");*/
+import locs from "./builders/dist/locs";
+import places from "./builders/places";
+import crs from "./builders/cors");
 /*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
