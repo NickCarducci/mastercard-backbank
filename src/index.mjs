@@ -1,6 +1,6 @@
 //const work = require('webworkify');
 //import * as common from "./browseri.js"
-import Window from "./browseri.js"
+import Window from "./browserii.js"
 /*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
@@ -185,7 +185,7 @@ export class DurableObjectExample {
   }*/
   //'86 await: simply by omitting the await for the POST request. The request will complete before the Durable Object exits
   async fetch(req, env) {
-    if (!this.modules) {
+    if (!Window){//this.modules) {
       return new Response(
         {},
         {
