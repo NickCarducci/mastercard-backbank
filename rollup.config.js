@@ -14,7 +14,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 2:   "builtin": {*/
 
 import nodePolyfills from 'rollup-plugin-polyfill-node';
-import legacy from '@rollup/plugin-legacy';
+//import legacy from '@rollup/plugin-legacy';
 import { dependencies } from './package.json';
 
 const exportType = moduleId=>{
