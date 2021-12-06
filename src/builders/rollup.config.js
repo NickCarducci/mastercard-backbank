@@ -55,7 +55,7 @@ commonjs({
     '!node_modules/logform/browser.js'
   ]//https://stackoverflow.com/a/62113284/11711280
 }),
-internal(),
+internal(['cors', 'mastercard-locations', 'mastercard-places']),
 terser()
 ];
 /*const inputOptions = {
