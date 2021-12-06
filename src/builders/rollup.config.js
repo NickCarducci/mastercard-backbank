@@ -37,7 +37,8 @@ const multiInput = require('rollup-plugin-multi-input');
 const plugins = [
 //multiInput(),
 nodeResolve({
-  browser: true
+  //browser: true
+      jsnext: true
 }),
 legacy({  'src/browserii.js': 'Window' }),
 commonjs({
