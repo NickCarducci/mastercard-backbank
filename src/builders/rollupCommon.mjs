@@ -9,7 +9,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
 //import { generate } from 'astring';
 import multiInput from 'rollup-plugin-multi-input';
-import { dependencies } from '.././package.json';
+import { dependencies } from '../.././package.json';
 /**
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
