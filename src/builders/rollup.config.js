@@ -8,6 +8,7 @@ import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
 import internal from 'rollup-plugin-internal';
+import autoExternal from 'rollup-plugin-auto-external';
 //import { generate } from 'astring';
 //import multiInput from 'rollup-plugin-multi-input';
 import internal from 'rollup-plugin-internal';
@@ -55,6 +56,7 @@ commonjs({
     '!node_modules/logform/browser.js'
   ]//https://stackoverflow.com/a/62113284/11711280
 }),
+  autoExternal(),
 internal(['cors', 'mastercard-locations', 'mastercard-places']),
 terser()
 ];
