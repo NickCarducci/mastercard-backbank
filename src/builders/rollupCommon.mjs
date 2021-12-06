@@ -9,7 +9,6 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
 //import { generate } from 'astring';
 import multiInput from 'rollup-plugin-multi-input';
-import { dependencies } from '../.././package.json';
 /**
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
@@ -22,7 +21,6 @@ const nodeResolve = require("@rollup/plugin-node-resolve");
 const legacy = require('@rollup/plugin-legacy');
 //import { generate } from 'astring';
 const multiInput = require('rollup-plugin-multi-input');
-const { dependencies } = require('.././package.json');
 */
 
 const presets = [
