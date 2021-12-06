@@ -8,7 +8,7 @@ const { terser } = require("rollup-plugin-terser");
 const nodeResolve = require("@rollup/plugin-node-resolve");
 const legacy = require('@rollup/plugin-legacy');
 //import { generate } from 'astring';
-//const multiInput = require('rollup-plugin-multi-input');
+const multiInput = require('rollup-plugin-multi-input');
 
 const presets = [
 [
@@ -22,7 +22,7 @@ const presets = [
 //"@babel/preset-react"
 ];
 const plugins = [
-//multiInput(),
+multiInput(),
 nodeResolve({
   browser: true
 }),
@@ -33,11 +33,11 @@ commonjs({
 }),*/
 terser()
 ];
-const inputOptions = {
+/*const inputOptions = {
 //external: ['cors', 'mastercard-locations','mastercard-places'],
 input: "src/browseri.js",//[cors,places,locs],
 plugins
-};
+};*/
 const output = {
 //banner,footer,
 name: "Window",
@@ -47,6 +47,19 @@ format: "es",//"umd"
 sourcemap: false,
 //globals:{"Window":this.storage
 };
+
+export default {
+  //inlineDynamicImports:true,
+    //external: Object.keys(dependencies),
+  manualChunks: {
+    'vendor': ['mastercard-locations', 'mastercard-places', 'cors']
+  },
+  output,
+  input: [cors,places,locs],//"src/browseri.js",
+  plugins
+};
+
+/*
 const watchOptions = {
 ...inputOptions,
 output: [output],
@@ -60,7 +73,6 @@ watch: {
 }
 };
 console.log("PLUGINS PASSED");
-/*
 const watcher = watch(watchOptions);
 console.log("WATCHER INITIALIZED");
 watcher.on("event", (event) => {
