@@ -60,6 +60,7 @@ watch: {
 }
 };
 console.log("PLUGINS PASSED");
+/*
 const watcher = watch(watchOptions);
 console.log("WATCHER INITIALIZED");
 watcher.on("event", (event) => {
@@ -86,4 +87,4 @@ rollup(inputOptions)
 .then(async (bundle) => {
   await bundle.write(output);
 })
-.catch((err) => console.log("rollup.rollup error", err.message));
+.catch((err) => console.log("rollup.rollup error", err.message));*/
