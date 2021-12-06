@@ -11,7 +11,6 @@ import internal from 'rollup-plugin-internal';
 import autoExternal from 'rollup-plugin-auto-external';
 //import { generate } from 'astring';
 //import multiInput from 'rollup-plugin-multi-input';
-import internal from 'rollup-plugin-internal';
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
 const crs = require("cors");
