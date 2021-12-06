@@ -7,6 +7,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
+import internal from 'rollup-plugin-internal';
 //import { generate } from 'astring';
 //import multiInput from 'rollup-plugin-multi-input';
 import internal from 'rollup-plugin-internal';
@@ -20,8 +21,7 @@ const { terser } = require("rollup-plugin-terser");
 const nodeResolve = require("@rollup/plugin-node-resolve");
 const legacy = require('@rollup/plugin-legacy');
 //import { generate } from 'astring';
-const multiInput = require('rollup-plugin-multi-input');
-//import internal from 'rollup-plugin-internal';*/
+const multiInput = require('rollup-plugin-multi-input');*/
 
 /*const presets = [
 [
