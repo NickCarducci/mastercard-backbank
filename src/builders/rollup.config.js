@@ -54,12 +54,12 @@ plugins
 };*/
 const output = {
 //banner,footer,
-//name: "Window",
+name: "Window",//no default
 strict: false,
 file: ".././browserii.js",
-format: "umd",//cannot call a namespace, "Window"//"es",
+format: "iife",//"umd",//cannot call a namespace/no default, "Window"//"es",
 sourcemap: false,
-//globals:{"Window":this.storage
+//globals:{"Window":this.storage}
 };
 
 export default {
