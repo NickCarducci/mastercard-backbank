@@ -8,7 +8,7 @@ import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
 //import { generate } from 'astring';
-import multiInput from 'rollup-plugin-multi-input';
+//import multiInput from 'rollup-plugin-multi-input';
 //import internal from 'rollup-plugin-internal';
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
@@ -39,7 +39,7 @@ const plugins = [
 nodeResolve({
   browser: true
 }),
-///legacy({  'src/browserii.js': 'Window' }),
+legacy({  'src/browserii.js': 'Window' }),
 commonjs({
   include: ["node_modules/**"],
   exclude: ["node_modules/process-es6/**","notes/**","src/builders/**"]
