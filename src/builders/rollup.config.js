@@ -23,7 +23,7 @@ const legacy = require('@rollup/plugin-legacy');
 const multiInput = require('rollup-plugin-multi-input');
 //import internal from 'rollup-plugin-internal';*/
 
-const presets = [
+/*const presets = [
 [
   "@babel/preset-env",
   {
@@ -33,7 +33,7 @@ const presets = [
   }
 ],
 //"@babel/preset-react"
-];
+];*/
 const plugins = [
 //multiInput(),
 nodeResolve({
