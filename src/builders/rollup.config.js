@@ -29,7 +29,7 @@ const presets = [
   {
     targets: 'defaults',
     //"esmodules": true,
-    modules: "auto"
+    //modules: "auto"
   }
 ],
 //"@babel/preset-react"
