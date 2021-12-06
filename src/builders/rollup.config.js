@@ -57,7 +57,7 @@ const output = {
 name: "Window",
 strict: false,
 file: ".././browserii.js",
-format: "es",//"umd"
+format: "umd",//"es",
 sourcemap: false,
 //globals:{"Window":this.storage
 };
