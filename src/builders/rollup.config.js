@@ -57,7 +57,7 @@ export default {
     'vendor': ['mastercard-locations', 'mastercard-places', 'cors']
   },
   output,
-  input: "src/browseri.js",//[crs,places,locs],
+  input: ".././browseri.js",//[crs,places,locs],
   plugins
 };
 
