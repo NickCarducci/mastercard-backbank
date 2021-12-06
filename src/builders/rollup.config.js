@@ -44,18 +44,18 @@ const output = {
 //banner,footer,
 name: "Window",
 strict: false,
-file: "src/browserii.js",
+file: ".././browserii.js",
 format: "es",//"umd"
 sourcemap: false,
 //globals:{"Window":this.storage
 };
 
 export default {
-  //inlineDynamicImports:true,
+  inlineDynamicImports:true,
     //external: Object.keys(dependencies),
-  manualChunks: {
+  /*manualChunks: {
     'vendor': ['mastercard-locations', 'mastercard-places', 'cors']
-  },
+  },*/
   output,
   input: ".././browseri.js",//[crs,places,locs],
   plugins
