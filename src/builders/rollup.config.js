@@ -54,10 +54,10 @@ plugins
 };*/
 const output = {
 //banner,footer,
-name: "Window",
+//name: "Window",
 strict: false,
 file: ".././browserii.js",
-format: "umd",//"es",
+format: "umd",//cannot call a namespace, "Window"//"es",
 sourcemap: false,
 //globals:{"Window":this.storage
 };
