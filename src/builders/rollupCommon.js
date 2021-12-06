@@ -8,7 +8,7 @@ const { terser } = require("rollup-plugin-terser");
 const nodeResolve = require("@rollup/plugin-node-resolve");
 const legacy = require('@rollup/plugin-legacy');
 //import { generate } from 'astring';
-const multiInput = require('rollup-plugin-multi-input');
+//const multiInput = require('rollup-plugin-multi-input');
 
 const presets = [
 [
@@ -22,7 +22,7 @@ const presets = [
 //"@babel/preset-react"
 ];
 const plugins = [
-multiInput(),
+//multiInput(),
 nodeResolve({
   browser: true
 }),
@@ -35,7 +35,7 @@ terser()
 ];
 const inputOptions = {
 //external: ['cors', 'mastercard-locations','mastercard-places'],
-input: [cors,places,locs],//"src/browseri.js",
+input: "src/browseri.js",//[cors,places,locs],
 plugins
 };
 const output = {
