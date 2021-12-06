@@ -5,5 +5,8 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": ".././browserii.js",
   "author": "Nick <nmcarducci@gmail.com>",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "rollup -c"
+  }
 }
