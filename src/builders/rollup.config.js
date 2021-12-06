@@ -40,7 +40,7 @@ nodeResolve({
   //browser: true
       jsnext: true
 }),
-legacy({  'src/browserii.js': 'Window' }),
+legacy({  '.././browserii.js': 'Window' }),
 commonjs({
   // non-CommonJS modules will be ignored, but you can also
   // specifically include/exclude files
