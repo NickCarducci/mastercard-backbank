@@ -1,14 +1,14 @@
-import * as locs from "mastercard-locations";
-import * as places from "mastercard-places";
-import * as crs from "cors";
-import { rollup, watch } from "rollup";
-import path from "path";
-import commonjs from "@rollup/plugin-commonjs";
-import { terser } from "rollup-plugin-terser";
-import nodeResolve from "@rollup/plugin-node-resolve";
-import legacy from '@rollup/plugin-legacy';
+const locs = require("mastercard-locations");
+const places = require("mastercard-places");
+const crs = require("cors");
+const { rollup, watch } = require("rollup");
+const path = require("path");
+const commonjs = require("@rollup/plugin-commonjs");
+const { terser } = require("rollup-plugin-terser");
+const nodeResolve = require("@rollup/plugin-node-resolve");
+const legacy = require('@rollup/plugin-legacy');
 //import { generate } from 'astring';
-import multiInput from 'rollup-plugin-multi-input';
+const multiInput = require('rollup-plugin-multi-input');
 /**
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
