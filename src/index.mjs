@@ -1,6 +1,7 @@
 //const work = require('webworkify');
-//import * as common from "./browseri.js"
-import * as Window from "./browserii.js"
+//import * as common from "./browseri.js" //cannot call a namespace
+//https://github.com/rollup/rollup/issues/1267#issuecomment-294156756
+import Window from "./browserii.js"
 /*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
