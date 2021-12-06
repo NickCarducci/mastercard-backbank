@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "private": true,
   "name": "mastercard-backbank",
   "version": "1.0.0",
