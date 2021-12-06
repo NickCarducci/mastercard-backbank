@@ -42,7 +42,17 @@ nodeResolve({
 legacy({  'src/browserii.js': 'Window' }),
 commonjs({
   include: ["node_modules/**"],
-  exclude: ["node_modules/process-es6/**","notes/**","src/builders/**"]
+  exclude: ["node_modules/process-es6/**","notes/**","src/builders/**"],
+  dynamicRequireTargets: [
+    // include using a glob pattern (either a string or an array of strings)
+    'node_modules/rollup/dist/shared/*.js',
+
+    // exclude files that are known to not be required dynamically, this allows for better optimizations
+    '!node_modules/logform/index.js',
+    '!node_modules/logform/format.js',
+    '!node_modules/logform/levels.js',
+    '!node_modules/logform/browser.js'
+  ]//https://stackoverflow.com/a/62113284/11711280
 }),
 //internal(),
 terser()
