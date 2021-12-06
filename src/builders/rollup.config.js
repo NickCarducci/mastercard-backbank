@@ -23,7 +23,7 @@ const presets = [
 //"@babel/preset-react"
 ];
 const plugins = [
-multiInput(),
+//multiInput(),
 nodeResolve({
   browser: true
 }),
@@ -57,7 +57,7 @@ export default {
     'vendor': ['mastercard-locations', 'mastercard-places', 'cors']
   },
   output,
-  input: [crs,places,locs],//"src/browseri.js",
+  input: "src/browseri.js",//[crs,places,locs],
   plugins
 };
 
