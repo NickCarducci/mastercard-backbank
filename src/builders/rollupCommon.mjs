@@ -10,6 +10,20 @@ import legacy from '@rollup/plugin-legacy';
 //import { generate } from 'astring';
 import multiInput from 'rollup-plugin-multi-input';
 import { dependencies } from '.././package.json';
+/**
+const locs = require("mastercard-locations");
+const places = require("mastercard-places");
+const crs = require("cors");
+const { rollup, watch } = require("rollup");
+const path = require("path");
+const commonjs = require("@rollup/plugin-commonjs");
+const { terser } = require("rollup-plugin-terser");
+const nodeResolve = require("@rollup/plugin-node-resolve");
+const legacy = require('@rollup/plugin-legacy');
+//import { generate } from 'astring';
+const multiInput = require('rollup-plugin-multi-input');
+const { dependencies } = require('.././package.json');
+*/
 
 const presets = [
 [
