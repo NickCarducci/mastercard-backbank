@@ -42,6 +42,8 @@ nodeResolve({
 }),
 legacy({  'src/browserii.js': 'Window' }),
 commonjs({
+  // non-CommonJS modules will be ignored, but you can also
+  // specifically include/exclude files
   include: ["node_modules/**"],
   exclude: ["node_modules/process-es6/**","notes/**","src/builders/**"],
   dynamicRequireTargets: [
@@ -53,7 +55,13 @@ commonjs({
     '!node_modules/logform/format.js',
     '!node_modules/logform/levels.js',
     '!node_modules/logform/browser.js'
-  ]//https://stackoverflow.com/a/62113284/11711280
+  ],//https://stackoverflow.com/a/62113284/11711280
+
+  // if true then uses of `global` won't be dealt with by this plugin
+  ignoreGlobal: false, // Default: false
+
+  // if false then skip sourceMap generation for CommonJS modules
+  sourceMap: false // Default: true
 }),
   autoExternal(),
 internal(['cors', 'mastercard-locations', 'mastercard-places']),
