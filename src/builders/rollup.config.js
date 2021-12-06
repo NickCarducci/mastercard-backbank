@@ -1,6 +1,6 @@
 /*import * as locs from "mastercard-locations";
 import * as places from "mastercard-places";
-import * as crs from "cors";
+import * as crs from "cors";*/
 import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
@@ -9,11 +9,11 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
 //import { generate } from 'astring';
 import multiInput from 'rollup-plugin-multi-input';
-//import internal from 'rollup-plugin-internal';*/
+//import internal from 'rollup-plugin-internal';
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
 const crs = require("cors");
-const { rollup, watch } = require("rollup");
+/*const { rollup, watch } = require("rollup");
 const path = require("path");
 const commonjs = require("@rollup/plugin-commonjs");
 const { terser } = require("rollup-plugin-terser");
@@ -21,7 +21,7 @@ const nodeResolve = require("@rollup/plugin-node-resolve");
 const legacy = require('@rollup/plugin-legacy');
 //import { generate } from 'astring';
 const multiInput = require('rollup-plugin-multi-input');
-//import internal from 'rollup-plugin-internal';
+//import internal from 'rollup-plugin-internal';*/
 
 const presets = [
 [
