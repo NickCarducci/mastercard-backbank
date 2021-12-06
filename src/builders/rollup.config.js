@@ -9,7 +9,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
 //import { generate } from 'astring';
 //import multiInput from 'rollup-plugin-multi-input';
-//import internal from 'rollup-plugin-internal';
+import internal from 'rollup-plugin-internal';
 const locs = require("mastercard-locations");
 const places = require("mastercard-places");
 const crs = require("cors");
@@ -55,7 +55,7 @@ commonjs({
     '!node_modules/logform/browser.js'
   ]//https://stackoverflow.com/a/62113284/11711280
 }),
-//internal(),
+internal(),
 terser()
 ];
 /*const inputOptions = {
