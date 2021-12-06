@@ -1,6 +1,6 @@
-import locs from "mastercard-locations";
-import places from "mastercard-places";
-import crs from "cors";
+import * as locs from "mastercard-locations";
+import * as places from "mastercard-places";
+import * as crs from "cors";
 import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
