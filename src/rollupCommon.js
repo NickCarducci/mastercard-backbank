@@ -57,8 +57,14 @@ sourcemap: false,
 
 export default {
       onwarn: (message) =>{
-    if (message.code === 'UNRESOLVED_IMPORT' && message.source === 'lodash') {
-      throw new Error(`Could not resolved "lodash" module`)
+    if (message.code === 'UNRESOLVED_IMPORT' && message.source === 'cors') {
+      throw new Error(`Could not resolved "cors" module`)
+    }else 
+    if (message.code === 'UNRESOLVED_IMPORT' && message.source === 'mastercard-places') {
+      throw new Error(`Could not resolved "mastercard-places" module`)
+    }else 
+    if (message.code === 'UNRESOLVED_IMPORT' && message.source === 'mastercard-locations') {
+      throw new Error(`Could not resolved "mastercard-locations" module`)
     }
   },
   inlineDynamicImports:true,
