@@ -7,7 +7,7 @@ import commonjs from "@rollup/plugin-commonjs";
 //import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
-import internal from 'rollup-plugin-internal';
+//import internal from 'rollup-plugin-internal';//no node_modules/
 import autoExternal from 'rollup-plugin-auto-external';
 //const locs = require("mastercard-locations");
 //const places = require("mastercard-places");
@@ -40,8 +40,8 @@ commonjs({
   // if false then skip sourceMap generation for CommonJS modules
   sourceMap: false // Default: true
 }),
-  autoExternal(),
-internal(['cors', 'mastercard-locations', 'mastercard-places']),
+  //autoExternal(),
+//internal(['cors', 'mastercard-locations', 'mastercard-places']),
 //terser()
 ];
 
