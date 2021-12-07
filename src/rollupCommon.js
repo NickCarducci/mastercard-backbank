@@ -55,7 +55,22 @@ sourcemap: false,
 //globals:{"Window":this.storage}
 };
 
-export default {
+const inputOptions = {
+  //external: ['cors', 'mastercard-locations','mastercard-places'],
+  input: "./browseri.js",//[crs,places,locs],
+  plugins
+};
+const watchOptions = {
+  ...inputOptions,
+  output: [output],
+  watch: {
+    buildDelay: 5000,
+    chokidar: {},
+    clearScreen: true,
+    skipWrite: false,
+    exclude: ["node_modules/**/*","notes/**/*","src/builders/**/*"],
+    include: "src/**/*"
+  },
       onwarn: (message) =>{
     if (message.code === 'UNRESOLVED_IMPORT' && message.source === 'cors') {
       throw new Error(`Could not resolved "cors" module`)
@@ -74,10 +89,11 @@ export default {
   /*manualChunks: {
     'vendor': ['mastercard-locations', 'mastercard-places', 'cors']
   },*/
-  output,
-  input: "./browseri.js",//[crs,places,locs],
-  plugins
 };
+console.log("PLUGINS PASSED");
+const watcher = watch(watchOptions);
+console.log("WATCHER INITIALIZED");
+watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
   } else if (event.code === "START") {
   } else if (event.code === "END") {
