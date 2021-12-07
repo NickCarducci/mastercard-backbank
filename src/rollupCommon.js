@@ -65,6 +65,8 @@ export default {
     }else 
     if (message.code === 'UNRESOLVED_IMPORT' && message.source === 'mastercard-locations') {
       throw new Error(`Could not resolved "mastercard-locations" module`)
+    }else {
+      throw new Error(JSON.stringify(message))
     }
   },
   inlineDynamicImports:true,
