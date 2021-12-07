@@ -78,3 +78,20 @@ export default {
   input: "./browseri.js",//[crs,places,locs],
   plugins
 };
+  if (event.code === "BUNDLE_START") {
+  } else if (event.code === "START") {
+  } else if (event.code === "END") {
+    watcher.close();
+  } else if (event.code === "ERROR") {
+  } else if (event.code === "BUNDLE_END") {
+  }
+  if (event.result) {
+    event.result.close();
+  }
+});
+
+rollup(inputOptions)
+  .then(async (bundle) => {
+    await bundle.write(output);
+  })
+  .catch((err) => console.log("rollup.rollup error", err.message));
