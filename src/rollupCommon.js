@@ -56,6 +56,11 @@ sourcemap: false,
 };
 
 export default {
+      onwarn: (message) =>{
+    if (message.code === 'UNRESOLVED_IMPORT' && message.source === 'lodash') {
+      throw new Error(`Could not resolved "lodash" module`)
+    }
+  },
   inlineDynamicImports:true,
     //external: Object.keys(dependencies),
   /*manualChunks: {
