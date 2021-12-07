@@ -102,12 +102,17 @@ watcher.on("event", (event) => {
   } else if (event.code === "BUNDLE_END") {
   }
   if (event.result) {
+        const ast = event.result.cache.modules.ast//.body
+        console.log(ast, " is Abstract Syntax Tree")
+      //const esm = generate(ast)
+      //this.el.storage.put("esm", JSON.stringify(esm)) 
     event.result.close();
   }
 });
 
 rollup(inputOptions)
   .then(async (bundle) => {
+      console.log(bundle, " is bundle")
     await bundle.write(output);
   })
   .catch((err) => console.log("rollup.rollup error", err.message));
