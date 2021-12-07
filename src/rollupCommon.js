@@ -6,7 +6,7 @@ import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
 //import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
-import legacy from '@rollup/plugin-legacy';
+//import legacy from '@rollup/plugin-legacy';
 //import internal from 'rollup-plugin-internal';//no node_modules/
 import autoExternal from 'rollup-plugin-auto-external';
 //const locs = require("mastercard-locations");
@@ -17,7 +17,7 @@ const plugins = [
 nodeResolve({
       jsnext: true
 }),
-legacy({  './browserii.js': 'Window' }),
+//legacy({  './browserii.js': 'Window' }),
 commonjs({
   // non-CommonJS modules will be ignored, but you can also
   // specifically include/exclude files
