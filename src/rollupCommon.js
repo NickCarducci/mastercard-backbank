@@ -4,7 +4,7 @@ import * as crs from "cors";*/
 import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
-import { terser } from "rollup-plugin-terser";
+//import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import legacy from '@rollup/plugin-legacy';
 import internal from 'rollup-plugin-internal';
@@ -42,7 +42,7 @@ commonjs({
 }),
   autoExternal(),
 internal(['cors', 'mastercard-locations', 'mastercard-places']),
-terser()
+//terser()
 ];
 
 const output = {
