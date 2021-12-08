@@ -4,7 +4,7 @@ import * as crs from "cors";*/
 import { rollup, watch } from "rollup";
 import path from "path";
 import builtins from 'rollup-plugin-node-builtins';
-import commonjs from "@rollup/plugin-commonjs";
+//import commonjs from "@rollup/plugin-commonjs";
 //import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
 //import legacy from '@rollup/plugin-legacy';
@@ -20,7 +20,7 @@ nodeResolve({preferBuiltins: false,
       jsnext: true
 }),
 //legacy({  './browserii.js': 'Window' }),
-commonjs({
+/*commonjs({
   // non-CommonJS modules will be ignored, but you can also
   // specifically include/exclude files
   include: ["node_modules/**"],
@@ -41,7 +41,7 @@ commonjs({
 
   // if false then skip sourceMap generation for CommonJS modules
   sourceMap: false // Default: true
-}),
+}),*/
   //autoExternal(),
 //internal(['cors', 'mastercard-locations', 'mastercard-places']),
 //terser()
