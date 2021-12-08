@@ -3,6 +3,7 @@ import * as places from "mastercard-places";
 import * as crs from "cors";*/
 import { rollup, watch } from "rollup";
 import path from "path";
+import builtins from 'rollup-plugin-node-builtins';
 import commonjs from "@rollup/plugin-commonjs";
 //import { terser } from "rollup-plugin-terser";
 import nodeResolve from "@rollup/plugin-node-resolve";
@@ -14,6 +15,7 @@ import autoExternal from 'rollup-plugin-auto-external';
 //const crs = require("cors");
 
 const plugins = [
+      builtins(),
 nodeResolve({preferBuiltins: false,
       jsnext: true
 }),
