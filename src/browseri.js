@@ -1,6 +1,6 @@
-import locs from "mastercard-locations";
-import places from "mastercard-places";
-import crs from "cors";
+import * as locs from "mastercard-locations";
+import * as places from "mastercard-places";
+import * as crs from "cors";
 /*import locs from "./builders/dist/locs";
 import places from "./builders/dist/places";
 import crs from "./builders/dist/cors");*/
@@ -92,7 +92,8 @@ rollup(inputOptions)
 })
 .catch((err) => console.log("rollup.rollup error", err.message));*/
 
-module.exports = function Window() {
+//module.exports = 
+export default function Window() {
     return {
       locs,
       places,
