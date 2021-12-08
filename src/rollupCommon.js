@@ -14,7 +14,7 @@ import autoExternal from 'rollup-plugin-auto-external';
 //const crs = require("cors");
 
 const plugins = [
-nodeResolve({
+nodeResolve({preferBuiltins: false,
       jsnext: true
 }),
 //legacy({  './browserii.js': 'Window' }),
