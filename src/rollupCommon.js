@@ -57,7 +57,7 @@ sourcemap: false,
 
 const inputOptions = {
   //external: ['cors', 'mastercard-locations','mastercard-places'],
-  input: "./browseri.js",//[crs,places,locs],
+  input: "src/browseri.js",//[crs,places,locs],
   plugins
 };
 const watchOptions = {
