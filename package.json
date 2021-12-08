@@ -6,7 +6,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "build": "node src/rollupCommon.js && rollup -c",
+    "build": "rollup -c",
     "build2": "cd src/builders && npm build && cd .. && cd .. && rollup -c",
     "build1": "node src/builders/rollupCommon.js && rollup -c"
   },
