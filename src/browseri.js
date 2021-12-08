@@ -1,6 +1,6 @@
-import * as locs from "mastercard-locations";
-import * as places from "mastercard-places";
-import * as crs from "cors";
+import locs from "mastercard-locations";
+import places from "mastercard-places";
+import crs from "cors";
 /*import locs from "./builders/dist/locs";
 import places from "./builders/dist/places";
 import crs from "./builders/dist/cors");*/
