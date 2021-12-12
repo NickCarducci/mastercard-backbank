@@ -94,6 +94,32 @@ rollup(inputOptions)
 
 //module.exports = 
 export default function Window() {
+  //https://itnext.io/source-maps-from-top-to-bottom-597bbc07436
+  const shimmer = (shims:{}) => {
+    // http://nodejs.org/api/modules.html#modules_loading_from_node_modules_folders
+    Object.keys(replacements).forEach(function(key) {
+        var val;
+        if (replacements[key] === false) {
+            val = path.normalize(__dirname + '/empty.js');
+        }
+        else {
+            val = replacements[key];
+            // if target is a relative path, then resolve
+            // otherwise we assume target is a module
+            if (val[0] === '.') {
+                val = path.resolve(cur_path, val);
+            }
+        }
+
+        if (key[0] === '/' || key[0] === '.') {
+            // if begins with / ../ or ./ then we must resolve to a full path
+            key = path.resolve(cur_path, key);
+        }
+        shims[key] = val;
+    });
+    return shims
+}
+  
     return {
       locs,
       places,
