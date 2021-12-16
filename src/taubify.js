@@ -1,7 +1,6 @@
 //https://github.com/craigtaub/our-own-webpack/blob/master/compiler/index.mjs
 import fs from "fs";
 import crypto from "crypto";
-import { transform } from "./transform.mjs";
 import path from "path";
 import ast from "abstract-syntax-tree";
 
