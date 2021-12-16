@@ -7,7 +7,7 @@ import ast from "abstract-syntax-tree";
 const depsArray = [];
 
 // Traverse deps graph
-const entry = "./fileA.mjs"; // move to config or cli
+const entry = "./browseri.js"; // move to config or cli
 const depsArray = (file) => {// depsGraph(entry);
   const fullPath = path.resolve("./src/", file);
   // return early if exists
