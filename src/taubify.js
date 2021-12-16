@@ -7,7 +7,12 @@ import ast from "abstract-syntax-tree";
 const depsArray = [];
 
 const depsGraph = (file) => {
-  const fullPath = path.resolve("./src/", file);
+  var fullPath = null
+  if(file.substring(file.length - 3, file.length) === ".js"){
+    fullPath = path.resolve("./src/", file);
+  } else {
+    fullPath = path.resolve("./node_modules/", file);
+  }
 
   // return early if exists
   if (!!depsArray.find((item) => item.name === fullPath)) return;
