@@ -6,21 +6,23 @@ import ast from "abstract-syntax-tree";
 
 const depsArray = [];
 
-// Traverse deps graph
-const entry = "./browseri.js"; // move to config or cli
-const depsArray = (file) => {// depsGraph(entry);
+const depsGraph = (file) => {
   const fullPath = path.resolve("./src/", file);
+
   // return early if exists
   if (!!depsArray.find((item) => item.name === fullPath)) return;
+
   // store path + parsed source as module
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const source = ast.parse(fileContents);
   const module = {
     name: fullPath,
-    source,
+    source
   };
+
   // Add module to deps array
   depsArray.push(module);
+
   // process deps
   source.body.map((current) => {
     if (current.type === "ImportDeclaration") {
@@ -28,8 +30,12 @@ const depsArray = (file) => {// depsGraph(entry);
       depsGraph(current.source.value);
     }
   });
+
   return depsArray;
 };
+// Traverse deps graph
+const entry = "./browseri.js"; // move to config or cli
+const da = depsGraph(entry);
 const buildModuleTemplateString = (moduleCode, index) => `
 /* index/id ${index} */
 (function(module, _ourRequire) {
@@ -87,21 +93,21 @@ const getImport = (item, allDeps) => {
           type: "CallExpression",
           callee: {
             type: "Identifier",
-            name: "_ourRequire",
+            name: "_ourRequire"
           },
           arguments: [
             {
               type: "Literal",
-              value: itemId,
-            },
-          ],
+              value: itemId
+            }
+          ]
         },
         id: {
           type: "Identifier",
-          name: importFunctionName,
-        },
-      },
-    ],
+          name: importFunctionName
+        }
+      }
+    ]
   };
 };
 
@@ -116,11 +122,11 @@ const getExport = (item) => {
         type: "MemberExpression",
         object: { type: "Identifier", name: "module" },
         computed: false,
-        property: { type: "Identifier", name: "exports" },
+        property: { type: "Identifier", name: "exports" }
       },
       operator: "=",
-      right: { type: "Identifier", name: moduleName },
-    },
+      right: { type: "Identifier", name: moduleName }
+    }
   };
 };
 
@@ -129,11 +135,11 @@ const transform = (depsArray) => {
     const updatedAst = dependency.source.body.map((item) => {
       if (item.type === "ImportDeclaration") {
         // replace module imports with ours
-        item = getImport(item, depsArray);// Replacing ESM import with our function. `const someImport = _ourRequire("{ID}");`
+        item = getImport(item, depsArray); // Replacing ESM import with our function. `const someImport = _ourRequire("{ID}");`
       }
       if (item.type === "ExportNamedDeclaration") {
         // replaces function name with real exported function
-        item = getExport(item);//Replacing ESM export with our function. `module.exports = someFunction;`
+        item = getExport(item); //Replacing ESM export with our function. `module.exports = someFunction;`
       }
       return item;
     });
@@ -147,19 +153,19 @@ const transform = (depsArray) => {
     return acc;
   }, []);
   // Add all modules to bundle
-  const bundleString = buildRuntimeTemplateString(updatedModules.join(","));// Our main template containing the bundles runtime.
+  const bundleString = buildRuntimeTemplateString(updatedModules.join(",")); // Our main template containing the bundles runtime.
   return bundleString;
 };
-const vendorString = transform(depsArray);// Take depsArray and return bundle string
-const sum = crypto.createHash("md5");// create hash
+const vendorString = transform(da); // Take depsArray and return bundle string
+const sum = crypto.createHash("md5"); // create hash
 sum.update(vendorString);
 const hash = sum.digest("hex");
-fs.writeFileSync(`./build/common-${hash}.js`, vendorString, "utf8");// write contents to bundle
+fs.writeFileSync(`./build/common-${hash}.js`, vendorString, "utf8"); // write contents to bundle
 fs.writeFileSync(
   "./build/manifest.json",
   `{"default": "common-${hash}.js"}`,
   "utf8"
-);// write hash to manifest
+); // write hash to manifest
 //import manifest from "./build/manifest.json";
 //`${manifest.default}`
 console.log("FINISHED :)");
