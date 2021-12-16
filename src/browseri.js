@@ -1,6 +1,6 @@
 import * as locs from "mastercard-locations";
 import * as places from "mastercard-places";
-import * as crs from "cors";
+import * as crs from "cors"; 
 /*import locs from "./builders/dist/locs";
 import places from "./builders/dist/places";
 import crs from "./builders/dist/cors");*/
@@ -95,7 +95,7 @@ rollup(inputOptions)
 //module.exports = 
 export default function Window() {
   //https://itnext.io/source-maps-from-top-to-bottom-597bbc07436
-  const shimmer = (shims:{}) => {
+  /*const shimmer = (shims:{}) => {
     // http://nodejs.org/api/modules.html#modules_loading_from_node_modules_folders
     Object.keys(replacements).forEach(function(key) {
         var val;
@@ -118,7 +118,7 @@ export default function Window() {
         shims[key] = val;
     });
     return shims
-}
+}*/
   
     return {
       locs,
