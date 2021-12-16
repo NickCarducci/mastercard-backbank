@@ -1,7 +1,9 @@
 //const work = require('webworkify');
 //import * as common from "./browseri.js" //cannot call a namespace
 //https://github.com/rollup/rollup/issues/1267#issuecomment-294156756
-import Window from "./browseri.js"
+//import Window from "./browseri.js"
+import manifest from "./build/manifest.json";
+//`${manifest.default}`
 /*import { rollup, watch } from "rollup";
 import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
@@ -196,7 +198,8 @@ export class DurableObjectExample {
         }
       );
     } else {
-      const { locs, places, crs } = Window(); //this.modules; //Window.sourcesContent();
+        
+      const { locs, places, crs } = manifest.default(); //Window() //this.modules; //Window.sourcesContent();
       const dataHead = {
         "Content-Type": "application/json"
       };
