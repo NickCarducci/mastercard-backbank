@@ -26,6 +26,7 @@
     "@rollup/plugin-legacy": "2.2.0",
     "@rollup/plugin-node-resolve": "13.0.4",
     "@rollup/plugin-replace": "3.0.0",
+    "abstract-syntax-tree": "2.20.5",
     "astring": "1.8.1",
     "rollup": "2.56.3",
     "rollup-plugin-auto-external": "2.0.0",
