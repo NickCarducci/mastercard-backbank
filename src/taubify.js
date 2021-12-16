@@ -11,7 +11,7 @@ const depsGraph = (file) => {
   if(file.substring(file.length - 3, file.length) === ".js"){
     fullPath = path.resolve("./src/", file);
   } else {
-    fullPath = path.resolve("./node_modules/", file, "/src/index.js");
+    fullPath = path.resolve("./node_modules/", `${file}/src/index.js`);
     console.log("processing: ", fullPath)
   }
 
