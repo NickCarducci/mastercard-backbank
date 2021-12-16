@@ -12,6 +12,7 @@ const depsGraph = (file) => {
     fullPath = path.resolve("./src/", file);
   } else {
     fullPath = path.resolve("./node_modules/", file);
+    console.log("processing: ", fullPath)
   }
 
   // return early if exists
