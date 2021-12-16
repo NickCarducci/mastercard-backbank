@@ -80,7 +80,7 @@ const getImport = (item, allDeps) => {
   // get variable we import onto
   const importFunctionName = item.specifiers[0].imported.name;
   // get files full path and find index in deps array.
-  const fullFile = path.resolve("./node_modules/", item.source.value);
+  const fullFile = path.resolve("./src/", item.source.value);
   const itemId = allDeps.findIndex((item) => item.name === fullFile);
 
   return {
