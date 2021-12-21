@@ -13,12 +13,12 @@ const depsGraph = (file) => {
   } else {
     fullPath = path.resolve("./node_modules/", file);//`${file}/src/index.js`);
     console.log("processing: ", fullPath)
+    var stats = fs.statSync(fullPath);
+    if(stats.isDirectory())
+     return fs.readdir(fullPath, (err, files) => {
+        console.log(files);
+      });
   }
-  var stats = fs.statSync(fullPath);
-  if(stats.isDirectory())
-   return fs.readdir(fullPath, (err, files) => {
-      console.log(files);
-    });
 
   // return early if exists
   if (!!depsArray.find((item) => item.name === fullPath)) return;
