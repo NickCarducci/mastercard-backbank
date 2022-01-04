@@ -90,6 +90,7 @@ const buildRuntimeTemplateString = (allModules) => `
 
 const getImport = (item, allDeps) => {
   // get variable we import onto
+  console.log(item.specifiers[0]);
   const importFunctionName = item.specifiers[0].imported.name;
   // get files full path and find index in deps array.
   const fullFile = path.resolve("./src/", item.source.value);
