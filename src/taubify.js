@@ -173,9 +173,9 @@ const vendorString = transform(da); // Take depsArray and return bundle string
 const sum = crypto.createHash("md5"); // create hash
 sum.update(vendorString);
 const hash = sum.digest("hex");
-fs.writeFileSync(`./build/common-${hash}.js`, vendorString, "utf8"); // write contents to bundle
+fs.writeFileSync(`src/build/common-${hash}.js`, vendorString, "utf8"); // write contents to bundle
 fs.writeFileSync(
-  "./build/manifest.json",
+  "src/build/manifest.json",
   `{"default": "common-${hash}.js"}`,
   "utf8"
 ); // write hash to manifest
