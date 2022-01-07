@@ -1,46 +1,181 @@
-//const work = require('webworkify');
-//import * as common from "./browseri.js" //cannot call a namespace
-//https://github.com/rollup/rollup/issues/1267#issuecomment-294156756
-//import Window from "./browseri.js"
-import manifest from "./build/manifest.json";
-//`${manifest.default}`
-/*import { rollup, watch } from "rollup";
+//import manifest from "./build/manifest.json";
+//https://github.com/craigtaub/our-own-webpack/blob/master/compiler/index.mjs
+import fs from "fs";
+import crypto from "crypto";
 import path from "path";
-import commonjs from "@rollup/plugin-commonjs";
-import { terser } from "rollup-plugin-terser";
-//import nodeResolve from "@rollup/plugin-node-resolve";
-//import json from "@rollup/plugin-json";
-//import { babel } from "@rollup/plugin-babel";
-import legacy from '@rollup/plugin-legacy';
-//import replace from '@rollup/plugin-replace';
-import { generate } from 'astring';*/
+import ast from "abstract-syntax-tree";
+/*import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);*/
 
-/*
-https://github.com/rokid/node-webworker/blob/d6092272f9f49447e067eaa2603585251bc23368/src/bootstrap_worker.js#L133
-function __importExternal__(filename, dirname, mName) {
-    // for external modules, allows the name without .js
-    // TODO(Yorkie): walk for package.json?
-    if (!/.js$/.test(filename)) {
-      filename += '.js';
-    }
-    const module = {
-      dirname,
-      exports: {},
-    };
+const depsArray = [];
 
-    const func = $compile(filename);
-    if (typeof func !== 'function')
-      throw new Error(`Cannot find module '${mName}' from ${filename}`);
-
-    func(
-      module.exports, 
-      module, 
-      require.bind(module), // require
-      dirname);             // __dirname
-    return module.exports;
+const depsGraph = (file) => {
+  var fullPath = null;
+  if (file.substring(file.length - 3, file.length) === ".js") {
+    fullPath = path.resolve("./src/", file);
+    console.log("processing: ", fullPath);
+  } else {
+    fullPath = path.resolve("./node_modules/", file); //`${file}/src/index.js`);
+    console.log("processing: ", fullPath);
+    var stats = fs.statSync(fullPath);
+    if (stats.isDirectory())
+      return fs.readdir(fullPath, (err, files) => {
+        console.log(files);
+      });
   }
-*/
-//const { locs, places, crs } = module.Window(); //Window.sourcesContent();
+
+  // return early if exists
+  if (!!depsArray.find((item) => item.name === fullPath)) return;
+
+  // store path + parsed source as module
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const source = ast.parse(fileContents);
+  const module = {
+    name: fullPath,
+    source
+  };
+
+  // Add module to deps array
+  depsArray.push(module);
+
+  // process deps
+  source.body.forEach((current) => {
+    if (current.type === "ImportDeclaration") {
+      // process module for each dep.
+      depsGraph(current.source.value);
+    }
+  });
+
+  return depsArray;
+};
+// Traverse deps graph
+const entry = "./browseri.js"; // move to config or cli
+const da = depsGraph(entry);
+const buildModuleTemplateString = (moduleCode, index) => `
+/* index/id ${index} */
+(function(module, _ourRequire) {
+  "use strict";
+  ${moduleCode}
+})
+`;
+
+const buildRuntimeTemplateString = (allModules) => `
+(function(modules) {
+  // Define runtime.
+  const installedModules = {}; // id/index + exports
+  function _our_require_(moduleId) {
+    // Module in cache?
+    if (installedModules[moduleId]) {
+        // return function exported in module
+       return installedModules[moduleId].exports
+    }
+    // Build module, store exports against this ref.
+    const module = {
+       i: moduleId,
+       exports: {},
+    }
+    // Execute module template function. Add exports to ref.
+    modules[moduleId](module, _our_require_);
+    // cache exports of module
+    const exports = module.exports;
+    installedModules[moduleId] = exports
+    // Return exports of module
+    return exports;
+  }
+  // Load entry module via id + return exports
+  return _our_require_(0);
+})
+/* Dep tree */
+([
+ ${allModules}
+]); 
+`;
+
+const getImport = (item, allDeps) => {
+  // get variable we import onto
+  console.log(item.specifiers[0]);
+  const importFunctionName = item.specifiers[0].local
+    ? item.specifiers[0].local.name
+    : item.specifiers[0].imported.name;
+  // get files full path and find index in deps array.
+  const fullFile = path.resolve("./src/", item.source.value);
+  const itemId = allDeps.findIndex((item) => item.name === fullFile);
+
+  return {
+    type: "VariableDeclaration",
+    kind: "const",
+    declarations: [
+      {
+        type: "VariableDeclarator",
+        init: {
+          type: "CallExpression",
+          callee: {
+            type: "Identifier",
+            name: "_ourRequire"
+          },
+          arguments: [
+            {
+              type: "Literal",
+              value: itemId
+            }
+          ]
+        },
+        id: {
+          type: "Identifier",
+          name: importFunctionName
+        }
+      }
+    ]
+  };
+};
+
+const getExport = (item) => {
+  // get export functions name
+  const moduleName = item.specifiers[0].exported.name;
+  return {
+    type: "ExpressionStatement",
+    expression: {
+      type: "AssignmentExpression",
+      left: {
+        type: "MemberExpression",
+        object: { type: "Identifier", name: "module" },
+        computed: false,
+        property: { type: "Identifier", name: "exports" }
+      },
+      operator: "=",
+      right: { type: "Identifier", name: moduleName }
+    }
+  };
+};
+
+const transform = (depsArray) => {
+  const updatedModules = depsArray.reduce((acc, dependency, index) => {
+    const updatedAst = dependency.source.body.map((item) => {
+      if (item.type === "ImportDeclaration") {
+        // replace module imports with ours
+        item = getImport(item, depsArray); // Replacing ESM import with our function. `const someImport = _ourRequire("{ID}");`
+      }
+      if (item.type === "ExportNamedDeclaration") {
+        // replaces function name with real exported function
+        item = getExport(item); //Replacing ESM export with our function. `module.exports = someFunction;`
+      }
+      return item;
+    });
+    dependency.source.body = updatedAst;
+    // Turn AST back into string
+    const updatedSource = ast.generate(dependency.source);
+    // Bind module source to module template
+    const updatedTemplate = buildModuleTemplateString(updatedSource, index);
+    //Template to be used for each module. module: load exports onto _ourRequire: import system
+    acc.push(updatedTemplate);
+    return acc;
+  }, []);
+  // Add all modules to bundle
+  const bundleString = buildRuntimeTemplateString(updatedModules.join(",")); // Our main template containing the bundles runtime.
+  return bundleString;
+};
+
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
@@ -50,145 +185,32 @@ export class DurableObjectExample {
       let stored = await this.el.storage.get("esm");
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
-      //this.modules = work(this)??
 
-      /*const presets = [
-        [
-          "@babel/preset-env",
-          {
-            targets: 'defaults',
-            //"esmodules": true,
-            modules: "auto"
-          }
-        ],
-        //"@babel/preset-react"
-      ];
-
-      const plugins = [
-          /*replace({ 
-            include: 'src/browseri.js',
-            values: {//https://stackoverflow.com/questions/40568580/rollup-js-how-import-a-js-file-not-es6-module-without-any-change-myvarextras
-              'module.exports =': 'export default'
-            }//like banner, footer
-          }),
-        nodeResolve({
-          browser: true,
-          only: [/^\.{0,2}\//],
-          extensions: [".js"],
-          mainFields: ["module", "main"]
-        }),*
-        legacy({  'src/browserii.js': 'Window' }),
-        commonjs({
-          include: ["node_modules/**"],
-          exclude: ["node_modules/process-es6/** /*","notes/** /*","src/builders/** /*"]
-        }),
-        /*babel({
-          babelHelpers: "bundled",
-          presets,
-          exclude: "node_modules/**" // only transpile our source code
-        }),
-        json(),*
-        terser()
-      ];
-      const inputOptions = {
-        external: ['cors', 'mastercard-locations','mastercard-places'],
-        input: "src/browseri.js",
-        plugins
-      };
-      const output = {
-        //banner,footer,
-        name: "Window",
-        strict: false,
-        file: "src/browserii.js",
-        format: "es",//"umd"
-        sourcemap: false,
-        //globals:{"Window":this.storage
-      };
-      const watchOptions = {
-        ...inputOptions,
-        output: [output],
-        watch: {
-          buildDelay: 5000,
-          chokidar: {},
-          clearScreen: true,
-          skipWrite: false,
-          exclude: ["node_modules/** /*","notes/** /*","src/builders/** /*"],
-          include: "src/** /*"
-        }
-      };
-      console.log("PLUGINS PASSED");
-      const watcher = watch(watchOptions);
-      console.log("WATCHER INITIALIZED");
-      watcher.on("event", (event) => {
-        //event.result.cache.modules.ast.sourceType = "module"
-        const ast = event.result.cache.modules.ast//.body
-        
-        const esm = generate(ast)
-      this.el.storage.put("esm", JSON.stringify(esm)) 
-
-        console.log("G-FORCE:rollup: ", JSON.stringify(event));
-        if (event.code === "BUNDLE_START") {
-        } else if (event.code === "START") {
-          //   START        — the watcher is (re)starting
-        } else if (event.code === "END") {
-          watcher.close();
-        } else if (event.code === "ERROR") {
-        } else if (event.code === "BUNDLE_END") {
-        }
-        if (event.result) {
-          event.result.close();
-        }
-      });
-
-      rollup(inputOptions)
-        .then(async (bundle) => {
-          await bundle.write(output);
-        })
-        .catch((err) => console.log("rollup.rollup error", err.message));
-*/
-
-      //this.el.storage.delete("esm");
-      //const worker = work(import("./browseri.js"))
-      //this.el.storage.put("esm", JSON.stringify(worker))
-      //this.el.storage.put("esm", JSON.stringify(Window))
-
-      /*
-      // "Much faster! But (used to be) wrong."
-      async function getUniqueNumber() {
-        if (this.val === undefined) {
-          this.val = await this.storage.get("esm");
-        }
-
-        let result = this.val;
-        ++this.val;
-        this.storage.put("esm", this.val);
-        return result;
-
-        // Move a value from "foo" to "bar".
-      let val = await this.storage.get("foo");
-
-      this.storage.delete("foo");
-      this.storage.put("bar", val);
-      // There's no possibility of data loss, because the delete() and the
-      // following put() are automatically coalesced into one atomic
-      // operation. This is true as long as you do not `await` anything
-      // in between.
-      
-      //https://blog.cloudflare.com/durable-objects-easy-fast-correct-choose-three/
-      */
+      const vendorString = transform(da); // Take depsArray and return bundle string
+      const sum = crypto.createHash("md5"); // create hash
+      sum.update(vendorString);
+      const hash = sum.digest("hex");
+      this.el.storage.put("esm", hash); // write hash to manifest //import manifest from "./build/manifest.json";
+      /*fs.writeFileSync(
+        `${__dirname}/build/common-${hash}.js`,
+        vendorString,
+        "utf8"
+      ); // write contents to bundle
+      fs.writeFileSync(
+        `${__dirname}/build/manifest.json`,
+        `{"default": "common-${hash}.js"}`,
+        "utf8"
+      );*/ //`${manifest.default}`
+      console.log("FINISHED :)");
     });
   }
-  /*static toRouteParams(pathname) {
-    const match = pathname.match(
-      /^\/((client)|(server))\/([\w-]+)\/([a-f0-9]{15})\/ws$/
-    )
-    if (!match) return { match: false }
-    const [_, __, client, server, sitename, tree_id] = match
-    return { match: true, client, server, sitename, tree_id }
-  }*/
-  //'86 await: simply by omitting the await for the POST request. The request will complete before the Durable Object exits
+
   async fetch(req, env) {
-    if (!Window){//this.modules) {
+    const dataHead = {
+      "Content-Type": "application/json"
+    };
+    if (!this.value) {
+      //this.modules) {
       return new Response(
         {},
         {
@@ -198,28 +220,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-        
-      const { locs, places, crs } = manifest.default(); //Window() //this.modules; //Window.sourcesContent();
-      const dataHead = {
-        "Content-Type": "application/json"
-      };
-
-      /*var require = null;
-        return await import("./require.js").then(async obj => {
-          require = await obj.require
-          if (!require) {
-            return new Response(
-              {},
-              {
-                status: "400",
-                message: "./require.js not working, is dev error",
-                headers: dataHead
-              }
-            );
-          } else {
-            require.config({
-              baseUrl:
-                "src" */
+      const { locs, places, crs } = this.value.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
         mc = null;
@@ -358,27 +359,3 @@ export class DurableObjectExample {
     }
   }
 }
-/*addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request))
-})*/
-
-/*export class Stripe {
-    checkout: typeof checkout
-    constructor(
-        stripe_secret: string,
-        params?: {
-            apiVersion?: string
-            fetch?: Function
-            userAgent?: string
-        },
-    ) {
-        let client = new HTTPClient(
-            stripe_secret,
-            params?.apiVersion,
-            params?.userAgent,
-            params?.fetch,
-        )
-        this.checkout = checkout
-        this.checkout.client = client.request
-    }
-}*/
