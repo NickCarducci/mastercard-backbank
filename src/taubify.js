@@ -3,6 +3,10 @@ import fs from "fs";
 import crypto from "crypto";
 import path from "path";
 import ast from "abstract-syntax-tree";
+import {fileURLToPath} from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const depsArray = [];
 
