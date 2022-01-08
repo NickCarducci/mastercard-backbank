@@ -46,5 +46,5 @@ export default {
       nested: true
     }),*/
   //legacy({  'browserii.js': 'Window' }),
-    commonjs({include: 'node_modules/**'}),nodePolyfills(),nodeResolve({browser: true,}),terser()]
+    commonjs({transformMixedEsModules:true,include: 'node_modules/**'}),nodePolyfills(),nodeResolve({browser: true,}),terser()]
 };
