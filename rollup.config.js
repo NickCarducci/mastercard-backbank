@@ -48,6 +48,6 @@ export default {
   //legacy({  'browserii.js': 'Window' }),
     commonjs({transformMixedEsModules:true,include: 'node_modules/**'}),
     //nodePolyfills(),
-    //nodeResolve({browser: true,}),
+    nodeResolve({browser: true,}),
     terser()]
 };
