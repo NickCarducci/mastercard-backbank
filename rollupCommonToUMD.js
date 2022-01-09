@@ -1,7 +1,12 @@
 import { rollup, watch } from "rollup";
 import nodeResolve from "@rollup/plugin-node-resolve";
 
-const plugins = [nodeResolve({ preferBuiltins: false, jsnext: true })];
+const plugins = [//nodeResolve({ preferBuiltins: false, jsnext: true }),
+      nodeResolve(),
+      commonjs({
+         include: 'node_modules/**', // Default: undefined
+      })
+                ];
 
 const output = {
   //banner,footer,
