@@ -5,7 +5,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 const plugins = [//nodeResolve({ preferBuiltins: false, jsnext: true }),
       nodeResolve(),
       commonjs({
-         include: 'node_modules/**', // Default: undefined
+         //include: 'node_modules/**', // Default: undefined
       })
                 ];
 
