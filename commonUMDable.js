@@ -2,9 +2,10 @@
 
 module.exports = {
   ast
-}*/const ast = require("abstract-syntax-tree");
+}*/
+import * as ast from "abstract-syntax-tree";
 
 export default function Window(){
-  ast
+  return {ast}
 }
 
