@@ -3,7 +3,7 @@
 import fs from "fs";
 import crypto from "crypto";
 import path from "path";
-import { parse as astParse, generate as astGenerate } from "abstract-syntax-tree";
+import ast from "./commonUMDable.js";//"abstract-syntax-tree";
 /*import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);*/
@@ -30,7 +30,7 @@ const depsGraph = (file) => {
 
   // store path + parsed source as module
   const fileContents = fs.readFileSync(fullPath, "utf8");
-  const source = astParse(fileContents);
+  const source = ast.parse(fileContents);
   const module = {
     name: fullPath,
     source
@@ -164,7 +164,7 @@ const transform = (depsArray) => {
     });
     dependency.source.body = updatedAst;
     // Turn AST back into string
-    const updatedSource = astGenerate(dependency.source);
+    const updatedSource = ast.generate(dependency.source);
     // Bind module source to module template
     const updatedTemplate = buildModuleTemplateString(updatedSource, index);
     //Template to be used for each module. module: load exports onto _ourRequire: import system
