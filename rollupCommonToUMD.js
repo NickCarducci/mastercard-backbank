@@ -13,7 +13,7 @@ const output = {
   //banner,footer,
   name: "Window", //no default
   strict: false,
-  file: "./commonUMDable.js",
+  file: "./commonUMDisModule.js",
   format: "umd", //"iife",//cannot call a namespace/no default, "Window"//"es",
   sourcemap: false
   //globals:{"Window":this.storage}
@@ -21,7 +21,7 @@ const output = {
 
 const inputOptions = {
   //external: ['cors', 'mastercard-locations','mastercard-places'],
-  input: "src/browseri.js", //[crs,places,locs],
+  input: "./commonUMDable.js", //[crs,places,locs],
   plugins
 };
 const watchOptions = {
