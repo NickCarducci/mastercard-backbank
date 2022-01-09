@@ -1,4 +1,5 @@
 import { rollup, watch } from "rollup";
+import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 
 const plugins = [//nodeResolve({ preferBuiltins: false, jsnext: true }),
