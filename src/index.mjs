@@ -3,7 +3,7 @@
 import fs from "fs";
 import crypto from "crypto";
 import path from "path";
-import ast from ".././commonUMDable.js";//"abstract-syntax-tree";
+import ast from ".././commonUMDisModule.js";//"abstract-syntax-tree";
 /*import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);*/
