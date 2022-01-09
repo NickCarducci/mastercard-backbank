@@ -13,7 +13,7 @@ const plugins = [//nodeResolve({ preferBuiltins: false, jsnext: true }),
 
 const output = {
   //banner,footer,
-  name: "Window", //no default
+  //name: "Window", //no default
   strict: false,
   file: "./commonUMDisModule.js",
   format: "umd", //"iife",//cannot call a namespace/no default, "Window"//"es",
