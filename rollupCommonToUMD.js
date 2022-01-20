@@ -1,11 +1,11 @@
 import { rollup, watch } from "rollup";
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
-//import json from '@rollup/plugin-json';
+import json from '@rollup/plugin-json';
 import nodePoly from 'rollup-plugin-polyfill-node';
 
 const plugins = [//nodeResolve({ preferBuiltins: false, jsnext: true }),
-      //json(),
+      json(),
       nodePoly(),
       nodeResolve(),
       commonjs({
