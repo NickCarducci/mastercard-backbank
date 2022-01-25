@@ -14,7 +14,8 @@ const plugins = [//nodeResolve({ preferBuiltins: false, jsnext: true }),
                 ];
 
 const output = {
-  //banner,footer,
+  banner:"const app = () => ",
+  footer:"export default app",
   name: "Window",//no default
   strict: false,
   file: "./commonUMDisModule.js",
