@@ -85,7 +85,7 @@ watcher.on("event", (event) => {
 
 rollup(inputOptions)
   .then(async (bundle) => {
-    console.log(bundle, " is bundle");
+    console.log(Object.keys(bundle), " is bundle");
     await bundle.write(output);
   })
   .catch((err) => console.log("rollup.rollup error", err.message));
