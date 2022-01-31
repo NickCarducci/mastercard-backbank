@@ -45,7 +45,7 @@ const depsGraph = (file) => {
   return depsArray;
 };
 // Traverse deps graph
-const entry = "./browseri.js"; // move to config or cli
+const entry = ".././browseri.js"; // move to config or cli
 const da = depsGraph(entry);
 const buildModuleTemplateString = (moduleCode, index) => `
 /* index/id ${index} */
