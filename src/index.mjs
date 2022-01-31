@@ -186,6 +186,8 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
 
+      console.log(Object.keys(this.value));
+      
       const vendorString = transform(da); // Take depsArray and return bundle string
       const sum = crypto.createHash("md5"); // create hash
       sum.update(vendorString);
