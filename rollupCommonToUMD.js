@@ -76,8 +76,8 @@ watcher.on("event", (event) => {
   } else if (event.code === "BUNDLE_END") {
   }
   if (event.result) {
-    console.log(event.result.cache.modules, " is event.result");
-    const ast = event.result.cache.modules.ast; //.body
+    //console.log(event.result.cache.modules[0], " is event.result.cache.modules[0]");
+    const ast = event.result.cache.modules[0].ast; //.body
     console.log(ast, " is Abstract Syntax Tree");
     //const esm = generate(ast)
     //this.el.storage.put("esm", JSON.stringify(esm))
