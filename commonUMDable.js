@@ -3,9 +3,10 @@
 module.exports = {
   ast
 }*/
-import {parse, generate} from "abstract-syntax-tree";
+import ast from "abstract-syntax-tree";
 
 export default function Window(){
+  const {parse, generate} = ast
   return {parse, generate}
 }
 
