@@ -1,17 +1,8 @@
 import { rollup, watch } from "rollup";
-import commonjs from "@rollup/plugin-commonjs";
+//import json from '@rollup/plugin-json';
+//import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
-import json from '@rollup/plugin-json';
 import nodePoly from 'rollup-plugin-polyfill-node';
-
-const plugins = [//nodeResolve({ preferBuiltins: false, jsnext: true }),
-      json(),
-      nodePoly(),
-      nodeResolve(),
-      commonjs({
-         //include: 'node_modules/**', // Default: undefined
-      }),
-                ];
 
 const output = {
   banner:"const app = () => ",
@@ -23,6 +14,16 @@ const output = {
   sourcemap: false
   //globals:{"Window":this.storage}
 };
+
+const plugins = [
+  //nodeResolve({ preferBuiltins: false, jsnext: true }),
+  //json(),
+  nodePoly(),
+  nodeResolve(),
+  /*commonjs({
+    //include: 'node_modules/**', // Default: undefined
+  }),*/
+];
 
 const inputOptions = {
   //external: ['cors', 'mastercard-locations','mastercard-places'],
