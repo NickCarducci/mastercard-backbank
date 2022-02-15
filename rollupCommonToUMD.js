@@ -67,7 +67,7 @@ const watchOptions = {
 console.log("PLUGINS PASSED");
 const watcher = watch(watchOptions);
 console.log("WATCHER INITIALIZED");
-watcher.on("event", (event) => {
+watcher.on("event", (event) => { 
   if (event.code === "BUNDLE_START") {
   } else if (event.code === "START") {
   } else if (event.code === "END") {
