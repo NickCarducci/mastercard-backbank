@@ -1,4 +1,4 @@
-import Window from "./dependencies/index.js";
+import Window from "./dependencies/shim.js";
 
 export class DurableObjectExample {
   constructor(el, env) {
