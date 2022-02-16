@@ -10,7 +10,7 @@ const output = {
   footer:"export default app",
   name: "Window",//no default
   strict: false,
-  file: "./commonUMDisModule.js",
+  file: "./built.js",
   format: "umd", //"iife",//cannot call a namespace/no default, "Window"//"es",
   sourcemap: false
   //globals:{"Window":this.storage}
@@ -28,7 +28,7 @@ const plugins = [
 
 const inputOptions = {
   //external: ['cors', 'mastercard-locations','mastercard-places'],
-  input: "./commonUMDable.js", //[crs,places,locs],
+  input: "./dependencies/shim.mjs", //[crs,places,locs],
   plugins
 };
 const watchOptions = {
