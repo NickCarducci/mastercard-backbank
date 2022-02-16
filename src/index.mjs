@@ -1,4 +1,4 @@
-import Window from ".././traverseCommons.js";
+import Window from "./dependencies/index.js";
 
 export class DurableObjectExample {
   constructor(el, env) {
