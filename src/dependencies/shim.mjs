@@ -1,13 +1,15 @@
 //traverseCommons.js
 //https://github.com/craigtaub/our-own-webpack/blob/master/compiler/index.mjs
 //import { Window } from "./index.mjs";//"abstract-syntax-tree";
-const { ast as Window } = require("abstract-syntax-tree");
+const ast = require("abstract-syntax-tree");
+const path = require("path");
+const fs = require("fs");
 //export { DurableObjectExample } from "./index.mjs";
 /*import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);*/
 
-const depsArray = [];
+const modules = [];
 
 const depsGraph = (file) => {
   var fullPath = null;
@@ -24,19 +26,17 @@ const depsGraph = (file) => {
       });
   }
 
-  // return early if exists
-  if (!!depsArray.find((item) => item.name === fullPath)) return;
+  if (!!modules.find((item) => item.name === fullPath)) return;
 
   // store path + parsed source as module
   const fileContents = fs.readFileSync(fullPath, "utf8");
-  const source = Window.parse(fileContents);
-  const module = {
+  const source = ast.parse(fileContents);
+  
+  //modules
+  modules.push({
     name: fullPath,
     source
-  };
-
-  // Add module to deps array
-  depsArray.push(module);
+  });
 
   // process deps
   source.body.forEach((current) => {
@@ -46,11 +46,11 @@ const depsGraph = (file) => {
     }
   });
 
-  return depsArray;
+  return modules;
 };
-// Traverse deps graph
-const entry = ".././browseri.js"; // move to config or cli
-const da = depsGraph(entry);
+
+// Traverse deps graph// move to config or cli
+const da = depsGraph("./index.mjs");
 const buildModuleTemplateString = (moduleCode, index) => `
 /* index/id ${index} */
 (function(module, _ourRequire) {
@@ -59,48 +59,9 @@ const buildModuleTemplateString = (moduleCode, index) => `
 })
 `;
 
-const buildRuntimeTemplateString = (allModules) => `
-(function(modules) {
-  // Define runtime.
-  const installedModules = {}; // id/index + exports
-  function _our_require_(moduleId) {
-    // Module in cache?
-    if (installedModules[moduleId]) {
-        // return function exported in module
-       return installedModules[moduleId].exports
-    }
-    // Build module, store exports against this ref.
-    const module = {
-       i: moduleId,
-       exports: {},
-    }
-    // Execute module template function. Add exports to ref.
-    modules[moduleId](module, _our_require_);
-    // cache exports of module
-    const exports = module.exports;
-    installedModules[moduleId] = exports
-    // Return exports of module
-    return exports;
-  }
-  // Load entry module via id + return exports
-  return _our_require_(0);
-})
-/* Dep tree */
-([
- ${allModules}
-]); 
-`;
-
 const getImport = (item, allDeps) => {
-  // get variable we import onto
-  console.log(item.specifiers[0]);
-  const importFunctionName = item.specifiers[0].local
-    ? item.specifiers[0].local.name
-    : item.specifiers[0].imported.name;
-  // get files full path and find index in deps array.
-  const fullFile = path.resolve("./src/", item.source.value);
-  const itemId = allDeps.findIndex((item) => item.name === fullFile);
-
+  // get variable
+  const spec = item.specifiers[0];
   return {
     type: "VariableDeclaration",
     kind: "const",
@@ -116,13 +77,17 @@ const getImport = (item, allDeps) => {
           arguments: [
             {
               type: "Literal",
-              value: itemId
+              // get files full path and find index in deps array.
+              value: allDeps.findIndex(
+                (item) =>
+                  item.name === path.resolve("./src/", item.source.value)
+              )
             }
           ]
         },
         id: {
           type: "Identifier",
-          name: importFunctionName
+          name: spec[spec.local ? "local" : "imported"].name
         }
       }
     ]
@@ -148,12 +113,13 @@ const getExport = (item) => {
   };
 };
 
-const transform = (depsArray) => {
-  const updatedModules = depsArray.reduce((acc, dependency, index) => {
-    const updatedAst = dependency.source.body.map((item) => {
+const transform = (modules) => {
+  const updatedModules = modules.reduce((acc, dependency, index) => {
+    dependency.source.body = dependency.source.body.map((item) => {
       if (item.type === "ImportDeclaration") {
         // replace module imports with ours
-        item = getImport(item, depsArray); // Replacing ESM import with our function. `const someImport = _ourRequire("{ID}");`
+        item = getImport(item, modules);
+        // Replacing ESM import with our function. `const someImport = _ourRequire("{ID}");`
       }
       if (item.type === "ExportNamedDeclaration") {
         // replaces function name with real exported function
@@ -161,25 +127,55 @@ const transform = (depsArray) => {
       }
       return item;
     });
-    dependency.source.body = updatedAst;
     // Turn AST back into string
-    const updatedSource = Window.generate(dependency.source);
+    const updatedSource = ast.generate(dependency.source);
     // Bind module source to module template
     const updatedTemplate = buildModuleTemplateString(updatedSource, index);
     //Template to be used for each module. module: load exports onto _ourRequire: import system
     acc.push(updatedTemplate);
     return acc;
   }, []);
-  // Add all modules to bundle
-  const bundleString = buildRuntimeTemplateString(updatedModules.join(",")); // Our main template containing the bundles runtime.
+  // Add all modules to bundle - buildRuntimeTemplateString()
+  // Our main template containing the bundles runtime.
+  const bundleString = `
+  (function(modules) {
+    // Define runtime.
+    const installedModules = {}; // id/index + exports
+    function _our_require_(moduleId) {
+      // Module in cache?
+      if (installedModules[moduleId]) {
+          // return function exported in module
+         return installedModules[moduleId].exports
+      }
+      // Build module, store exports against this ref.
+      const module = {
+         i: moduleId,
+         exports: {},
+      }
+      // Execute module template function. Add exports to ref.
+      modules[moduleId](module, _our_require_);
+      // cache exports of module
+      const exports = module.exports;
+      installedModules[moduleId] = exports
+      // Return exports of module
+      return exports;
+    }
+    // Load entry module via id + return exports
+    return _our_require_(0);
+  })
+  /* Dep tree */
+  ([
+   ${updatedModules.join(",")}
+  ]); 
+  `;
   return bundleString;
 };
 
-const vendorString = transform(da); // Take depsArray and return bundle string
+const vendorString = transform(da); // Take modules and return bundle string
 const sum = crypto.createHash("md5"); // create hash
 sum.update(vendorString);
 const hash = sum.digest("hex");
 
 export default {
   hash
-}
+};
