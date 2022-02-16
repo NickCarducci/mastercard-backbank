@@ -28,7 +28,7 @@ const plugins = [
 
 const inputOptions = {
   //external: ['cors', 'mastercard-locations','mastercard-places'],
-  input: "./dependencies/shim.mjs", //[crs,places,locs],
+  input: "src/dependencies/shim.mjs", //[crs,places,locs],
   plugins
 };
 const watchOptions = {
