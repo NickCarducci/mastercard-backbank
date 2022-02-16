@@ -4,7 +4,7 @@ module.exports = {
   ast
 }
 commonUMDable.js
-*/
+*/ 
 import ast from "abstract-syntax-tree";
 //const ast = require("abstract-syntax-tree");
 
