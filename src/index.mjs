@@ -1,4 +1,4 @@
-import Window from "./dependencies/shim.js";//"./dependencies/commonUMD.js"
+import Window from "./dependencies/shim.mjs";//"./dependencies/commonUMD.js"
 
 export class DurableObjectExample {
   constructor(el, env) {
