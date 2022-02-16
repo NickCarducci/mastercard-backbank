@@ -1,6 +1,6 @@
 //traverseCommons.js
 //https://github.com/craigtaub/our-own-webpack/blob/master/compiler/index.mjs
-import Window from "./commonUMDisModule.js";//"abstract-syntax-tree";
+import Window from "./index.js";//"abstract-syntax-tree";
 /*import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);*/
