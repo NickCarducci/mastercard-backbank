@@ -79,7 +79,7 @@ watcher.on("event", (event) => {
   if (event.result) {
     //console.log(event.result.cache.modules[0], " is event.result.cache.modules[0]");
     const ast = event.result.cache.modules[0].ast; //.body
-    console.log(ast, " is Abstract Syntax Tree");
+    console.log(ast, " is Abstract Syntax Tree of dependencies");
     //const esm = generate(ast)
     //this.el.storage.put("esm", JSON.stringify(esm))
     event.result.close();
