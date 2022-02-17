@@ -4,6 +4,7 @@
 const ast = require("abstract-syntax-tree");
 const path = require("path");
 const fs = require("fs");
+const entry = "./index.mjs";
 //export { DurableObjectExample } from "./index.mjs";
 /*import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -14,7 +15,7 @@ const modules = [];
 const traverse = (file) => {
   //`${file}/src/index.js`);
   var fullPath = path.resolve(
-    file.includes(".") ? "./src/" : path.resolve("./node_modules/", file),
+    file.includes(".") ? "./src/" : "./node_modules/",
     file
   );
   //file.substring(file.length - 3, file.length) === ".js"
@@ -46,9 +47,6 @@ const traverse = (file) => {
 
   return modules;
 };
-
-// Traverse deps graph// move to config or cli
-const da = traverse("./index.mjs");
 
 const getImport = (item, allDeps) => {
   // get variable
@@ -187,6 +185,8 @@ const transform = (modules) => {
   `;
 };
 
+// Traverse deps graph// move to config or cli
+const da = traverse(entry);
 const vendorString = transform(da); // Take modules and return bundle string
 const sum = crypto.createHash("md5"); // create hash
 sum.update(vendorString);
