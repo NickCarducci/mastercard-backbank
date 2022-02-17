@@ -8,7 +8,7 @@ import nodePoly from 'rollup-plugin-polyfill-node';
 const output = {
   //banner:"const app = () => ",
   //footer:"export default app",
-  name: "Window",//no default
+  //name: "Window",//no default
   strict: false,
   file: "src/built.js",
   format: "umd", //"iife",//cannot call a namespace/no default, "Window"//"es",
