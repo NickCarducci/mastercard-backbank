@@ -11,27 +11,25 @@ const __dirname = path.dirname(__filename);*/
 
 const modules = [];
 
-const depsGraph = (file) => {
-  var fullPath = null;
-  if (file.substring(file.length - 3, file.length) === ".js") {
-    fullPath = path.resolve("./src/", file);
-    console.log("processing: ", fullPath);
-  } else {
-    fullPath = path.resolve("./node_modules/", file); //`${file}/src/index.js`);
-    console.log("processing: ", fullPath);
-    var stats = fs.statSync(fullPath);
-    if (stats.isDirectory())
-      return fs.readdir(fullPath, (err, files) => {
-        console.log(files);
-      });
-  }
+const traverse = (file) => {
+  //`${file}/src/index.js`);
+  var fullPath = path.resolve(
+    file.includes(".") ? "./src/" : path.resolve("./node_modules/", file),
+    file
+  );
+  //file.substring(file.length - 3, file.length) === ".js"
+  //console.log("processing: ", fullPath);
+  if (!file.includes(".") && fs.statSync(fullPath).isDirectory())
+    return fs.readdir(fullPath, (err, files) => {
+      //console.log(files);
+    });
 
   if (!!modules.find((item) => item.name === fullPath)) return;
 
   // store path + parsed source as module
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const source = ast.parse(fileContents);
-  
+
   //modules
   modules.push({
     name: fullPath,
@@ -42,7 +40,7 @@ const depsGraph = (file) => {
   source.body.forEach((current) => {
     if (current.type === "ImportDeclaration") {
       // process module for each dep.
-      depsGraph(current.source.value);
+      traverse(current.source.value);
     }
   });
 
@@ -50,14 +48,7 @@ const depsGraph = (file) => {
 };
 
 // Traverse deps graph// move to config or cli
-const da = depsGraph("./index.mjs");
-const buildModuleTemplateString = (moduleCode, index) => `
-/* index/id ${index} */
-(function(module, _ourRequire) {
-  "use strict";
-  ${moduleCode}
-})
-`;
+const da = traverse("./index.mjs");
 
 const getImport = (item, allDeps) => {
   // get variable
@@ -95,7 +86,7 @@ const getImport = (item, allDeps) => {
 };
 
 const getExport = (item) => {
-  // get export functions name
+  // get functions
   const moduleName = item.specifiers[0].exported.name;
   return {
     type: "ExpressionStatement",
@@ -114,7 +105,7 @@ const getExport = (item) => {
 };
 
 const transform = (modules) => {
-  const updatedModules = modules.reduce((acc, dependency, index) => {
+  /*const updatedModules = modules.reduce((acc, dependency, index) => {
     dependency.source.body = dependency.source.body.map((item) => {
       if (item.type === "ImportDeclaration") {
         // replace module imports with ours
@@ -127,17 +118,17 @@ const transform = (modules) => {
       }
       return item;
     });
-    // Turn AST back into string
-    const updatedSource = ast.generate(dependency.source);
-    // Bind module source to module template
+    const updatedSource = ast.generate(dependency.source);//String
+    // template.source(bind)
     const updatedTemplate = buildModuleTemplateString(updatedSource, index);
     //Template to be used for each module. module: load exports onto _ourRequire: import system
     acc.push(updatedTemplate);
     return acc;
-  }, []);
+  }, []);*/
   // Add all modules to bundle - buildRuntimeTemplateString()
   // Our main template containing the bundles runtime.
-  const bundleString = `
+
+  return `
   (function(modules) {
     // Define runtime.
     const installedModules = {}; // id/index + exports
@@ -165,10 +156,35 @@ const transform = (modules) => {
   })
   /* Dep tree */
   ([
-   ${updatedModules.join(",")}
+   ${modules
+     .map((dependency, index) => {
+       dependency.source.body = dependency.source.body.map((item) => {
+         if (item.type === "ImportDeclaration") {
+           // replace module imports with ours
+           // Replacing ESM import with our function. `const someImport = _ourRequire("{ID}");`
+           item = getImport(item, modules);
+         }
+         if (item.type === "ExportNamedDeclaration") {
+           // replaces function name with real exported function
+           //Replacing ESM export with our function. `module.exports = someFunction;`
+           item = getExport(item);
+         }
+         return item;
+       });
+       // template.source(bind)
+       //module Template: _ourRequire: import exports
+       //buildModuleTemplateString()
+       return `
+        /* index/id ${index} */
+        (function(module, _ourRequire) {
+          "use strict";
+          ${ast.generate(dependency.source)}//updatedSource
+        })
+        `;
+     })
+     .join(",")}
   ]); 
   `;
-  return bundleString;
 };
 
 const vendorString = transform(da); // Take modules and return bundle string
