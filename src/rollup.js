@@ -10,7 +10,7 @@ const output = {
   footer:"export default app",
   name: "Window",//no default
   strict: false,
-  file: "./built.js",
+  file: "src/built.js",
   format: "umd", //"iife",//cannot call a namespace/no default, "Window"//"es",
   sourcemap: false
   //globals:{"Window":this.storage}
