@@ -12,7 +12,7 @@ export class DurableObjectExample {
 
       console.log("this.value",Object.keys(this.value),"Window.hash",Window.hash);
       
-      Window && Window.hash &&
+      Window && Window.hash && Window.hash!==undefined &&
       this.el.storage.put("esm", Window.hash); // write hash to manifest //import manifest from "./build/manifest.json";
       /*fs.writeFileSync(
         `${__dirname}/build/common-${hash}.js`,
