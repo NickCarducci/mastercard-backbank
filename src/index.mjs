@@ -10,9 +10,9 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
 
-      console.log(Object.keys(this.value));
+      console.log("this.value",Object.keys(this.value),"Window.hash",Window.hash);
       
-      Window &&
+      Window && Window.hash &&
       this.el.storage.put("esm", Window.hash); // write hash to manifest //import manifest from "./build/manifest.json";
       /*fs.writeFileSync(
         `${__dirname}/build/common-${hash}.js`,
