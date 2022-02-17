@@ -191,7 +191,7 @@ const vendorString = transform(da); // Take modules and return bundle string
 const sum = crypto.createHash("md5"); // create hash
 sum.update(vendorString);
 const hash = sum.digest("hex");
-console.log("hash of dependencies ",hash
+console.log("hash of dependencies ",hash);
 export default {
   hash
 };
