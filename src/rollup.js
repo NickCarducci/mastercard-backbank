@@ -11,7 +11,7 @@ const output = {
   name: "Window",//no default
   strict: false,
   file: "src/built.js",
-  format: "umd", //"iife",//cannot call a namespace/no default, "Window"//"es",
+  format: "iife", //"umd",//cannot call a namespace/no default, "Window"//"es",
   sourcemap: false
   //globals:{"Window":this.storage}
 };
