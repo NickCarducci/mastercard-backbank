@@ -6,8 +6,8 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import nodePoly from 'rollup-plugin-polyfill-node';
 
 const output = {
-  banner:"const app = () => ",
-  footer:"export default app",
+  //banner:"const app = () => ",
+  //footer:"export default app",
   name: "Window",//no default
   strict: false,
   file: "src/built.js",
