@@ -1,6 +1,5 @@
 import { terser } from 'rollup-plugin-terser'
-import commonjs from "@rollup/plugin-commonjs";
-import nodeResolve from "@rollup/plugin-node-resolve";
+//import nodeResolve from "@rollup/plugin-node-resolve";
 import { dependencies } from './package.json';
 
 const exportType = moduleId=>{
@@ -20,7 +19,7 @@ export default {
     sourcemap: true
   },
   plugins: [
-    nodeResolve({browser: true,}),
+    //nodeResolve({browser: true,}),
     terser()
   ]
 };
