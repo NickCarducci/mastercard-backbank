@@ -6,10 +6,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "build": "node src/rollup.js && rollup -c",
-    "build3": "node src/taubify.js && rollup -c",
-    "build2": "cd src/builders && npm build && cd .. && cd .. && rollup -c",
-    "build1": "node src/builders/rollupCommon.js && rollup -c"
+    "build": "node src/rollup.js && rollup -c"
   },
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED", 
@@ -17,7 +14,6 @@
     "@babel/core": "7.15.0",
     "@babel/preset-env": "^7.14.8",
     "@rollup/plugin-babel": "5.3.0",
-    "@rollup/plugin-commonjs": "20.0.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-legacy": "2.2.0",
     "@rollup/plugin-node-resolve": "13.0.4",
