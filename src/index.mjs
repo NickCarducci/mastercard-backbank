@@ -1,4 +1,5 @@
 import Window from "./built.js";//"./dependencies/commonUMD.js"
+//https://developers.cloudflare.com/workers/platform/limits#durable-objects-limits
 
 export class DurableObjectExample {
   constructor(el, env) {
