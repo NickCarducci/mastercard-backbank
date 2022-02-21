@@ -3,7 +3,7 @@ import { rollup, watch } from "rollup";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import nodePoly from "rollup-plugin-polyfill-node";
 
-const output = [
+const pages = [
   {
     format: "iife",
     sourcemap: false,
@@ -16,11 +16,11 @@ const output = [
 const manifest = {
   input: "src/dependencies/shim.mjs",
   plugins: [nodePoly(), nodeResolve()]
-}
+};
 
 const watchable = {
-  ...manifest
-  output,
+  ...manifest,
+  output: pages,
   watch: {
     buildDelay: 5000,
     chokidar: {},
@@ -69,7 +69,7 @@ watcher.on("event", (event) => {
 rollup(manifest)
   .then(async (bundle) => {
     console.log(Object.keys(bundle), " is bundle");
-    return output.forEach(async output=>await bundle.write(output));
+    return pages.forEach(async (output) => await bundle.write(output));
   })
   .catch((err) => console.log("rollup.rollup error", err.message));
 
