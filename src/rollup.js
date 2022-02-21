@@ -69,7 +69,7 @@ watcher.on("event", (event) => {
 rollup(manifest)
   .then(async (bundle) => {
     console.log(Object.keys(bundle), " is bundle");
-    await bundle.write(output);
+    return output.forEach(async output=>await bundle.write(output));
   })
   .catch((err) => console.log("rollup.rollup error", err.message));
 
