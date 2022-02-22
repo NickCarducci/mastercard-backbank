@@ -5,7 +5,7 @@ import nodePoly from "rollup-plugin-polyfill-node";
 
 const pages = [
   {
-    name:"app",
+    name:"Window",
     format: "iife",
     sourcemap: false,
     strict: false,
