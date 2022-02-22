@@ -15,7 +15,7 @@ const pages = [
   }
 ];
 const manifest = {
-  input: "src/dependencies/shim.mjs",
+  input: "src/dependencies/index.mjs",//"src/dependencies/shim.mjs",
   plugins: [nodePoly(), nodeResolve()]
 };
 
