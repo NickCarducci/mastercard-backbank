@@ -1,6 +1,8 @@
 import { terser } from 'rollup-plugin-terser'
 export default {
   input: "src/shim.mjs",
+  exclude: ["node_modules/**/*", "notes/**/*", "src/builders/**/*", "src/notes/**/*"],
+  include: "src/**/*",
   output: {
     exports: 'named',
     strict: false,
