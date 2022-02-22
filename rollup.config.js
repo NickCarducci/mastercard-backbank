@@ -13,7 +13,7 @@ export default {
   plugins: [
     nodeResolve({browser:true}),
     commonjs({
-     exclude: ["node_modules/**/*", "notes/**/*", "src/builders/**/*", "src/notes/**/*"],
+     exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
      include: "src/**/*",
     }),
     terser()
