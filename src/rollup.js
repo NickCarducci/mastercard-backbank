@@ -5,12 +5,12 @@ import nodePoly from "rollup-plugin-polyfill-node";
 
 const pages = [
   {
+    banner: "const app = () => ",
+    footer: "export default app",
+    file: "src/built.js",
     format: "iife",
     sourcemap: false,
     strict: false,
-    banner: "const app = () => ",
-    file: "src/built.js",
-    footer: "export default app"
   }
 ];
 const manifest = {
