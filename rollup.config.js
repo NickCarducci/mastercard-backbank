@@ -1,4 +1,5 @@
 import { terser } from 'rollup-plugin-terser'
+import { commonjs } from '@rollup/plugin-commonjs'
 export default {
   input: "src/shim.mjs",
   output: {
