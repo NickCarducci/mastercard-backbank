@@ -5,7 +5,7 @@
 const path = require("path");
 const fs = require("fs");
 const entry = "./index.mjs";*/
-import ast from "abstract-syntax-tree";
+import * as ast from "abstract-syntax-tree";
 import path from "path";
 import fs from "fs";
 import entry from "./index.mjs";
