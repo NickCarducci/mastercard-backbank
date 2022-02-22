@@ -5,11 +5,11 @@ import nodePoly from "rollup-plugin-polyfill-node";
 
 const pages = [
   {
-    //name:"Window",
+    name:"app",
     format: "iife",
     sourcemap: false,
     strict: false,
-    banner: "const app = () => ",
+    //banner: "const app = () => ",
     file: "src/built.js",
     footer: "export default app"
   }
