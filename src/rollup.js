@@ -11,8 +11,6 @@ const pages = [
     strict: false,
     //banner: "const app = () => ",
     file: "src/built.js",
-    exclude: ["node_modules/**/*", "notes/**/*", "src/builders/**/*", "src/notes/**/*"],
-    include: "src/**/*",
     footer: "export default app"
   }
 ];
@@ -29,6 +27,8 @@ const watchable = {
     chokidar: {},
     clearScreen: true,
     skipWrite: false,
+    exclude: ["node_modules/**/*", "notes/**/*", "src/builders/**/*", "src/notes/**/*"],
+    include: "src/**/*",
   },
   onwarn: (message) => {
     if (message.code === "UNRESOLVED_IMPORT" && message.source === "cors") {
