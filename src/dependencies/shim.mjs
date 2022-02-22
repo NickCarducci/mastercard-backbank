@@ -1,10 +1,14 @@
 //traverseCommons.js
 //https://github.com/craigtaub/our-own-webpack/blob/master/compiler/index.mjs
 //import { Window } from "./index.mjs";//"abstract-syntax-tree";
-const ast = require("abstract-syntax-tree");
+/*const ast = require("abstract-syntax-tree");
 const path = require("path");
 const fs = require("fs");
-const entry = "./index.mjs";
+const entry = "./index.mjs";*/
+import * as ast from "abstract-syntax-tree";
+import * as path from "path";
+import * as fs from "fs";
+import entry from "./index.mjs";
 //export { DurableObjectExample } from "./index.mjs";
 /*import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
