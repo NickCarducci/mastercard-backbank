@@ -51,10 +51,12 @@ const watchable = {
   inlineDynamicImports: true
 };
 console.log("PLUGINS PASSED");
-const watcher = watch(watchable);
-console.log("WATCHER INITIALIZED");
+//const watcher = watch(watchable);
 
 export {
-  watcher,
+  watcher:()=>{
+    const watcher = watch(watchable);
+    console.log("WATCHER INITIALIZED");
+  },
   manifest
 }
