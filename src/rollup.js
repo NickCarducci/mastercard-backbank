@@ -11,7 +11,7 @@ const pages = [
     strict: false,
     banner: "const app = () => ",
     file: "src/built.js",
-    footer: "export default app",
+    //footer: "export default app",
   }
 ];
 const manifest = {
