@@ -57,6 +57,7 @@ export {
   watcher:()=>{
     const watcher = watch(watchable);
     console.log("WATCHER INITIALIZED");
+    return watcher
   },
   manifest
 }
