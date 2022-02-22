@@ -1,3 +1,59 @@
+
+
+const getImport = (item, allDeps) => {
+  // get variable
+  const spec = item.specifiers[0];
+  return {
+    type: "VariableDeclaration",
+    kind: "const",
+    declarations: [
+      {
+        type: "VariableDeclarator",
+        init: {
+          type: "CallExpression",
+          callee: {
+            type: "Identifier",
+            name: "_ourRequire"
+          },
+          arguments: [
+            {
+              type: "Literal",
+              // get files full path and find index in deps array.
+              value: allDeps.findIndex(
+                (item) =>
+                  item.name === path.resolve("./src/", item.source.value)
+              )
+            }
+          ]
+        },
+        id: {
+          type: "Identifier",
+          name: spec[spec.local ? "local" : "imported"].name
+        }
+      }
+    ]
+  };
+};
+
+const getExport = (item) => {
+  // get functions
+  const moduleName = item.specifiers[0].exported.name;
+  return {
+    type: "ExpressionStatement",
+    expression: {
+      type: "AssignmentExpression",
+      left: {
+        type: "MemberExpression",
+        object: { type: "Identifier", name: "module" },
+        computed: false,
+        property: { type: "Identifier", name: "exports" }
+      },
+      operator: "=",
+      right: { type: "Identifier", name: moduleName }
+    }
+  };
+};
+
 const hydrate = modules =>{
  return `
   (function(modules) {
@@ -58,5 +114,7 @@ const hydrate = modules =>{
   `;
 }
 export {
-  hydrate
+  hydrate,
+  getImport,
+  getExport
 }
