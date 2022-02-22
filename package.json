@@ -11,6 +11,9 @@
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED", 
   "devDependencies": {
+    "@babel/core": "7.15.0",
+    "@babel/preset-env": "^7.14.8",
+    "@rollup/plugin-babel": "5.3.0",
     "@rollup/plugin-node-resolve": "13.0.4",
     "abstract-syntax-tree": "2.20.5",
     "cors": "2.8.5",
