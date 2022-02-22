@@ -5,9 +5,9 @@
 const path = require("path");
 const fs = require("fs");
 const entry = "./index.mjs";*/
-import * as ast from "abstract-syntax-tree";
-import * as path from "path";
-import * as fs from "fs";
+import ast from "abstract-syntax-tree";
+import path from "path";
+import fs from "fs";
 import entry from "./index.mjs";
 //export { DurableObjectExample } from "./index.mjs";
 /*import { fileURLToPath } from "url";
