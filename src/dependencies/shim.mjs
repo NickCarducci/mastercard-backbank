@@ -1,5 +1,3 @@
-
-
 const getImport = (item, allDeps) => {
   // get variable
   const spec = item.specifiers[0];
@@ -114,7 +112,5 @@ const hydrate = modules =>{
   `;
 }
 export {
-  hydrate,
-  getImport,
-  getExport
+  hydrate
 }
