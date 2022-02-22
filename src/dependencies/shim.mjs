@@ -111,6 +111,6 @@ const hydrate = modules =>{
   ]); 
   `;
 }
-export {
+export default {
   hydrate
 }
