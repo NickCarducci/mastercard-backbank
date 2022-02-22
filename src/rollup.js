@@ -2,6 +2,7 @@
 import { rollup, watch } from "rollup";
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
+import { hydrate } from "./dependencies/shim.js";
 
 const pages = [
   {
@@ -70,7 +71,8 @@ watcher.on("event", (event) => {
 rollup(manifest)
   .then(async (bundle) => {
     console.log(Object.keys(bundle), " is bundle");
-    return pages.forEach(async (output) => await bundle.write(output));
+    pages.forEach(async (output) => await bundle.write(output));
+    return hydrate(bundle)
   })
   .catch((err) => console.log("rollup.rollup error", err.message));
 
