@@ -9,9 +9,9 @@ const pages = [
     format: "iife",
     sourcemap: false,
     strict: false,
-    banner: "const app = () => ",
+    //banner: "const app = () => ",
     file: "src/built.js",
-    //footer: "export default app",
+    footer: "export default app",
   }
 ];
 const manifest = {
