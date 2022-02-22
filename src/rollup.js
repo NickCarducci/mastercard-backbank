@@ -27,7 +27,7 @@ const watchable = {
     chokidar: {},
     clearScreen: true,
     skipWrite: false,
-    exclude: ["node_modules/**/*", "notes/**/*", "src/builders/**/*"],
+    exclude: ["node_modules/**/*", "notes/**/*", "src/builders/**/*", "src/notes/**/*"],
     include: "src/**/*"
   },
   onwarn: (message) => {
