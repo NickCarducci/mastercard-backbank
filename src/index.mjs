@@ -1,4 +1,4 @@
-import Window from "./built.js"; //"./dependencies/commonUMD.js"
+//import Window from "./built.js"; //"./dependencies/commonUMD.js"
 //https://developers.cloudflare.com/workers/platform/limits#durable-objects-limits
 import { watcher, manifest, pages } from "./rolluphelpers.js";
 import { rollup } from "rollup";
@@ -9,27 +9,26 @@ export class DurableObjectExample {
     console.log(el.textContent, "- From the example module");
     this.el = el;
     this.env = env;
+    watcher.on("event", (event) => {
+      if (event.code === "BUNDLE_START") {
+      } else if (event.code === "START") {
+      } else if (event.code === "END") {
+        watcher.close();
+      } else if (event.code === "ERROR") {
+      } else if (event.code === "BUNDLE_END") {
+      }
+      if (event.result) {
+        const ast = event.result.cache.modules[0].ast; //.body
+        const product = hydrate(ast);
+        product && this.el.storage.put("esm", product);
+        console.log(ast, " is Abstract Syntax Tree of dependencies");
+        event.result.close();
+      }
+    });
     this.el.blockConcurrencyWhile(async () => {
       let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
-
-      watcher.on("event", (event) => {
-        if (event.code === "BUNDLE_START") {
-        } else if (event.code === "START") {
-        } else if (event.code === "END") {
-          watcher.close();
-        } else if (event.code === "ERROR") {
-        } else if (event.code === "BUNDLE_END") {
-        }
-        if (event.result) {
-          const ast = event.result.cache.modules[0].ast; //.body
-          const product = hydrate(ast);
-          product && this.el.storage.put("esm", product);
-          console.log(ast, " is Abstract Syntax Tree of dependencies");
-          event.result.close();
-        }
-      });
 
       rollup(manifest)
         .then((bundle) => {
@@ -45,30 +44,7 @@ export class DurableObjectExample {
         })
         .catch((err) => console.log("rollup.rollup error", err.message));
 
-      /*console.log("this.value", this.value, "Window.hash", Window.hash);
-
-      Window &&
-        Window.hash &&
-        Window.hash !== undefined &&
-        this.el.storage.put("esm", Window.hash); // write hash to manifest //import manifest from "./build/manifest.json"; //`${manifest.default}`
-      //II
-      */
-      
-      /*fs.writeFileSync(
-        `${__dirname}/build/common-${hash}.js`,
-        vendorString,
-        "utf8"
-      ); // write contents to bundle
-      fs.writeFileSync(
-        `${__dirname}/build/manifest.json`,
-        `{"default": "common-${hash}.js"}`,
-        "utf8"
-      );
-      //I
-      */
-      console.log(
-        "FINISHED :)"
-      );
+      console.log("FINISHED :)");
     });
   }
 
@@ -227,3 +203,24 @@ export class DurableObjectExample {
   }
 }
 
+/*console.log("this.value", this.value, "Window.hash", Window.hash);
+
+Window &&
+  Window.hash &&
+  Window.hash !== undefined &&
+  this.el.storage.put("esm", Window.hash); // write hash to manifest //import manifest from "./build/manifest.json"; //`${manifest.default}`
+//II
+*/
+
+/*fs.writeFileSync(
+  `${__dirname}/build/common-${hash}.js`,
+  vendorString,
+  "utf8"
+); // write contents to bundle
+fs.writeFileSync(
+  `${__dirname}/build/manifest.json`,
+  `{"default": "common-${hash}.js"}`,
+  "utf8"
+);
+//I
+*/
