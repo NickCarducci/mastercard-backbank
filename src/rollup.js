@@ -1,6 +1,6 @@
 //rollupCommonToUMD.js
 import { rollup, watch } from "rollup";
-import nodeResolve from "@rollup/plugin-node-resolve";
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
 
 const pages = [
