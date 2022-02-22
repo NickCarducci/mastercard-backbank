@@ -16,7 +16,7 @@ const pages = [
 ];
 const manifest = {
   input: "src/dependencies/index.mjs",//"src/dependencies/shim.mjs",
-  plugins: [nodePoly(), nodeResolve()]
+  plugins: [nodePoly(), nodeResolve({browser:true})]
 };
 
 const watchable = {
@@ -27,7 +27,7 @@ const watchable = {
     chokidar: {},
     clearScreen: true,
     skipWrite: false,
-    exclude: ["node_modules/**/*", "notes/**/*", "src/builders/**/*", "src/notes/**/*"],
+    exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
     include: "src/**/*",
   },
   onwarn: (message) => {
