@@ -2,7 +2,7 @@
 //https://developers.cloudflare.com/workers/platform/limits#durable-objects-limits
 import { watcher, manifest, pages } from "./rolluphelpers.js";
 import { rollup } from "rollup";
-import { hydrate } from "./dependencies/shim.js";
+import { hydrate } from "./dependencies/shim.mjs";
 
 export class DurableObjectExample {
   constructor(el, env) {
