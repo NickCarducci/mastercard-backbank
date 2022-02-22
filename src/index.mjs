@@ -9,6 +9,10 @@ export class DurableObjectExample {
     console.log(el.textContent, "- From the example module");
     this.el = el;
     this.env = env;
+    this.el.blockConcurrencyWhile(async () => {
+      let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
+      // After initialization, future reads do not need to access storage.
+      this.value = stored || 0;
     watcher.on("event", (event) => {
       if (event.code === "BUNDLE_START") {
       } else if (event.code === "START") {
@@ -25,10 +29,6 @@ export class DurableObjectExample {
         event.result.close();
       }
     });
-    this.el.blockConcurrencyWhile(async () => {
-      let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
-      // After initialization, future reads do not need to access storage.
-      this.value = stored || 0;
 
       rollup(manifest)
         .then((bundle) => {
