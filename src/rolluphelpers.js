@@ -53,11 +53,16 @@ const watchable = {
 console.log("PLUGINS PASSED");
 //const watcher = watch(watchable);
 
+const watcher = watch(watchable);
+console.log("WATCHER INITIALIZED");
 export default {
-  watcher:()=>{
-    const watcher = watch(watchable);
-    console.log("WATCHER INITIALIZED");
-    return watcher
-  },
+  watcher,
   manifest
 }
+/**
+watcher:()=>{
+  const watcher = watch(watchable);
+  console.log("WATCHER INITIALIZED");
+  return watcher
+},
+*/
