@@ -1,5 +1,5 @@
-import { watcher, manifest, pages } from "./rolluphelpers.mjs";
-import { rollup } from "rollup";
+//import { watcher, manifest, pages } from "./rolluphelpers.mjs";
+//import { rollup } from "rollup";
 
 const getImport = (item, allDeps) => {
   // get variable
@@ -114,7 +114,7 @@ const hydrate = modules =>{
   ]); 
   `;
 }
-
+/*
 var product = null
 watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
@@ -151,3 +151,4 @@ rollup(manifest)
 
 console.log("FINISHED :)");
 
+*/
