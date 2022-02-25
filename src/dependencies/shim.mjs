@@ -1,3 +1,6 @@
+import { watcher, manifest, pages } from "./rolluphelpers.mjs";
+import { rollup } from "rollup";
+
 const getImport = (item, allDeps) => {
   // get variable
   const spec = item.specifiers[0];
@@ -111,6 +114,40 @@ const hydrate = modules =>{
   ]); 
   `;
 }
+
+var product = null
+watcher.on("event", (event) => {
+  if (event.code === "BUNDLE_START") {
+  } else if (event.code === "START") {
+  } else if (event.code === "END") {
+    watcher.close();
+  } else if (event.code === "ERROR") {
+  } else if (event.code === "BUNDLE_END") {
+  }
+  if (event.result) {
+    const ast = event.result.cache.modules[0].ast; //.body
+    product = hydrate(ast);
+    console.log(ast, " is Abstract Syntax Tree of dependencies");
+    event.result.close();
+  }
+});
 export default {
-  hydrate
+  product
 }
+
+rollup(manifest)
+.then((bundle) => {
+  console.log(
+    Object.keys(bundle),
+    " is bundle; using the watcher-listener's first ast-event-result-cache-module"
+  );
+  pages.forEach(async (page) => await bundle.write(page));
+  return console.log(
+    Object.keys(bundle),
+    " is bundle, with written pages"
+  );
+})
+.catch((err) => console.log("rollup.rollup error", err.message));
+
+console.log("FINISHED :)");
+
