@@ -3,7 +3,7 @@
 //import { watcher, manifest, pages } from "./rolluphelpers.mjs";
 //import { rollup } from "rollup";
 //import { product } from "./dependencies/shim.mjs";
-import Window from "dist/built.mjs";
+import Window from "dist/built.js";
 
 export class DurableObjectExample {
   constructor(el, env) {
