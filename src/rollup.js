@@ -11,7 +11,7 @@ const pages = [
     sourcemap: false,
     strict: false,
     //banner: "const app = () => ",
-    file: "dist/built.js",
+    file: "dist/built.mjs",
     footer: "export default app"
   }
 ];
