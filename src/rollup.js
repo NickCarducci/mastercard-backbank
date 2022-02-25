@@ -2,7 +2,7 @@
 import { rollup, watch } from "rollup";
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
-import { hydrate } from "./dependencies/shim.js";
+//import { hydrate } from "./dependencies/shim.js";
 
 const pages = [
   {
@@ -11,7 +11,7 @@ const pages = [
     sourcemap: false,
     strict: false,
     //banner: "const app = () => ",
-    file: "src/built.js",
+    file: "dist/built.mjs",
     footer: "export default app"
   }
 ];
@@ -72,7 +72,7 @@ rollup(manifest)
   .then(async (bundle) => {
     console.log(Object.keys(bundle), " is bundle");
     pages.forEach(async (output) => await bundle.write(output));
-    return hydrate(bundle)
+   // return hydrate(bundle)
   })
   .catch((err) => console.log("rollup.rollup error", err.message));
 
