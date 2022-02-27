@@ -28,7 +28,7 @@ const pages = [
       console.log(globalThis);
     `,*/
     file: "dist/built.mjs",
-    footer: "globalThis"
+    //footer: "globalThis"
     //footer: "export default app"
   }
 ];
