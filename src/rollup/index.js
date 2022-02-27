@@ -4,6 +4,10 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
 //import { hydrate } from "./dependencies/shim.js";
 
+/*
+if (typeof global === 'undefined')
+  globalThis.global = globalThis
+*/
 const pages = [
   {
     name:"app",
