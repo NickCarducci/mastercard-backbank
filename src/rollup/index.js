@@ -1,5 +1,6 @@
 //rollupCommonToUMD.js
 import { rollup, watch } from "rollup";
+import externalGlobals from "rollup-plugin-external-globals";
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
 //import { hydrate } from "./dependencies/shim.js";
@@ -31,7 +32,12 @@ const pages = [
 ];
 const manifest = {
   input: "src/dependencies/index.mjs",//"src/dependencies/shim.mjs",
-  plugins: [nodePoly(), nodeResolve({browser:true})],
+  plugins: [nodePoly(), nodeResolve({browser:true}),
+           
+    externalGlobals({
+      this: "globalThis"
+    })
+           ],
   //external: ["globalThis"]
 };
 
