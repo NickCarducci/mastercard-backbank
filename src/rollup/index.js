@@ -11,7 +11,7 @@ if (typeof global === 'undefined')
 const pages = [
   {
     name:"app",
-    format: "iife",
+    format: "amd",
     sourcemap: false,
     strict: false,
     banner: "const app = () => ",
