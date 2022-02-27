@@ -44,10 +44,10 @@ const manifest = {
     /*externalGlobals({
       this: "globalThis"
     }),*/
-            /*commonjs({
+            commonjs({
               
     include: 'node_modules/**'
-            })*/
+            })
            ],
   //external: ["globalThis"]
 };
