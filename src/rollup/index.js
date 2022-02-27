@@ -10,14 +10,25 @@ const pages = [
     format: "iife",
     sourcemap: false,
     strict: false,
-    //banner: "const app = () => ",
+    banner: "const app = () => ",
+    /*footer: `
+      export default (() => {
+        if (typeof globalThis === 'object') return;
+        Object.prototype.__defineGetter__('window', () => this);
+        window.globalThis = window;
+        delete Object.prototype.window;
+      }());
+
+      console.log(globalThis);
+    `,*/
     file: "dist/built.mjs",
     footer: "export default app"
   }
 ];
 const manifest = {
   input: "src/dependencies/index.mjs",//"src/dependencies/shim.mjs",
-  plugins: [nodePoly(), nodeResolve({browser:true})]
+  plugins: [nodePoly(), nodeResolve({browser:true})],
+  //external: ["globalThis"]
 };
 
 const watchable = {
