@@ -34,7 +34,7 @@ const pages = [
     `,*/
     file: "dist/built.mjs",
     //footer: "globalThis"
-    //footer: "export default app"
+    footer: "export default app"
   }
 ];
 const manifest = {
