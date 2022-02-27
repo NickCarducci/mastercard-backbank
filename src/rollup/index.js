@@ -17,7 +17,7 @@ const pages = [
       places: "mastercard-locations",
       crs: "cors" 
     },
-    //name:"app",
+    name:"app",
     format: "umd",
     sourcemap: false,
     strict: false,
