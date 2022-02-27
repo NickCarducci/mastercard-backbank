@@ -3,9 +3,9 @@
 import { watcher, manifest, pages } from "./rolluphelpers.mjs";
 import { rollup } from "rollup";
 //import { product } from "./dependencies/shim.mjs";
-import Window from ".././dist/built.mjs";
+//import Window from ".././dist/built.mjs";
 
-/*watcher.on("event", (event) => {
+watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
   } else if (event.code === "START") {
   } else if (event.code === "END") {
@@ -19,7 +19,7 @@ import Window from ".././dist/built.mjs";
     event.result.close();
   }
 });
-*/
+
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
@@ -29,9 +29,9 @@ export class DurableObjectExample {
       let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
-      this.value = Window;
+      //this.value = Window;
       
-      /*
+      
       rollup(manifest)
         .then(async (bundle) => {
           console.log(Object.keys(bundle), " is bundle");
@@ -39,7 +39,7 @@ export class DurableObjectExample {
         this.value = bundle
          // return hydrate(bundle)
         })
-        .catch((err) => console.log("rollup.rollup error", err.message));*/
+        .catch((err) => console.log("rollup.rollup error", err.message));
       //this.el.storage.put("esm", product);
     });
   }
