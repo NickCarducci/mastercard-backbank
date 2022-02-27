@@ -5,13 +5,13 @@ import { hydrate } from ".././dependencies/shim.mjs";
 
 const pages = [
   {
-    name:"app",
-    format: "iife",
+    //name:"app",
+    format: "amd",
     sourcemap: false,
     strict: false,
     //banner: "const app = () => ",
-    file: "src/built.js",
-    footer: "export default app"
+    file: "dist/built.js",
+    //footer: "export default app"
   }
 ];
 const manifest = {
