@@ -40,7 +40,7 @@ const pages = [
 const manifest = {
   input: "src/dependencies/index.mjs",//"src/dependencies/shim.mjs",
   plugins: [//nodePoly(), 
-    nodeResolve({browser:true}),
+    nodeResolve({browser:true,preferBuiltins:true}),
            
     /*externalGlobals({
       this: "globalThis"
