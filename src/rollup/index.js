@@ -12,6 +12,11 @@ if (typeof global === 'undefined')
 */
 const pages = [
   {
+    globals:{
+     locs: "mastercard-locations",
+      places: "mastercard-locations",
+      crs: "cors" 
+    },
     //name:"app",
     format: "umd",
     sourcemap: false,
