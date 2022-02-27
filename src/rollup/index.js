@@ -39,7 +39,8 @@ const pages = [
 ];
 const manifest = {
   input: "src/dependencies/index.mjs",//"src/dependencies/shim.mjs",
-  plugins: [//nodePoly(), //nodeResolve({browser:true}),
+  plugins: [//nodePoly(), 
+    nodeResolve({browser:true}),
            
     /*externalGlobals({
       this: "globalThis"
