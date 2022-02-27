@@ -1,6 +1,6 @@
 //import Window from "./built.js"; //"./dependencies/commonUMD.js"
 //https://developers.cloudflare.com/workers/platform/limits#durable-objects-limits
-import { watcher, manifest } from "./rolluphelpers.mjs";
+import { watcher, manifest } from "./rollup/helpers.mjs";
 import { rollup } from "rollup";
 //import { product } from "./dependencies/shim.mjs";
 //import Window from ".././dist/built.mjs";
