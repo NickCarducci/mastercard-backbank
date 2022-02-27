@@ -14,7 +14,7 @@ const pages = [
   {
     globals:{
      "mastercard-locations":"locs",
-      "mastercard-locations":"places",
+      "mastercard-places":"places",
        "cors":"crs" 
     },
     name:"app",
