@@ -11,10 +11,10 @@ if (typeof global === 'undefined')
 const pages = [
   {
     name:"app",
-    format: "amd",
+    format: "iife",
     sourcemap: false,
     strict: false,
-    banner: "const app = () => ",
+    //banner: "const app = () => ",
     /*footer: `
       export default (() => {
         if (typeof globalThis === 'object') return;
