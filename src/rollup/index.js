@@ -1,6 +1,7 @@
 //rollupCommonToUMD.js
 import { rollup, watch } from "rollup";
 import externalGlobals from "rollup-plugin-external-globals";
+import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
 //import { hydrate } from "./dependencies/shim.js";
@@ -11,8 +12,8 @@ if (typeof global === 'undefined')
 */
 const pages = [
   {
-    name:"app",
-    format: "iife",
+    //name:"app",
+    format: "umd",
     sourcemap: false,
     strict: false,
     //banner: "const app = () => ",
@@ -27,7 +28,8 @@ const pages = [
       console.log(globalThis);
     `,*/
     file: "dist/built.mjs",
-    footer: "export default app"
+    footer: "globalThis"
+    //footer: "export default app"
   }
 ];
 const manifest = {
@@ -36,7 +38,11 @@ const manifest = {
            
     externalGlobals({
       this: "globalThis"
-    })
+    }),
+            commonjs({
+              
+    include: 'node_modules/**'
+            })
            ],
   //external: ["globalThis"]
 };
