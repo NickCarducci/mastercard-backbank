@@ -13,6 +13,9 @@ export default {
   plugins: [
     nodeResolve({browser:true}),
     commonjs({
+      namedExports: {
+        'node_modules/picomatch/index.js': ['pm']
+      },
      exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
      include: "src/**/*",
     }),
