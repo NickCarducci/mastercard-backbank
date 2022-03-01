@@ -6,7 +6,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
 import require from "../dependencies/shim.mjs";
 //import virtual from '@rollup/plugin-virtual';
-import alias from "@rollup/plugin-alias";
+//import alias from "@rollup/plugin-alias";
 /*
 if (typeof global === 'undefined')
   globalThis.global = globalThis
@@ -23,7 +23,7 @@ const pages = [
     format: "umd",
     sourcemap: false,
     strict: false,
-    //banner: "const app = () => ",
+    banner: "import require from '../dependencies/shim.mjs'",//"const app = () => ",
     /*footer: `
       export default (() => {
         if (typeof globalThis === 'object') return;
@@ -46,13 +46,13 @@ const manifest = {
       require: require,
       //require: `export default 'na na na na na'`,
       //'src/robin.js': `export default 'batmannnnn'`
-    }),*/
+    }),
     alias({
       entries: [
         { find: require, replacement: "src/dependencies/shim.mjs" },
         //{ find: 'batman-1.0.0', replacement: './joker-1.5.0' }
       ]
-    }),
+    }),*/
     nodePoly(), 
     nodeResolve({browser:true,preferBuiltins:true}),
            
