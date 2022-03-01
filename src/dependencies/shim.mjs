@@ -1,14 +1,14 @@
 //import Window from '.'
-import * as locs from "mastercard-locations";
+/*import * as locs from "mastercard-locations";
 import * as places from "mastercard-places";
-import * as crs from "cors"; 
+import * as crs from "cors";*/
 //https://github.com/nodejs/node/blob/08be585712774904bccbf4a43e481895a641464f/doc/api/modules.md#exports-shortcut
-export default function require(/* ... */) {
+export default function require(app/* ... */) {
   const module = { exports: {} };//const is shallow?
   ((module, exports) => {
-    function app() {
+    /*function app() {
       locs,places,crs
-    }
+    }*/
     exports = app;//exports != module.exports && export an empty default object (const, page)
     module.exports = app;//export app != default object (const, page)
   })(module, module.exports);
