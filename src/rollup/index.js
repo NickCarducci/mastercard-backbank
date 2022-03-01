@@ -5,7 +5,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
 //import require from "../dependencies/shim.mjs";
-//import virtual from '@rollup/plugin-virtual';
+import virtual from '@rollup/plugin-virtual';
 //import alias from "@rollup/plugin-alias";
 /*
 if (typeof global === 'undefined')
