@@ -4,7 +4,7 @@ import externalGlobals from "rollup-plugin-external-globals";
 import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
-import require from "./dependencies/shim.js";
+import require from "src/dependencies/shim.js";
 import virtual from '@rollup/plugin-virtual';
 /*
 if (typeof global === 'undefined')
