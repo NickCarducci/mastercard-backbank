@@ -39,7 +39,7 @@ const pages = [
   }
 ];
 const manifest = {
-  input: "src/dependencies/shim.mjs",//"src/dependencies/index.mjs",
+  input: "src/dependencies/index.mjs",
   plugins: [
     virtual({
       require: require,
