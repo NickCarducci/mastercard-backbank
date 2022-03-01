@@ -20,23 +20,10 @@ const pages = [
        "cors":"crs" 
     },
     name:"app",
-    format: "umd",
+    format: "iife",
     sourcemap: false,
     strict: false,
-    banner: `
-     function require(app/* ... */) {
-        const module = { exports: {} };//const is shallow?
-        ((module, exports) => {
-          /*function app() {
-            locs,places,crs
-          }*/
-          exports = app;//exports != module.exports && export an empty default object (const, page)
-          module.exports = app;//export app != default object (const, page)
-        })(module, module.exports);
-        return module.exports;
-      }
-    `,
-    //"import require from 'src/dependencies/shim.mjs'",//"const app = () => ",
+    //banner:"import require from 'src/dependencies/shim.mjs'",//"const app = () => ",
     /*footer: `
       export default (() => {
         if (typeof globalThis === 'object') return;
@@ -55,11 +42,23 @@ const pages = [
 const manifest = {
   input: "src/dependencies/index.mjs",
   plugins: [
-    /*virtual({
-      require: require,
+    virtual({
+      require: `
+        export default function require(app/* ... */) {
+          const module = { exports: {} };//const is shallow?
+          ((module, exports) => {
+            /*function app() {
+              locs,places,crs
+            }*/
+            exports = app;//exports != module.exports && export an empty default object (const, page)
+            module.exports = app;//export app != default object (const, page)
+          })(module, module.exports);
+          return module.exports;
+        }
+      `,
       //require: `export default 'na na na na na'`,
       //'src/robin.js': `export default 'batmannnnn'`
-    }),
+    }),/*
     alias({
       entries: [
         { find: require, replacement: "src/dependencies/shim.mjs" },
