@@ -4,8 +4,8 @@ import externalGlobals from "rollup-plugin-external-globals";
 import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
-//import { hydrate } from "./dependencies/shim.js";
-
+import require from "./dependencies/shim.js";
+import virtual from '@rollup/plugin-virtual';
 /*
 if (typeof global === 'undefined')
   globalThis.global = globalThis
@@ -13,6 +13,7 @@ if (typeof global === 'undefined')
 const pages = [
   {
     globals:{
+     "./dependencies/shim.js" "require",
      "mastercard-locations":"locs",
       "mastercard-places":"places",
        "cors":"crs" 
@@ -39,7 +40,13 @@ const pages = [
 ];
 const manifest = {
   input: "src/dependencies/shim.mjs",//"src/dependencies/index.mjs",
-  plugins: [nodePoly(), 
+  plugins: [
+    virtual({
+      require: require,
+      //require: `export default 'na na na na na'`,
+      //'src/robin.js': `export default 'batmannnnn'`
+    }),
+    nodePoly(), 
     nodeResolve({browser:true,preferBuiltins:true}),
            
     /*externalGlobals({
