@@ -40,7 +40,7 @@ const pages = [
   }
 ];
 const manifest = {
-  input: "../dependencies/index.mjs",
+  input: "src/dependencies/index.mjs",
   plugins: [
     /*virtual({
       require: require,
@@ -49,7 +49,7 @@ const manifest = {
     }),*/
     alias({
       entries: [
-        { find: require, replacement: "../dependencies/shim.mjs" },
+        { find: require, replacement: "src/dependencies/shim.mjs" },
         //{ find: 'batman-1.0.0', replacement: './joker-1.5.0' }
       ]
     }),
