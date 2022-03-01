@@ -39,13 +39,19 @@ const pages = [
   }
 ];
 const manifest = {
-  input: "src/dependencies/index.mjs",
+  input: "../dependencies/index.mjs",
   plugins: [
     virtual({
       require: require,
       //require: `export default 'na na na na na'`,
       //'src/robin.js': `export default 'batmannnnn'`
     }),
+    alias({
+      entries: [
+        { find: require, replacement: "../dependencies/index.mjs" },
+        //{ find: 'batman-1.0.0', replacement: './joker-1.5.0' }
+      ]
+    })
     nodePoly(), 
     nodeResolve({browser:true,preferBuiltins:true}),
            
