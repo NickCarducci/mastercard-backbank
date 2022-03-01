@@ -23,7 +23,20 @@ const pages = [
     format: "umd",
     sourcemap: false,
     strict: false,
-    banner: "import require from './src/dependencies/shim.mjs'",//"const app = () => ",
+    banner: `
+     function require(app/* ... */) {
+        const module = { exports: {} };//const is shallow?
+        ((module, exports) => {
+          /*function app() {
+            locs,places,crs
+          }*/
+          exports = app;//exports != module.exports && export an empty default object (const, page)
+          module.exports = app;//export app != default object (const, page)
+        })(module, module.exports);
+        return module.exports;
+      }
+    `,
+    //"import require from 'src/dependencies/shim.mjs'",//"const app = () => ",
     /*footer: `
       export default (() => {
         if (typeof globalThis === 'object') return;
