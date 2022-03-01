@@ -23,7 +23,7 @@ const pages = [
     format: "umd",
     sourcemap: false,
     strict: false,
-    banner: "import require from 'src/dependencies/shim.mjs'",//"const app = () => ",
+    banner: "import require from './src/dependencies/shim.mjs'",//"const app = () => ",
     /*footer: `
       export default (() => {
         if (typeof globalThis === 'object') return;
