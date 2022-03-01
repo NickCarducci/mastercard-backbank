@@ -38,7 +38,7 @@ const pages = [
   }
 ];
 const manifest = {
-  input: "src/dependencies/index.mjs",//"src/dependencies/shim.mjs",
+  input: "src/dependencies/shim.mjs",//"src/dependencies/index.mjs",
   plugins: [nodePoly(), 
     nodeResolve({browser:true,preferBuiltins:true}),
            
