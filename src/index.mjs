@@ -2,7 +2,7 @@
 //https://developers.cloudflare.com/workers/platform/limits#durable-objects-limits
 //import { watcher, manifest } from "./rollup/helpers.mjs";
 //import { rollup } from "rollup";
-//import { product } from "./dependencies/shim.mjs";
+import require from "./dependencies/shim.mjs";
 import Window from ".././dist/built.mjs";
 
 /*watcher.on("event", (event) => {
@@ -30,6 +30,7 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       this.value = Window;
+      this.require = require
       
       
      /* rollup(manifest)
