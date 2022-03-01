@@ -51,7 +51,7 @@ const manifest = {
         { find: require, replacement: "../dependencies/index.mjs" },
         //{ find: 'batman-1.0.0', replacement: './joker-1.5.0' }
       ]
-    })
+    }),
     nodePoly(), 
     nodeResolve({browser:true,preferBuiltins:true}),
            
