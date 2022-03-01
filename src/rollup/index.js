@@ -5,7 +5,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import nodePoly from "rollup-plugin-polyfill-node";
 import require from "../dependencies/shim.mjs";
-import virtual from '@rollup/plugin-virtual';
+//import virtual from '@rollup/plugin-virtual';
 import alias from "@rollup/plugin-alias";
 /*
 if (typeof global === 'undefined')
@@ -42,14 +42,14 @@ const pages = [
 const manifest = {
   input: "../dependencies/index.mjs",
   plugins: [
-    virtual({
+    /*virtual({
       require: require,
       //require: `export default 'na na na na na'`,
       //'src/robin.js': `export default 'batmannnnn'`
-    }),
+    }),*/
     alias({
       entries: [
-        { find: require, replacement: "../dependencies/index.mjs" },
+        { find: require, replacement: "../dependencies/shim.mjs" },
         //{ find: 'batman-1.0.0', replacement: './joker-1.5.0' }
       ]
     }),
