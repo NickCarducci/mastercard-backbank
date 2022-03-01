@@ -44,7 +44,7 @@ const manifest = {
   plugins: [
     virtual({
       require: `
-        export default function require(app/* ... */) {
+        function require(app/* ... */) {
           const module = { exports: {} };//const is shallow?
           ((module, exports) => {
             /*function app() {
@@ -55,16 +55,21 @@ const manifest = {
           })(module, module.exports);
           return module.exports;
         }
+        export { require as default }
       `,
+      'react': `
+          export * from "preact-compat"
+          export {default} from "preact-compat"
+          `,
       //require: `export default 'na na na na na'`,
       //'src/robin.js': `export default 'batmannnnn'`
-    }),/*
+    }),
     alias({
       entries: [
-        { find: require, replacement: "src/dependencies/shim.mjs" },
+        { find: require, replacement: "require"},//"src/dependencies/shim.mjs" },
         //{ find: 'batman-1.0.0', replacement: './joker-1.5.0' }
       ]
-    }),*/
+    }),
     nodePoly(), 
     nodeResolve({browser:true,preferBuiltins:true}),
            
