@@ -13,7 +13,7 @@ if (typeof global === 'undefined')
 const pages = [
   {
     globals:{
-     "./dependencies/shim.js" "require",
+     //"./dependencies/shim.js" "require",
      "mastercard-locations":"locs",
       "mastercard-places":"places",
        "cors":"crs" 
