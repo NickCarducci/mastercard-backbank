@@ -57,10 +57,6 @@ const manifest = {
         }
         export { require as default }
       `,
-      'react': `
-          export * from "preact-compat"
-          export {default} from "preact-compat"
-          `,
       //require: `export default 'na na na na na'`,
       //'src/robin.js': `export default 'batmannnnn'`
     }),
