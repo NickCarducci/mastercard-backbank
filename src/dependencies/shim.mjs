@@ -3,7 +3,7 @@
 import * as places from "mastercard-places";
 import * as crs from "cors";*/
 //https://github.com/nodejs/node/blob/08be585712774904bccbf4a43e481895a641464f/doc/api/modules.md#exports-shortcut
-export default function require(app/* ... */) {
+function require(app/* ... */) {
   var module = { exports: {} };//const is shallow?
   ((module, exports, app) => {
     /*function app() {
@@ -14,4 +14,5 @@ export default function require(app/* ... */) {
   })(module, module.exports, app);
   return module.exports;
 }
+export {require as default} 
 //https://stackoverflow.com/a/52351150/11711280
