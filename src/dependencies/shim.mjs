@@ -9,8 +9,8 @@ export default function require(app/* ... */) {
     /*function app() {
       locs,places,crs
     }*/
-    exports = app;//exports != module.exports && export an empty default object (const, page)
-    module.exports = app;//export app != default object (const, page)
+    exports = app; //exports != module.exports && export an empty default object (const, page)
+    module.exports = app; //export app != default object (const, page)
   })(module, module.exports, app);
   return module.exports;
 }
