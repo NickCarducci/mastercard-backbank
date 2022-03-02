@@ -4,7 +4,7 @@ import * as places from "mastercard-places";
 import * as crs from "cors";*/
 //https://github.com/nodejs/node/blob/08be585712774904bccbf4a43e481895a641464f/doc/api/modules.md#exports-shortcut
 function requiree(app/* ... */) {
-  const module = { exports: {} };//const is shallow?
+  var module = { exports: {} };//const is shallow?
   ((module, exports, app) => {
     /*function app() {
       locs,places,crs
