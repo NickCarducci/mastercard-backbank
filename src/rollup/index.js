@@ -62,7 +62,7 @@ const manifest = {
     }),
     alias({
       entries: [
-        { find: require, replacement: "./require.js"},//"src/dependencies/shim.mjs" },
+        { find: "require", replacement: "./require.js"},//"src/dependencies/shim.mjs" },
         //{ find: 'batman-1.0.0', replacement: './joker-1.5.0' }
       ]
     }),
