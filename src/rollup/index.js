@@ -23,7 +23,7 @@ const pages = [
     format: "iife",
     sourcemap: false,
     strict: false,
-    //banner:"import require from 'src/dependencies/shim.mjs'",//"const app = () => ",
+    banner:"import * as require from 'src/dependencies/shim.mjs'",//"const app = () => ",
     /*footer: `
       export default (() => {
         if (typeof globalThis === 'object') return;
@@ -42,9 +42,9 @@ const pages = [
 const manifest = {
   input: "src/dependencies/index.mjs",
   plugins: [
-    virtual({
+    /*virtual({
       "./require.js": `
-        function require(app/* ... */) {
+        function require(app) {
           const module = { exports: {} };//const is shallow?
           ((module, exports) => {
             /*function app() {
@@ -65,7 +65,7 @@ const manifest = {
         { find: "require", replacement: "./require.js"},//"src/dependencies/shim.mjs" },
         //{ find: 'batman-1.0.0', replacement: './joker-1.5.0' }
       ]
-    }),
+    }),*/
     nodePoly(), 
     nodeResolve({browser:true,preferBuiltins:true}),
            
