@@ -2,7 +2,7 @@
 //https://developers.cloudflare.com/workers/platform/limits#durable-objects-limits
 //import { watcher, manifest } from "./rollup/helpers.mjs";
 //import { rollup } from "rollup";
-import require from "./dependencies/shim.mjs";
+//import require from "./dependencies/shim.mjs";
 import Window from ".././dist/built.mjs";
 
 /*watcher.on("event", (event) => {
@@ -29,7 +29,7 @@ export class DurableObjectExample {
       let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
-      this.require = require;
+      //this.require = require;
       this.value = Window;
       
       
