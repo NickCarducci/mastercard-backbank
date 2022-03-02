@@ -47,9 +47,7 @@ const manifest = {
         function require(app) {
           const module = { exports: {} };//const is shallow?
           ((module, exports) => {
-            /*function app() {
-              locs,places,crs
-            }*/
+            //function app() {locs,places,crs}
             exports = app;//exports != module.exports && export an empty default object (const, page)
             module.exports = app;//export app != default object (const, page)
           })(module, module.exports);
