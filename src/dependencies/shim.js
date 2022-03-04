@@ -10,11 +10,13 @@ export default {
         /*function app() {
           locs,places,crs
         }*/
+        const app = {...Window//locs,places,crs}
         exports = app; //exports != module.exports && export an empty default object (const, page)
         module.exports = app; //export app != default object (const, page)
       })(module, module.exports, app);
       return module.exports;
     } catch (e) {
+      console.log(e.message);
       return new Response(e.message);
     }
   }
