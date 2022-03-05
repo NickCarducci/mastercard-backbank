@@ -6,9 +6,6 @@
 //import Window from ".././dist/built.mjs";
 import * as Required from '../src/require.js';
 const { require, define } = Required//(); //Window() //this.modules; //Window.sourcesContent();
-const locs = require("mastercard-locations");
-const places = require("mastercard-places");
-const crs = require("cors"); 
 
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
@@ -35,7 +32,8 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       //this.require = require;
-      this.value = Window;
+      
+      //this.value = {locs,places,crs}//Window;
       
       
      /* rollup(manifest)
@@ -65,7 +63,10 @@ export class DurableObjectExample {
         }
       );
     } else {
-      //const { locs, places, crs } = this.value.default(); //Window() //this.modules; //Window.sourcesContent();
+      const locs = require("mastercard-locations");
+      const places = require("mastercard-places");
+      const crs = require("cors"); 
+      //const { locs, places, crs } = this.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
         mc = null;
