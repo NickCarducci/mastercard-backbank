@@ -2290,7 +2290,7 @@ require = (function (global, setTimeout) {
    */
   req.exec = function (text) {
     /*jslint evil: true */
-    return new Promise((resolve, reject) => new Function('resolve',`"use strict";return (${text})`)(resolve,text);//eval(text);
+    return new Promise((resolve, reject) => new Function('resolve',`"use strict";return (${text})`)(resolve,text)//eval(text);
                       );
   };
 
