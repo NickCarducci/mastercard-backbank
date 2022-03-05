@@ -23,7 +23,7 @@ const pages = [
     format: "amd",
     sourcemap: false,
     strict: false,
-    banner:"import {require,define} from '../src/require.js'",//"const app = () => ",
+    banner:"import * as Required from '../src/require.js';const {require,define} = Required;",//"const app = () => ",
     /*footer: `
       export default (() => {
         if (typeof globalThis === 'object') return;
