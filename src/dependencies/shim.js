@@ -13,7 +13,6 @@ export default {
       })(module, module.exports);
       return module.exports;
     } catch (e) {
-      console.log(e.message);
       return new Response(e.message);
     }
   }
