@@ -11,7 +11,6 @@ export default {
     sourcemap: true
   },
   plugins: [
-    nodeResolve({browser:true}),
     commonjs({
       /*
       depreciated, done automatically, not the problem!
@@ -21,6 +20,7 @@ export default {
      exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
      include: "src/**/*",
     }),
+    nodeResolve({browser:true}),
     terser()
   ]
 };
