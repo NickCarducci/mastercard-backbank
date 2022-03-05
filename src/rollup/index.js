@@ -20,7 +20,7 @@ const pages = [
        "cors":"crs" 
     },
     name:"app",
-    format: "amd",
+    format: "iife",
     sourcemap: false,
     strict: false,
     banner:"import require from '../src/require.js'",//"const app = () => ",
