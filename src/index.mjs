@@ -4,6 +4,8 @@
 //import { rollup } from "rollup";
 //import require from "./dependencies/shim.mjs";
 import Window from ".././dist/built.mjs";
+import * as Required from '../src/require.js';
+const { locs, places, crs } = Required//(); //Window() //this.modules; //Window.sourcesContent();
 
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
@@ -60,7 +62,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-      const { locs, places, crs } = this.value.default(); //Window() //this.modules; //Window.sourcesContent();
+      //const { locs, places, crs } = this.value.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
         mc = null;
