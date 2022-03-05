@@ -20,7 +20,7 @@ const pages = [
        "cors":"crs" 
     },
     name:"app",
-    format: "iife",
+    format: "amd",
     sourcemap: false,
     strict: false,
     //banner:"import require from '../src/dependencies/shim.js'",//"const app = () => ",
