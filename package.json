@@ -22,6 +22,7 @@
     "abstract-syntax-tree": "2.20.5",
     "cors": "2.8.5",
     "astring": "1.8.1",
+    "miniflare": "2.3.0",
     "mastercard-locations": "1.0.3",
     "mastercard-places": "1.0.5",
     "picomatch": "2.3.1",
