@@ -6,14 +6,10 @@ export default {
     //Response class must be a promise
     try {
       const module = { exports: {} };//const is shallow?
-      ((module, exports, app) => {
-        /*function app() {
-          locs,places,crs
-        }*/
-        const app = {...Window//locs,places,crs}
-        exports = app; //exports != module.exports && export an empty default object (const, page)
-        module.exports = app; //export app != default object (const, page)
-      })(module, module.exports, app);
+      ((module, exports) => {
+        exports = Window; //exports != module.exports && export an empty default object (const, page)
+        module.exports = Window; //export app != default object (const, page)
+      })(module, module.exports);
       return module.exports;
     } catch (e) {
       console.log(e.message);
