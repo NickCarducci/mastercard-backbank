@@ -27,15 +27,15 @@ export class DurableObjectExample {
     console.log(el.textContent, "- From the example module");
     this.el = el;
     this.env = env;
+      const locs = require("mastercard-locations");
+      const places = require("mastercard-places");
+      const crs = require("cors"); 
     this.el.blockConcurrencyWhile(async () => {
       let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       //this.require = require;
       
-      const locs = require("mastercard-locations");
-      const places = require("mastercard-places");
-      const crs = require("cors"); 
       this.value = {locs,places,crs}//Window;
       
       
