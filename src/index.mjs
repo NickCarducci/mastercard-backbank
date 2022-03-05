@@ -27,16 +27,16 @@ export class DurableObjectExample {
     console.log(el.textContent, "- From the example module");
     this.el = el;
     this.env = env;
-      const locs = require("mastercard-locations");
+      /*const locs = require("mastercard-locations");
       const places = require("mastercard-places");
-      const crs = require("cors"); 
+      const crs = require("cors"); */
     this.el.blockConcurrencyWhile(async () => {
       let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       //this.require = require;
       
-      this.value = {locs,places,crs}//Window;
+      //this.value = {locs,places,crs}//Window;
       
       
      /* rollup(manifest)
@@ -66,7 +66,10 @@ export class DurableObjectExample {
         }
       );
     } else {
-      const { locs, places, crs } = this.value//.default(); //Window() //this.modules; //Window.sourcesContent();
+      const locs = require("mastercard-locations");
+      const places = require("mastercard-places");
+      const crs = require("cors"); 
+      //const { locs, places, crs } = this.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
         mc = null;
