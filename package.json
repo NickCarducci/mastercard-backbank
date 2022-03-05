@@ -7,7 +7,7 @@
   "module": "./dist/shim.mjs",
   "scripts": {
     "build": "rollup -c",
-    "build1": "node src/rollup && rollup -c",
+    "build1": "node src/rollup && rollup -c"
   },
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED", 
