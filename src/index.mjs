@@ -33,7 +33,10 @@ export class DurableObjectExample {
       this.value = stored || 0;
       //this.require = require;
       
-      //this.value = {locs,places,crs}//Window;
+      const locs = require("mastercard-locations");
+      const places = require("mastercard-places");
+      const crs = require("cors"); 
+      this.value = {locs,places,crs}//Window;
       
       
      /* rollup(manifest)
@@ -63,10 +66,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-      const locs = require("mastercard-locations");
-      const places = require("mastercard-places");
-      const crs = require("cors"); 
-      //const { locs, places, crs } = this.value//.default(); //Window() //this.modules; //Window.sourcesContent();
+      const { locs, places, crs } = this.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
         mc = null;
