@@ -6,7 +6,8 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "build": "node src/rollup && rollup -c"
+    "build": "rollup -c",
+    "build1": "node src/rollup && rollup -c",
   },
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED", 
