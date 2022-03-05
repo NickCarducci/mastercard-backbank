@@ -2290,7 +2290,7 @@ require = (function (global, setTimeout) {
    */
   req.exec = function (text) {
     /*jslint evil: true */
-    return eval(text);
+    return Function('"use strict";return (' + text + ')')();//eval(text);
   };
 
   //Set up with config info.
