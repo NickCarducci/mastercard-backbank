@@ -5,7 +5,10 @@
 //import require from "./dependencies/shim.mjs";
 import Window from ".././dist/built.mjs";
 import * as Required from '../src/require.js';
-const { locs, places, crs } = Required//(); //Window() //this.modules; //Window.sourcesContent();
+const { require, define } = Required//(); //Window() //this.modules; //Window.sourcesContent();
+const locs = require("mastercard-locations");
+const places = require("mastercard-places");
+const crs = require("cors"); 
 
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
