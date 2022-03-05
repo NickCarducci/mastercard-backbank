@@ -5,6 +5,7 @@ export default {
   async fetch(request, env/*, ctx*/) {
     //Response class must be a promise
     try {
+      console.log(Window);
       const module = { exports: {} };//const is shallow?
       ((module, exports) => {
         exports = Window; //exports != module.exports && export an empty default object (const, page)
