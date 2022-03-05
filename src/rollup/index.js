@@ -23,7 +23,7 @@ const pages = [
     format: "amd",
     sourcemap: false,
     strict: false,
-    //banner:"import require from '../src/dependencies/shim.js'",//"const app = () => ",
+    banner:"import require from '../src/require.js'",//"const app = () => ",
     /*footer: `
       export default (() => {
         if (typeof globalThis === 'object') return;
