@@ -2296,4 +2296,4 @@ require = (function (global, setTimeout) {
   //Set up with config info.
   req(cfg);
 })(require, typeof setTimeout === "undefined" ? undefined : setTimeout);
-export default require;
+export default {require,define};
