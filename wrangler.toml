@@ -45,3 +45,6 @@ command = "npm install && npm run build"
 # command = "node build.js"
 # command = "npx rollup src/index.js --file dist/index.js --format es"
 
+[miniflare]
+global_async_io = true
+
