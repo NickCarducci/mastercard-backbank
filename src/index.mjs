@@ -36,6 +36,7 @@ export class DurableObjectExample {
       this.value = stored || 0;
       //this.require = require;
       
+      //fn.apply(this, [locs,places,crs])
       //this.value = {locs,places,crs}//Window;
       
       
@@ -66,10 +67,10 @@ export class DurableObjectExample {
         }
       );
     } else {
-      const locs = require("mastercard-locations");
+      /*const locs = require("mastercard-locations");
       const places = require("mastercard-places");
-      const crs = require("cors"); 
-      //const { locs, places, crs } = this.value//.default(); //Window() //this.modules; //Window.sourcesContent();
+      const crs = require("cors");*/ 
+      //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
         mc = null;
