@@ -9,6 +9,22 @@
 
 var requirejs, define, require;
 require = ((dependency, setTimeout) => {
+  var isBrowser = !!(
+      typeof window !== "undefined" &&
+      typeof navigator !== "undefined" &&
+      window.document
+    ),
+    isWebWorker = !isBrowser && typeof importScripts !== "undefined",
+    //'loading', 'loaded', execution, 'complete'
+    readyRegExp =
+      isBrowser && navigator.platform === "PLAYSTATION 3"
+        ? /^complete$/
+        : /^(complete|loaded)$/,
+    defContextName = "_",
+    //Oh the tragedy, detecting opera. See the usage of isOpera for reason.
+    isOpera =
+      typeof opera !== "undefined" && opera.toString() === "[object Opera]",
+    contexts = {};
   var globalDefQueue = [];
   var req,
     s,
@@ -24,25 +40,6 @@ require = ((dependency, setTimeout) => {
     op = Object.prototype,
     ostring = op.toString,
     hasOwn = op.hasOwnProperty,
-    isBrowser = !!(
-      typeof window !== "undefined" &&
-      typeof navigator !== "undefined" &&
-      window.document
-    ),
-    isWebWorker = !isBrowser && typeof importScripts !== "undefined",
-    //PS3 indicates loaded and complete, but need to wait for complete
-    //specifically. Sequence is 'loading', 'loaded', execution,
-    // then 'complete'. The UA check is unfortunate, but not sure how
-    //to feature test w/o causing perf issues.
-    readyRegExp =
-      isBrowser && navigator.platform === "PLAYSTATION 3"
-        ? /^complete$/
-        : /^(complete|loaded)$/,
-    defContextName = "_",
-    //Oh the tragedy, detecting opera. See the usage of isOpera for reason.
-    isOpera =
-      typeof opera !== "undefined" && opera.toString() === "[object Opera]",
-    contexts = {},
     configuration = {},
     useInteractive = false;
 
@@ -238,30 +235,17 @@ require = ((dependency, setTimeout) => {
   // globally agreed names for other potential AMD loaders
   req.config = (config) => req(config);
 
-  /**
-   * Execute something after the current tick
-   * of the event loop. Override for other envs
-   * that have a better solution than setTimeout.
-   * @param  {Function} fn function to execute later.
-   */
   req.nextTick =
     typeof setTimeout !== "undefined"
-      ? function (fn) {
-          setTimeout(fn, 4);
-        }
-      : function (fn) {
-          fn();
-        };
+      ? (fn) => setTimeout(fn, 4)
+      : (fn) => fn();
 
-  /**
-   * Export require as a dependency, but only if it does not already exist.
-   */
+  //Exportable require
+
   if (!require) require = req;
 
   req.version = version;
 
-  //Used to filter out dependencies that are already paths.
-  req.jsExtRegExp = /^\/|:|\?|\.js$/;
   req.isBrowser = isBrowser;
   s = req.s = {
     contexts: contexts,
@@ -272,9 +256,7 @@ require = ((dependency, setTimeout) => {
         handlers,
         checkLoadedTimeoutId,
         config = {
-          //Defaults. Do not set a default for map
-          //config to speed up normalize(), which
-          //will run faster if there is no default.
+          //normalize() will run faster if there is no default
           waitSeconds: 7,
           baseUrl: "./",
           paths: {},
@@ -284,9 +266,7 @@ require = ((dependency, setTimeout) => {
           config: {}
         },
         registry = {},
-        //registry of just enabled modules, to speed
-        //cycle breaking code when lots of modules
-        //are registered, but not activated.
+        //just enabled, but unactivated, modules
         enabledRegistry = {},
         undefEvents = {},
         defQueue = [],
@@ -296,16 +276,7 @@ require = ((dependency, setTimeout) => {
         requireCounter = 1,
         unnormalizedCounter = 1;
 
-      /**
-       * Trims the . and .. from an array of path segments.
-       * It will keep a leading path segment if a .. will become
-       * the first path segment, to help with module name lookups,
-       * which act like paths, but can be remapped. But the end result,
-       * all paths that use this function should look normalized.
-       * NOTE: this method MODIFIES the input array.
-       * @param {Array} array the array of path segments.
-       */
-      function trimDots(array) {
+      const trimDots = (array) => {
         var part;
         for (let i = 0; i < array.length; i++) {
           part = array[i];
@@ -313,11 +284,6 @@ require = ((dependency, setTimeout) => {
             array.splice(i, 1);
             i -= 1;
           } else if (part === "..") {
-            // If at the start, or previous value is still ..,
-            // keep them so that when converted to a path it may
-            // still work when converted to a path, even though
-            // as an ID it is less than ideal. In larger point
-            // releases, may be better to just kick out an error.
             if (
               i === 0 ||
               (i === 1 && array[2] === "..") ||
@@ -330,18 +296,9 @@ require = ((dependency, setTimeout) => {
             }
           }
         }
-      }
+      };
 
-      /**
-       * Given a relative module name, like ./something, normalize it to
-       * a real name that can be mapped to a path.
-       * @param {String} name the relative name
-       * @param {String} baseName a real name that the name arg is relative
-       * to.
-       * @param {Boolean} applyMap apply the map config to the value. Should
-       * only be done if this normalization is for a dependency ID.
-       * @returns {String} normalized name
-       */
+      //'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
       const normalize = (name, baseName, applyMap) => {
         var pkgMain,
           mapValue,
@@ -362,21 +319,13 @@ require = ((dependency, setTimeout) => {
           name = name.split("/");
           lastIndex = name.length - 1;
 
-          // If wanting node ID compatibility, strip .js from end
-          // of IDs. Have to do this here, and not in nameToUrl
-          // because node allows either .js or non .js to map
-          // to same file.
+          //node allows either .js or non .js, yet not in nameToUrl
           if (config.nodeIdCompat && /\.js$/.test(name[lastIndex])) {
             name[lastIndex] = name[lastIndex].replace(/\.js$/, "");
           }
 
           // Starts with a '.' so need the baseName
           if (name[0].charAt(0) === "." && paths) {
-            //Convert baseName to array, and lop off the last part,
-            //so that . matches that 'directory' and not name of the baseName's
-            //module. For instance, baseName of 'one/two/three', maps to
-            //'one/two/three.js', but we want the directory, 'one/two' for
-            //this normalization.
             normalizedBaseParts = paths.slice(0, paths.length - 1);
             name = normalizedBaseParts.concat(name);
           }
@@ -393,8 +342,8 @@ require = ((dependency, setTimeout) => {
             nameSegment = names.slice(0, i).join("/");
 
             if (paths) {
-              //Find the longest baseName segment match in the config.
-              //So, do joins on the biggest to smallest lengths of paths.
+              //join biggest-to-smallest lengths paths to find
+              //the-longest 'baseName segment match' in the config
               for (let j = paths.length; j > 0; j -= 1) {
                 mapValue = getOwn(map, paths.slice(0, j).join("/"));
 
@@ -412,9 +361,7 @@ require = ((dependency, setTimeout) => {
               }
             }
 
-            //Check for a star map match, but just hold on to it,
-            //if there is a shorter segment match later in a matching
-            //config, then favor over this star map.
+            //unless shorter matching config, favor a "star map"
             if (!foundStarMap && starMap && getOwn(starMap, nameSegment)) {
               foundStarMap = getOwn(starMap, nameSegment);
               starI = i;
@@ -432,8 +379,7 @@ require = ((dependency, setTimeout) => {
           }
         }
 
-        // If the name points to a package's name, use
-        // the package main instead.
+        // If package-name, package 'main'
         pkgMain = getOwn(config.pkgs, name);
 
         return pkgMain ? pkgMain : name;
@@ -467,9 +413,7 @@ require = ((dependency, setTimeout) => {
         }
       };
 
-      //Turns a plugin!resource to [plugin, resource]
-      //with the plugin being undefined if the name
-      //did not have a plugin prefix.
+      //(plugin!resource) => [plugin, resource] or [undefined,{}] if the name without a plugin prefix.
       const splitPrefix = (name) => {
         var prefix,
           index = name ? name.indexOf("!") : -1;
@@ -480,22 +424,9 @@ require = ((dependency, setTimeout) => {
         return [prefix, name];
       };
 
-      /**
-       * Creates a module mapping that includes plugin prefix, module
-       * name, and path. If parentModuleMap is provided it will
-       * also normalize the name via require.normalize()
-       *
-       * @param {String} name the module name
-       * @param {String} [parentModuleMap] parent module map
-       * for the module name, used to resolve relative names.
-       * @param {Boolean} isNormalized: is the ID already normalized.
-       * This is true if this call is done for a define() module ID.
-       * @param {Boolean} applyMap: apply the map config to the ID.
-       * Should only be true if this map is for a dependency.
-       *
-       * @returns {Object}
-       */
-      function makeModuleMap(name, parentModuleMap, isNormalized, applyMap) {
+      //'applyMap' for dependency ID, 'isNormalized' define() module ID,
+      //'[parentModuleMap]' to resolve relative names (&& require.normalize()), 'name' the most relative
+      const makeModuleMap = (name, parentModuleMap, isNormalized, applyMap) => {
         var url,
           pluginModule,
           suffix,
@@ -506,8 +437,7 @@ require = ((dependency, setTimeout) => {
           isDefine = true,
           normalizedName = "";
 
-        //If no name, then it means it is a require call, generate an
-        //internal name.
+        //internally-name a 'require' call, given no name
         if (!name) {
           isDefine = false;
           name = "_@r" + (requireCounter += 1);
@@ -522,36 +452,27 @@ require = ((dependency, setTimeout) => {
           pluginModule = getOwn(defined, prefix);
         }
 
-        //Account for relative paths if there is a base name.
         if (name) {
+          //ok base name, relative path?.
           if (prefix) {
-            if (isNormalized) {
-              normalizedName = name;
-            } else if (pluginModule && pluginModule.normalize) {
-              //Plugin is loaded, use its normalize method.
-              normalizedName = pluginModule.normalize(name, function (name) {
-                return normalize(name, parentName, applyMap);
-              });
-            } else {
-              // If nested plugin references, then do not try to
-              // normalize, as it will not normalize correctly. This
-              // places a restriction on resourceIds, and the longer
-              // term solution is not to normalize until plugins are
-              // loaded and all normalizations to allow for async
-              // loading of a loader plugin. But for now, fixes the
-              // common uses. Details in #1131
-              normalizedName =
-                name.indexOf("!") === -1
-                  ? normalize(name, parentName, applyMap)
-                  : name;
-            }
+            if (isNormalized) return (normalizedName = name);
+            if (pluginModule && pluginModule.normalize)
+              return (normalizedName = pluginModule.normalize(name, (name) =>
+                normalize(name, parentName, applyMap)
+              ));
+            //do not normalize if nested plugin references; albeit this deprecates resourceIds,
+            //normalize after plugins are loaded and such normalizations allow for async loading
+            //of a loader plugin (#1131)
+
+            normalizedName =
+              name.indexOf("!") === -1
+                ? normalize(name, parentName, applyMap)
+                : name;
           } else {
-            //A regular module.
             normalizedName = normalize(name, parentName, applyMap);
 
-            //Normalized name may be a plugin ID due to map config
-            //application in normalize. The map config values must
-            //already be normalized, so do not need to redo that part.
+            //normalize's 'map config application' might make normalized 'name' a plugin ID.
+            //'map config values' are already normalized at this point.
             names = splitPrefix(normalizedName);
             prefix = names[0];
             normalizedName = names[1];
@@ -561,14 +482,13 @@ require = ((dependency, setTimeout) => {
           }
         }
 
-        //If the id is a plugin id that cannot be determined if it needs
-        //normalization, stamp it with a unique ID so two matching relative
-        //ids that may conflict can be separate.
+        //If it may be a plugin id that doesn't normalization, stamp it with a unique ID
         suffix =
           prefix && !pluginModule && !isNormalized
             ? "_unnormalized" + (unnormalizedCounter += 1)
             : "";
 
+        //module mapping includes plugin prefix, module name, and path
         return {
           prefix: prefix,
           name: normalizedName,
@@ -579,7 +499,7 @@ require = ((dependency, setTimeout) => {
           isDefine: isDefine,
           id: (prefix ? prefix + "!" + normalizedName : normalizedName) + suffix
         };
-      }
+      };
 
       function getModule(depMap) {
         var id = depMap.id,
@@ -810,24 +730,16 @@ require = ((dependency, setTimeout) => {
             });
           }
 
-          //Do a copy of the dependency array, so that
-          //source inputs are not modified. For example
-          //"shim" deps are passed in here directly, and
-          //doing a direct modification of the depMaps array
-          //would affect that config.
+          //copy of 'source dependency array inputs' (i.e. "shim" deps by depMaps array)
           this.depMaps = depMaps && depMaps.slice(0);
 
           this.errback = errback;
 
-          //Indicate this module has be initialized
           this.inited = true;
 
           this.ignore = options.ignore;
 
-          //Could have option to init this module in enabled mode,
-          //or could have been previously marked as enabled. However,
-          //the dependencies are not known until init is called. So
-          //if enabled previously, now trigger dependencies as enabled.
+          //init as, or previously, -enabled, yet dependencies unknown until init
           if (options.enabled || this.enabled) return this.enable();
 
           this.check();
@@ -866,7 +778,7 @@ require = ((dependency, setTimeout) => {
           }
         },
 
-        load: function () {
+        load: () => {
           var url = this.map.url;
 
           //Regular dependency.
@@ -880,7 +792,7 @@ require = ((dependency, setTimeout) => {
          * Checks if the module is ready to define itself, and if so,
          * define it.
          */
-        check: function () {
+        check: () => {
           if (!this.enabled || this.enabling) {
             return;
           }
@@ -900,20 +812,15 @@ require = ((dependency, setTimeout) => {
           } else if (this.error) {
             this.emit("error", this.error);
           } else if (!this.defining) {
-            //The factory could trigger another require call
-            //that would result in checking this module to
-            //define itself again. If already in the process
-            //of doing that, skip this work.
+            //in case factory redundant require call to module to
+            //define itself again
             this.defining = true;
 
             if (this.depCount < 1 && !this.defined) {
               if (isFunction(factory)) {
-                //If there is an error listener, favor passing
-                //to that instead of throwing an error. However,
-                //only do it for define()'d  modules. require
-                //errbacks should not be called for failures in
-                //their callbacks (#699). However if a dependency
-                //onError is set, use that.
+                //for define()'d  modules, use error listener,
+                //require errbacks should not be called (#699).
+                //Yet, if dependency-'onError,' use that.
                 if (
                   (this.events.error && this.map.isDefine) ||
                   req.onError !== defaultOnError
@@ -971,9 +878,7 @@ require = ((dependency, setTimeout) => {
               this.defined = true;
             }
 
-            //Finished the define stage. Allow calling check again
-            //to allow define notifications below in the case of a
-            //cycle.
+            //Finished definition, so allow call-check again for 'define' notifications, by cycle.
             this.defining = false;
 
             if (this.defined && !this.defineEmitted) {
@@ -1098,10 +1003,8 @@ require = ((dependency, setTimeout) => {
                   moduleMap = makeModuleMap(moduleName),
                   hasInteractive = useInteractive;
 
-                //As of 2.1.0, support just passing the text, to reinforce
-                //fromText only being called once per resource. Still
-                //support old style of passing moduleName but discard
-                //that moduleName in favor of the internal ref.
+                //2.1.0 onwards, pass text to reinforce fromText 1call/resource.
+                //pass moduleName, ok, but discard moduleName for internal ref.
                 if (textAlt) text = textAlt;
 
                 //Turn off interactive script matching for IE for any define
@@ -1160,10 +1063,7 @@ require = ((dependency, setTimeout) => {
           enabledRegistry[this.map.id] = this;
           this.enabled = true;
 
-          //Set flag mentioning that the module is enabling,
-          //so that immediate calls to the defined callbacks
-          //for dependencies do not trigger inadvertent load
-          //with the depCount still being zero.
+          //no inadvertent load and 0 depCount by immediate calls to the defined callbacks for dependencies
           this.enabling = true;
 
           //Enable each dependency
@@ -1400,11 +1300,7 @@ require = ((dependency, setTimeout) => {
                 config.paths[name] = pkgObj.location;
               }
 
-              //pkg name main module ID pointer
-              //Remove leading dot in main, so main paths are normalized,
-              //and remove any trailing .js, since different package
-              //envs have different conventions: some use a module name,
-              //some use a file name.
+              //normalize pkg name main module ID pointer paths
               config.pkgs[name] =
                 pkgObj.name +
                 "/" +
@@ -1427,8 +1323,9 @@ require = ((dependency, setTimeout) => {
             context.require(configuration.deps || [], configuration.callback);
         },
 
-        makeShimExports: function (value) {
+        makeShimExports: (value) => {
           function fn() {
+            //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
             var ret;
             if (value.init) {
               ret = value.init.apply(dependency, arguments);
@@ -1441,39 +1338,30 @@ require = ((dependency, setTimeout) => {
         makeRequire: (relMap, options) => {
           options = options || {};
 
-          function localRequire(deps, callback, errback) {
+          const localRequire = (deps, callback, errback) => {
             var id, map, requireMod;
 
             if (options.enableBuildCallback && callback && isFunction(callback))
               callback.__requireJsBuild = true;
 
             if (typeof deps === "string") {
-              if (isFunction(callback)) {
+              if (isFunction(callback))
                 //Invalid call
                 return onError(
                   makeError("requireargs", "Invalid require call"), //id, msg, err, requireModules
                   errback
                 );
-              }
 
-              //If require|exports|module are requested, get the
-              //value for them from the special handlers. Caveat:
-              //this only works while module is being defined.
-              if (relMap && hasProp(handlers, deps)) {
+              //when require|exports|module are requested && while module is being defined
+              if (relMap && hasProp(handlers, deps))
                 return handlers[deps](registry[relMap.id]);
-              }
+              if (req.get) return req.get(context, deps, relMap, localRequire);
 
-              //Synchronous access to one module. If require.get is
-              //available (as in the Node adapter), prefer that.
-              if (req.get) {
-                return req.get(context, deps, relMap, localRequire);
-              }
-
-              //Normalize module name, if it contains . or ..
+              //Normalize module name from . or ..
               map = makeModuleMap(deps, relMap, false, true);
               id = map.id;
 
-              if (!hasProp(defined, id)) {
+              if (!hasProp(defined, id))
                 return onError(
                   makeError(
                     "notloaded",
@@ -1484,7 +1372,7 @@ require = ((dependency, setTimeout) => {
                       (relMap ? "" : ". Use require([])")
                   ) //id, msg, err, requireModules
                 );
-              }
+
               return defined[id];
             }
 
@@ -1492,43 +1380,32 @@ require = ((dependency, setTimeout) => {
             intakeDefines();
 
             //Mark all the dependencies as needing to be loaded.
-            context.nextTick(function () {
-              //Some defines could have been added since the
-              //require call, collect them.
+            context.nextTick(() => {
+              //collect defines that could have been added since the 'require call'
               intakeDefines();
-
               requireMod = getModule(makeModuleMap(null, relMap));
-
-              //Store if map config should be applied to this require
-              //call for dependencies.
+              //store if 'map config' applied to this 'require call' for dependencies
               requireMod.skipMap = options.skipMap;
-
               requireMod.init(deps, callback, errback, {
                 enabled: true
               });
-
               checkLoaded();
             });
 
             return localRequire;
-          }
+          };
 
           mixin(localRequire, {
             isBrowser: isBrowser,
 
-            /**
-             * Converts a module name + .extension into an URL path.
-             * *Requires* the use of a module name. It does not support using
-             * plain URLs like nameToUrl.
-             */
-            toUrl: function (moduleNamePlusExt) {
+            //URL path = module name + .extension; requires 'module name,' not 'plain URLs' like nameToUrl
+            toUrl: (moduleNamePlusExt) => {
               var ext,
                 index = moduleNamePlusExt.lastIndexOf("."),
                 segment = moduleNamePlusExt.split("/")[0],
                 isRelative = segment === "." || segment === "..";
 
-              //Have a file extension alias, and it is not the
-              //dots from a relative path.
+              //file extension alias, not 'relative path dots'
               if (index !== -1 && (!isRelative || index > 1)) {
                 ext = moduleNamePlusExt.substring(
                   index,
@@ -1544,14 +1421,10 @@ require = ((dependency, setTimeout) => {
               );
             },
 
-            defined: function (id) {
-              return hasProp(
-                defined,
-                makeModuleMap(id, relMap, false, true).id
-              );
-            },
+            defined: (id) =>
+              hasProp(defined, makeModuleMap(id, relMap, false, true).id),
 
-            specified: function (id) {
+            specified: (id) => {
               id = makeModuleMap(id, relMap, false, true).id;
               return hasProp(defined, id) || hasProp(registry, id);
             }
@@ -1559,9 +1432,8 @@ require = ((dependency, setTimeout) => {
 
           //Only allow undef on top level require calls
           if (!relMap) {
-            localRequire.undef = function (id) {
-              //Bind any waiting define() calls to this context,
-              //fix for #408
+            localRequire.undef = (id) => {
+              //Bind define() calls (fixes #408) to 'this' context
               takeGlobalQueue();
 
               var map = makeModuleMap(id, relMap, true),
@@ -1574,23 +1446,16 @@ require = ((dependency, setTimeout) => {
               delete urlFetched[map.url];
               delete undefEvents[id];
 
-              //Clean queued defines too. Go backwards
-              //in array so that the splices do not
-              //mess up the iteration.
-              eachReverse(defQueue, function (args, i) {
-                if (args[0] === id) {
-                  defQueue.splice(i, 1);
-                }
-              });
+              //Clean queued defines, backwards, so splices don't destroy the iteration
+              eachReverse(
+                defQueue,
+                (args, i) => args[0] === id && defQueue.splice(i, 1)
+              );
               delete context.defQueueMap[id];
 
               if (mod) {
-                //Hold on to listeners in case the
-                //module will be attempted to be reloaded
-                //using a different config.
-                if (mod.events.defined) {
-                  undefEvents[id] = mod.events;
-                }
+                //if different config, same listeners
+                if (mod.events.defined) undefEvents[id] = mod.events;
 
                 cleanRegistry(id);
               }
@@ -1600,12 +1465,7 @@ require = ((dependency, setTimeout) => {
           return localRequire;
         },
 
-        /**
-         * Called to enable a module if it is still in the registry
-         * awaiting enablement. A second arg, parent, the parent module,
-         * is passed in for context, when this method is overridden by
-         * the optimizer. Not shown here to keep code compact.
-         */
+        //if module is in registry, parent's context when overridden in "optimizer" (Not shown).
         enable: (depMap) => {
           var mod = getOwn(registry, depMap.id);
           if (mod) {
@@ -1613,12 +1473,7 @@ require = ((dependency, setTimeout) => {
           }
         },
 
-        /**
-         * Internal method used by environment adapters to complete a load event.
-         * A load event could be a script load or just a load pass from a synchronous
-         * load call.
-         * @param {String} moduleName the name of the module to potentially complete.
-         */
+        //method used "internally" by environment adapters script-load or a synchronous load call.
         completeLoad: (moduleName) => {
           var found,
             args,
@@ -1632,15 +1487,13 @@ require = ((dependency, setTimeout) => {
             args = defQueue.shift();
             if (args[0] === null) {
               args[0] = moduleName;
-              //If already found an anonymous module and bound it
-              //to this name, then this is some other anon module
-              //waiting for its completeLoad to fire.
-              if (found) {
-                break;
-              }
+
+              if (found) break; //anonymous module bound to name already
+              //this is another anon module waiting for its completeLoad to fire.
+
               found = true;
             } else if (args[0] === moduleName) {
-              //Found matching define call for this script!
+              //matched a define call in this script
               found = true;
             }
 
@@ -1648,15 +1501,14 @@ require = ((dependency, setTimeout) => {
           }
           context.defQueueMap = {};
 
-          //Do this after the cycle of callGetModule in case the result
-          //of those calls/init calls changes the registry.
+          // in case-/init-calls change the registry
           mod = getOwn(registry, moduleName);
 
           if (!found && !hasProp(defined, moduleName) && mod && !mod.inited) {
             if (config.enforceDefine && (!shExports || !getGlobal(shExports))) {
               if (hasPathFallback(moduleName)) {
                 return;
-              } else {
+              } else
                 return onError(
                   makeError(
                     "nodefine",
@@ -1665,24 +1517,16 @@ require = ((dependency, setTimeout) => {
                     [moduleName]
                   ) //id, msg, err, requireModules
                 );
-              }
-            } else {
-              //A script that does not call define(), so just simulate
-              //the call for it.
-              callGetModule([moduleName, shim.deps || [], shim.exportsFn]);
             }
+            //does not call define(), but simulated
+            else callGetModule([moduleName, shim.deps || [], shim.exportsFn]);
           }
 
           checkLoaded();
         },
 
-        /**
-         * Converts a module name to a file path. Supports cases where
-         * moduleName may actually be just an URL.
-         * Note that it **does not** call normalize on the moduleName,
-         * it is assumed to have already been normalized. This is an
-         * internal API, not a public one. Use toUrl for the public API.
-         */
+        //already-normalized-moduleName as URL. Use toUrl for the public API.
+
         nameToUrl: (moduleName, ext, skipExt) => {
           var paths,
             syms,
@@ -1699,11 +1543,10 @@ require = ((dependency, setTimeout) => {
 
           if (bundleId) context.nameToUrl(bundleId, ext, skipExt);
 
-          //If a colon is in the URL, it indicates a protocol is used and it is just
-          //an URL to a file, or if it starts with a slash, contains a query arg (i.e. ?)
-          //or ends with .js, then assume the user meant to use an url and not a module id.
-          //The slash is important for protocol-less URLs as well as full paths.
-          if (req.jsExtRegExp.test(moduleName)) {
+          //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
+          //assume use of an url, not a module id.
+          //filter out dependencies that are already paths.
+          if (/^[/:?.]|(.js)$/.test(moduleName)) {
             //Just a plain path, not module name lookup, so just return it.
             //Add extension if it is included. This is a bit wonky, only non-.js things pass
             //an extension, this method probably needs to be reworked.
@@ -1812,11 +1655,10 @@ require = ((dependency, setTimeout) => {
   //Create default context.
   req({});
 
-  //Exports some context-sensitive methods on dependency require.
-  each(["toUrl", "undef", "defined", "specified"], function (prop) {
-    //Reference from contexts instead of early binding to default context,
-    //so that during builds, the latest instance of the default context
-    //with its config gets used.
+  //'dependency require' context-sensitive exported methods
+  each(["toUrl", "undef", "defined", "specified"], (prop) => {
+    //not the 'early binding to default context,' but contexts during builds
+    //for the latest instance of the 'default context config'
     req[prop] = function () {
       var ctx = contexts[defContextName];
       return ctx.require[prop].apply(ctx, arguments);
@@ -1825,26 +1667,17 @@ require = ((dependency, setTimeout) => {
 
   if (isBrowser) {
     head = s.head = document.getElementsByTagName("head")[0];
-    //If BASE tag is in play, using appendChild is a problem for IE6.
-    //When that browser dies, this can be removed. Details in this jQuery bug:
-    //http://dev.jquery.com/ticket/2709
+    //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
     baseElement = document.getElementsByTagName("base")[0];
     if (baseElement) {
       head = s.head = baseElement.parentNode;
     }
   }
 
-  /**
-   * Any errors that require explicitly generates will be passed to this
-   * function. Intercept/override it if you want custom error handling.
-   * @param {Error} err the error object.
-   */
   req.onError = defaultOnError;
 
-  /**
-   * Creates the node for the load command. Only used in browser envs.
-   */
-  req.createNode = function (config, moduleName, url) {
+  // node for the load command in browser env
+  req.createNode = (config, moduleName, url) => {
     var node = config.xhtml
       ? document.createElementNS("http://www.w3.org/1999/xhtml", "html:script")
       : document.createElement("script");
@@ -1854,66 +1687,41 @@ require = ((dependency, setTimeout) => {
     return node;
   };
 
-  /**
-   * Does the request to load a module for the browser case.
-   * Make this a separate function to allow other environments
-   * to override it.
-   *
-   * @param {Object} context the require context to find state.
-   * @param {String} moduleName the name of the module.
-   * @param {Object} url the URL to the module.
-   */
-  req.load = function (context, moduleName, url) {
+  //handle load request (in browser env); 'context' for state, 'moduleName' for name, 'url' for point
+  req.load = (context, moduleName, url) => {
     var config = (context && context.config) || {},
       node;
     if (isBrowser) {
-      //In the browser so use a script tag
+      //browser script tag
       node = req.createNode(config, moduleName, url);
 
       node.setAttribute("data-requirecontext", context.contextName);
       node.setAttribute("data-requiremodule", moduleName);
 
-      //Set up load listener. Test attachEvent first because IE9 has
-      //a subtle issue in its addEventListener and script onload firings
-      //that do not match the behavior of all other browsers with
-      //addEventListener support, which fire the onload event for a
-      //script right after the script execution. See:
-      //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
-      //UNFORTUNATELY Opera implements attachEvent but does not follow the script
-      //script execution mode.
       if (
         node.attachEvent &&
-        //Check if node.attachEvent is artificially added by custom script or
-        //natively supported by browser
-        //read https://github.com/requirejs/requirejs/issues/187
-        //if we can NOT find [native code] then it must NOT natively supported.
-        //in IE8, node.attachEvent does not have toString()
-        //Note the test for "[native code" with no closing brace, see:
-        //https://github.com/requirejs/requirejs/issues/273
+        //artificial native-browser support? https://github.com/requirejs/requirejs/issues/187
+        //![native code]. IE8, !node.attachEvent.toString()
+        //testing for "[native code" https://github.com/requirejs/requirejs/issues/273
         !(
           node.attachEvent.toString &&
           node.attachEvent.toString().indexOf("[native code") < 0
         ) &&
         !isOpera
       ) {
-        //Probably IE. IE (at least 6-8) do not fire
-        //script onload right after executing the script, so
-        //we cannot tie the anonymous define call to a name.
-        //However, IE reports the script as being in 'interactive'
-        //readyState at the time of the define call.
+        //IE (6-8) doesn't script-'onload,' right after executing the script,
+        //cannot "tie" anonymous define call to a name,
+        //yet for 'interactive'-script, 'readyState' triggers by 'define' call
         useInteractive = true;
 
+        //IE9 "addEventListener and script onload firings" issues
+        //should actually 'onload' event script, right after the script execution
+        //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
+        //Opera.attachEvent does not follow the execution mode.
         node.attachEvent("onreadystatechange", context.onScriptLoad);
-        //It would be great to add an error handler here to catch
-        //404s in IE9+. However, onreadystatechange will fire before
-        //the error handler, so that does not help. If addEventListener
-        //is used, then IE will fire error before load, but we cannot
-        //use that pathway given the connect.microsoft.com issue
-        //mentioned above about not doing the 'script execute,
-        //then fire the script load event listener before execute
-        //next script' that other browsers do.
-        //Best hope: IE10 fixes the issues,
-        //and then destroys all installs of IE 6-9.
+
+        //IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
+        //yet that pathway not doing the 'execute, fire load event listener before next script'
         //node.attachEvent('onerror', context.onScriptError);
       } else {
         node.addEventListener("load", context.onScriptLoad, false);
@@ -1927,7 +1735,7 @@ require = ((dependency, setTimeout) => {
         config.onNodeCreated(node, config, moduleName, url);
       }
 
-      //For some cache cases in IE 6-8, the script executes before the end
+      //IE 6-8 cache, script executes before the end
       //of the appendChild execution, so to tie an anonymous define
       //call to the module name (which is stored on the node), hold on
       //to a reference to this node, but clear after the DOM insertion.
@@ -1976,29 +1784,21 @@ require = ((dependency, setTimeout) => {
   };
 
   //Look for a data-main script attribute, which could also adjust the baseUrl.
-  if (isBrowser && !configuration.skipDataMain) {
-    //Figure out baseUrl. Get it from the script tag with require.js in it.
+  if (isBrowser && !configuration.skipDataMain)
+    //baseUrl from script tag with require.js in it.
     eachReverse(scripts(), (script) => {
-      //Set the 'head' where we can append children by
-      //using the script's parent.
-      if (!head) {
-        head = script.parentNode;
-      }
+      //Set 'head' and append children to script's parent
+      if (!head) head = script.parentNode;
 
-      //Look for a data-main attribute to set main script for the page
-      //to load. If it is there, the path to data main becomes the
-      //baseUrl, if it is not already set.
+      //attribute 'data-main' script to load baseUrl, if it is not already set.
       dataMain = script.getAttribute("data-main");
       if (dataMain) {
         //Preserve dataMain in case it is a path (i.e. contains '?')
         mainScript = dataMain;
 
-        //Set final baseUrl if there is not already an explicit one,
-        //but only do so if the data-main value is not a loader plugin
-        //module ID.
+        //baseUrl if data-main value is not a loader plugin module ID.
         if (!configuration.baseUrl && mainScript.indexOf("!") === -1) {
-          //Pull off the directory of data-main for use as the
-          //baseUrl.
+          //data-main-directory as baseUrl
           src = mainScript.split("/");
           mainScript = src.pop();
           subPath = src.length ? src.join("/") + "/" : "./";
@@ -2006,14 +1806,12 @@ require = ((dependency, setTimeout) => {
           configuration.baseUrl = subPath;
         }
 
-        //Strip off any trailing .js since mainScript is now
-        //like a module name.
+        //Strip off trailing .js mainScript, as is now a module name.
         mainScript = mainScript.replace(/\.js$/, "");
 
-        //If mainScript is still a path, fall back to dataMain
-        if (req.jsExtRegExp.test(mainScript)) {
-          mainScript = dataMain;
-        }
+        //If mainScript is still a mere path, fall back to dataMain
+        //filter out dependencies that are already paths.//^\/|:|\?|\.js$
+        if (/^[/:?.]|(.js)$/.test(mainScript)) mainScript = dataMain;
 
         //Put the data-main script in the files to load.
         configuration.deps = configuration.deps
@@ -2023,14 +1821,7 @@ require = ((dependency, setTimeout) => {
         return true;
       }
     });
-  }
 
-  /**
-   * Executes the text. Normally just uses eval, but can be modified
-   * to use a better, environment-specific call. Only used for transpiling
-   * loader plugins, not for plain JS modules.
-   * @param {String} text the text to execute/evaluate.
-   */
   /*jslint evil: true */
   req.exec = (text) =>
     new Promise(
