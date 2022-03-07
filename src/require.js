@@ -106,7 +106,7 @@ require = ((dependency, setTimeout) => {
   };
   if (typeof define !== "undefined") return; //Do not overwrite an existing REQUIREJS instance/ amd loader.
   define = (name, deps, callback) => {
-    var node, context; // package-names, callback, returns a value to define the module of argument index[0]
+    var node, ctx; // package-names, callback, returns a value to define the module of argument index[0]
     if (typeof name !== "string") {
       callback = deps; //Adjust args appropriately
       deps = name; //Allow for anonymous modules
@@ -137,12 +137,12 @@ require = ((dependency, setTimeout) => {
       node = currentlyAddingScript || getInteractiveScript(); //IE 6-8 anonymous define() call, requires interactive scripts
       if (node) {
         if (!name) name = node.getAttribute("data-requiremodule");
-        context = contexts[node.getAttribute("data-requirecontext")];
+        ctx = contexts[node.getAttribute("data-requirecontext")];
       }
     }
-    if (context) {
-      context.defQueue.push([name, deps, callback]); //module named by onload event, for anonymous modules or without context
-      context.defQueueMap[name] = true;
+    if (ctx) {
+      ctx.defQueue.push([name, deps, callback]); //module named by onload event, for anonymous modules or without context
+      ctx.defQueueMap[name] = true;
     } else globalDefQueue.push([name, deps, callback]);
   };
   define.amd = {
@@ -155,7 +155,7 @@ require = ((dependency, setTimeout) => {
     REQUIREJS = undefined;
   }
   if (typeof require !== "undefined" && !isFunction(require)) {
-    configuration = require; //require is a config object.
+    configuration = require; //require is a CONFIG object.
     require = undefined;
   }
   const trimDots = (array) => {
@@ -180,12 +180,12 @@ require = ((dependency, setTimeout) => {
     }
   }; //just enabled, but unactivated, modules
   const convertName = (name, map, applyMap, paths) => {
-    var starMap = map && map["*"]; //Apply map config if available.
+    var starMap = map && map["*"]; //Apply map CONFIG if available.
     if (applyMap && map && (paths || starMap)) {
       var foundMap, foundI, foundStarMap, starI;
       var names = name.split("/"); //continue search
       outerLoop: for (let i = names.length; i > 0; i -= 1) {
-        var nameSegment = names.slice(0, i).join("/"); //unless shorter matching config, favor a "star map"
+        var nameSegment = names.slice(0, i).join("/"); //unless shorter matching CONFIG, favor a "star map"
         if (!foundStarMap && starMap && getOwn(starMap, nameSegment)) {
           foundStarMap = getOwn(starMap, nameSegment);
           starI = i;
@@ -194,9 +194,9 @@ require = ((dependency, setTimeout) => {
           for (let j = paths.length; j > 0; j -= 1) {
             var mapValue = getOwn(map, paths.slice(0, j).join("/")); //join biggest-to-smallest lengths paths to find
             if (mapValue) {
-              mapValue = getOwn(mapValue, nameSegment); //the-longest 'baseName segment match' in the config
+              mapValue = getOwn(mapValue, nameSegment); //the-longest 'baseName segment match' in the CONFIG
               if (mapValue) {
-                foundMap = mapValue; //baseName segment has config, what about for this name?
+                foundMap = mapValue; //baseName segment has CONFIG, what about for this name?
                 foundI = i;
                 break outerLoop; //Match, update name to the new value.
               }
@@ -225,12 +225,12 @@ require = ((dependency, setTimeout) => {
         return true;
       }
     });
-  const hasPathFallback = (id, configPaths, context) => {
+  const hasPathFallback = (id, configPaths, ctx) => {
     var pathConfig = getOwn(configPaths, id);
     if (pathConfig && isArray(pathConfig) && pathConfig.length > 1) {
       pathConfig.shift(); //next try
-      context.require.undef(id);
-      context.makeRequire(null, {
+      ctx.require.undef(id);
+      ctx.makeRequire(null, {
         skipMap: true
       })([id]); //no map translation, ID, absolutely-, already mapped/resolved.
       return true;
@@ -282,25 +282,24 @@ require = ((dependency, setTimeout) => {
     this.depCount = 0;
   }; //this.exports; this.factory; this.depMaps = [], this.enabled, this.fetched
   var req = (REQUIREJS = (deps, callback, errback, optional) => {
-    var context; //Caja compliant req for minified-scope
-    var config; //name of dependency, callback for array completion
-    var contextName = defContextName; //Find the right context, use default
+    var ctx; //Caja compliant req for minified-scope
+    var confi; //name of dependency, callback for array completion
+    var contextName = defContextName; //Find the right CONTEXT, use default
     if (!isArray(deps) && typeof deps !== "string") {
-      config = deps;
+      confi = deps;
       if (isArray(callback)) {
-        deps = callback; // Determine if have config object in the call.
-        callback = errback; // deps is a config object
+        deps = callback; // Determine if have CONFIG object in the call.
+        callback = errback; // deps is a CONFIG object
         errback = optional; // Adjust args if there are dependencies
       } else deps = [];
     }
-    if (config && config.context) contextName = config.context;
-    context = getOwn(contexts, contextName);
-    if (!context)
-      context = contexts[contextName] = req.s.newContext(contextName);
-    if (config) context.configure(config);
-    return context.require(deps, callback, errback);
+    if (confi && confi.context) contextName = confi.context;
+    ctx = getOwn(contexts, contextName);
+    if (!ctx) ctx = contexts[contextName] = req.s.newContext(contextName);
+    if (confi) ctx.configure(confi);
+    return ctx.require(deps, callback, errback);
   });
-  req.config = (config) => req(config); // globally agreed names for other potential AMD loaders
+  req.CONFIG = (confi) => req(confi); // globally agreed names for other potential AMD loaders
   req.nextTick =
     typeof setTimeout !== "undefined"
       ? (fn) => setTimeout(fn, 4)
@@ -310,10 +309,8 @@ require = ((dependency, setTimeout) => {
   req.isBrowser = isBrowser;
   var interactiveScript, dataMain, baseElement, mainScript, subPath, src, head;
   const newContext = (contextName) => {
-    var inCheckLoaded,
-      context,
-      checkLoadedTimeoutId,
-      config = {
+    var CONTEXT = {
+      CONFIG: {
         waitSeconds: 7,
         baseUrl: "./",
         paths: {},
@@ -321,7 +318,23 @@ require = ((dependency, setTimeout) => {
         pkgs: {},
         shim: {},
         config: {}
-      },
+      }
+    };
+    var { CONFIG } = CONTEXT;
+    /*
+      contextName,
+      registry,
+      defined,
+      urlFetched,
+      defQueue,
+      defQueueMap: {},
+      Module,
+      makeModuleMap,
+      nextTick: req.nextTick,
+      onError,
+      configure,*/
+    var inCheckLoaded,
+      checkLoadedTimeoutId,
       registry = {},
       enabledRegistry = {},
       undefEvents = {},
@@ -340,7 +353,7 @@ require = ((dependency, setTimeout) => {
         isDefine = false; //internally-name a 'require' call, given no name
         name = "_@r" + (requireCounter += 1);
       }
-      const configGets = [config.nodeIdCompat, config.map, config.pkgs];
+      const configGets = [CONFIG.nodeIdCompat, CONFIG.map, CONFIG.pkgs];
       var names = splitPrefix(name);
       var prefix = names[0];
       name = names[1];
@@ -363,10 +376,10 @@ require = ((dependency, setTimeout) => {
           : name; //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
         if (!prefix) {
           names = splitPrefix(normalizedName); //ok base name, relative path?.
-          prefix = names[0]; //normalize's 'map config application' might make normalized 'name' a plugin ID.
-          normalizedName = names[1]; //'map config values' are already normalized at this point.
+          prefix = names[0]; //normalize's 'map CONFIG application' might make normalized 'name' a plugin ID.
+          normalizedName = names[1]; //'map CONFIG values' are already normalized at this point.
           isNormalized = true;
-          url = context.nameToUrl(normalizedName);
+          url = CONTEXT.nameToUrl(normalizedName);
         }
       }
       var suffix =
@@ -387,10 +400,10 @@ require = ((dependency, setTimeout) => {
     const getModule = (depMap) => {
       var mod = getOwn(registry, depMap.id);
       if (!mod)
-        mod = registry[depMap.id] = new context.Module(
+        mod = registry[depMap.id] = new CONTEXT.Module(
           depMap,
           undefEvents,
-          config.shim
+          CONFIG.shim
         );
       return mod;
     };
@@ -424,14 +437,14 @@ require = ((dependency, setTimeout) => {
       if (globalDefQueue.length)
         each(globalDefQueue, (queueItem) => {
           var id = queueItem[0]; //globalQueue by internal method to this defQueue
-          if (typeof id === "string") context.defQueueMap[id] = true;
-          defQueue.push(queueItem); //Push all the globalDefQueue items into the context's defQueue
+          if (typeof id === "string") CONTEXT.defQueueMap[id] = true;
+          defQueue.push(queueItem); //Push all the globalDefQueue items into the CONTEXT's defQueue
         });
       globalDefQueue = [];
     };
     var handlers = {
       require: (mod) => {
-        if (!mod.require) return (mod.require = context.makeRequire(mod.map));
+        if (!mod.require) return (mod.require = CONTEXT.makeRequire(mod.map));
         return mod.require;
       },
       exports: (mod) => {
@@ -445,7 +458,7 @@ require = ((dependency, setTimeout) => {
           return (mod.module = {
             id: mod.map.id,
             uri: mod.map.url,
-            config: () => getOwn(config.config, mod.map.id) || {},
+            config: () => getOwn(CONFIG.config, mod.map.id) || {},
             exports: mod.exports || (mod.exports = {})
           });
         return mod.module;
@@ -474,11 +487,11 @@ require = ((dependency, setTimeout) => {
     const checkLoaded = () => {
       var err,
         usingPathFallback,
-        waitInterval = config.waitSeconds * 1000,
+        waitInterval = CONFIG.waitSeconds * 1000,
         //It is possible to disable the wait interval by using waitSeconds of 0.
         expired =
           waitInterval &&
-          context.startTime + waitInterval < new Date().getTime(),
+          CONTEXT.startTime + waitInterval < new Date().getTime(),
         noLoads = [],
         reqCalls = [],
         stillLoading = false,
@@ -492,12 +505,12 @@ require = ((dependency, setTimeout) => {
         if (!map.isDefine) reqCalls.push(mod);
         if (!mod.error && !mod.inited) {
           if (expired) {
-            if (hasPathFallback(modId, config.paths)) {
+            if (hasPathFallback(modId, CONFIG.paths)) {
               usingPathFallback = true;
               stillLoading = true;
             } else {
               noLoads.push(modId);
-              removeScript(modId, context.contextName);
+              removeScript(modId, CONTEXT.contextName);
             }
           } else if (mod.fetched && map.isDefine) {
             stillLoading = true;
@@ -512,7 +525,7 @@ require = ((dependency, setTimeout) => {
           null,
           noLoads
         ); //id, msg, err, requireModules
-        err.contextName = context.contextName;
+        err.contextName = CONTEXT.contextName;
         return onError(err);
       } else {
         if (needCycleCheck) each(reqCalls, (mod) => breakCycle(mod, {}, {}));
@@ -544,10 +557,10 @@ require = ((dependency, setTimeout) => {
     const fetcher = () => {
       if (this.fetched) return null;
       this.fetched = true;
-      context.startTime = new Date().getTime();
+      CONTEXT.startTime = new Date().getTime();
       var map = this.map;
       if (this.shim) {
-        context.makeRequire(this.map, {
+        CONTEXT.makeRequire(this.map, {
           enableBuildCallback: true
         })(
           this.shim.deps || [],
@@ -564,11 +577,11 @@ require = ((dependency, setTimeout) => {
         req.onError !== defaultOnError
       ) {
         try {
-          exports = context.execCb(id, factory, depExports, exports); //factory.apply(exports, depExports),
+          exports = CONTEXT.execCb(id, factory, depExports, exports); //factory.apply(exports, depExports),
         } catch (e) {
           err = e;
         }
-      } else exports = context.execCb(id, factory, depExports, exports); // Favor return value over exports. If node/cjs in play,
+      } else exports = CONTEXT.execCb(id, factory, depExports, exports); // Favor return value over exports. If node/cjs in play,
       if (this.map.isDefine && exports === undefined) {
         cjsModule = this.module; // then will not have a return value anyway. Favor
         if (cjsModule) {
@@ -598,7 +611,7 @@ require = ((dependency, setTimeout) => {
             each(this.depMaps, (depMap) =>
               resLoadMaps.push(depMap.normalizedMap || depMap)
             );
-            req.onResourceLoad(context, this.map, resLoadMaps);
+            req.onResourceLoad(CONTEXT, this.map, resLoadMaps);
           }
         }
         cleanRegistry(id);
@@ -611,59 +624,6 @@ require = ((dependency, setTimeout) => {
         this.defineEmitComplete = true;
       }
     };
-    const loadFinish = (id, map, plugin) => {
-      var load = bind(this, (value) => {
-        this.init([], () => value, null, {
-          enabled: true
-        });
-      });
-      load.error = bind(this, (err) => {
-        this.inited = true; //Remove temp unnormalized modules for this module,
-        this.error = err; //since they will never be resolved otherwise now.
-        err.requireModules = [id];
-        eachProp(
-          registry,
-          (mod) =>
-            mod.map.id.indexOf(id + "_unnormalized") === 0 &&
-            cleanRegistry(mod.map.id)
-        );
-        onError(err);
-      }); //Allow plugins to load other code without having to know the
-      var localRequire = context.makeRequire(map.parentMap, {
-        enableBuildCallback: true
-      }); //context or how to 'complete' the load.
-      load.fromText = bind(this, (text, textAlt) => {
-        /*jslint evil: true */
-        var moduleName = map.name;
-        var moduleMap = makeModuleMap(moduleName); //2.1.0 onwards, pass text to reinforce fromText 1call/resource.
-        var hasInteractive = useInteractive; //pass moduleName, ok, but discard moduleName for internal ref.
-        if (textAlt) text = textAlt; //Turn off interactive script matching for IE for any define
-        if (hasInteractive) useInteractive = false; //calls in the text, then turn it back on at the end.
-        getModule(moduleMap); //Prime the system by creating a module instance for
-        if (hasProp(config.config, id))
-          config.config[moduleName] = config.config[id]; //Transfer any config to this other module.
-        try {
-          req.exec(text);
-        } catch (e) {
-          return onError(
-            makeError(
-              "fromtexteval",
-              "fromText eval for " + id + " failed: " + e,
-              e,
-              [id]
-            ) //id, msg, err, requireModules
-          );
-        }
-        if (hasInteractive) useInteractive = true; //Mark this as a dependency for the plugin resource
-        this.depMaps.push(moduleMap);
-        context.completeLoad(moduleName); //Support anonymous modules.
-        localRequire([moduleName], load); //Bind the value of that module to the value for this resource ID.
-      });
-      //Use parentName here since the plugin's name is not reliable,
-      //could be some weird string with no path that actually wants to
-      //reference the parentName's path.
-      plugin.load(map.name, localRequire, load, config);
-    };
     const normalizeMod = (plugin, map) => {
       var name = this.map.name; //Normalize the ID if the plugin allows it.
       if (plugin.normalize)
@@ -673,16 +633,16 @@ require = ((dependency, setTimeout) => {
               name,
               this.map.parentMap ? this.map.parentMap.name : null, //parentName
               true,
-              config.nodeIdCompat,
-              config.map,
-              config.pkgs
+              CONFIG.nodeIdCompat,
+              CONFIG.map,
+              CONFIG.pkgs
             )
           ) || ""; //prefix and name should already be normalized, no need
       var normalizedMap = makeModuleMap(
         map.prefix + "!" + name,
         this.map.parentMap,
         true
-      ); //for applying map config again either.
+      ); //for applying map CONFIG again either.
       on(
         normalizedMap,
         "defined",
@@ -706,6 +666,60 @@ require = ((dependency, setTimeout) => {
         normalizedMod.enable();
       }
     };
+    const loadFinish = (id, map, plugin) => {
+      const load = bind(this, (factory) =>
+        this.init([], () => factory, null, {
+          enabled: true
+        })
+      ); //depMaps, factory, errback, options
+      load.error = bind(this, (err) => {
+        this.inited = true; //Remove temp unnormalized modules for this module,
+        this.error = err; //since they will never be resolved otherwise now.
+        err.requireModules = [id];
+        eachProp(
+          registry,
+          (mod) =>
+            mod.map.id.indexOf(id + "_unnormalized") === 0 &&
+            cleanRegistry(mod.map.id)
+        );
+        onError(err);
+      }); //Allow plugins to load other code without having to know the
+      const localRequire = CONTEXT.makeRequire(map.parentMap, {
+        enableBuildCallback: true
+      }); //CONTEXT or how to 'complete' the load.
+      const localreq = (text, textAlt) => {
+        /*jslint evil: true */
+        var moduleName = map.name;
+        var moduleMap = makeModuleMap(moduleName); //2.1.0 onwards, pass text to reinforce fromText 1call/resource.
+        var hasInteractive = useInteractive; //pass moduleName, ok, but discard moduleName for internal ref.
+        if (textAlt) text = textAlt; //Turn off interactive script matching for IE for any define
+        if (hasInteractive) useInteractive = false; //calls in the text, then turn it back on at the end.
+        getModule(moduleMap); //Prime the system by creating a module instance for
+        if (hasProp(CONFIG.config, id))
+          CONFIG.config[moduleName] = CONFIG.config[id]; //Transfer any CONFIG to this other module.
+        try {
+          req.exec(text);
+        } catch (e) {
+          return onError(
+            makeError(
+              "fromtexteval",
+              "fromText eval for " + id + " failed: " + e,
+              e,
+              [id]
+            ) //id, msg, err, requireModules
+          );
+        }
+        if (hasInteractive) useInteractive = true; //Mark this as a dependency for the plugin resource
+        this.depMaps.push(moduleMap);
+        CONTEXT.completeLoad(moduleName); //Support anonymous modules.
+        localRequire([moduleName], load); //Bind the value of that module to the value for this resource ID.
+      };
+      load.fromText = bind(this, localreq);
+      //Use parentName here since the plugin's name is not reliable,
+      //could be some weird string with no path that actually wants to
+      //reference the parentName's path.
+      plugin.load(map.name, localRequire, load, CONFIG);
+    };
     const callPlugin = () => {
       var map = this.map; //Map already normalized the prefix.
       var id = map.id; //Mark this as a dependency for this plugin, so it
@@ -718,14 +732,14 @@ require = ((dependency, setTimeout) => {
           if (this.map.unnormalized) return normalizeMod(plugin, map); //If current map is not normalized, wait for that
           var bundleId = getOwn(bundlesMap, this.map.id); //normalized name to load instead of continuing.
           if (bundleId) {
-            this.map.url = context.nameToUrl(bundleId); //If a paths config, then just load that file instead to
+            this.map.url = CONTEXT.nameToUrl(bundleId); //If a paths CONFIG, then just load that file instead to
             this.load(); //resolve the plugin, as it is built into that paths layer.
             return null;
           }
           loadFinish(id, map, plugin);
         })
       );
-      context.enable(pluginMap, this);
+      CONTEXT.enable(pluginMap, this);
       this.pluginMaps[pluginMap.id] = pluginMap;
     };
     const enable = () => {
@@ -770,41 +784,41 @@ require = ((dependency, setTimeout) => {
           var id = depMap.id; //Skip special modules like 'require', 'exports', 'module'
           var mod = registry[id];
           if (!hasProp(handlers, id) && mod && !mod.enabled)
-            context.enable(depMap, this); //don't call enable if it is already enabled (circular deps)
+            CONTEXT.enable(depMap, this); //don't call enable if it is already enabled (circular deps)
         })
       ); //dependency plugins, enabled
       eachProp(
         this.pluginMaps,
         bind(this, (pluginMap) => {
           var mod = getOwn(registry, pluginMap.id);
-          if (mod && !mod.enabled) context.enable(pluginMap, this);
+          if (mod && !mod.enabled) CONTEXT.enable(pluginMap, this);
         })
       );
       this.enabling = false;
       this.check();
     };
-    //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
+
     Module.prototype = {
       init,
       defineDep: (i, depExports) => {
         if (!this.depMatched[i]) {
-          this.depMatched[i] = true; //multiple callback export cycles
-          this.depCount -= 1;
-          this.depExports[i] = depExports;
+          this.depMatched[i] = true; //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
+          this.depCount -= 1; //prototype is hydratable for async results, init only on this page by 'new' initialization
+          this.depExports[i] = depExports; //multiple callback export cycles
         }
       },
       fetch: fetcher,
       load: () => {
         if (!urlFetched[this.map.url]) {
           urlFetched[this.map.url] = true; //Regular dependency.
-          context.load(this.map.id, this.map.url);
+          CONTEXT.load(this.map.id, this.map.url);
         }
       },
       check: () => {
         if (!this.enabled || this.enabling) return null;
         var id = this.map.id; // module is ready to, and does, define itself
         if (!this.inited) {
-          if (!hasProp(context.defQueueMap, id)) this.fetch(); // !defQueue.includes(this)
+          if (!hasProp(CONTEXT.defQueueMap, id)) this.fetch(); // !defQueue.includes(this)
         } else if (this.error) {
           this.emit("error", this.error);
         } else if (!this.defining) defineModule(id);
@@ -837,8 +851,8 @@ require = ((dependency, setTimeout) => {
         } else node.removeEventListener(name, func, false);
       };
       var node = evt.currentTarget || evt.srcElement; //REQUIREJS event info, remove listener from node //target
-      removeListener(node, context.onScriptLoad, "load", "onreadystatechange");
-      removeListener(node, context.onScriptError, "error");
+      removeListener(node, CONTEXT.onScriptLoad, "load", "onreadystatechange");
+      removeListener(node, CONTEXT.onScriptError, "error");
       return {
         node: node,
         id: node && node.getAttribute("data-requiremodule")
@@ -858,7 +872,7 @@ require = ((dependency, setTimeout) => {
             );
           if (relMap && hasProp(handlers, deps))
             return handlers[deps](registry[relMap.id]); //when require|exports|module are requested && while module is being defined
-          if (req.get) return req.get(context, deps, relMap, localRequire);
+          if (req.get) return req.get(CONTEXT, deps, relMap, localRequire);
           map = makeModuleMap(deps, relMap, false, true);
           id = map.id; //Normalize module name from . or ..
           if (!hasProp(defined, id))
@@ -867,7 +881,7 @@ require = ((dependency, setTimeout) => {
                 "notloaded",
                 'Module name "' +
                   id +
-                  '" has not been loaded yet for context: ' +
+                  '" has not been loaded yet for CONTEXT: ' +
                   contextName +
                   (relMap ? "" : ". Use require([])")
               ) //id, msg, err, requireModules
@@ -889,13 +903,13 @@ require = ((dependency, setTimeout) => {
               );
             callGetModule(args); //...id, deps, factory; "normalized by define()"
           }
-          context.defQueueMap = {};
+          CONTEXT.defQueueMap = {};
         };
         intakeDefines(); //Grab defines waiting in the dependency queue.
-        context.nextTick(() => {
+        CONTEXT.nextTick(() => {
           intakeDefines(); //Mark all the dependencies as needing to be loaded.
           requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
-          requireMod.skipMap = options.skipMap; //store if 'map config' applied to this 'require call' for dependencies
+          requireMod.skipMap = options.skipMap; //store if 'map CONFIG' applied to this 'require call' for dependencies
           requireMod.init(deps, callback, errback, {
             enabled: true
           });
@@ -914,14 +928,14 @@ require = ((dependency, setTimeout) => {
             ext = moduleNamePlusExt.substring(index, moduleNamePlusExt.length); //file extension alias, not 'relative path dots'
             moduleNamePlusExt = moduleNamePlusExt.substring(0, index);
           }
-          return context.nameToUrl(
+          return CONTEXT.nameToUrl(
             normalize(
               moduleNamePlusExt,
               relMap && relMap.id,
               true,
-              config.nodeIdCompat,
-              config.map,
-              config.pkgs
+              CONFIG.nodeIdCompat,
+              CONFIG.map,
+              CONFIG.pkgs
             ),
             ext,
             true
@@ -937,10 +951,10 @@ require = ((dependency, setTimeout) => {
       if (!relMap)
         localRequire.undef = (id) => {
           takeGlobalQueue(); //Only allow undef on top level require calls
-          var map = makeModuleMap(id, relMap, true); //Bind define() calls (fixes #408) to 'this' context
+          var map = makeModuleMap(id, relMap, true); //Bind define() calls (fixes #408) to 'this' CONTEXT
           var mod = getOwn(registry, id);
           mod.undefed = true;
-          removeScript(id, context.contextName);
+          removeScript(id, CONTEXT.contextName);
           delete defined[id];
           delete urlFetched[map.url];
           delete undefEvents[id];
@@ -948,9 +962,9 @@ require = ((dependency, setTimeout) => {
             defQueue,
             (args, i) => args[0] === id && defQueue.splice(i, 1)
           ); //Clean queued defines, backwards, so splices don't destroy the iteration
-          delete context.defQueueMap[id];
+          delete CONTEXT.defQueueMap[id];
           if (mod) {
-            if (mod.events.defined) undefEvents[id] = mod.events; //if different config, same listeners
+            if (mod.events.defined) undefEvents[id] = mod.events; //if different CONFIG, same listeners
             cleanRegistry(id);
           }
         };
@@ -965,17 +979,17 @@ require = ((dependency, setTimeout) => {
       if (typeof configuration.urlArgs === "string")
         configuration.urlArgs = (id, url) =>
           (url.indexOf("?") === -1 ? "?" : "&") + configuration.urlArgs; // Convert old style urlArgs string to a function.
-      var shim = config.shim; //save paths for special "additive processing"
+      var shim = CONFIG.shim; //save paths for special "additive processing"
       var objs = {
         paths: true,
         bundles: true,
-        config: true,
+        CONFIG: true,
         map: true
       };
       eachProp(configuration, (value, prop) => {
-        if (!objs[prop]) return (config[prop] = value);
-        if (!config[prop]) config[prop] = {};
-        mixin(config[prop], value, true, true);
+        if (!objs[prop]) return (CONFIG[prop] = value);
+        if (!CONFIG[prop]) CONFIG[prop] = {};
+        mixin(CONFIG[prop], value, true, true);
       });
       if (configuration.bundles)
         eachProp(configuration.bundles, (value, prop) => {
@@ -990,10 +1004,10 @@ require = ((dependency, setTimeout) => {
               deps: value
             }; //Merge shim, Normalize the structure
           if ((value.exports || value.init) && !value.exportsFn)
-            value.exportsFn = context.makeShimExports(value);
+            value.exportsFn = CONTEXT.makeShimExports(value);
           shim[id] = value;
         });
-        config.shim = shim;
+        CONFIG.shim = shim;
       }
       if (configuration.packages)
         each(configuration.packages, (pkgObj) => {
@@ -1001,8 +1015,8 @@ require = ((dependency, setTimeout) => {
           pkgObj = typeof pkgObj === "string" ? { name: pkgObj } : pkgObj;
           name = pkgObj.name;
           location = pkgObj.location;
-          if (location) config.paths[name] = pkgObj.location;
-          config.pkgs[name] =
+          if (location) CONFIG.paths[name] = pkgObj.location;
+          CONFIG.pkgs[name] =
             pkgObj.name +
             "/" +
             (pkgObj.main || "main").replace(/^\.\//, "").replace(/\.js$/, ""); //normalize pkg name main module ID pointer paths
@@ -1012,11 +1026,11 @@ require = ((dependency, setTimeout) => {
           mod.map = makeModuleMap(id, null, true); //Info, like URLs to load, may have changed.
       }); //if inited and transient, unnormalized modules.
       if (configuration.deps || configuration.callback)
-        context.require(configuration.deps || [], configuration.callback); //When require is defined as a config object before require.js is loaded,
-    }; //call require with those args, if a deps array or a config callback is specified
+        CONTEXT.require(configuration.deps || [], configuration.callback); //When require is defined as a CONFIG object before require.js is loaded,
+    }; //call require with those args, if a deps array or a CONFIG callback is specified
 
-    context = {
-      config,
+    CONTEXT = {
+      CONFIG,
       contextName,
       registry,
       defined,
@@ -1038,7 +1052,7 @@ require = ((dependency, setTimeout) => {
       },
       makeRequire,
       enable: (depMap) => {
-        var mod = getOwn(registry, depMap.id); //if module is in registry, parent's context when
+        var mod = getOwn(registry, depMap.id); //if module is in registry, parent's CONTEXT when
         if (mod) getModule(depMap).enable(); // overridden in "optimizer" (Not shown).
       },
       completeLoad: (moduleName) => {
@@ -1053,15 +1067,15 @@ require = ((dependency, setTimeout) => {
           } else if (args[0] === moduleName) found = true; //matched a define call in this script
           callGetModule(args);
         }
-        context.defQueueMap = {};
+        CONTEXT.defQueueMap = {};
         var mod = getOwn(registry, moduleName); // in case-/init-calls change the registry
         if (!found && !hasProp(defined, moduleName) && mod && !mod.inited) {
-          var shim = getOwn(config.shim, moduleName) || {};
+          var shim = getOwn(CONFIG.shim, moduleName) || {};
           if (
-            config.enforceDefine &&
+            CONFIG.enforceDefine &&
             (!shim.exports || !getGlobal(shim.exports))
           )
-            return hasPathFallback(moduleName, config.paths)
+            return hasPathFallback(moduleName, CONFIG.paths)
               ? null
               : onError(
                   makeError(
@@ -1076,16 +1090,16 @@ require = ((dependency, setTimeout) => {
         checkLoaded();
       },
       nameToUrl: (moduleName, ext, skipExt) => {
-        var pkgMain = getOwn(config.pkgs, moduleName); //already-normalized-moduleName as URL. Use toUrl for the public API.
+        var pkgMain = getOwn(CONFIG.pkgs, moduleName); //already-normalized-moduleName as URL. Use toUrl for the public API.
         if (pkgMain) moduleName = pkgMain; //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
         var bundleId = getOwn(bundlesMap, moduleName); //assume use of an url, not a module id.
-        if (bundleId) context.nameToUrl(bundleId, ext, skipExt); //filter out dependencies that are already paths.
+        if (bundleId) CONTEXT.nameToUrl(bundleId, ext, skipExt); //filter out dependencies that are already paths.
         const geturl = (url = "") => {
           //Just a plain path, not module name lookup, so just return it.
           if (/^[/:?.]|(.js)$/.test(moduleName)) {
             url = moduleName + (ext || ""); //Add extension if it is included. This is a bit wonky, only non-.js things pass
           } else {
-            var paths = config.paths; //an extension, this method probably needs to be reworked.
+            var paths = CONFIG.paths; //an extension, this method probably needs to be reworked.
             var syms = moduleName.split("/"); //A module that needs to be converted to a path.
 
             for (let i = syms.length; i > 0; i -= 1) {
@@ -1103,17 +1117,17 @@ require = ((dependency, setTimeout) => {
             url =
               (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ///^[\w\+\.\-]+:/
                 ? ""
-                : config.baseUrl) + url;
+                : CONFIG.baseUrl) + url;
           }
           return url;
         };
         const url = geturl(); //Delegates to req.load. Broken out as a separate function to
-        return config.urlArgs && !/^blob:/.test(url) //!/^blob\:/
-          ? url + config.urlArgs(moduleName, url)
+        return CONFIG.urlArgs && !/^blob:/.test(url) //!/^blob\:/
+          ? url + CONFIG.urlArgs(moduleName, url)
           : url; //allow overriding in the optimizer.
       },
 
-      load: (id, url) => req.load(context, id, url),
+      load: (id, url) => req.load(CONTEXT, id, url),
       //allow the build system to sequence the files in the built layer, correctly
       execCb: (name, callback, args, exports) => callback.apply(exports, args),
       onScriptLoad: (evt) => {
@@ -1123,12 +1137,12 @@ require = ((dependency, setTimeout) => {
         ) {
           interactiveScript = null; //browser event for script loaded status
           var data = getScriptData(evt);
-          context.completeLoad(data.id);
+          CONTEXT.completeLoad(data.id);
         }
       },
       onScriptError: (evt) => {
         var data = getScriptData(evt);
-        if (!hasPathFallback(data.id, config.paths)) {
+        if (!hasPathFallback(data.id, CONFIG.paths)) {
           var parents = [];
           eachProp(
             registry,
@@ -1154,20 +1168,20 @@ require = ((dependency, setTimeout) => {
         }
       }
     };
-    context.require = context.makeRequire();
-    return context;
+    CONTEXT.require = CONTEXT.makeRequire();
+    return CONTEXT;
   };
   var s = (req.s = {
     contexts,
     newContext
-  }); //Create default context.
-  req({}); //'dependency require' context-sensitive exported methods
+  }); //Create default CONTEXT.
+  req({}); //'dependency require' CONTEXT-sensitive exported methods
   each(
     ["toUrl", "undef", "defined", "specified"],
     (prop) =>
       (req[prop] = function () {
-        var ctx = contexts[defContextName]; //not the 'early binding to default context,' but contexts during builds
-        return ctx.require[prop].apply(ctx, arguments); //for the latest instance of the 'default context config'
+        var ctx = contexts[defContextName]; //not the 'early binding to default CONTEXT,' but contexts during builds
+        return ctx.require[prop].apply(ctx, arguments); //for the latest instance of the 'default CONTEXT CONFIG'
       })
   );
   if (isBrowser) {
@@ -1176,21 +1190,21 @@ require = ((dependency, setTimeout) => {
     if (baseElement) head = s.head = baseElement.parentNode;
   }
   req.onError = defaultOnError;
-  req.createNode = (config, moduleName, url) => {
-    var node = config.xhtml
+  req.createNode = (CONFIG, moduleName, url) => {
+    var node = CONFIG.xhtml
       ? document.createElementNS("http://www.w3.org/1999/xhtml", "html:script")
       : document.createElement("script"); // node for the load command in browser env
-    node.type = config.scriptType || "text/javascript";
+    node.type = CONFIG.scriptType || "text/javascript";
     node.charset = "utf-8";
     node.async = true;
     return node;
   };
-  req.load = (context, moduleName, url) => {
-    var config = (context && context.config) || {},
-      node; //handle load request (in browser env); 'context' for state, 'moduleName' for name, 'url' for point
+  req.load = (CONTEXT, moduleName, url) => {
+    var CONFIG = (CONTEXT && CONTEXT.CONFIG) || {},
+      node; //handle load request (in browser env); 'CONTEXT' for state, 'moduleName' for name, 'url' for point
     if (isBrowser) {
-      node = req.createNode(config, moduleName, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
-      node.setAttribute("data-requirecontext", context.contextName); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187
+      node = req.createNode(CONFIG, moduleName, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
+      node.setAttribute("data-requirecontext", CONTEXT.contextName); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187
       node.setAttribute("data-requiremodule", moduleName); //![native code]. IE8, !node.attachEvent.toString()
       if (
         node.attachEvent &&
@@ -1201,18 +1215,18 @@ require = ((dependency, setTimeout) => {
         !isOpera
       ) {
         useInteractive = true; //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
-        node.attachEvent("onreadystatechange", context.onScriptLoad); //yet for 'interactive'-script, 'readyState' triggers by 'define' call
+        node.attachEvent("onreadystatechange", CONTEXT.onScriptLoad); //yet for 'interactive'-script, 'readyState' triggers by 'define' call
         //IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
         //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
         //Opera.attachEvent does not follow the execution mode.
         //IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
       } else {
-        node.addEventListener("load", context.onScriptLoad, false); //yet that pathway not doing the 'execute, fire load event listener before next script'
-        node.addEventListener("error", context.onScriptError, false); //node.attachEvent('onerror', context.onScriptError);
+        node.addEventListener("load", CONTEXT.onScriptLoad, false); //yet that pathway not doing the 'execute, fire load event listener before next script'
+        node.addEventListener("error", CONTEXT.onScriptError, false); //node.attachEvent('onerror', CONTEXT.onScriptError);
       }
       node.src = url; //Calling onNodeCreated after all properties on the node have been
-      if (config.onNodeCreated)
-        config.onNodeCreated(node, config, moduleName, url); //set, but before it is placed in the DOM.
+      if (CONFIG.onNodeCreated)
+        CONFIG.onNodeCreated(node, CONFIG, moduleName, url); //set, but before it is placed in the DOM.
       //IE 6-8 cache, script executes before the end
       currentlyAddingScript = node; //of the appendChild execution, so to tie an anonymous define
       if (baseElement) {
@@ -1224,9 +1238,9 @@ require = ((dependency, setTimeout) => {
       try {
         setTimeout(() => {}, 0); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop
         importScripts(url);
-        context.completeLoad(moduleName); //Account for anonymous modules
+        CONTEXT.completeLoad(moduleName); //Account for anonymous modules
       } catch (e) {
-        context.onError(
+        CONTEXT.onError(
           makeError(
             "importscripts",
             "importScripts failed for " + moduleName + " at " + url,
@@ -1275,7 +1289,7 @@ require = ((dependency, setTimeout) => {
         new Function("resolve", `"use strict";return (${text})`)(resolve, text) //eval(text);
     );
 
-  //Set up with config info.
+  //Set up with CONFIG info.
   req(configuration);
 })(require, timeout);
 
