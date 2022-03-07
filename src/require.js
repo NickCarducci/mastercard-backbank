@@ -97,7 +97,10 @@ require = ((dependency, setTimeout) => {
   };
 
   //Function.prototype.bind, with 'this'
-  const bind = (obj, fn) => () => fn.apply(obj, arguments);
+  const bind = (obj, fn) =>
+    function () {
+      fn.apply(obj, arguments);
+    };
 
   const scripts = () => document.getElementsByTagName("script");
 
@@ -300,19 +303,10 @@ require = ((dependency, setTimeout) => {
 
       //'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
       const normalize = (name, baseName, applyMap) => {
-        var pkgMain,
-          mapValue,
-          names,
-          nameSegment,
-          lastIndex,
-          foundMap,
-          foundI,
-          foundStarMap,
-          starI,
+        var lastIndex,
           normalizedBaseParts,
           paths = baseName && baseName.split("/"),
-          map = config.map,
-          starMap = map && map["*"];
+          map = config.map;
 
         //Adjust any relative paths.
         if (name) {
@@ -333,19 +327,29 @@ require = ((dependency, setTimeout) => {
           trimDots(name);
           name = name.join("/");
         }
-
+        var starI,
+          foundStarMap,
+          foundI,
+          foundMap,
+          starMap = map && map["*"];
         //Apply map config if available.
         if (applyMap && map && (paths || starMap)) {
-          names = name.split("/");
+          var names = name.split("/");
           //continue search
           outerLoop: for (let i = names.length; i > 0; i -= 1) {
-            nameSegment = names.slice(0, i).join("/");
+            var nameSegment = names.slice(0, i).join("/");
+
+            //unless shorter matching config, favor a "star map"
+            if (!foundStarMap && starMap && getOwn(starMap, nameSegment)) {
+              foundStarMap = getOwn(starMap, nameSegment);
+              starI = i;
+            }
 
             if (paths) {
               //join biggest-to-smallest lengths paths to find
               //the-longest 'baseName segment match' in the config
               for (let j = paths.length; j > 0; j -= 1) {
-                mapValue = getOwn(map, paths.slice(0, j).join("/"));
+                var mapValue = getOwn(map, paths.slice(0, j).join("/"));
 
                 //baseName segment has config, find if it has one for
                 //this name.
@@ -360,27 +364,19 @@ require = ((dependency, setTimeout) => {
                 }
               }
             }
-
-            //unless shorter matching config, favor a "star map"
-            if (!foundStarMap && starMap && getOwn(starMap, nameSegment)) {
-              foundStarMap = getOwn(starMap, nameSegment);
-              starI = i;
-            }
-          }
-
-          if (!foundMap && foundStarMap) {
-            foundMap = foundStarMap;
-            foundI = starI;
           }
 
           if (foundMap) {
             names.splice(0, foundI, foundMap);
             name = names.join("/");
+          } else if (foundStarMap) {
+            foundMap = foundStarMap;
+            foundI = starI;
           }
         }
 
         // If package-name, package 'main'
-        pkgMain = getOwn(config.pkgs, name);
+        var pkgMain = getOwn(config.pkgs, name);
 
         return pkgMain ? pkgMain : name;
       };
@@ -555,10 +551,7 @@ require = ((dependency, setTimeout) => {
         }
       }
 
-      /**
-       * Internal method to transfer globalQueue items to this context's
-       * defQueue.
-       */
+      //globalQueue by internal method to this defQueue
       const takeGlobalQueue = () => {
         //Push all the globalDefQueue items into the context's defQueue
         if (globalDefQueue.length)
