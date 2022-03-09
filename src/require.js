@@ -1,5 +1,7 @@
+/**UNLICENSED BUT FOR PARTS OF OTHERS */
+
 /** vim: et:ts=4:sw=4:sts=4
- * @license RequireJS 2.3.6 Copyright jQuery Foundation and other contributors.
+ * @license RequireJS 2.3.6.carducci Copyright jQuery Foundation and other contributors.
  * Released under MIT license, https://github.com/REQUIREJS/REQUIREJS/blob/master/LICENSE
  */
 //Not using strict: uneven strict support in browsers, #392, and causes
@@ -321,18 +323,6 @@ require = ((dependency, setTimeout) => {
       }
     };
     var { CONFIG } = CONTEXT;
-    /*
-      contextName,
-      registry,
-      defined,
-      urlFetched,
-      defQueue,
-      defQueueMap: {},
-      Module,
-      makeModuleMap,
-      nextTick: req.nextTick,
-      onError,
-      configure,*/
     var inCheckLoaded,
       checkLoadedTimeoutId,
       registry = {},
@@ -1297,3 +1287,4 @@ const Required = () => {
   return { require, define };
 };
 export { Required as default };
+
