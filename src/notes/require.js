@@ -114,7 +114,7 @@ require = ((dependency, setTimeout) => {
     return e;
   };
 
-  const defaultOnError = (err) => makeError(err.message);
+const defaultOnError = (err) => err;
 
   //dont-notation dependency
   const getGlobal = (value) => {
