@@ -217,8 +217,8 @@ const makeError = (id, msg, err, requireModules) => {
   }
   return e;
 };
-const defaultOnError = (err) => makeError(err.message);
 
+const defaultOnError = (err) => err;
 require = ((dependency, setTimeout) => {
   var globalDefQueue = [];
   var currentlyAddingScript,
