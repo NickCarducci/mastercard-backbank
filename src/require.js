@@ -147,15 +147,11 @@ var timeout = typeof setTimeout === "undefined" ? undefined : setTimeout;
   };
   export { Required as default };*/
 
-const mapObject = (obj, f) => {
-  for (let prop in obj) {
-    if (obj.prototype.hasOwnProperty(prop) && f(obj[prop], prop)) break; // If truthy, stop
-  }
-};
 const getvalue = (obj, prop) => obj.prototype.hasOwnProperty(prop) && obj[prop];
 const mixin = (target, source, force, deepStringMixin) => {
   if (source)
-    mapObject(source, (value, prop) => {
+    Object.keys(source).forEach((prop, i) => {
+      const value = Object.values(source)[i];
       if (force || !target.prototype.hasOwnProperty(prop)) {
         if (
           deepStringMixin &&
@@ -562,7 +558,8 @@ require = ((dependency, setTimeout) => {
         needCycleCheck = true;
       if (inCheckLoaded) return null; //Do not bother if this call was a result of a cycle break.
       inCheckLoaded = true;
-      mapObject(enabledRegistry, (mod) => {
+      Object.keys(enabledRegistry).forEach((x, i) => {
+        const mod = Object.values(enabledRegistry)[i];
         var map = mod.map; //Figure out the state of all the modules.
         var modId = map.id; //disabled or in error
         if (!mod.enabled) return null;
@@ -795,12 +792,11 @@ require = ((dependency, setTimeout) => {
               this.inited = true; //Remove temp unnormalized modules for this module,
               this.error = err; //since they will never be resolved otherwise now.
               err.requireModules = [id];
-              mapObject(
-                registry,
-                (mod) =>
-                  mod.map.id.indexOf(id + "_unnormalized") === 0 &&
-                  cleanRegistry(mod.map.id)
-              );
+              Object.keys(registry).forEach((x, i) => {
+                const mod = Object.values(registry)[i];
+                mod.map.id.indexOf(id + "_unnormalized") === 0 &&
+                  cleanRegistry(mod.map.id);
+              });
               onError(err);
             }); //Allow plugins to load other code without having to know the
             const localRequire = CONTEXT.makeRequire(map.parentMap, {
@@ -888,9 +884,9 @@ require = ((dependency, setTimeout) => {
               CONTEXT.enable(depMap, this); //don't call enable if it is already enabled (circular deps)
           })
         ); //dependency plugins, enabled
-        mapObject(
-          this.pluginMaps,
-          bind(this, (pluginMap) => {
+        Object.keys(this.pluginMaps).forEach(
+          bind(this, (x, i) => {
+            const pluginMap = Object.values(this.pluginMaps)[i];
             var mod = getvalue(registry, pluginMap.id);
             if (mod && !mod.enabled) CONTEXT.enable(pluginMap, this);
           })
@@ -978,19 +974,22 @@ require = ((dependency, setTimeout) => {
           CONFIG: true,
           map: true
         };
-        mapObject(configuration, (value, prop) => {
+        Object.keys(configuration).forEach((prop, i) => {
+          const value = Object.values(configuration)[i];
           if (!objs[prop]) return (CONFIG[prop] = value);
           if (!CONFIG[prop]) CONFIG[prop] = {};
           mixin(CONFIG[prop], value, true, true);
         });
         if (configuration.bundles)
-          mapObject(configuration.bundles, (value, prop) => {
+          Object.keys(configuration.bundles).forEach((prop, i) => {
+            const value = Object.values(configuration.bundles)[i];
             value.forEach((v) => {
               if (v !== prop) bundlesMap[v] = prop; //Reverse map the bundles
             });
           });
         if (configuration.shim) {
-          mapObject(configuration.shim, (value, id) => {
+          Object.keys(configuration.shim).forEach((id, i) => {
+            var value = Object.values(configuration.shim)[i];
             if (Object.prototype.toString(value) === "[object Array]")
               value = {
                 deps: value
@@ -1013,7 +1012,8 @@ require = ((dependency, setTimeout) => {
               "/" +
               (pkgObj.main || "main").replace(/^\.\//, "").replace(/\.js$/, ""); //normalize pkg name main module ID pointer paths
           }); //Update maps for "waiting to execute" modules in the registry.
-        mapObject(registry, (mod, id) => {
+        Object.keys(registry).forEach((id, i) => {
+          var mod = Object.values(registry)[i];
           if (!mod.inited && !mod.map.unnormalized)
             mod.map = makeModuleMap(id, null, true); //Info, like URLs to load, may have changed.
         }); //if inited and transient, unnormalized modules.
@@ -1250,17 +1250,16 @@ require = ((dependency, setTimeout) => {
         var data = getScriptData(evt);
         if (!hasPathFallback(data.id, CONFIG.paths)) {
           var parents = [];
-          mapObject(
-            registry,
-            (value, key) =>
-              key.indexOf("_@r") !== 0 &&
+          Object.keys(registry).forEach((key, i) => {
+            const value = Object.values(registry)[i];
+            key.indexOf("_@r") !== 0 &&
               value.depMaps.forEach((depMap) => {
                 if (depMap.id === data.id) {
                   parents.push(key);
                   return true;
                 }
-              })
-          );
+              });
+          });
           return onError(
             makeError(
               "scripterror",
