@@ -181,10 +181,11 @@ const mixin = (tgt, src, frc, dSM) =>
     return tgt;
   }, tgt);
 
-const construct = (f, obj) =>
+/*const construct = (f, obj) =>
   function () {
+    //in original JQuery RequireJS, obj is this or module
     f.apply(obj, arguments);
-  }; //Function.prototype.construct (bind), with 'module' //https://stackoverflow.com/a/46700616/11711280
+  }; //Function.prototype.construct (bind), with 'module' //https://stackoverflow.com/a/46700616/11711280*/
 const makeError = (id, msg, err, requireModules) => {
   var e = new Error(msg + "\nhttps://REQUIREJS.org/docs/errors.html#" + id);
   e.requireType = id;
@@ -624,7 +625,7 @@ require = ((dependency, setTimeout) => {
       if (errback) {
         module.on("error", errback); //If no errback already, but there are error listeners
       } else if (module.events.error)
-        errback = construct((err) => module.emit("error", err), module); //on module module, set up an errback to pass to the ds.
+        errback = (err) => module.emit("error", err); //construct((err) => module.emit("error", err), module); //on module module, set up an errback to pass to the ds.
       module["depMaps"] = depMaps && depMaps.slice(0);
       module.errback = errback; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
       module["inited"] = true;
@@ -652,23 +653,20 @@ require = ((dependency, setTimeout) => {
       on(
         nM,
         "defined",
-        construct((value) => {
+        (value) => {
           module.map.normalizedMap = nM;
           module.init([], () => value, null, {
             enabled: true,
             ignore: true
           });
-        }, module)
+        } //construct
       );
 
       var normMod = exists(registry).yes(nM.id) && registry[nM.id]; //normalizedMod
       if (normMod) {
         module["depMaps"].push(nM); //Mark module as a dependency for module plugin, so it
         if (module.events.error)
-          normMod.on(
-            "error",
-            construct((err) => module.emit("error", err), module)
-          ); //can be traced for cycles.
+          normMod.on("error", (err) => module.emit("error", err)); //can be traced for cycles.
 
         normMod.enable();
       }
@@ -692,10 +690,7 @@ require = ((dependency, setTimeout) => {
             enableBuildCallback: true
           })(
             module.shim.ds || [],
-            construct(
-              () => (map.prefix ? module.callPlugin() : module.load()),
-              module
-            )
+            map.prefix ? module.callPlugin() : module.load()
           ); //plugin-managed resource
         } else return map.prefix ? module.callPlugin() : module.load(); //Regular dependency.
       },
@@ -774,74 +769,68 @@ require = ((dependency, setTimeout) => {
         var id = map.id; //Mark module as a dependency for module plugin, so it
         var pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
         module.depMaps.push(pluginMap);
-        on(
-          pluginMap,
-          "defined",
-          construct((plugin) => {
-            if (module.map.unnormalized) return normalizeMod(plugin, map); //If current map is not normalized, wait for that
-            var bundleId =
-              exists(bdlMap).yes(module.map.id) && bdlMap[module.map.id]; //normalized name to load instead of continuing.
-            if (bundleId) {
-              module.map.url = CONTEXT.nameToUrl(bundleId); //If a paths CONFIG, then just load that file instead to
-              module.load(); //resolve the plugin, as it is built into that paths layer.
-              return null;
-            }
+        on(pluginMap, "defined", (plugin) => {
+          if (module.map.unnormalized) return normalizeMod(plugin, map); //If current map is not normalized, wait for that
+          var bundleId =
+            exists(bdlMap).yes(module.map.id) && bdlMap[module.map.id]; //normalized name to load instead of continuing.
+          if (bundleId) {
+            module.map.url = CONTEXT.nameToUrl(bundleId); //If a paths CONFIG, then just load that file instead to
+            module.load(); //resolve the plugin, as it is built into that paths layer.
+            return null;
+          }
 
-            const load = construct(
-              (factory) =>
-                module.init([], () => factory, null, {
-                  enabled: true
-                }),
-              module
-            ); //depMaps, factory, errback, options
-            load.error = construct((err) => {
-              module["inited"] = true; //Remove temp unnormalized modules for module module,
-              module.error = err; //since they will never be resolved otherwise now.
-              err.requireModules = [id];
-              Object.keys(registry).forEach(
-                (x, i) =>
-                  registry[x].map.id.indexOf(id + "_unnormalized") === 0 &&
-                  clrRegstr(registry[x].map.id)
+          const load = (factory) =>
+            module.init([], () => factory, null, {
+              enabled: true
+            }); //depMaps, factory, errback, options
+
+          load.error = (err) => {
+            module["inited"] = true; //Remove temp unnormalized modules for module module,
+            module.error = err; //since they will never be resolved otherwise now.
+            err.requireModules = [id];
+            Object.keys(registry).forEach(
+              (x, i) =>
+                registry[x].map.id.indexOf(id + "_unnormalized") === 0 &&
+                clrRegstr(registry[x].map.id)
+            );
+            onError(err);
+          }; //Allow plugins to load other code without having to know the
+          const localRequire = CONTEXT.makeRequire(map.parentMap, {
+            enableBuildCallback: true
+          }); //CONTEXT or how to 'complete' the load.
+          const localreq = (text, textAlt) => {
+            /*jslint evil: true */
+            var mN = map.name;
+            var moduleMap = makeModuleMap(mN); //2.1.0 onwards, pass text to reinforce fromText 1call/resource.
+            var hasInteractive = useInteractive; //pass mN, ok, but discard mN for internal ref.
+            if (textAlt) text = textAlt; //Turn off interactive script matching for IE for any define
+            if (hasInteractive) useInteractive = false; //calls in the text, then turn it back on at the end.
+            getModule(moduleMap); //Prime the system by creating a module instance for
+            if (exists(CONFIG.config).yes(id))
+              CONFIG.config[mN] = CONFIG.config[id]; //Transfer any CONFIG to module other module.
+            try {
+              req.exec(text);
+            } catch (e) {
+              return onError(
+                makeError(
+                  "fromtexteval",
+                  "fromText eval for " + id + " failed: " + e,
+                  e,
+                  [id]
+                ) //id, msg, err, requireModules
               );
-              onError(err);
-            }, module); //Allow plugins to load other code without having to know the
-            const localRequire = CONTEXT.makeRequire(map.parentMap, {
-              enableBuildCallback: true
-            }); //CONTEXT or how to 'complete' the load.
-            const localreq = (text, textAlt) => {
-              /*jslint evil: true */
-              var mN = map.name;
-              var moduleMap = makeModuleMap(mN); //2.1.0 onwards, pass text to reinforce fromText 1call/resource.
-              var hasInteractive = useInteractive; //pass mN, ok, but discard mN for internal ref.
-              if (textAlt) text = textAlt; //Turn off interactive script matching for IE for any define
-              if (hasInteractive) useInteractive = false; //calls in the text, then turn it back on at the end.
-              getModule(moduleMap); //Prime the system by creating a module instance for
-              if (exists(CONFIG.config).yes(id))
-                CONFIG.config[mN] = CONFIG.config[id]; //Transfer any CONFIG to module other module.
-              try {
-                req.exec(text);
-              } catch (e) {
-                return onError(
-                  makeError(
-                    "fromtexteval",
-                    "fromText eval for " + id + " failed: " + e,
-                    e,
-                    [id]
-                  ) //id, msg, err, requireModules
-                );
-              }
-              if (hasInteractive) useInteractive = true; //Mark module as a dependency for the plugin resource
-              module.depMaps.push(moduleMap);
-              CONTEXT.completeLoad(mN); //Support anonymous modules.
-              localRequire([mN], load); //Bind the value of that module to the value for module resource ID.
-            };
-            load.fromText = construct(localreq, module);
-            //Use ptName here since the plugin's name is not reliable,
-            //could be some weird string with no path that actually wants to
-            //reference the ptName's path.
-            plugin.load(map.name, localRequire, load, CONFIG);
-          }, module)
-        );
+            }
+            if (hasInteractive) useInteractive = true; //Mark module as a dependency for the plugin resource
+            module.depMaps.push(moduleMap);
+            CONTEXT.completeLoad(mN); //Support anonymous modules.
+            localRequire([mN], load); //Bind the value of that module to the value for module resource ID.
+          };
+          load.fromText = localreq;
+          //Use ptName here since the plugin's name is not reliable,
+          //could be some weird string with no path that actually wants to
+          //reference the ptName's path.
+          plugin.load(map.name, localRequire, load, CONFIG);
+        });
         CONTEXT.enable(pluginMap, module);
         module.pluginMaps[pluginMap.id] = pluginMap;
       },
@@ -850,54 +839,42 @@ require = ((dependency, setTimeout) => {
         module.enabled = true; //immediate calls to the defined callbacks for dependencies
         module.enabling = true; //Enable mapFunction 1,dependency
 
-        module.depMaps.forEach(
-          construct((depMap, i) => {
-            if (typeof depMap === "string") {
-              depMap = makeModuleMap(
-                depMap,
-                module.map.iDef ? module.map : module.map.parentMap,
-                false,
-                !module.skipMap
-              ); //Dependency needs to be converted to a depMap
-              module.depMaps[i] = depMap; //and wired up to module module.
-              var handler =
-                exists(handlers).yes(depMap.id) && handlers[depMap.id];
-              if (handler) {
-                module.depExports[i] = handler(module);
-                return null;
-              }
-              module["depCount"] += 1;
-              on(
-                depMap,
-                "defined",
-                construct((depExports) => {
-                  if (module.undefed) return null;
-                  module.defineDep(i, depExports);
-                  module.check();
-                }, module)
-              );
-              if (module.errback) {
-                on(depMap, "error", construct(module.errback, module)); // propagate the error correctly - something else is listening for errors
-              } else if (module.events.error)
-                on(
-                  depMap,
-                  "error",
-                  construct((err) => module.emit("error", err), module)
-                ); // (No direct errback on module module)
+        module.depMaps.forEach((depMap, i) => {
+          if (typeof depMap === "string") {
+            depMap = makeModuleMap(
+              depMap,
+              module.map.iDef ? module.map : module.map.parentMap,
+              false,
+              !module.skipMap
+            ); //Dependency needs to be converted to a depMap
+            module.depMaps[i] = depMap; //and wired up to module module.
+            var handler =
+              exists(handlers).yes(depMap.id) && handlers[depMap.id];
+            if (handler) {
+              module.depExports[i] = handler(module);
+              return null;
             }
-            var id = depMap.id; //Skip special modules like 'require', 'exports', 'module'
-            var mod = registry[id];
-            if (!exists(handlers).yes(id) && mod && !mod.enabled)
-              CONTEXT.enable(depMap, module); //don't call enable if it is already enabled (circular ds)
-          }, module)
-        ); //dependency plugins, enabled
-        Object.keys(module.pluginMaps).forEach(
-          construct((x, i) => {
-            const pM = module.pluginMaps[x]; //pluginMap
-            var mod = exists(registry).yes(pM.id) && registry[pM.id];
-            if (mod && !mod.enabled) CONTEXT.enable(pM, module);
-          }, module)
-        );
+            module["depCount"] += 1;
+            on(depMap, "defined", (depExports) => {
+              if (module.undefed) return null;
+              module.defineDep(i, depExports);
+              module.check();
+            });
+            if (module.errback) {
+              on(depMap, "error", module.errback); // propagate the error correctly - something else is listening for errors
+            } else if (module.events.error)
+              on(depMap, "error", (err) => module.emit("error", err)); // (No direct errback on module module)
+          }
+          var id = depMap.id; //Skip special modules like 'require', 'exports', 'module'
+          var mod = registry[id];
+          if (!exists(handlers).yes(id) && mod && !mod.enabled)
+            CONTEXT.enable(depMap, module); //don't call enable if it is already enabled (circular ds)
+        }); //dependency plugins, enabled
+        Object.keys(module.pluginMaps).forEach((x, i) => {
+          const pM = module.pluginMaps[x]; //pluginMap
+          var mod = exists(registry).yes(pM.id) && registry[pM.id];
+          if (mod && !mod.enabled) CONTEXT.enable(pM, module);
+        });
         module.enabling = false;
         module.check();
       },
