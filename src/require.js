@@ -311,9 +311,9 @@ require = ((dependency, setTimeout) => {
     isBrowser &&
       exists()
         .tag()
-        .forEach((sn) => {
-          if (sn[ga](m(true)) === e(true) && sn[ga](m()) === e()) {
-            sn.parentNode.removeChild(sn);
+        .forEach((sN) => {
+          if (sN[ga](m(true)) === e(true) && sN[ga](m()) === e()) {
+            sN.parentNode.removeChild(sN);
             return true; //scriptNode
           }
         });
@@ -484,23 +484,19 @@ require = ((dependency, setTimeout) => {
       }; //module mapping includes plugin prefix, module name, and path
     };
     const getModule = (depMap) => {
-      var mod = exists(registry).yes(depMap.id) && registry[depMap.id];
-      if (!mod)
-        mod = registry[depMap.id] = new CONTEXT.Module(
-          depMap,
-          unDE,
-          CONFIG.shim
-        );
-      return mod;
+      var m = exists(registry).yes(depMap.id) && registry[depMap.id];
+      if (!m)
+        m = registry[depMap.id] = new CONTEXT.Module(depMap, unDE, CONFIG.shim);
+      return m;
     };
     const on = (depMap, name, f) => {
-      var mod = exists(registry).yes(depMap.id) && registry[depMap.id];
-      if (exists(defined).yes(depMap.id) && (!mod || mod.defineEmitComplete)) {
+      var m = exists(registry).yes(depMap.id) && registry[depMap.id];
+      if (exists(defined).yes(depMap.id) && (!m || m.defineEmitComplete)) {
         if (name === "defined") f(defined[depMap.id]);
       } else {
-        mod = getModule(depMap);
-        if (mod["error"] && name === "error") return f(mod["error"]);
-        mod["on"](name, f);
+        m = getModule(depMap);
+        if (m["error"] && name === "error") return f(m["error"]);
+        m["on"](name, f);
       }
     };
     const onError = (err, errback) => {
@@ -508,40 +504,38 @@ require = ((dependency, setTimeout) => {
         notified = false;
       if (errback) return errback(err);
       ids.forEach((id) => {
-        var mod = exists(registry).yes(id) && registry[id];
-        if (mod) {
-          mod["error"] = err; //Set error on module, so it skips timeout checks.
-          if (mod["events"].error) {
+        var m = exists(registry).yes(id) && registry[id];
+        if (m) {
+          m["error"] = err; //Set error on module, so it skips timeout checks.
+          if (m["events"].error) {
             notified = true;
-            mod["emit"]("error", err);
+            m["emit"]("error", err);
           }
         }
       });
       if (!notified) req["onError"](err);
     };
     var handlers = {
-      require: (mod) =>
-        !mod.require
-          ? (mod.require = CONTEXT.makeRequire(mod.map))
-          : mod.require,
-      exports: (mod) => {
-        mod.usingExports = true;
-        if (!mod.map.iDef) return null;
-        if (!mod.exports) return (mod.exports = defined[mod.map.id] = {});
-        return (defined[mod.map.id] = mod.exports);
+      require: (m) =>
+        !m.require ? (m.require = CONTEXT.makeRequire(m.map)) : m.require,
+      exports: (m) => {
+        m.usingExports = true;
+        if (!m.map.iDef) return null;
+        if (!m.exports) return (m.exports = defined[m.map.id] = {});
+        return (defined[m.map.id] = m.exports);
       },
-      module: (mod) => {
-        if (!mod.module)
-          return (mod.module = {
-            id: mod.map.id,
-            uri: mod.map.url,
+      module: (m) => {
+        if (!m.module)
+          return (m.module = {
+            id: m.map.id,
+            uri: m.map.url,
             config: () =>
-              exists(CONFIG.config).yes(mod.map.id)
-                ? CONFIG.config[mod.map.id]
+              exists(CONFIG.config).yes(m.map.id)
+                ? CONFIG.config[m.map.id]
                 : {},
-            exports: mod.exports || (mod.exports = {})
+            exports: m.exports || (m.exports = {})
           });
-        return mod.module;
+        return m.module;
       }
     };
     const clrRegstr = (id) => {
@@ -563,21 +557,20 @@ require = ((dependency, setTimeout) => {
       if (iCL) return null; //Do not bother if module call was a result of a cycle break.
       iCL = true;
       Object.keys(enRgtry).forEach((x, i) => {
-        const mod = Object.values(enRgtry)[i];
-        var map = mod.map; //Figure out the state of all the modules.
-        var modId = map.id; //disabled or in error
-        if (!mod.enabled) return null;
-        if (!map.iDef) reqCalls.push(mod);
-        if (!mod["error"] && !mod.inited) {
+        const m = enRgtry[x];
+        const { map, id, fetched, inited, enabled } = m; //Figure out the state of all the modules.//disabled or in error
+        if (!enabled) return null;
+        if (!map.iDef) reqCalls.push(m);
+        if (!m["error"] && !inited) {
           if (halt) {
-            if (hasPathFallback(modId, CONFIG.paths)) {
+            if (hasPathFallback(id, CONFIG.paths)) {
               uPF = true;
               stillLoading = true;
             } else {
-              hs.push(modId);
-              rmvScrpt(modId, CONTEXT.ctn);
+              hs.push(id);
+              rmvScrpt(id, CONTEXT.ctn);
             }
-          } else if (mod.fetched && map.iDef) {
+          } else if (fetched && map.iDef) {
             stillLoading = true;
             if (!map.prefix) needCycleCheck = false; //non-plugin-resource
           }
@@ -589,24 +582,24 @@ require = ((dependency, setTimeout) => {
         return onError(err);
       } else {
         if (needCycleCheck) {
-          const breakCycle = (mod, traced, processed) => {
-            var id = mod.map.id;
-            if (mod["error"]) return mod["emit"]("error", mod["error"]);
+          const breakCycle = (m, traced, processed) => {
+            var id = m.map.id;
+            if (m["error"]) return m["emit"]("error", m["error"]);
             traced[id] = true;
 
-            mod.depMaps.forEach((depMap, i) => {
+            m.depMaps.forEach((depMap, i) => {
               var depId = depMap.id; //Only force undefined (nor matched in module)
               var dep = exists(registry).yes(depId) && registry[depId]; // but still-registered, things
-              if (dep && !mod.depMatched[i] && !processed[depId]) {
+              if (dep && !m.depMatched[i] && !processed[depId]) {
                 if (exists(traced).yes(depId) && traced[depId]) {
-                  mod.defineDep(i, defined[depId]);
-                  mod.check(); //pass false?
+                  m.defineDep(i, defined[depId]);
+                  m.check(); //pass false?
                 } else breakCycle(dep, traced, processed);
               }
             });
             processed[id] = true;
           };
-          reqCalls.forEach((mod) => breakCycle(mod, {}, {}));
+          reqCalls.forEach((m) => breakCycle(m, {}, {}));
         }
         if ((!halt || uPF) && stillLoading) {
           if ((isBrowser || isWebWorker) && !cLT)
@@ -866,14 +859,14 @@ require = ((dependency, setTimeout) => {
               on(depMap, "error", (err) => module.emit("error", err)); // (No direct errback on module module)
           }
           var id = depMap.id; //Skip special modules like 'require', 'exports', 'module'
-          var mod = registry[id];
-          if (!exists(handlers).yes(id) && mod && !mod.enabled)
+          var m = registry[id];
+          if (!exists(handlers).yes(id) && m && !m.enabled)
             CONTEXT.enable(depMap, module); //don't call enable if it is already enabled (circular ds)
         }); //dependency plugins, enabled
         Object.keys(module.pluginMaps).forEach((x, i) => {
           const pM = module.pluginMaps[x]; //pluginMap
-          var mod = exists(registry).yes(pM.id) && registry[pM.id];
-          if (mod && !mod.enabled) CONTEXT.enable(pM, module);
+          var m = exists(registry).yes(pM.id) && registry[pM.id];
+          if (m && !m.enabled) CONTEXT.enable(pM, module);
         });
         module.enabling = false;
         module.check();
@@ -1027,8 +1020,8 @@ require = ((dependency, setTimeout) => {
         localRequire.undef = (id) => {
           tkeGblQue(); //Only allow undef on top level require calls
           var map = makeModuleMap(id, relMap, true); //Bind define() calls (fixes #408) to 'module' CONTEXT
-          var mod = exists(registry).yes(id) && registry[id];
-          mod.undefed = true;
+          var m = exists(registry).yes(id) && registry[id];
+          m.undefed = true;
           rmvScrpt(id, CONTEXT.ctn);
           delete defined[id];
           delete urlFchd[map.url];
@@ -1037,8 +1030,8 @@ require = ((dependency, setTimeout) => {
             .sort((a, b) => b - a)
             .map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
           delete CONTEXT.defQueueMap[id];
-          if (mod) {
-            if (mod.events.defined) unDE[id] = mod.events; //if different CONFIG, same listeners
+          if (m) {
+            if (m.events.defined) unDE[id] = m.events; //if different CONFIG, same listeners
             clrRegstr(id);
           }
         };
@@ -1107,9 +1100,9 @@ require = ((dependency, setTimeout) => {
               (pkgObj.main || "main").replace(/^\.\//, "").replace(/\.js$/, ""); //normalize pkg name main module ID pointer paths
           }); //Update maps for "waiting to execute" modules in the registry.
         Object.keys(registry).forEach((id, i) => {
-          var mod = registry[id];
-          if (!mod.inited && !mod.map.unnormalized)
-            mod.map = makeModuleMap(id, null, true); //Info, like URLs to load, may have changed.
+          var m = registry[id];
+          if (!m.inited && !m.map.unnormalized)
+            m.map = makeModuleMap(id, null, true); //Info, like URLs to load, may have changed.
         }); //if inited and transient, unnormalized modules.
         if (c.ds || c.cb) CONTEXT.require(c.ds || [], c.cb); //When require is defined as a CONFIG object before require.js is loaded,
       }, //call require with those args, if a ds arr or a CONFIG cb is specified
@@ -1124,7 +1117,7 @@ require = ((dependency, setTimeout) => {
       makeRequire,
       enable: (depMap) =>
         exists(registry).yes(depMap.id) &&
-        registry[depMap.id] && //if "mod" module is in registry, parent's CONTEXT when
+        registry[depMap.id] && //if "m" module is in registry, parent's CONTEXT when
         getModule(depMap).enable(), // overridden in "optimizer" (Not shown).
       completeLoad: (mN) => {
         var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
@@ -1140,8 +1133,8 @@ require = ((dependency, setTimeout) => {
         }
         CONTEXT.defQueueMap = {};
 
-        var mod = exists(registry).yes(mN) && registry[mN]; // in case-/init-calls change the registry
-        if (!found && !exists(defined).yes(mN) && mod && !mod.inited) {
+        var m = exists(registry).yes(mN) && registry[mN]; // in case-/init-calls change the registry
+        if (!found && !exists(defined).yes(mN) && m && !m.inited) {
           var shim = exists(CONFIG.shim).yes(mN) ? CONFIG.shim[mN] : {};
           if (
             CONFIG.enforceDefine &&
