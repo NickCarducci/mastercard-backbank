@@ -20,7 +20,7 @@ var readyRegExp =
   isBrowser && navigator.platform === "PLAYSTATION 3"
     ? /^complete$/
     : /^(complete|loaded)$/;
-var defContextName = "_";
+var us = "_";
 //Oh the tragedy, detecting opera. See the usage of isOpera for reason.
 var isOpera =
   typeof opera !== "undefined" && opera.toString() === "[object Opera]";
@@ -29,123 +29,6 @@ var ctxs = {};
 var REQUIREJS, define, require;
 var timeout = typeof setTimeout === "undefined" ? undefined : setTimeout;
 
-/*- Object.prototype.toString(it) === "[object Function]" = (it) => ostring.call(it) === "[object Function]";
-  - Object.prototype.toString(it) === "[object Array]" = (it) => ostring.call(it) === "[object Array]";
-  - propertyExists = (obj, prop) => hasOwn.call(obj, prop);
-  - getvalue = (obj, prop) => propertyExists(obj, prop) && obj[prop];
-  - mapObject = 
-  - mixin = 
-  - construct =
-  - makeError = 
-  - defaultOnError = (err) => makeError(err.message);
-  require = ((dependency, setTimeout) => {
-    - getGlobal = 
-    define = (name, ds, cb) => 
-    define.amd = 
-    - trimDots = 
-    - convertName = 
-    - rmvScrpt = 
-    - hasPathFallback =
-    - splitPrefix = 
-    - normalize = 
-    - Module = 
-    - req = (REQUIREJS = (ds, cb, errback, optional) => 
-    req.CONFIG = (cfg) => req(cfg); // globally agreed names for other potential AMD loaders
-    req.nextTick =
-    if (!require) require = req; //Exportable require
-    req.version = version;
-    req.isBrowser = isBrowser;
-    - newContext = (ctn) => 
-      - CONTEXT = {
-        CONFIG: {
-          waitSeconds: 7,
-          baseUrl: "./",
-          paths: {},
-          bundles: {},
-          pkgs: {},
-          shim: {},
-          config: {}
-        }
-      };
-      - makeModuleMap = 
-      - getModule =
-      - on =
-      - onError = 
-      - tkeGblQue = 
-      - handlers = {
-        require: 
-        exports:
-        module: 
-      };
-      - clrRegstr =
-      - breakCycle = 
-      - checkLoaded = 
-      - init = 
-      - fetcher = 
-      - bindExports =
-      - defineModule =
-      - normalizeMod = 
-      - loadFinish =
-        - localRequire = 
-        - localreq =
-      - callPlugin = 
-      - enable = 
-      Module.prototype = {
-        init,
-        defineDep:
-        fetch: fetcher,
-        load:
-        check: 
-        callPlugin,
-        enable,
-        on: 
-        emit:
-      };
-      - callGetModule = 
-      - getScriptData =
-      - makeRequire =
-          - intakeDefines = 
-      - configure = 
-  
-      CONTEXT = {
-        CONFIG,
-        ctn,
-        registry,
-        defined,
-        urlFchd,
-        defQueue,
-        defQueueMap: {},
-        Module,
-        makeModuleMap,
-        nextTick: req.nextTick,
-        onError,
-        configure,
-        makeShimExports: 
-        makeRequire,
-        enable: 
-        completeLoad:
-        nameToUrl:
-  
-        load: 
-        execCb: 
-        onScriptError: 
-        
-      };
-      CONTEXT.require = CONTEXT.makeRequire();
-      return CONTEXT;
-    };
-    - s = (req.s = 
-    req.onError =
-    req.createNode =
-    req.load = 
-    - getInteractiveScript = 
-    req.exec = 
-  )(require, timeout);
-  
-  - Required = () => {
-    return { require, define };
-  };
-  export { Required as default };*/
 const exists = (obj /*,string*/) => {
   //obj.prototype["hasOwnProperty"][name]
   //const method =string?"toString":"hasOwnProperty"
@@ -214,51 +97,19 @@ require = ((dependency, setTimeout) => {
     useInteractive = false;
   //Do not overwrite an existing REQUIREJS instance/ amd loader.
   if (typeof define !== "undefined") return; // package-names, cb, returns a value to define the module of argument index[0]
+  // prettier-ignore
   define = (nm, ds, c) => {
     const copy = { nm, ds, c };
-    if (typeof nm !== "string") {
-      nm = null;
-      ds = copy.nm;
-      c = copy.ds;
-    } //Allow for anonymous modules
-    else if (exists(ds).string() !== "[object Array]") {
-      ds = null;
-      c = copy.ds;
-    }
-    if (!ds && exists(c).string() === "[object Function]" && c.length)
-      ds = concat(ds, c); // no deps nor name + cb is func => then CommonJS
-
-    var ctx,
-      ga = "getAttribute";
-    if (useInteractive) {
-      var n =
-        scriptPends ||
-        (() => {
-          if (interscrpt && interscrpt.readyState === "interactive")
-            return interscrpt; //getInteractiveScript
-
-          exists()
-            .tag()
-            .sort((a, b) => b - a)
-            .map(
-              (script) =>
-                script.readyState === "interactive" && (interscrpt = script)
-            );
-          return interscrpt; //Look for a data-main script attribute, which could also adjust the baseUrl.
-        })(); //baseUrl from script tag with require.js in it.
+    if (typeof nm !== "string") {nm = null;ds = copy.nm;c = copy.ds;} //Allow for anonymous modules
+    else if (exists(ds).string() !== "[object Array]") {ds = null;c = copy.ds;}
+    if (!ds && exists(c).string() === "[object Function]" && c.length)ds = concat(ds, c); // no deps nor name + cb is func => then CommonJS
+    var ctx,ga = "getAttribute";
+    if (useInteractive) { var n =scriptPends ||(()=>{if(interscrpt&&interscrpt.readyState==="interactive")return interscrpt;exists().tag().sort((a,b)=>b-a).map((script)=>script.readyState==="interactive"&&(interscrpt=script));return interscrpt;})();//getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
       //IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
-      if (n) {
-        if (!nm) nm = n[ga](dr(true));
-        ctx = ctxs[n[ga](dr())];
-      } //node
-    }
-    if (!ctx) return defineables.push([nm, ds, c]);
-    ctx.defQueue.push([nm, ds, c]); //module named by onload event, for anonymous modules or without context
-    ctx.defQueueMap[nm] = true;
+      if (n) {if (!nm) nm = n[ga](dr(true));ctx = ctxs[n[ga](dr())];}} //node
+    if (!ctx) return defineables.push([nm, ds, c]);ctx.defQueue.push([nm, ds, c]);ctx.defQueueMap[nm] = true;//module named by onload event, for anonymous modules or without context
   };
-  define.amd = {
-    jQuery: true
-  };
+  define.amd = { jQuery: true };
 
   if (typeof REQUIREJS !== "undefined") {
     if (exists(REQUIREJS).string() === "[object Function]") return null;
@@ -272,54 +123,23 @@ require = ((dependency, setTimeout) => {
     configuration = require; //require is a CONFIG object.
     require = undefined;
   }
+  // prettier-ignore
   const convertName = (nm, mp, applyMap, ph) => {
     if (!applyMap || !mp || (!ph && !mp["*"])) return nm;
-
-    var n, i, map, starMap;
-    var nms = nm.split("/"); //continue search
-    var mpcf = mp && mp["*"]; //map CONFIG, bigloop:
-
+    var n,i,map,starMap,nms=nm.split("/"),mpcf=mp&&mp["*"];//continue search ___ map CONFIG, bigloop:
     for (let g = nms.length; g > 0; g -= 1) {
       var name = nms.slice(0, g).join("/"); //favor a "star map" unless shorter matching CONFIG
       const yes = !starMap && mpcf && exists(mpcf).yes(name);
-      if (yes) {
-        starMap = mpcf[name];
-        n = g;
-      } //paths
-      if (ph) {
-        for (let f = ph.length; f > 0; f--) {
-          const fP = ph.slice(0, f).join("/");
-          var mV = exists(mp).yes(fP) && mp[fP];
-          if (!mV) continue;
-          if (exists(mV).yes(name) && mV[name]) {
-            i = g;
-            break;
-          } // bigloop; //Match, update name to the new value.
-        }
-      }
-    }
+      if (yes) {starMap = mpcf[name];n = g;} //paths
+      if (ph) {for(let f = ph.length; f > 0; f--) {const fP = ph.slice(0, f).join("/"),mV = exists(mp).yes(fP) && mp[fP];
+        if (!mV) continue;if (exists(mV).yes(name) && mV[name]) {i = g;break;}}}} // bigloop; //Match, update name to the new value.
     if (map) return (nm = nms.splice(0, i, map).join("/"));
-    if (starMap) {
-      map = starMap;
-      i = n;
-    }
+    if (starMap) {map = starMap;i = n;}
     return nm;
   };
-  const rmvScrpt = (name, ctn) => {
-    const ga = "getAttribute";
-    const e = (m) => (m ? name : ctn);
-    return (
-      isBrowser &&
-      exists()
-        .tag()
-        .forEach((sN) => {
-          if (sN[ga](dr(true)) === e(true) && sN[ga](dr()) === e()) {
-            sN.parentNode.removeChild(sN);
-            return true; //scriptNode
-          }
-        })
-    );
-  };
+  // prettier-ignore
+  const rmvScrpt = (name, ctn) => {const ga = "getAttribute", e = (m) => (m ? name : ctn);//scriptNode
+    return (isBrowser&&exists().tag().forEach((sN)=>(sN[ga](dr(true)) === e(true) && sN[ga](dr()) === e()) && sN.parentNode.removeChild(sN)));};
   const hasPathFallback = (id, cP, ctx) => {
     var pC = exists(cP).yes(id) && cP[id]; //pathConfig,configPaths
     if (pC && exists(pC).string() === "[object Array]" && pC.length > 1) {
@@ -379,7 +199,7 @@ require = ((dependency, setTimeout) => {
   var req = (REQUIREJS = (ds, cb, errback, optional) => {
     var ctx; //Caja compliant req for minified-scope
     var cfg; //name of dependency, cb for arr completion
-    var ctn = defContextName; //Find the right CONTEXT, use default
+    var ctn = us; //Find the right CONTEXT, use default
     if (!exists(ds).string() === "[object Array]" && typeof ds !== "string") {
       cfg = ds; // Determine if have CONFIG object in the call.
       if (exists(cb).string() === "[object Array]") {
@@ -401,96 +221,35 @@ require = ((dependency, setTimeout) => {
   req.version = version;
   req.isBrowser = isBrowser;
   var interscrpt, dataMain, baseElement, mainScript, subPath, src, head;
+
   const newContext = (ctn) => {
-    var CONTEXT = {
-      CONFIG: {
-        waitSeconds: 7,
-        baseUrl: "./",
-        paths: {},
-        bundles: {},
-        pkgs: {},
-        shim: {},
-        config: {}
-      }
-    };
+    //prettier-ignore
+    var CONTEXT = {CONFIG: {waitSeconds: 7,baseUrl: "./",paths: {},bundles: {},pkgs: {},shim: {},config: {}}};
     var { CONFIG } = CONTEXT;
-    var registry = {},
-      enRgtry = {},
-      unDE = {},
-      defQueue = [],
-      defined = {},
-      urlFchd = {},
-      bdlMap = {},
-      rqrCnt = 1,
-      abnCnt = 1; //abnormalCount - normalize() will run faster if there is no default
+    //prettier-ignore
+    var registry = {},enRgtry = {},unDE = {},defQueue = [],defined = {},urlFchd = {},bdlMap = {},rqrCnt = 1,abnCnt = 1; //abnormalCount - normalize() will run faster if there is no default
+    //prettier-ignore
     const makeModuleMap = (n, sourcemap, isNormalized, applyMap) => {
-      var ptName = sourcemap ? sourcemap.name : null; //'applyMap' for dependency ID, 'isNormalized' define() module ID,
-      var gvnName = n; //'[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
-      var iDef = true;
-      if (!n) {
-        iDef = false; //internally-name a 'require' call, given no name
-        n = "_@r" + (rqrCnt += 1);
-      }
-      const splitPrefix = (n) => {
-        var prefix;
-        var i = n ? n.indexOf("!") : -1;
-        if (i > -1) {
-          prefix = n.substring(0, i);
-          n = n.substring(i + 1, n.length);
-        }
-        return [prefix, n]; //[plugin=undefined, resource={}] if the name without a plugin prefix.
-      };
-      var names = splitPrefix(n),
-        prefix = names[0];
-      var pluginModule, url;
+      var ptName = sourcemap ? sourcemap.name : null,gvnName = n,iDef = true; //'applyMap' for dependency ID, 'isNormalized' define() module ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
+      if (!n) iDef = false;n = n ? n : "_@r" + (rqrCnt += 1); //internally-name a 'require' call, given no name
+      const splitPrefix = (n) => {var p;var i = n ? n.indexOf("!") : -1;
+        if (i > -1) { p = n.substring(0, i);n = n.substring(i + 1, n.length);}return [p, n];}; //[plugin=undefined, resource={}] if the name without a plugin prefix.
+      var names = splitPrefix(n), p = names[0], pluginModule,url;
       const configGets = [CONFIG.nodeIdCompat, CONFIG.map, CONFIG.pkgs];
-      if (prefix) {
-        prefix = normalize(prefix, ptName, applyMap, ...configGets);
-        pluginModule = exists(defined).yes(prefix) && defined[prefix];
-      }
+      !p&&(()=>{p=!p?p:normalize(p,ptName,applyMap,...configGets);pluginModule=!p?pluginModule:exists(defined).yes(p)&&defined[p];})()
       var normalizedName = "";
       n = names[1];
-      if (n) {
-        normalizedName = !prefix
-          ? normalize(n, ptName, applyMap, ...configGets)
-          : isNormalized
-          ? n
-          : pluginModule && pluginModule.normalize
-          ? pluginModule.normalize(n, (n) =>
-              normalize(n, ptName, applyMap, ...configGets)
-            ) //do not normalize if nested plugin references; albeit module deprecates resourceIds,
-          : n.indexOf("!") === -1
-          ? normalize(n, ptName, applyMap, ...configGets)
-          : n; //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
-        if (!prefix) {
-          names = splitPrefix(normalizedName); //ok base name, relative path?.
-          prefix = names[0]; //normalize's 'map CONFIG application' might make normalized 'name' a plugin ID.
-          normalizedName = names[1]; //'map CONFIG values' are already normalized at module point.
-          isNormalized = true;
-          url = CONTEXT.nameToUrl(normalizedName);
-        }
+      if (n) { normalizedName = !p ? normalize(n, ptName, applyMap, ...configGets) : isNormalized ? n : pluginModule && pluginModule.normalize ? 
+        pluginModule.normalize(n, (n) => normalize(n, ptName, applyMap, ...configGets))//do not normalize if nested plugin references; albeit module deprecates resourceIds,
+        : n.indexOf("!") === -1 ? normalize(n, ptName, applyMap, ...configGets) : n; //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
+        if (!p) {names = splitPrefix(normalizedName);p = names[0];normalizedName = names[1];isNormalized = true;url = CONTEXT.nameToUrl(normalizedName);}
+        //ok base name, relative path?.normalize's 'map CONFIG application' might make normalized 'name' a plugin ID.'map CONFIG values' are already normalized at module point.
       }
-      var suffix =
-        prefix && !pluginModule && !isNormalized
-          ? "_unnormalized" + (abnCnt += 1)
-          : ""; //If it may be a plugin id that doesn't normalization, stamp it with a unique ID
-      return {
-        prefix,
-        name: normalizedName,
-        parentMap: sourcemap,
-        unnormalized: !!suffix,
-        url,
-        gvnName,
-        iDef,
-        id: (prefix ? prefix + "!" + normalizedName : normalizedName) + suffix
-      }; //module mapping includes plugin prefix, module name, and path
-    };
-    const getModule = (depMap) => {
-      var m = exists(registry).yes(depMap.id) && registry[depMap.id];
-      if (!m)
-        m = registry[depMap.id] = new CONTEXT.Module(depMap, unDE, CONFIG.shim);
-      return m;
-    };
+      var suffix =p && !pluginModule && !isNormalized? "_unnormalized" + (abnCnt += 1): "", //If it may be a plugin id that doesn't normalization, stamp it with a unique ID
+      fin = {p,name: normalizedName,parentMap: sourcemap,unnormalized: !!suffix,url,gvnName,iDef,id: (p ? p + "!" + normalizedName : normalizedName) + suffix};return fin;}; //module mapping includes plugin prefix, module name, and path
+    //prettier-ignore
+    const getModule = (depMap) => {var m = exists(registry).yes(depMap.id) && registry[depMap.id];
+      if (!m) m = registry[depMap.id] = new CONTEXT.Module(depMap, unDE, CONFIG.shim);return m;};
     const on = (depMap, name, f) => {
       var m = exists(registry).yes(depMap.id) && registry[depMap.id];
       if (exists(defined).yes(depMap.id) && (!m || m.defineEmitComplete)) {
@@ -1014,73 +773,36 @@ require = ((dependency, setTimeout) => {
         };
       return localRequire;
     };
-    CONTEXT = {
-      CONFIG,
-      ctn,
-      registry,
-      defined,
-      urlFchd,
-      defQueue,
-      defQueueMap: {},
-      Module,
-      makeModuleMap,
-      nextTick: req.nextTick,
-      onError,
+    const evt = (
+      v = (evt) =>
+        evt.type === "load" ||
+        readyRegExp.test((evt.currentTarget || evt.srcElement).readyState)
+    ) => {
+      interscrpt = v ? null : interscrpt; //interactiveScript - browser event for script loaded status
+      return v && getScriptData(evt);
+    };
+    // prettier-ignore
+    CONTEXT = {CONFIG,ctn,registry,defined,urlFchd,defQueue,defQueueMap:{},Module,makeModuleMap,nextTick: req.nextTick,onError,
       configure: (c) => {
-        if (c.baseUrl && c.baseUrl.charAt(c.baseUrl.length - 1) !== "/")
-          c.baseUrl += "/"; //Make sure the baseUrl ends in a slash.
-        if (typeof c.urlArgs === "string")
-          c.urlArgs = (id, url) =>
-            (url.indexOf("?") === -1 ? "?" : "&") + c.urlArgs; // Convert old style urlArgs string to a function.
+        if (c.baseUrl && c.baseUrl.charAt(c.baseUrl.length - 1) !== "/") c.baseUrl += "/"; //Make sure the baseUrl ends in a slash.
+        if (typeof c.urlArgs === "string")c.urlArgs = (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c.urlArgs; // Convert old style urlArgs string to a function.
         var shim = CONFIG.shim; //save paths for special "additive processing"
-        var objs = {
-          paths: true,
-          bundles: true,
-          CONFIG: true,
-          map: true
-        };
-        Object.keys(c).forEach((prop, i) => {
-          if (!objs[prop]) return (CONFIG[prop] = c[prop]);
-          if (!CONFIG[prop]) CONFIG[prop] = {};
-          mixin(CONFIG[prop], c[prop], true, true);
-        });
-        if (c.bundles)
-          Object.keys(c.bundles).forEach((prop, i) =>
-            c.bundles[prop].forEach(
-              (v) => (bdlMap[v] = v !== prop ? prop : bdlMap[v])
-            )
-          ); //Reverse map the bundles
-
-        if (c.shim) {
-          Object.keys(c.shim).forEach((id, i) => {
-            var v = c.shim[id];
-            if (exists(v).string() === "[object Array]")
-              v = {
-                ds: v
-              }; //Merge shim, Normalize the structure
-            if ((v.exports || v.init) && !v.exportsFn)
-              v.exportsFn = CONTEXT.makeShimExports(v);
-            shim[id] = v;
-          });
-          CONFIG.shim = shim;
-        }
+        var objs = {paths: true,bundles: true,CONFIG: true,map: true};
+        const mx = (p)=>{if(!objs[p])return(CONFIG[p]=c[p]);if(!CONFIG[p])CONFIG[p]={};return p}
+        Object.keys(c).forEach((prop = mx, i) => mixin(CONFIG[prop], c[prop], true, true));
+        if (c.bundles)Object.keys(c.bundles).forEach((prop, i)=>c.bundles[prop].forEach((v)=>(bdlMap[v]=v!==prop?prop:bdlMap[v])));//Reverse map the bundles
+        if (c.shim) {Object.keys(c.shim).forEach((id, i) => {var v = c.shim[id];
+            if (exists(v).string() === "[object Array]") v = {ds: v}; //Merge shim, Normalize the structure
+            if ((v.exports || v.init) && !v.exportsFn)v.exportsFn = CONTEXT.makeShimExports(v);shim[id] = v;});CONFIG.shim = shim;}
         if (c.packages)
           c.packages.forEach((pkgObj) => {
-            var location, name; //Adjust packages if necessary.
             pkgObj = typeof pkgObj === "string" ? { name: pkgObj } : pkgObj;
-            name = pkgObj.name;
-            location = pkgObj.location;
+            var name = pkgObj.name, location = pkgObj.location; //Adjust packages if necessary.
             if (location) CONFIG.paths[name] = pkgObj.location;
-            CONFIG.pkgs[name] =
-              pkgObj.name +
-              "/" +
-              (pkgObj.main || "main").replace(/^\.\//, "").replace(/\.js$/, ""); //normalize pkg name main module ID pointer paths
+            CONFIG.pkgs[name] =`${pkgObj.name}/${(pkgObj.main || "main").replace(/^\.\//, "").replace(/\.js$/, "")}`; //normalize pkg name main module ID pointer paths
           }); //Update maps for "waiting to execute" modules in the registry.
-        Object.keys(registry).forEach((id, i) => {
-          var m = registry[id];
-          if (!m.inited && !m.map.unnormalized)
-            m.map = makeModuleMap(id, null, true); //Info, like URLs to load, may have changed.
-        }); //if inited and transient, unnormalized modules.
+        const mxx = (id) =>(!registry[id].inited && !registry[id].map.unnormalized) &&id
+        Object.keys(registry).forEach((id=mxx)=>registry[id].map=makeModuleMap(id, null, true)); //if inited and transient, unnormalized modules.
         if (c.ds || c.cb) CONTEXT.require(c.ds || [], c.cb); //When require is defined as a CONFIG object before require.js is loaded,
       }, //call require with those args, if a ds arr or a CONFIG cb is specified
       makeShimExports: (value) => {
@@ -1092,91 +814,46 @@ require = ((dependency, setTimeout) => {
         return fn;
       },
       makeRequire,
-      enable: (depMap) =>
-        exists(registry).yes(depMap.id) &&
-        registry[depMap.id] && //if "m" module is in registry, parent's CONTEXT when
-        getModule(depMap).enable(), // overridden in "optimizer" (Not shown).
+      enable: (depMap) =>exists(registry).yes(depMap.id) &&registry[depMap.id] && getModule(depMap).enable(),
+      //if "m" module is in registry, parent's CONTEXT when overridden in "optimizer" (Not shown).
       completeLoad: (mN) => {
         var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
         tkeGblQue();
-        while (defQueue.length) {
-          args = defQueue.shift();
-          if (args[0] === null) {
-            args[0] = mN;
-            if (found) break; //anonymous module bound to name already
-            found = true; //module is another anon module waiting for its completeLoad to fire.
-          } else if (args[0] === mN) found = true; //matched a define call in module script
-          callGetModule(args);
-        }
+        while (defQueue.length){args = defQueue.shift();if (args[0] === null) {
+            args[0] = mN;if (found) break; found = true; //anonymous module bound to name already  module is another anon module waiting for its completeLoad to fire.
+          } else if (args[0] === mN) found = true;callGetModule(args);} //matched a define call in module script
         CONTEXT.defQueueMap = {};
-
         var m = exists(registry).yes(mN) && registry[mN]; // in case-/init-calls change the registry
         if (!found && !exists(defined).yes(mN) && m && !m.inited) {
           var shim = exists(CONFIG.shim).yes(mN) ? CONFIG.shim[mN] : {};
-          if (
-            CONFIG.enforceDefine &&
-            (!shim.exports || !getGlobal(shim.exports))
-          )
-            return hasPathFallback(mN, CONFIG.paths)
-              ? null
-              : onError(
-                  makeError("nodefine", "No define call for " + mN, null, [mN]) //id, msg, err, requireModules
-                );
-          callGetModule([mN, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
-        }
-        checkLoaded(); //mN = moduleName
+          if (CONFIG.enforceDefine &&(!shim.exports || !getGlobal(shim.exports)))
+            return hasPathFallback(mN, CONFIG.paths) ? null : onError(makeError("nodefine", "No define call for " + mN, null, [mN])); //id, msg, err, requireModules
+           callGetModule([mN, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
+        } checkLoaded(); //mN = moduleName
       },
       nameToUrl: (mN, ext, skipExt) => {
         var pkgMain = exists(CONFIG.pkgs).yes(mN) && CONFIG.pkgs[mN]; //already-normalized-mN as URL. Use toUrl for the public API.
         if (pkgMain) mN = pkgMain; //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
         var bundleId = exists(bdlMap).yes(mN) && bdlMap[mN]; //assume use of an url, not a module id.
         if (bundleId) CONTEXT.nameToUrl(bundleId, ext, skipExt); //filter out dependencies that are already paths.
-        const geturl = (url = "") => {
-          //Just a plain path, not module name lookup, so just return it.
-          if (/^[/:?.]|(.js)$/.test(mN)) {
-            url = mN + (ext || ""); //Add extension if it is included. This is a bit wonky, only non-.js things pass
-          } else {
-            var paths = CONFIG.paths; //an extension, module method probably needs to be reworked.
-            var syms = mN.split("/"); //A module that needs to be converted to a path.
-
-            for (let i = syms.length; i > 0; i -= 1) {
-              var pM = syms.slice(0, i).join("/"); //per module name segment if path registered, start name, and work up
-              var pP = exists(paths).yes(pM) && paths[pM]; //parentModule
-              if (pP) {
-                if (exists(pP).string() === "[object Array]") pP = pP[0];
-                syms.splice(0, i, pP); //arr means a few choices
-                break; //parentPath
-              }
-            }
-            url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
-            url +=
-              ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js"); ///^data\:|^blob\:|\?/
-            url =
-              (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ///^[\w\+\.\-]+:/
-                ? ""
-                : CONFIG.baseUrl) + url;
+        const geturl = (url = "") => {//Just a plain path, not module name lookup, so just return it.
+          if (/^[/:?.]|(.js)$/.test(mN))return url = mN + (ext || ""); //Add extension if it is included. This is a bit wonky, only non-.js things pass
+          var paths = CONFIG.paths,syms = mN.split("/");  //an extension, module method probably needs to be reworked. A module that needs to be converted to a path.
+          for (let i = syms.length; i > 0; i -= 1) {
+            var pM = syms.slice(0, i).join("/"); //per module name segment if path registered, start name, and work up
+            var pP = exists(paths).yes(pM) && paths[pM]; //parentModule
+            if (pP) {if (exists(pP).string()==="[object Array]")pP=pP[0];syms.splice(0,i,pP);break;} //arr means a few choices; parentPath
           }
-          return url;
+          url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
+          url += ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js"); ///^data\:|^blob\:|\?/
+          return `${(url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "": CONFIG.baseUrl) + url}`;///^[\w\+\.\-]+:/
         };
         const url = geturl(); //Delegates to req.load. Broken out as a separate function to
-        return CONFIG.urlArgs && !/^blob:/.test(url) //!/^blob\:/
-          ? url + CONFIG.urlArgs(mN, url)
-          : url; //allow overriding in the optimizer.
+        return `${CONFIG.urlArgs && !/^blob:/.test(url) ? url + CONFIG.urlArgs(mN, url) : url}`; //!/^blob\:/ ___ allow overriding in the optimizer.
       },
-
-      load: (id, url) => req.load(CONTEXT, id, url),
-      //allow the build system to sequence the files in the built layer, correctly
+      load: (id, url) => req.load(CONTEXT, id, url),//allow the build system to sequence the files in the built layer, correctly
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
-      onScriptLoad: (evt) => {
-        if (
-          evt.type === "load" ||
-          readyRegExp.test((evt.currentTarget || evt.srcElement).readyState)
-        ) {
-          interscrpt = null; //interactiveScript - browser event for script loaded status
-          var data = getScriptData(evt);
-          CONTEXT.completeLoad(data.id);
-        }
-      },
+      onScriptLoad: (data=evt)=>CONTEXT.completeLoad(data.id),
       onScriptError: (evt) => {
         var data = getScriptData(evt);
         if (!hasPathFallback(data.id, CONFIG.paths)) {
@@ -1207,98 +884,49 @@ require = ((dependency, setTimeout) => {
     CONTEXT.require = CONTEXT.makeRequire();
     return CONTEXT;
   };
-  var s = (req.s = {
-    ctxs,
-    newContext
-  }); //Create default CONTEXT.
+  // prettier-ignore
+  var s = (req.s = {contexts:ctxs,newContext}); //Create default CONTEXT.
   req({}); //'dependency require' CONTEXT-sensitive exported methods
-
-  ["toUrl", "undef", "defined", "specified"].map(
-    (prop) =>
-      (req[prop] = function () {
-        var ctx = ctxs[defContextName]; //not the 'early binding to default CONTEXT,' but ctxs during builds
-        return ctx.require[prop].apply(ctx, arguments); //for the latest instance of the 'default CONTEXT CONFIG'
-      })
-  ); //ticketx to apology tour
-  if (isBrowser) {
-    head = s.head = exists("head").tag(); //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
-    baseElement = exists("base").tag(0);
-    if (baseElement) head = s.head = baseElement.parentNode;
-  }
-  req.onError = (err) => err;
-  req.createNode = (CONFIG, mN, url) => {
-    var node = CONFIG.xhtml ? exists().create("NS") : exists().create(); // node for the load command in browser env
-    node.type = CONFIG.scriptType || "text/javascript";
-    node.charset = "utf-8";
-    node.async = true;
-    return node;
-  };
+  // prettier-ignore
+  ["toUrl","undef","defined","specified"].forEach((prop)=>(req[prop]=function(){return ctxs[us].require[prop].apply(ctxs[us],arguments);}));
+  //for the latest instance of the 'default CONTEXT CONFIG'//not the 'early binding to default CONTEXT,' but ctxs during builds//ticketx to apology tour
+  // prettier-ignore
+  if (isBrowser) {head = s.head = exists("head").tag();baseElement = exists("base").tag(0);if (baseElement) head = s.head = baseElement.parentNode;} //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
+  req.onError = (err) => err; // node for the load command in browser env
+  // prettier-ignore
+  req.createNode = (CONFIG, mN, url) => {return {...(CONFIG.xhtml ? exists().create("NS") : exists().create()),
+    type: CONFIG.scriptType || "text/javascript",charset: "utf-8",async: true};};
+  // prettier-ignore
   req.load = (CONTEXT, mN, url) => {
-    const sa = "setAttribute",
-      ae = "attachEvent",
-      ael = "addEventListener",
-      CONFIG = (CONTEXT && CONTEXT.CONFIG) || {};
+    const sa = "setAttribute",ae = "attachEvent",ael = "addEventListener",CONFIG = (CONTEXT && CONTEXT.CONFIG) || {};
     //handle load request (in browser env); 'CONTEXT' for state, 'mN' for name, 'url' for point
-    if (isBrowser) {
-      var n = req.createNode(CONFIG, mN, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
-      n[sa](dr(), CONTEXT.ctn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187
-      n[sa](dr(true), mN); //![native code]. IE8, !node.attachEvent.toString()
-      if (
-        n[ae] &&
-        !(n[ae].toString && n[ae].toString().indexOf("[native code") < 0) &&
-        !isOpera
-      ) {
-        useInteractive = true; //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
-        n[ae]("onreadystatechange", CONTEXT.onScriptLoad); //yet for 'interactive'-script, 'readyState' triggers by 'define' call
-        //IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
+    if (isBrowser) {var n = req.createNode(CONFIG, mN, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
+      n[sa](dr(), CONTEXT.ctn);n[sa](dr(true), mN);//artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
+      if (n[ae] &&!(n[ae].toString && n[ae].toString().indexOf("[native code") < 0) &&!isOpera) {
+        useInteractive = true;n[ae]("onreadystatechange", CONTEXT.onScriptLoad); //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
+        //yet for 'interactive'-script, 'readyState' triggers by 'define' call IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
         //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
-        //Opera.attachEvent does not follow the execution mode.
-        //IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
-      } else {
-        n[ael]("load", CONTEXT.onScriptLoad, false); //yet that pathway not doing the 'execute, fire load event listener before next script'
-        n[ael]("error", CONTEXT.onScriptError, false); //node.attachEvent('onerror', CONTEXT.onScriptError);
-      }
+        //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
+      } else {n[ael]("load", CONTEXT.onScriptLoad, false);n[ael]("error", CONTEXT.onScriptError, false);} //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', CONTEXT.onScriptError);
       n.src = url; //Calling onNodeCreated after all properties on the node have been
       if (CONFIG.onNodeCreated) CONFIG.onNodeCreated(n, CONFIG, mN, url); //set, but before it is placed in the DOM.
       //IE 6-8 cache, script executes before the end
       scriptPends = n; //of the appendChild execution, so to tie an anonymous define
-      if (baseElement) {
-        head.insertBefore(n, baseElement); //call to the module name (which is stored on the node), hold on
-      } else head.appendChild(n); //to a reference to module node, but clear after the DOM insertion.
-      scriptPends = null;
-      return n; // bug in WebKit where the worker gets garbage-collected after calling
-    } else if (isWebWorker) {
-      try {
-        setTimeout(() => {}, 0); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop
-        importScripts(url);
-        CONTEXT.completeLoad(mN); //Account for anonymous modules
-      } catch (e) {
-        CONTEXT.onError(
-          makeError(
-            "importscripts",
-            "importScripts failed for " + mN + " at " + url,
-            e,
-            [mN]
-          ) //id, msg, err, requireModules
-        );
-      }
-    }
+      if (baseElement) {head.insertBefore(n, baseElement);} else head.appendChild(n); //call to the module name (which is stored on the node), hold on to a reference to module node, but clear after the DOM insertion.  
+      scriptPends = null; return n; // bug in WebKit where the worker gets garbage-collected after calling
+    } else if (isWebWorker){try{setTimeout(()=>{},0);importScripts(url);CONTEXT.completeLoad(mN); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
+      } catch (e){CONTEXT.onError(makeError("importscripts",`importScripts failed for ${mN} at ${url}`,e,[mN]));}//id, msg, err, requireModules
+    };
   };
+  // prettier-ignore
   if (isBrowser && !configuration.skipDataMain)
-    exists()
-      .tag()
-      .sort((a, b) => b - a)
+    exists().tag().sort((a, b) => b - a)
       .forEach((script) => {
-        if (!head) head = script.parentNode; //Set 'head' and append children to script's parent
-        dataMain = script.getAttribute("data-main"); //attribute 'data-main' script to load baseUrl, if it is not already set.
-        if (dataMain) {
-          mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
+        if (!head) head = script.parentNode;dataMain = script.getAttribute("data-main"); //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
+        if (dataMain) {mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
           if (!configuration.baseUrl && mainScript.indexOf("!") === -1) {
-            src = mainScript.split("/"); //baseUrl if data-main value is not a loader plugin module ID.
-            mainScript = src.pop(); //data-main-directory as baseUrl
-            subPath = src.length ? src.join("/") + "/" : "./";
-            configuration.baseUrl = subPath; //Strip off trailing .js mainScript, as is now a module name.
-          }
+            src = mainScript.split("/");mainScript = src.pop(); subPath = src.length ? src.join("/") + "/" : "./";configuration.baseUrl = subPath;} 
+            //baseUrl if data-main value is not a loader plugin module ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a module name.
           mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
           if (/^[/:?.]|(.js)$/.test(mainScript)) mainScript = dataMain; //filter out dependencies that are already paths.//^\/|:|\?|\.js$
           configuration.ds = configuration.ds
@@ -1308,12 +936,9 @@ require = ((dependency, setTimeout) => {
         }
       });
 
+  //prettier-ignore
   /*jslint evil: true */
-  req.exec = (text) =>
-    new Promise(
-      (resolve, reject) =>
-        new Function("resolve", `"use strict";return (${text})`)(resolve, text) //eval(text);
-    );
+  req.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
 
   //Set up with CONFIG info.
   req(configuration);
