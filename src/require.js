@@ -151,7 +151,7 @@ const exists = (obj /*,string*/) => {
   //const method =string?"toString":"hasOwnProperty"
   return {
     yes: (name) => obj.prototype["hasOwnProperty"](name),
-    string: () => Object.prototype["toString"](obj),
+    string: () => Object.prototype.toString(obj),
     tag: (ind) => document.getElementsByTagName(obj ? obj : "script")[ind],
     create: (NS) => {
       const ns = NS.constructor === "String" && NS.toUpperCase() === "NS";
@@ -206,7 +206,7 @@ const concat = (ds, cb) => {
   ).concat(ds); //Potential-CommonJS use-case of exports and module, without 'require.';
 };
 require = ((dependency, setTimeout) => {
-  const m = (m) => `data-require${m ? "module" : "context"}`;
+  const dr = (m) => `data-require${m ? "module" : "context"}`;
   var defineables = [],
     scriptPends,
     version = "2.3.6.carducci",
@@ -248,8 +248,8 @@ require = ((dependency, setTimeout) => {
         })(); //baseUrl from script tag with require.js in it.
       //IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
       if (n) {
-        if (!nm) nm = n[ga](m(true));
-        ctx = ctxs[n[ga](m())];
+        if (!nm) nm = n[ga](dr(true));
+        ctx = ctxs[n[ga](dr())];
       } //node
     }
     if (!ctx) return defineables.push([nm, ds, c]);
@@ -308,15 +308,17 @@ require = ((dependency, setTimeout) => {
   const rmvScrpt = (name, ctn) => {
     const ga = "getAttribute";
     const e = (m) => (m ? name : ctn);
-    isBrowser &&
+    return (
+      isBrowser &&
       exists()
         .tag()
         .forEach((sN) => {
-          if (sN[ga](m(true)) === e(true) && sN[ga](m()) === e()) {
+          if (sN[ga](dr(true)) === e(true) && sN[ga](dr()) === e()) {
             sN.parentNode.removeChild(sN);
             return true; //scriptNode
           }
-        });
+        })
+    );
   };
   const hasPathFallback = (id, cP, ctx) => {
     var pC = exists(cP).yes(id) && cP[id]; //pathConfig,configPaths
@@ -503,16 +505,14 @@ require = ((dependency, setTimeout) => {
       var ids = err.requireModules,
         notified = false;
       if (errback) return errback(err);
-      ids.forEach((id) => {
-        var m = exists(registry).yes(id) && registry[id];
-        if (m) {
-          m["error"] = err; //Set error on module, so it skips timeout checks.
-          if (m["events"].error) {
-            notified = true;
-            m["emit"]("error", err);
-          }
-        }
-      });
+      const r = (em) => {
+          notified = true;
+          em("error", err);
+        },
+        mx = (id) => {
+          return { ...(exists(registry).yes(id) && registry[id]), error: err };
+        };
+      ids.forEach((m = mx) => m["events"] && m["events"].error && r(m["emit"])); //Set error on module, so it skips timeout checks.
       if (!notified) req["onError"](err);
     };
     var handlers = {
@@ -524,19 +524,18 @@ require = ((dependency, setTimeout) => {
         if (!m.exports) return (m.exports = defined[m.map.id] = {});
         return (defined[m.map.id] = m.exports);
       },
-      module: (m) => {
-        if (!m.module)
-          return (m.module = {
-            id: m.map.id,
-            uri: m.map.url,
-            config: () =>
-              exists(CONFIG.config).yes(m.map.id)
-                ? CONFIG.config[m.map.id]
-                : {},
-            exports: m.exports || (m.exports = {})
-          });
-        return m.module;
-      }
+      module: (m) =>
+        (m.module = !m.module
+          ? {
+              id: m.map.id,
+              uri: m.map.url,
+              config: () =>
+                exists(CONFIG.config).yes(m.map.id)
+                  ? CONFIG.config[m.map.id]
+                  : {},
+              exports: m.exports || (m.exports = {})
+            }
+          : m.module)
     };
     const clrRegstr = (id) => {
       delete registry[id];
@@ -544,70 +543,55 @@ require = ((dependency, setTimeout) => {
     };
     var cLT, iCL;
     const checkLoaded = () => {
-      //usingPathFallback, waitInterval
-      var err,
-        uPF,
-        wI = CONFIG.waitSeconds * 1000,
-        //It is possible to disable the wait interval by using waitSeconds of 0.
-        halt = wI && CONTEXT.startTime + wI < new Date().getTime(),
-        hs = [],
-        reqCalls = [],
-        stillLoading = false,
-        needCycleCheck = true;
-      if (iCL) return null; //Do not bother if module call was a result of a cycle break.
+      // prettier-ignore
+      var err,uPF,hs=[],reqCalls=[],pndng=false,needCycleCheck=true,wI=CONFIG.waitSeconds*1000,halt=wI&&CONTEXT.startTime+wI<new Date().getTime(); //It is possible to disable the wait interval by using waitSeconds of 0.
+      //usingPathFallback, waitInterval - Do not bother if module call was a result of a cycle break.
+      if (iCL) return null; //hoist-"mixin" functional obj[prop]
+      const mx = (m) => ({ m, s: m.depMaps, i: m.map.id }); //traced,processed
+      const progress = ({ m, s, i } = mx, t = {}, p = {}) => {
+        t[i] = true;
+        s.forEach((i = (d) => d.id, ix) => {
+          var dep = exists(registry).yes(i) && registry[i]; // depMap force undefined (registered yet not matched in module)
+          const prcd = dep && !m.depMatched[ix] && !p[i];
+          if (prcd && (!exists(t).yes(i) || !t[i])) return progress(dep, t, p);
+          prcd && m.defineDep(ix, defined[i]);
+          prcd && m.check(); //pass false?
+        });
+        p[i] = true;
+      };
+      const brwr = isBrowser || isWebWorker;
       iCL = true;
-      Object.keys(enRgtry).forEach((x, i) => {
-        const m = enRgtry[x];
-        const { map, id, fetched, inited, enabled } = m; //Figure out the state of all the modules.//disabled or in error
-        if (!enabled) return null;
-        if (!map.iDef) reqCalls.push(m);
-        if (!m["error"] && !inited) {
-          if (halt) {
-            if (hasPathFallback(id, CONFIG.paths)) {
-              uPF = true;
-              stillLoading = true;
-            } else {
-              hs.push(id);
-              rmvScrpt(id, CONTEXT.ctn);
-            }
-          } else if (fetched && map.iDef) {
-            stillLoading = true;
-            if (!map.prefix) needCycleCheck = false; //non-plugin-resource
-          }
-        }
-      }); //If wait time expired, throw error of unloaded modules.
+      const er = "error",
+        mxx = (mod = (x) => enRgtry[x]) => {
+          const { iDef, fetched, prefix, error, enabled, inited } = mod.map;
+          if (enabled && !iDef) reqCalls.push(mod);
+          mod.noCyc = fetched && iDef && !prefix;
+          return !inited && enabled && !error ? mod : {};
+        };
+      Object.keys(enRgtry).forEach(({ id, noCyc } = mxx, i) =>
+        id && halt && !hasPathFallback(id, CONFIG.paths)
+          ? rmvScrpt(id, CONTEXT.ctn) && hs.push(id)
+          : (() => {
+              if (!id) return null;
+              uPF = halt && true;
+              if (!halt && noCyc) needCycleCheck = false; //non-plugin-resource
+              pndng = true;
+            })()
+      ); //Figure out the state of all the modules.//disabled or in error
       if (halt && hs.length) {
         err = makeError("timeout", "Load timeout for modules: " + hs, null, hs); //id, msg, err, requireModules
         err.ctn = CONTEXT.ctn;
-        return onError(err);
+        return onError(err); //If wait time expired, throw error of unloaded modules.
       } else {
-        if (needCycleCheck) {
-          const breakCycle = (m, traced, processed) => {
-            var id = m.map.id;
-            if (m["error"]) return m["emit"]("error", m["error"]);
-            traced[id] = true;
+        if (needCycleCheck)
+          reqCalls.forEach((m) => (m[er] ? m["emit"](er, m[er]) : progress(m))); //breakCycle
+        cLT =
+          (!halt || uPF) &&
+          pndng &&
+          brwr &&
+          !cLT &&
+          setTimeout(() => checkLoaded() && null, 50); //plugin-resource
 
-            m.depMaps.forEach((depMap, i) => {
-              var depId = depMap.id; //Only force undefined (nor matched in module)
-              var dep = exists(registry).yes(depId) && registry[depId]; // but still-registered, things
-              if (dep && !m.depMatched[i] && !processed[depId]) {
-                if (exists(traced).yes(depId) && traced[depId]) {
-                  m.defineDep(i, defined[depId]);
-                  m.check(); //pass false?
-                } else breakCycle(dep, traced, processed);
-              }
-            });
-            processed[id] = true;
-          };
-          reqCalls.forEach((m) => breakCycle(m, {}, {}));
-        }
-        if ((!halt || uPF) && stillLoading) {
-          if ((isBrowser || isWebWorker) && !cLT)
-            cLT = setTimeout(() => {
-              cLT = 0; //plugin-resource
-              checkLoaded();
-            }, 50);
-        }
         iCL = false; //inCheckLoaded
       }
     };
@@ -834,19 +818,12 @@ require = ((dependency, setTimeout) => {
 
         module.depMaps.forEach((depMap, i) => {
           if (typeof depMap === "string") {
-            depMap = makeModuleMap(
-              depMap,
-              module.map.iDef ? module.map : module.map.parentMap,
-              false,
-              !module.skipMap
-            ); //Dependency needs to be converted to a depMap
+            const mp = module.map.iDef ? module.map : module.map.parentMap;
+            depMap = makeModuleMap(depMap, mp, false, !module.skipMap); //Dependency needs to be converted to a depMap
             module.depMaps[i] = depMap; //and wired up to module module.
             var handler =
               exists(handlers).yes(depMap.id) && handlers[depMap.id];
-            if (handler) {
-              module.depExports[i] = handler(module);
-              return null;
-            }
+            if (handler) return (module.depExports[i] = handler(module));
             module["depCount"] += 1;
             on(depMap, "defined", (depExports) => {
               if (module.undefed) return null;
@@ -863,11 +840,11 @@ require = ((dependency, setTimeout) => {
           if (!exists(handlers).yes(id) && m && !m.enabled)
             CONTEXT.enable(depMap, module); //don't call enable if it is already enabled (circular ds)
         }); //dependency plugins, enabled
-        Object.keys(module.pluginMaps).forEach((x, i) => {
-          const pM = module.pluginMaps[x]; //pluginMap
-          var m = exists(registry).yes(pM.id) && registry[pM.id];
-          if (m && !m.enabled) CONTEXT.enable(pM, module);
-        });
+        Object.keys(module.pluginMaps).forEach(
+          (pM = (x) => module.pluginMaps[x], i) =>
+            //prettier-ignore
+            exists(registry).yes(pM.id) && registry[pM.id] && !registry[pM.id].enabled && CONTEXT.enable(pM, module)
+        );
         module.enabling = false;
         module.check();
       },
@@ -901,7 +878,7 @@ require = ((dependency, setTimeout) => {
       rmvLstnr(node, CONTEXT.onScriptError, "error");
       return {
         node: node,
-        id: node && node.getAttribute(m(true))
+        id: node && node.getAttribute(dr(true))
       };
     };
 
@@ -1203,17 +1180,17 @@ require = ((dependency, setTimeout) => {
       onScriptError: (evt) => {
         var data = getScriptData(evt);
         if (!hasPathFallback(data.id, CONFIG.paths)) {
-          var parents = [];
-          Object.keys(registry).forEach((key, i) => {
-            const value = Object.values(registry)[i];
-            key.indexOf("_@r") !== 0 &&
-              value.depMaps.forEach((depMap) => {
-                if (depMap.id === data.id) {
-                  parents.push(key);
-                  return true;
-                }
-              });
-          });
+          const parents = Object.keys(registry)
+            .map((key, i) =>
+              key.indexOf("_@r") !== 0
+                ? registry[key].depMaps.forEach((depMap) => {
+                    if (depMap.id === data.id) {
+                      return key;
+                    } else return "";
+                  })
+                : ""
+            )
+            .filter((x) => x !== "");
           return onError(
             makeError(
               "scripterror",
@@ -1264,8 +1241,8 @@ require = ((dependency, setTimeout) => {
     //handle load request (in browser env); 'CONTEXT' for state, 'mN' for name, 'url' for point
     if (isBrowser) {
       var n = req.createNode(CONFIG, mN, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
-      n[sa](m(), CONTEXT.ctn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187
-      n[sa](m(true), mN); //![native code]. IE8, !node.attachEvent.toString()
+      n[sa](dr(), CONTEXT.ctn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187
+      n[sa](dr(true), mN); //![native code]. IE8, !node.attachEvent.toString()
       if (
         n[ae] &&
         !(n[ae].toString && n[ae].toString().indexOf("[native code") < 0) &&
