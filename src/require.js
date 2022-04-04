@@ -29,40 +29,21 @@ var ctxs = {};
 var REQUIREJS, define, require;
 var timeout = typeof setTimeout === "undefined" ? undefined : setTimeout;
 
+//prettier-ignore
 const exists = (obj /*,string*/) => {
   //obj.prototype["hasOwnProperty"][name]
   //const method =string?"toString":"hasOwnProperty"
-  return {
-    yes: (name) => obj.prototype["hasOwnProperty"](name),
-    string: () => Object.prototype.toString(obj),
+  return {yes: (name) => obj.prototype["hasOwnProperty"](name),string: () => Object.prototype.toString(obj),
     tag: (ind) => document.getElementsByTagName(obj ? obj : "script")[ind],
-    create: (NS) => {
-      const ns = NS.constructor === "String" && NS.toUpperCase() === "NS";
-      document[`createElementNS${ns ? "NS" : ""}`](
-        ns ? ("http://www.w3.org/1999/xhtml", "html:script") : "script"
-      );
-    }
-  };
-};
-const mixin = (tgt, src, frc, dSM) =>
-  Object.keys(src).reduce((prop, nextProp) => {
-    if (!src) return tgt; //force
-    if (frc || !exists(tgt).yes(prop)) {
-      const v = src[prop]; //dpStrMixin
-      if (
-        dSM &&
-        typeof v === "object" &&
-        v &&
-        !exists(v).string() === "[object Array]" &&
-        !exists(v).string() === "[object Function]" &&
-        !(v instanceof RegExp)
-      ) {
-        if (!tgt[prop]) tgt[prop] = {};
-        mixin(tgt[prop], v, frc, dSM);
-      } else tgt[prop] = v;
-    }
-    return tgt;
-  }, tgt);
+    create: (NS) => {const ns = NS.constructor === "String" && NS.toUpperCase() === "NS";
+      document[`createElementNS${ns ? "NS" : ""}`](ns ? ("http://www.w3.org/1999/xhtml", "html:script") : "script");}};};
+//prettier-ignore
+const mixin = (tgt, src, frc, dSM) =>Object.keys(src).reduce((prop, nextProp) => {
+    if(!src)return tgt;if(frc||!exists(tgt).yes(prop)){
+      const v = src[prop];
+      const go = dSM&&typeof v==="object"&&v&&!exists(v).string()==="[object Array]"&&!exists(v).string()==="[object Function]"&&!(v instanceof RegExp)
+      if(!go){tgt[prop] = v;}else{if(!tgt[prop])tgt[prop]={};mixin(tgt[prop],v,frc,dSM);} 
+    }return tgt;}, tgt);
 
 /*const construct = (f, obj) =>
   function () {
@@ -77,17 +58,14 @@ const makeError = (id, msg, err, requireModules) => {
   return e;
 };
 //const defaultOnError = (err) => err;
+//prettier-ignore
 const concat = (ds, cb) => {
   const comment = /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm;
   const requires = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g;
-  cb.toString()
-    .replace(comment, (match, singlePrefix) => singlePrefix || "")
+  cb.toString().replace(comment, (match, singlePrefix) => singlePrefix || "")
     .replace(requires, (match, dep) => ds.push(dep)); //like ')//comment'; keep prefix
-  return (cb.length === 1
-    ? ["require"]
-    : ["require", "exports", "module"]
-  ).concat(ds); //Potential-CommonJS use-case of exports and module, without 'require.';
-};
+  return (cb.length === 1 ? ["require"] : ["require", "exports", "module"]).concat(ds);}; //Potential-CommonJS use-case of exports and module, without 'require.';
+
 require = ((dependency, setTimeout) => {
   const dr = (m) => `data-require${m ? "module" : "context"}`;
   var defineables = [],
@@ -140,17 +118,10 @@ require = ((dependency, setTimeout) => {
   // prettier-ignore
   const rmvScrpt = (name, ctn) => {const ga = "getAttribute", e = (m) => (m ? name : ctn);//scriptNode
     return (isBrowser&&exists().tag().forEach((sN)=>(sN[ga](dr(true)) === e(true) && sN[ga](dr()) === e()) && sN.parentNode.removeChild(sN)));};
-  const hasPathFallback = (id, cP, ctx) => {
-    var pC = exists(cP).yes(id) && cP[id]; //pathConfig,configPaths
-    if (pC && exists(pC).string() === "[object Array]" && pC.length > 1) {
-      pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
-      ctx.require.undef(id);
-      ctx.makeRequire(null, {
-        skipMap: true
-      })([id]);
-      return true;
-    }
-  };
+  // prettier-ignore
+  const hasPathFallback = (id, cP, ctx) => {var pC = exists(cP).yes(id) && cP[id]; //pathConfig,configPaths
+    if (pC && exists(pC).string() === "[object Array]" && pC.length > 1) {pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
+      ctx.require.undef(id);ctx.makeRequire(null, {skipMap: true})([id]);return true;}};
   //'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
   // prettier-ignore
   const parseName = (nm, roots, conId) => nm &&
@@ -484,161 +455,68 @@ require = ((dependency, setTimeout) => {
     const callGetModule = (args) =>
       !exists(defined).yes(args[0]) &&
       getModule(makeModuleMap(args[0], null, true)).init(args[1], args[2]); //Skip modules already defined.
-    const getScriptData = (evt) => {
-      const rmvLstnr = (node, func, name, ieName) => {
-        if (node.detachEvent && !isOpera) {
-          if (ieName) node.detachEvent(ieName, func);
-        } else node.removeEventListener(name, func, false);
-      };
+    //prettier-ignore
+    const getScriptData = (evt) => {const rmvLstnr = (node, func, name, ieName) => {
+        if(node.detachEvent&&!isOpera){if(ieName)node.detachEvent(ieName,func);}else node.removeEventListener(name,func,false);};
       var node = evt.currentTarget || evt.srcElement; //REQUIREJS event info, remove listener from node //target
       rmvLstnr(node, CONTEXT.onScriptLoad, "load", "onreadystatechange");
       rmvLstnr(node, CONTEXT.onScriptError, "error");
-      return {
-        node: node,
-        id: node && node.getAttribute(dr(true))
-      };
-    };
+      return {node: node,id: node && node.getAttribute(dr(true))};};
 
-    const tkeGblQue = () => {
-      if (defineables.length)
-        defineables.forEach((queueItem) => {
-          var id = queueItem[0]; //globalQueue by internal method to module defQueue
-          if (typeof id === "string") CONTEXT.defQueueMap[id] = true;
-          defQueue.push(queueItem); //Push all the defineables items into the CONTEXT's defQueue
-        });
-      defineables = [];
-    };
-    const getGlobal = (value) => {
-      if (!value) return value; //dont-notation dependency
-      var g = dependency;
-      value.split(".").forEach((part) => {
-        g = g[part];
-      });
-      return g;
-    };
-    const makeRequire = (relMap, options) => {
-      options = options || {};
-      const localRequire = (ds, cb, errback) => {
-        var id, map, requireMod;
-        if (
-          options.enableBuildCallback &&
-          cb &&
-          exists(cb).string() === "[object Function]"
-        )
-          cb.__requireJsBuild = true;
+    //prettier-ignore
+    const tkeGblQue = () => {if (defineables.length)defineables.forEach((queueItem) => {
+          var id = queueItem[0];if (typeof id === "string") CONTEXT.defQueueMap[id] = true;//globalQueue by internal method to module defQueue
+          defQueue.push(queueItem);});defineables = [];}; //Push all the defineables items into the CONTEXT's defQueue
+    //prettier-ignore
+    const getGlobal = (value) => {if (!value) return value; //dont-notation dependency
+      var g = dependency;value.split(".").forEach((part) => {g = g[part];});return g;};
+    const makeRequire = (relMap, o = (options) => options || {}) => {
+      //prettier-ignore
+      const localRequire = (ds, cb, errback) => {var id, map, requireMod;
+        if (o.enableBuildCallback &&cb &&exists(cb).string() === "[object Function]")cb.__requireJsBuild = true;
         if (typeof ds === "string") {
           if (exists(cb).string() === "[object Function]")
-            return onError(
-              makeError("requireargs", "Invalid require call"), //Invalid call; id, msg, err, requireModules
-              errback
-            );
+            return onError(makeError("requireargs", "Invalid require call"),errback); //Invalid call; id, msg, err, requireModule
           if (relMap && exists(handlers).yes(ds))
             return handlers[ds](registry[relMap.id]); //when require|exports|module are requested && while module is being defined
           if (req.get) return req.get(CONTEXT, ds, relMap, localRequire);
           map = makeModuleMap(ds, relMap, false, true);
           id = map.id; //Normalize module name from . or ..
           if (!exists(defined).yes(id))
-            return onError(
-              makeError(
-                "notloaded",
-                `Module name ${id} has not been loaded yet for CONTEXT: ${
-                  ctn + (relMap ? "" : ". Use require([])")
-                }`
-              ) //id, msg, err, requireModules
-            );
-          return defined[id];
-        }
-        const intakeDefines = () => {
-          var args;
-          tkeGblQue(); //"intake modules"
-          while (defQueue.length) {
-            args = defQueue.shift();
-            if (args[0] === null)
-              return onError(
-                makeError(
-                  "mismatch",
-                  `Mismatched anonymous define() module: ${
-                    args[args.length - 1]
-                  }`
-                ) //id, msg, err, requireModules
-              );
-            callGetModule(args); //...id, ds, factory; "normalized by define()"
-          }
-          CONTEXT.defQueueMap = {};
-        };
+            return onError(makeError("notloaded",`Module name ${id} has not been loaded yet for CONTEXT: ${ctn+(relMap?"":". Use require([])")}`));return defined[id];}//id, msg, err, requireModules
+        const intakeDefines = () => {var args;tkeGblQue();
+          while(defQueue.length){args=defQueue.shift();if(args[0]===null)return onError(makeError("mismatch",`Mismatched anonymous define() module: ${args[args.length - 1]}`));callGetModule(args);}CONTEXT.defQueueMap = {};};//"intake modules" //id, msg, err, requireModules //...id, ds, factory; "normalized by define()"
         intakeDefines(); //Grab defines waiting in the dependency queue.
         CONTEXT.nextTick(() => {
           intakeDefines(); //Mark all the dependencies as needing to be loaded.
           requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
-          requireMod.skipMap = options.skipMap; //store if 'map CONFIG' applied to module 'require call' for dependencies
-          requireMod.init(ds, cb, errback, {
-            enabled: true
-          });
+          requireMod.skipMap = o.skipMap; //store if 'map CONFIG' applied to module 'require call' for dependencies
+          requireMod.init(ds, cb, errback, {enabled: true});
           checkLoaded();
-        });
-        return localRequire;
-      };
-      mixin(localRequire, {
-        isBrowser,
-        toUrl: (mNPE) => {
-          //moduleNamePlusExt
-          var ext, //URL path = module name + .extension; requires 'module name,' not 'plain URLs' like nameToUrl
-            i = mNPE.lastIndexOf("."),
-            seg = mNPE.split("/")[0],
-            isRelative = seg === "." || seg === "..";
-          if (i !== -1 && (!isRelative || i > 1)) {
-            ext = mNPE.substring(i, mNPE.length); //file extension alias, not 'relative path dots'
-            mNPE = mNPE.substring(0, i);
-          }
-          return CONTEXT.nameToUrl(
-            normalize(
-              mNPE,
-              relMap && relMap.id,
-              true,
-              CONFIG.nodeIdCompat,
-              CONFIG.map,
-              CONFIG.pkgs
-            ),
-            ext,
-            true
-          );
-        },
-        defined: (id) =>
-          exists(defined).yes(makeModuleMap(id, relMap, false, true).id),
-        specified: (id) => {
-          id = makeModuleMap(id, relMap, false, true).id;
-          return exists(defined).yes(id) || exists(registry).yes(id);
-        }
-      });
-      if (!relMap)
-        localRequire.undef = (id) => {
+        });return localRequire;};
+      //prettier-ignore
+      mixin(localRequire,{isBrowser,toUrl: (mNPE) => { //moduleNamePlusExt
+          var ext,i = mNPE.lastIndexOf("."),seg = mNPE.split("/")[0],isRelative = seg === "." || seg === "..";//URL path = module name + .extension; requires 'module name,' not 'plain URLs' like nameToUrl
+          if(i!==-1&&(!isRelative||i > 1)) {ext=mNPE.substring(i, mNPE.length); mNPE = mNPE.substring(0, i);}//file extension alias, not 'relative path dots'
+          const ar = [mNPE,relMap && relMap.id,true,CONFIG.nodeIdCompat,CONFIG.map,CONFIG.pkgs];
+          return CONTEXT.nameToUrl(normalize(ar), ext, true);
+        },defined:(id)=>exists(defined).yes(makeModuleMap(id,relMap,false,true).id),
+        specified:(id=(id)=>makeModuleMap(id,relMap,false,true).id)=>exists(defined).yes(id)||exists(registry).yes(id)});
+      // prettier-ignore
+      if (!relMap)localRequire.undef = (id) => {
           tkeGblQue(); //Only allow undef on top level require calls
           var map = makeModuleMap(id, relMap, true); //Bind define() calls (fixes #408) to 'module' CONTEXT
           var m = exists(registry).yes(id) && registry[id];
           m.undefed = true;
-          rmvScrpt(id, CONTEXT.ctn);
-          delete defined[id];
-          delete urlFchd[map.url];
-          delete unDE[id];
-          defQueue
-            .sort((a, b) => b - a)
-            .map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
-          delete CONTEXT.defQueueMap[id];
-          if (m) {
-            if (m.events.defined) unDE[id] = m.events; //if different CONFIG, same listeners
-            clrRegstr(id);
-          }
-        };
+          rmvScrpt(id, CONTEXT.ctn);delete defined[id];delete urlFchd[map.url];delete unDE[id];
+          defQueue.sort((a, b) => b - a).map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
+          delete CONTEXT.defQueueMap[id];if(m){if(m.events.defined)unDE[id]=m.events; //if different CONFIG, same listeners
+            clrRegstr(id);}};
       return localRequire;
     };
-    const evt = (
-      v = (evt) =>
-        evt.type === "load" ||
-        readyRegExp.test((evt.currentTarget || evt.srcElement).readyState)
-    ) => {
-      interscrpt = v ? null : interscrpt; //interactiveScript - browser event for script loaded status
-      return v && getScriptData(evt);
-    };
+    // prettier-ignore
+    const evt = (v=(evt)=>evt.type==="load"||readyRegExp.test((evt.currentTarget||evt.srcElement).readyState))=>{
+      interscrpt = v ? null : interscrpt;return v && getScriptData(evt);}; //interactiveScript - browser event for script loaded status
     // prettier-ignore
     CONTEXT = {CONFIG,ctn,registry,defined,urlFchd,defQueue,defQueueMap:{},Module,makeModuleMap,nextTick: req.nextTick,onError,
       configure: (c) => {
@@ -712,33 +590,12 @@ require = ((dependency, setTimeout) => {
       load: (id, url) => req.load(CONTEXT, id, url),//allow the build system to sequence the files in the built layer, correctly
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
       onScriptLoad: (data=evt)=>CONTEXT.completeLoad(data.id),
-      onScriptError: (evt) => {
-        var data = getScriptData(evt);
-        if (!hasPathFallback(data.id, CONFIG.paths)) {
-          const parents = Object.keys(registry)
-            .map((key, i) =>
-              key.indexOf("_@r") !== 0
-                ? registry[key].depMaps.forEach((depMap) => {
-                    if (depMap.id === data.id) {
-                      return key;
-                    } else return "";
-                  })
-                : ""
-            )
-            .filter((x) => x !== "");
-          return onError(
-            makeError(
-              "scripterror",
-              'Script error for "' +
-                data.id +
-                (parents.length ? '", needed by: ' + parents.join(", ") : '"'),
-              evt,
-              [data.id]
-            ) //id, msg, err, requireModules
-          );
-        }
-      }
-    };
+      //prettier-ignore
+      onScriptError: (evt) => {var data = getScriptData(evt);
+        if(!hasPathFallback(data.id, CONFIG.paths)){const parents=Object.keys(registry).map((key,i)=>
+              key.indexOf("_@r")!==0?registry[key].depMaps.forEach((depMap)=>{if(depMap.id === data.id){return key;}else return "";}):"").filter((x) =>x!=="");
+          return onError(makeError("scripterror",`Script error for ${data.id+(parents.length?`" needed by: ${parents.join(", ")}` : '"')}`,
+              evt,[data.id]));}}}; //id, msg, err, requireModules
     CONTEXT.require = CONTEXT.makeRequire();
     return CONTEXT;
   };
