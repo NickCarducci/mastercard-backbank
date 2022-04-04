@@ -261,21 +261,15 @@ require = ((dependency, setTimeout) => {
         iCL = false; //inCheckLoaded
       }
     };
-    const init = (depMaps, factory, errback, options) => {
-      options = options || {}; //if multiple define calls for the same module
-      if (module["inited"]) return null;
-      module["factory"] = factory; //Register for errors on module module.
-      if (errback) {
-        module.on("error", errback); //If no errback already, but there are error listeners
-      } else if (module.events.error)
-        errback = (err) => module.emit("error", err); //construct((err) => module.emit("error", err), module); //on module module, set up an errback to pass to the ds.
-      module["depMaps"] = depMaps && depMaps.slice(0);
-      module.errback = errback; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
-      module["inited"] = true;
-      module.ignore = options.ignore;
-      if (options.enabled || module.enabled) return module.enable();
-      module.check(); //init as, or previously, -enabled, yet dependencies unknown until init
-    };
+    // prettier-ignore
+    const init = (depMaps, factory, errback, options) => {options = options || {}; //if multiple define calls for the same module
+      if (module["inited"]) return null;module["factory"] = factory; //Register for errors on module module.
+      if (errback) {module.on("error", errback); //If no errback already, but there are error listeners
+      } else if (module.events.error)errback = (err) => module.emit("error", err); //construct((err) => module.emit("error", err), module); //on module module, set up an errback to pass to the ds.
+      const obj = {depMaps: depMaps && depMaps.slice(0),errback: errback, //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
+        inited: true,ignore: options.ignore}; Object.keys(obj).forEach((key) => (module[key] = obj[key]));
+      if (options.enabled || module.enabled) return module.enable();module.check();}; //init as, or previously, -enabled, yet dependencies unknown until init
+
     // prettier-ignore
     const normalizeMod = (plugin, mp) => {
       var { name, parentMap: pM } = module.map; //Normalize the ID if the plugin allows it.
@@ -298,64 +292,31 @@ require = ((dependency, setTimeout) => {
           module.depExports[i] = depExports; //multiple cb export cycles
         }
       },
+      //prettier-ignore
       fetch: () => {
         if (module.fetched) return null;
         module.fetched = true;
         CONTEXT.startTime = new Date().getTime();
         var map = module.map;
-        if (module.shim) {
-          CONTEXT.makeRequire(module.map, {
-            enableBuildCallback: true
-          })(
-            module.shim.ds || [],
-            map.prefix ? module.callPlugin() : module.load()
-          ); //plugin-managed resource
-        } else return map.prefix ? module.callPlugin() : module.load(); //Regular dependency.
-      },
-      load: () => {
-        if (!urlFchd[module.map.url]) {
-          urlFchd[module.map.url] = true; //Regular dependency.
-          CONTEXT.load(module.map.id, module.map.url);
-        }
-      },
+        if (module.shim) {CONTEXT.makeRequire(module.map, {enableBuildCallback: true})(module.shim.ds || [], map.prefix ? module.callPlugin() : module.load()); //plugin-managed resource
+        } else return map.prefix ? module.callPlugin() : module.load();}, //Regular dependency.
+      //prettier-ignore
+      load:()=>{if(!urlFchd[module.map.url]){urlFchd[module.map.url] = true;CONTEXT.load(module.map.id, module.map.url);}}, //Regular dependency.
       //prettier-ignore
       check: () => {
-        if (!module.enabled || module.enabling) return null;
-        var id = module.map.id; // module is ready to, and does, define itself
-        if (!module["inited"]) {
-          if (!exists(CONTEXT.defQueueMap).yes(id)) module.fetch(); // !defQueue.includes(module)
-        } else if (module.error) {
-          module.emit("error", module.error);
-        } else {
-          if (module["defining"]) return null;
-          var expts = module.exports, //no edundant require-define
-            factory = module.factory;
-          module["defining"] = true;
-          if (module.depCount < 1 && !module.defined) {
-            const isDefine = module.map.iDef; //for define()'d  modules, use error listener,
-            if (exists(factory).string() === "[object Function]") {
-              var err,cjs,depExpo = module.depExports; //require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
-              if ((module.events.error && isDefine)||req.onError !== ((err) => err)) {
-                try{expts=CONTEXT.execCb(id,factory,depExpo,expts);} catch (e) {err = e;} //factory.apply(exports, depExports),
-              } else expts = CONTEXT.execCb(id, factory, depExpo, expts); // Favor return value over exports. If node/cjs in play,
-              if (isDefine && expts === undefined) {cjs = module.module; // then will not have a return value anyway. Favor
-                if (cjs) {expts = cjs.exports;} else if (module.usingExports) expts = module.exports;} // module.exports assignment over exports object. exports already set the defined value.
-              if (err) {const obj={requireMap:module.map,requireModules:isDefine?[module.map.id]:null,
-                requireType:isDefine ? "define" : "require"};Object.keys(obj).forEach(key=>err[key]=obj[key]);return onError((module.error = err));}
-            } else expts = factory; //Just a literal value
-            module["exports"] = expts;
-            if (isDefine && !module.ignore) {
-              defined[id] = expts; if (req.onResourceLoad)
+        if(!module.enabled||module.enabling)return null;var id=module.map.id;if(!module["inited"]){if(!exists(CONTEXT.defQueueMap).yes(id))module.fetch();}else if(module.error){module.emit("error",module.error);// !defQueue.includes(module) module is ready to, and does, define itself
+        }else{if(module["defining"])return null;var expts=module.exports,factory=module.factory;module["defining"]=true;//no redundant require-define
+          if(module.depCount < 1 && !module.defined) {const isDefine = module.map.iDef; 
+            if(exists(factory).string() === "[object Function]") {var err,cjs,depExpo = module.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
+              if((module.events.error && isDefine)||req.onError !== ((err) => err)) {try{expts=CONTEXT.execCb(id,factory,depExpo,expts);} catch (e) {err = e;}//factory.apply(exports, depExports),
+              }else expts = CONTEXT.execCb(id, factory, depExpo, expts);if (isDefine && expts === undefined) {cjs = module.module; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
+                if(cjs){expts = cjs.exports;} else if (module.usingExports) expts = module.exports;} // module.exports assignment over exports object. exports already set the defined value.
+              if(err){const obj={requireMap:module.map,requireModules:isDefine?[module.map.id]:null,
+                requireType:isDefine?"define":"require"};Object.keys(obj).forEach(key=>err[key]=obj[key]);return onError((module.error = err));}}else expts=factory;
+            module["exports"]=expts;if(isDefine&& !module.ignore){defined[id] = expts; if (req.onResourceLoad)
                 req.onResourceLoad(CONTEXT,module.map,module["depMaps"].map((depMap) => depMap.normalizedMap || depMap));}
-            clrRegstr(id); module["defined"] = true;}
-          module["defining"] = false; //Finished definition, so allow call-check again for 'define' notifications, by cycle.
-          if (module["defined"] && !module.defineEmitted) {
-            module["defineEmitted"] = true;
-            module.emit("defined", module.exports);
-            module["defineEmitComplete"] = true;
-          }
-        }
-      },
+            clrRegstr(id); module["defined"] = true;} module["defining"] = false; //Finished definition, so allow call-check again for 'define' notifications, by cycle.
+          if(module["defined"]&&!module.defineEmitted){module["defineEmitted"]=true;module.emit("defined", module.exports);module["defineEmitComplete"] = true;}}},
       //prettier-ignore
       callPlugin: () => {
         var map = module.map; //Map already normalized the prefix.
@@ -399,59 +360,32 @@ require = ((dependency, setTimeout) => {
         CONTEXT.enable(pluginMap, module);
         module.pluginMaps[pluginMap.id] = pluginMap;
       },
+      //prettier-ignore
       enable: () => {
-        enRgtry[module.map.id] = module; //no inadvertent load and 0 depCount by
-        module.enabled = true; //immediate calls to the defined callbacks for dependencies
-        module.enabling = true; //Enable mapFunction 1,dependency
-
+        enRgtry[module.map.id] = module;module.enabled = true; module.enabling = true; //no inadvertent load and 0 depCount by
+        //immediate calls to the defined callbacks for dependencies. Enable mapFunction 1,dependency
         module.depMaps.forEach((depMap, i) => {
           if (typeof depMap === "string") {
-            const mp = module.map.iDef ? module.map : module.map.parentMap;
-            depMap = makeModuleMap(depMap, mp, false, !module.skipMap); //Dependency needs to be converted to a depMap
+            const mp=module.map.iDef?module.map:module.map.parentMap;
+            depMap=makeModuleMap(depMap, mp, false, !module.skipMap); //Dependency needs to be converted to a depMap
             module.depMaps[i] = depMap; //and wired up to module module.
-            var handler =
-              exists(handlers).yes(depMap.id) && handlers[depMap.id];
-            if (handler) return (module.depExports[i] = handler(module));
+            var handler =exists(handlers).yes(depMap.id) && handlers[depMap.id];
+            if(handler) return (module.depExports[i] = handler(module));
             module["depCount"] += 1;
             on(depMap, "defined", (depExports) => {
-              if (module.undefed) return null;
-              module.defineDep(i, depExports);
-              module.check();
-            });
-            if (module.errback) {
-              on(depMap, "error", module.errback); // propagate the error correctly - something else is listening for errors
-            } else if (module.events.error)
-              on(depMap, "error", (err) => module.emit("error", err)); // (No direct errback on module module)
-          }
-          var id = depMap.id; //Skip special modules like 'require', 'exports', 'module'
-          var m = registry[id];
+              if(module.undefed)return null;module.defineDep(i, depExports);module.check();});
+            if(module.errback){on(depMap, "error", module.errback); // propagate the error correctly - something else is listening for errors
+            } else if (module.events.error)on(depMap, "error", (err) => module.emit("error", err));} // (No direct errback on module module)
+          var id = depMap.id, m = registry[id];//Skip special modules like 'require', 'exports', 'module'
           if (!exists(handlers).yes(id) && m && !m.enabled)
-            CONTEXT.enable(depMap, module); //don't call enable if it is already enabled (circular ds)
-        }); //dependency plugins, enabled
-        Object.keys(module.pluginMaps).forEach(
-          (pM = (x) => module.pluginMaps[x], i) =>
-            //prettier-ignore
-            exists(registry).yes(pM.id) && registry[pM.id] && !registry[pM.id].enabled && CONTEXT.enable(pM, module)
-        );
-        module.enabling = false;
-        module.check();
-      },
-      on: (name, cb) => {
-        var cbs = module.events[name];
-        if (!cbs) {
-          cbs = module.events[name] = [];
-        }
-        cbs.push(cb);
-      },
-      emit: (name, evt) => {
-        module.events[name].forEach((cb) => {
-          cb(evt);
-        });
-        if (name === "error")
-          //remove broken Module instance from registry.
-          delete module.events[name];
-      }
-    };
+            CONTEXT.enable(depMap, module);}); //don't call enable if it is already enabled (circular ds)
+        //prettier-ignore
+        Object.keys(module.pluginMaps).forEach((pM=(x)=>module.pluginMaps[x],i)=>exists(registry).yes(pM.id)&&registry[pM.id]&&!registry[pM.id].enabled&&CONTEXT.enable(pM,module));module.enabling=false;module.check();},
+      //prettier-ignore
+      on:(name,cb)=>{var cbs=module.events[name];if(!cbs)cbs=module.events[name]=[];cbs.push(cb);},
+      //prettier-ignore
+      emit:(name,evt)=>{module.events[name].forEach((cb) => cb(evt));if (name === "error")delete module.events[name];}
+    }; //remove broken Module instance from registry.
     const callGetModule = (args) =>
       !exists(defined).yes(args[0]) &&
       getModule(makeModuleMap(args[0], null, true)).init(args[1], args[2]); //Skip modules already defined.
