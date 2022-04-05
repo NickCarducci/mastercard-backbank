@@ -39,6 +39,7 @@ var Ar = "[object Array]",
       ns ? ("http://www.w3.org/1999/xhtml", "html:script") : "script"
     ),
   REQUIREJS,
+  define,
   require,
   timeout = typeof setTimeout === "undefined" ? undefined : setTimeout;
 /*
@@ -103,7 +104,7 @@ const e_ = (obj /*,string*/) => {
     reducer:(prop,nextProp) => {const s=obj[0],tgt=obj[1],frc=obj[2],dSM=obj[3];
     if(!s)return tgt;if(frc||!e_(tgt).yes(prop)){const v = s[prop];
       const go = dSM&&typeof v==="object"&&v&&!e_(v).string()===Ar&&!e_(v).string()===Fn&&!(v instanceof RegExp)
-      if(!go){tgt[prop] = v;}else{if(!tgt[prop])tgt[prop]={};bindings.mixin(tgt[prop],v,frc,dSM);}}return tgt;},
+      if(!go){tgt[prop] = v;}else{if(!tgt[prop])tgt[prop]={};BINDABLES.mixin(tgt[prop],v,frc,dSM);}}return tgt;},
     create: (ns = n) => createElement(ns),
     string,
     tag,
@@ -117,7 +118,7 @@ ctx,ga="getAttribute", module= {} //"this";
 
 // prettier-ignore
 const _p ="packages",_b="bundles",_s="shim",_l="location",_u="baseUrl",_a="urlArgs",_t="string",_xf="exportsFn",_x="exports",_m="module",_o="onError",_dd="defined",_dg="defining",_ed="enabled",_e="error",_i="init"
-const bindings = {
+const BINDABLES = {
   mixin: (tgt, s, frc, dSM) =>
     _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
   makeError: (id, msg, err, requireModules) => {
@@ -146,7 +147,7 @@ const bindings = {
   dr: (m) => `data-require${m ? "module" : "context"}`,
   // prettier-ignore
   rmvScrpt : (name, ctn) => {const ga = "getAttribute", e = (m) => (m ? name : ctn);//scriptNode
-  return (isBrowser&&e_().tag().forEach((sN)=>(sN[ga](bindings.dr(true)) === e(true) && sN[ga](bindings.dr()) === e()) && sN.parentNode.removeChild(sN)));},
+  return (isBrowser&&e_().tag().forEach((sN)=>(sN[ga](BINDABLES.dr(true)) === e(true) && sN[ga](BINDABLES.dr()) === e()) && sN.parentNode.removeChild(sN)));},
   // prettier-ignore
   hasPathFallback :(id, cP, ctx) => {var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
   if (pC && e_(pC).string() === Ar && pC.length > 1) {pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
@@ -159,40 +160,10 @@ const bindings = {
     for (let i = 0; i < nm.length; i++) {const solid = nm[i] === "." && nm.splice(i, 1); //:part === "..":null
       if (solid) {i -= 1;continue;}const more=i===0||(i===1&&nm[2]==="..")||nm[i-1]==="..";
       if (!more && i > 0 && nm.splice(i - 1, 2)) i -= 2;}return nm.join("/");})(), //just enabled, but unactivated, modules
-  useInr: (sP) =>
-    sP ||
-    (() => {
-      if (interscrpt && e_(interscrpt).interA()) return interscrpt;
-      e_()
-        .tag()
-        .sort((a, b) => b - a)
-        .map((script) => e_(script).interA() && (interscrpt = script));
-      return interscrpt;
-    })(),
-  // prettier-ignore
-  d: (nm, ds, c) => {
-    const copy = { nm, ds, c }; //Allow for anonymous modules
-    if (typeof nm !== _t) {nm = null;ds = copy.nm;c = copy.ds;}else if (e_(ds).string() !== Ar) {ds = null;c = copy.ds;}
-    if (!ds && e_(c).string() === Fn && c.length)ds = bindings.concat(ds, c); // no deps nor name + cb is func => then CommonJS
-    if (useInteractive) {
-      const n = bindings.useInr(scriptPends, nm);
-      if (!nm) nm = n[ga](bindings.dr(true));
-      ctx = ctxs[n[ga](bindings.dr())];
-    }
-    //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
 
-    if (!ctx) return defineables.push([nm, ds, c]);
-    ctx.defQueue.push([nm, ds, c]);
-    ctx.defQueueMap[nm] = true;
-  },
-  define: () => {
-    //module named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
-    bindings.d.amd = { jQuery: true };
-    return bindings.d;
-  },
   //prettier-ignore
   normalize : (nm, bn, applyMap, conId, map, configPkgs) => {
-    const rs = bn && bn.split("/");nm = bindings.parseName(nm, rs, conId);nm = bindings.convertName(nm, map, applyMap, rs);
+    const rs = bn && bn.split("/");nm = BINDABLES.parseName(nm, rs, conId);nm = BINDABLES.convertName(nm, map, applyMap, rs);
     return e_(configPkgs).yes(nm) ? configPkgs[nm] : nm;}, // If package-name, package 'main,' roots
   // prettier-ignore
   Module: (map, unDE, configShim) => {
@@ -207,9 +178,42 @@ const bindings = {
   }; //Function.prototype.construct (bind), with 'module' //https://stackoverflow.com/a/46700616/11711280*/
 //const defaultOnError = (err) => err;
 
+//prettier-ignore
+const d = (nm, ds, c) => {
+  const copy = { nm, ds, c }; //Allow for anonymous modules
+  if (typeof nm !== _t) {
+    nm = null;
+    ds = copy.nm;
+    c = copy.ds;
+  } else if (e_(ds).string() !== Ar) {
+    ds = null;
+    c = copy.ds;
+  }
+  if (!ds && e_(c).string() === Fn && c.length) ds = BINDABLES.concat(ds, c); // no deps nor name + cb is func => then CommonJS
+  if (useInteractive) {
+    const n =  scriptPends ||
+      (() => {if (interscrpt && e_(interscrpt).interA()) return interscrpt;
+        e_().tag().sort((a, b) => b - a)
+          .map((script) => e_(script).interA() && (interscrpt = script));
+        return interscrpt;
+      })();
+    if (!nm) nm = n[ga](BINDABLES.dr(true));
+    ctx = ctxs[n[ga](BINDABLES.dr())];
+  }
+  //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
+
+  if (!ctx) return defineables.push([nm, ds, c]);
+  ctx.defQueue.push([nm, ds, c]);
+  ctx.defQueueMap[nm] = true;
+};
+define = (() => {
+  //module named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
+  d.amd = { jQuery: true };
+  return d;
+})();
 require = ((dependency, setTimeout) => {
   //prettier-ignore
-  const { dr,normalize,hasPathFallback,rmvScrpt,Module,makeError } = bindings;
+  const { dr,normalize,hasPathFallback,rmvScrpt,Module,makeError } = BINDABLES;
 
   //Do not overwrite an existing REQUIREJS instance/ amd loader.
   if (typeof define !== "undefined") return; // package-names, cb, returns a value to define the module of argument index[0]
@@ -249,8 +253,8 @@ require = ((dependency, setTimeout) => {
     var CONTEXT = {CONFIG: {waitSeconds: 7,baseUrl: "./",paths: {},bundles: {},pkgs: {},shim: {},config: {}}};
     var { CONFIG } = CONTEXT;
     //prettier-ignore
-    var dependencies = {},enRgtry = {},unDE = {},defQueue = [],defined = {},urlFchd = {},bdlMap = {},rqrCnt = 1,abnCnt = 1; //abnormalCount - normalize() will run faster if there is no default
-    const bindingsRequire = {
+    var dependencies = {},enRgtry = {},unDE = {},defQueue = [],defined = {},urlFchd = {},bdlMap = {},rqrCnt = 1,abnCnt = 1; //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
+    const BR = {
       //prettier-ignore
       makeModuleMap : (n, sourcemap, isNormalized, applyMap) => {
       var ptName = sourcemap ? sourcemap.name : null,gvnName = n,iDef = true; //'applyMap' for dependency ID, 'isNormalized' define() module ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
@@ -279,7 +283,7 @@ require = ((dependency, setTimeout) => {
         var m = e_(dependencies).yes(depMap.id) && dependencies[depMap.id];
         if (!e_(defined).yes(depMap.id) || (m && !m.defineEmitComplete))
           return name === _dd && f(defined[depMap.id]);
-        m = bindings.getModule(depMap);
+        m = BINDABLES.getModule(depMap);
         if (m[_e] && name === _e) return f(m[_e]);
         m["on"](name, f);
       },
@@ -304,10 +308,10 @@ require = ((dependency, setTimeout) => {
     //prettier-ignore
     const clrRegstr = (id) => {delete dependencies[id];delete enRgtry[id];};
     var cLT, iCL;
-    const { mixin, makeError } = bindings;
-    const { makeModuleMap, on, onError, getModule } = bindingsRequire;
+    const { mixin, makeError } = BINDABLES;
+    const { makeModuleMap, on, onError, getModule } = BR;
 
-    const bindingsModule = {
+    const BM = {
       // prettier-ignore
       checkLoaded : () => {
       var err,uPF,hs=[],reqCalls=[],pndng=false,needCycleCheck=true,wI=CONFIG.waitSeconds*1000,halt=wI&&CONTEXT.startTime+wI<new Date().getTime(); //It is possible to disable the wait interval by using waitSeconds of 0.
@@ -338,7 +342,7 @@ require = ((dependency, setTimeout) => {
         return onError(err); //If wait time expired, throw error of unloaded modules.
       } else {
         if (needCycleCheck)reqCalls.forEach((m) => (m[er] ? m["emit"](er, m[er]) : progress(m))); //breakCycle
-        cLT =(!halt || uPF) &&pndng &&brwr &&!cLT &&setTimeout(() => bindingsModule.checkLoaded() && null, 50); //plugin-resource
+        cLT =(!halt || uPF) &&pndng &&brwr &&!cLT &&setTimeout(() => BM.checkLoaded() && null, 50); //plugin-resource
         iCL = false; //inCheckLoaded
       }
     },
@@ -367,7 +371,7 @@ require = ((dependency, setTimeout) => {
        normMod.enable();}}
     };
     Module[_P] = {
-      init: bindingsModule[_i],
+      init: BM[_i],
       defineDep: (i, depExports) => {
         if (!module.depMatched[i]) {
           module.depMatched[i] = true; //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
@@ -407,7 +411,7 @@ require = ((dependency, setTimeout) => {
         var pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
         module.depMaps.push(pluginMap);
         on(pluginMap, _dd, (plugin) => {
-          if (module.map.unnormalized) return bindingsModule.normalizeMod(plugin, map); //If current map is not normalized, wait for that
+          if (module.map.unnormalized) return BM.normalizeMod(plugin, map); //If current map is not normalized, wait for that
           var bundleId =
             e_(bdlMap).yes(module.map.id) && bdlMap[module.map.id]; //normalized name to load instead of continuing.
           if (bundleId) {module.map.url = CONTEXT.nameToUrl(bundleId);module.load();return null;}//If a paths CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
@@ -463,8 +467,8 @@ require = ((dependency, setTimeout) => {
       on:(name,cb)=>{var cbs=module.events[name];if(!cbs)cbs=module.events[name]=[];cbs.push(cb);},
       //prettier-ignore
       emit:(name,evt)=>{module.events[name].forEach((cb) => cb(evt));if (name === _e)delete module.events[name];}
-    }; //remove broken Module instance from dependencies.
-    const bindingsFetch = {
+    }; //remove broken Module instance from dependencies.//BS/BF 'bindingsFetch'
+    const BF = {
       //prettier-ignore
       callGetModule: (args) => !e_(defined).yes(args[0]) && getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]), //Skip modules already defined.
       getScriptData: (
@@ -491,13 +495,13 @@ require = ((dependency, setTimeout) => {
 
       // prettier-ignore
       evt : (v=(evt)=>evt.type==="load"||readyRegExp.test((evt.currentTarget||evt.srcElement).readyState))=>{
-      interscrpt = v ? null : interscrpt;return v && bindingsFetch.getScriptData(bindingsFetch.evt);}, //interactiveScript - browser event for script loaded status
+      interscrpt = v ? null : interscrpt;return v && BF.getScriptData(BF.evt);}, //interactiveScript - browser event for script loaded status
 
       // prettier-ignore
       initial :{ CONFIG,ctn,dependencies,defined,urlFchd,defQueue,defQueueMap:{},Module,makeModuleMap,nextTick: req.nextTick,onError}
     };
     // prettier-ignore
-    CONTEXT = {...bindingsFetch.initial,
+    CONTEXT = {...BF.initial,
       configure: (c) => {
         if (c[_u] && c[_u].charAt(c[_u].length - 1) !== "/") c[_u] += "/"; //Make sure the baseUrl ends in a slash.
         if (typeof c[_a] === _t)c[_a] = (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]; // Convert old style urlArgs string to a function.
@@ -524,13 +528,13 @@ require = ((dependency, setTimeout) => {
         function fn() {
           var ret; //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
           if (value[_i]) ret = value[_i].apply(dependency, arguments);
-          return ret || (value[_x] && bindingsFetch.getGlobal(value[_x]));
+          return ret || (value[_x] && BF.getGlobal(value[_x]));
         }
         return fn;
       },
       makeRequire:(relMap, o = (options) => options || {}) => {
         //prettier-ignore
-          const {tkeGblQue,callGetModule}=bindingsFetch
+          const {tkeGblQue,callGetModule}=BF
         const localRequire = (ds, cb, eb) => {var id, map, requireMod;
           if (o.enableBuildCallback &&cb &&e_(cb).string() === Fn)cb.__requireJsBuild = true;
           if (typeof ds === _t) {
@@ -551,7 +555,7 @@ require = ((dependency, setTimeout) => {
             requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
             requireMod.skipMap = o.skipMap; //store if 'map CONFIG' applied to module 'require call' for dependencies
             requireMod[_i](ds, cb, eb, {enabled: true});
-            bindingsModule.checkLoaded();
+            BM.checkLoaded();
           });return localRequire;};
         //prettier-ignore
         mixin(localRequire,{isBrowser,toUrl: (mNPE) => { //moduleNamePlusExt
@@ -576,7 +580,7 @@ require = ((dependency, setTimeout) => {
       enable: (depMap) =>e_(dependencies).yes(depMap.id) &&dependencies[depMap.id] && getModule(depMap).enable(),
       //if "m" module is in dependencies, parent's CONTEXT when overridden in "optimizer" (Not shown).
       completeLoad: (mN) => {
-        const {tkeGblQue,callGetModule,getGlobal}=bindingsFetch
+        const {tkeGblQue,callGetModule,getGlobal}=BF
         var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
         tkeGblQue();
         while (defQueue.length){args = defQueue.shift();if (args[0] === null) {
@@ -589,7 +593,7 @@ require = ((dependency, setTimeout) => {
           if (CONFIG.enforceDefine &&(!shim[_x] || !getGlobal(shim[_x])))
             return hasPathFallback(mN, CONFIG.paths) ? null : onError(makeError("nodefine", "No define call for " + mN, null, [mN])); //id, msg, err, requireModules
            callGetModule([mN, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
-        } bindingsModule.checkLoaded(); //mN = moduleName
+        } BM.checkLoaded(); //mN = moduleName
       },
       nameToUrl: (mN, ext, skipExt) => {
         var pkgMain = e_(CONFIG.pkgs).yes(mN) && CONFIG.pkgs[mN]; //already-normalized-mN as URL. Use toUrl for the public API.
@@ -612,9 +616,9 @@ require = ((dependency, setTimeout) => {
       
       load: (id, url) => req.load(CONTEXT, id, url),//allow the build system to sequence the files in the built layer, correctly
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
-      onScriptLoad: (data=bindingsFetch.evt)=>CONTEXT.completeLoad(data.id),
+      onScriptLoad: (data=BF.evt)=>CONTEXT.completeLoad(data.id),
       //prettier-ignore
-      onScriptError: (evt) => {var data = bindingsFetch.getScriptData(evt);
+      onScriptError: (evt) => {var data = BF.getScriptData(evt);
         if(!hasPathFallback(data.id, CONFIG.paths)){const parents=_K(dependencies).map((key,i)=>
               key.indexOf("_@r")!==0?dependencies[key].depMaps.forEach((depMap)=>{if(depMap.id === data.id){return key;}else return "";}):"").filter((x) =>x!=="");
           return onError(makeError("scripterror",`Script error for ${data.id+(parents.length?`" needed by: ${parents.join(", ")}` : '"')}`,
@@ -683,6 +687,6 @@ require = ((dependency, setTimeout) => {
 })(require, timeout);
 
 const Required = () => {
-  return { require, define: bindings.define };
+  return { require, define: define };
 };
 export { Required as default };
