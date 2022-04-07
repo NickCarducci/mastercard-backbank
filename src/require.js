@@ -128,12 +128,13 @@ const BINDABLES = {
     if (err) e.originalError = err;
     return e;
   },
-  //prettier-ignore
   concat: (ds, cb) => {
     const comment = /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm;
     const requires = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g;
-    cb.toString().replace(comment, (match, singlePrefix) => singlePrefix || "")
+    cb.toString()
+      .replace(comment, (match, singlePrefix) => singlePrefix || "")
       .replace(requires, (match, dep) => ds.push(dep)); //like ')//comment'; keep prefix
+    // prettier-ignore
     return (cb.length === 1 ? ["require"] : ["require", _x, "module"]).concat(ds);
   }, //Potential-CommonJS use-case of exports and module, without 'require.';
   convertName: (nm, mp, applyMap, ph) => {
@@ -148,9 +149,17 @@ const BINDABLES = {
         starMap = mpcf[name];
         n = g;
       }
-      // prettier-ignore
-      if (ph) {for(let f = ph.length; f > 0; f--) {const fP = ph.slice(0, f).join("/"),mV = e_(mp).yes(fP) && mp[fP];
-        if (!mV) continue;if (e_(mV).yes(name) && mV[name]) {i = g;break;}}}
+      if (ph) {
+        for (let f = ph.length; f > 0; f--) {
+          // prettier-ignore
+          const fP = ph.slice(0, f).join("/"),mV = e_(mp).yes(fP) && mp[fP];
+          if (!mV) continue;
+          if (e_(mV).yes(name) && mV[name]) {
+            i = g;
+            break;
+          }
+        }
+      }
     } // bigloop; //Match, update name to the new value.
     if (map) return (nm = nms.splice(0, i, map).join("/"));
     if (starMap) {
@@ -168,23 +177,49 @@ const BINDABLES = {
   if (pC && e_(pC).string() === Ar && pC.length > 1) {pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
     ctx.require.undef(id);ctx.makeRequire(null, {skipMap: true})([id]);return true;}},
   //'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
-  // prettier-ignore
-  parseName : (nm, roots, conId) => nm &&
-  (() => {nm = nm.split("/");const l = nm.length - 1,isjs = /\.js$/,suffjs = conId && isjs.test(nm[l]);
-    if (suffjs) nm[l] = nm[l].replace(isjs, "");if (nm[0].charAt(0) === "." && roots)nm = roots.slice(0, roots.length - 1).concat(nm);//Adjust any relative paths. node allows either .js or non .js, yet not in nameToUrl;baseName.push(nm), but new instead of length report
-    for (let i = 0; i < nm.length; i++) {const solid = nm[i] === "." && nm.splice(i, 1); //:part === "..":null
-      if (solid) {i -= 1;continue;}const more=i===0||(i===1&&nm[2]==="..")||nm[i-1]==="..";
-      if (!more && i > 0 && nm.splice(i - 1, 2)) i -= 2;}return nm.join("/");})(), //just enabled, but unactivated, modules
 
-  //prettier-ignore
-  normalize : (nm, bn, applyMap, conId, map, configPkgs) => {
-    const rs = bn && bn.split("/");nm = BINDABLES.parseName(nm, rs, conId);nm = BINDABLES.convertName(nm, map, applyMap, rs);
-    return e_(configPkgs).yes(nm) ? configPkgs[nm] : nm;}, // If package-name, package 'main,' roots
-  // prettier-ignore
+  parseName: (nm, roots, conId) =>
+    nm &&
+    (() => {
+      nm = nm.split("/");
+      // prettier-ignore
+      const l = nm.length - 1,isjs = /\.js$/,suffjs = conId && isjs.test(nm[l]);
+      if (suffjs) nm[l] = nm[l].replace(isjs, "");
+      // prettier-ignore
+      if (nm[0].charAt(0) === "." && roots)nm = roots.slice(0, roots.length - 1).concat(nm); //Adjust any relative paths. node allows either .js or non .js, yet not in nameToUrl;baseName.push(nm), but new instead of length report
+      for (let i = 0; i < nm.length; i++) {
+        const solid = nm[i] === "." && nm.splice(i, 1); //:part === "..":null
+        if (solid) {
+          i -= 1;
+          continue;
+        }
+        // prettier-ignore
+        const more=i===0||(i===1&&nm[2]==="..")||nm[i-1]==="..";
+        if (!more && i > 0 && nm.splice(i - 1, 2)) i -= 2;
+      }
+      return nm.join("/");
+    })(), //just enabled, but unactivated, modules
+
+  normalize: (nm, bn, applyMap, conId, map, configPkgs) => {
+    const rs = bn && bn.split("/");
+    nm = BINDABLES.parseName(nm, rs, conId);
+    nm = BINDABLES.convertName(nm, map, applyMap, rs);
+    return e_(configPkgs).yes(nm) ? configPkgs[nm] : nm;
+  }, // If package-name, package 'main,' roots
+
   Module: (map, unDE, configShim) => {
-      const obj = {events: (e_(unDE).yes(map.id)&&unDE[map.id])||{},map:map,shim:e_(configShim).yes(map.id)&&configShim[map.id],
-        depExports: [],depMaps: [],depMatched: [],pluginMaps: {},depCount: 0};
-      _K(obj).forEach((key) => (module.key = obj[key]));} //module.exports; module.factory; module.depMaps = [], module[_ed], module.fetched
+    const obj = {
+      events: (e_(unDE).yes(map.id) && unDE[map.id]) || {},
+      map: map,
+      shim: e_(configShim).yes(map.id) && configShim[map.id],
+      depExports: [],
+      depMaps: [],
+      depMatched: [],
+      pluginMaps: {},
+      depCount: 0
+    };
+    _K(obj).forEach((key) => (module.key = obj[key]));
+  } //module.exports; module.factory; module.depMaps = [], module[_ed], module.fetched
 };
 /*const construct = (f, obj) =>
   function () {
@@ -193,7 +228,6 @@ const BINDABLES = {
   }; //Function.prototype.construct (bind), with 'module' //https://stackoverflow.com/a/46700616/11711280*/
 //const defaultOnError = (err) => err;
 
-//prettier-ignore
 const d = (nm, ds, c) => {
   const copy = { nm, ds, c }; //Allow for anonymous modules
   if (typeof nm !== _t) {
@@ -206,8 +240,11 @@ const d = (nm, ds, c) => {
   }
   if (!ds && e_(c).string() === Fn && c.length) ds = BINDABLES.concat(ds, c); // no deps nor name + cb is func => then CommonJS
   if (useInteractive) {
-    const n =  scriptPends ||
-      (() => {if (interscrpt && e_(interscrpt).interA()) return interscrpt;
+    const n =
+      scriptPends ||
+      (() => {
+        if (interscrpt && e_(interscrpt).interA()) return interscrpt;
+        // prettier-ignore
         e_().tag().sort((a, b) => b - a)
           .map((script) => e_(script).interA() && (interscrpt = script));
         return interscrpt;
@@ -448,33 +485,56 @@ require = ((dependency, setTimeout) => {
         module.fetched = true;
         CONTEXT.startTime = new Date().getTime();
         var map = module.map;
-        // prettier-ignore
-        if (module.shim) {CONTEXT.makeRequire(module.map, {enableBuildCallback: true})(module.shim.ds || [], map.prefix ? module.callPlugin() : module.load()); //plugin-managed resource
+        if (module.shim) {
+          CONTEXT.makeRequire(module.map, { enableBuildCallback: true })(
+            module.shim.ds || [],
+            map.prefix ? module.callPlugin() : module.load()
+          ); //plugin-managed resource
         } else return map.prefix ? module.callPlugin() : module.load();
       }, //Regular dependency.
-      //prettier-ignore
-      load:()=>{if(!urlFchd[module.map.url]){urlFchd[module.map.url] = true;CONTEXT.load(module.map.id, module.map.url);}}, //Regular dependency.
+      load: () => {
+        if (!urlFchd[module.map.url]) {
+          urlFchd[module.map.url] = true;
+          CONTEXT.load(module.map.id, module.map.url);
+        }
+      }, //Regular dependency.
       check: () => {
         if (!module[_ed] || module.enabling) return null;
         var id = module.map.id;
         if (module["inited"]) {
           if (!module[_dg]) {
-            // prettier-ignore
-            var expts = module[_x],factory = module.factory;
+            var expts = module[_x],
+              factory = module.factory;
             module[_dg] = true; //no redundant require-define
             if (module.depCount < 1 && !module.defined) {
               const isDefine = module.map.iDef;
-              // prettier-ignore
-              if(e_(factory).string() === Fn) {
-                var err,cjs,depExpo = module.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
-            // prettier-ignore 
-            if((module.events[_e] && isDefine)||req[_o] !== ((err) => err)) {try{expts=CONTEXT.execCb(id,factory,depExpo,expts);} catch (e) {err = e;}//factory.apply(exports, depExports),
-              }else expts = CONTEXT.execCb(id, factory, depExpo, expts);if (isDefine && expts === undefined) {cjs = module[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
-                if(cjs){expts = cjs[_x];} else if (module.usingExports) expts = module[_x];} // module.exports assignment over exports object. exports already set the defined value.
-              if(err){const obj={requireMap:module.map,requireModules:isDefine?[module.map.id]:null,
-                requireType:isDefine?"define":"require"};_K(obj).forEach(key=>err[key]=obj[key]);return onError((module[_e] = err));}}else expts=factory;
-              // prettier-ignore
-              module[_x]=expts;
+              if (e_(factory).string() === Fn) {
+                var err,
+                  cjs,
+                  depExpo = module.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
+
+                if (
+                  (module.events[_e] && isDefine) ||
+                  req[_o] !== ((err) => err)
+                ) {
+                  // prettier-ignore
+                  try { expts = CONTEXT.execCb(id, factory, depExpo, expts);} catch (e) { err = e;} //factory.apply(exports, depExports),
+                } else expts = CONTEXT.execCb(id, factory, depExpo, expts);
+                if (isDefine && expts === undefined) {
+                  cjs = module[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
+                  if (cjs) {
+                    expts = cjs[_x];
+                  } else if (module.usingExports) expts = module[_x];
+                } // module.exports assignment over exports object. exports already set the defined value.
+                if (err) {
+                  // prettier-ignore
+                  const obj={requireMap:module.map,requireModules:isDefine?[module.map.id]:null,requireType:isDefine?"define":"require"};
+                  _K(obj).forEach((key) => (err[key] = obj[key]));
+                  return onError((module[_e] = err));
+                }
+              } else expts = factory;
+
+              module[_x] = expts;
               if (isDefine && !module.ignore) {
                 defined[id] = expts;
                 if (req.onResourceLoad)
@@ -490,7 +550,6 @@ require = ((dependency, setTimeout) => {
           } else if (module[_e]) module.emit(_e, module[_e]); // !defQueue.includes(module) module is ready to, and does, define itself
         } else if (!e_(CONTEXT.defQueueMap).yes(id)) module.fetch();
       },
-      //prettier-ignore
       callPlugin: () => {
         var map = module.map; //Map already normalized the prefix.
         var id = map.id; //Mark module as a dependency for module plugin, so it
@@ -498,32 +557,54 @@ require = ((dependency, setTimeout) => {
         module.depMaps.push(pluginMap);
         on(pluginMap, _dd, (plugin) => {
           if (module.map.unnormalized) return BM.normalizeMod(plugin, map); //If current map is not normalized, wait for that
-          var bundleId =
-            e_(bdlMap).yes(module.map.id) && bdlMap[module.map.id]; //normalized name to load instead of continuing.
-          if (bundleId) {module.map.url = CONTEXT.nameToUrl(bundleId);module.load();return null;}//If a paths CG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
-          const load =(factory)=>module[_i]([],()=>factory,null,{enabled: true});//depMaps, factory, eb, options
+          var bundleId = e_(bdlMap).yes(module.map.id) && bdlMap[module.map.id]; //normalized name to load instead of continuing.
+
+          // prettier-ignore
+          if (bundleId) {module.map.url = CONTEXT.nameToUrl(bundleId);module.load();return null;} //If a paths CG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
+          const load = (factory) =>
+            module[_i]([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
           load[_e] = (err) => {
-            module["inited"] = true; //Remove temp unnormalized modules for module module,
-            module[_e] = err; //since they will never be resolved otherwise now.
+            module["inited"] = true;
+            module[_e] = err;
             err.requireModules = [id];
-            _K(dependencies).forEach((x,i)=>dependencies[x].map.id.indexOf(id+"_unnormalized")===0&&clrRegstr(dependencies[x].map.id));
+            _K(dependencies).forEach(
+              (x, i) =>
+                dependencies[x].map.id.indexOf(id + "_unnormalized") === 0 &&
+                clrRegstr(dependencies[x].map.id)
+            );
             onError(err);
-          }; //Allow plugins to load other code without having to know the
+          }; //Remove temp unnormalized modules for module module, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
           const localRequire = CONTEXT.makeRequire(map.parentMap, {
             enableBuildCallback: true
           }); //CONTEXT or how to 'complete' the load.
-          
+
           load.fromText = (text, textAlt) => {
             /*jslint evil: true */
-            var mN = map.name,moduleMap = makeModuleMap(mN),hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass mN, ok, but discard mN for internal ref.
-            if (textAlt) text = textAlt;if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
+            var mN = map.name,
+              moduleMap = makeModuleMap(mN),
+              hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass mN, ok, but discard mN for internal ref.
+            if (textAlt) text = textAlt;
+            if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
             getModule(moduleMap); //Prime the system by creating a module instance for
             if (e_(CG.config).yes(id)) CG.config[mN] = CG.config[id]; //Transfer any CG to module other module.
-            try {req.exec(text);} catch (e) { return onError(makeError("fromtexteval", `fromText eval for ${  id } failed: ${  e}`,e,[id]));}//id, msg, err, requireModules 
+            try {
+              req.exec(text);
+            } catch (e) {
+              return onError(
+                makeError(
+                  "fromtexteval",
+                  `fromText eval for ${id} failed: ${e}`,
+                  e,
+                  [id]
+                )
+              );
+            } //id, msg, err, requireModules
             if (hasInteractive) useInteractive = true; //Mark module as a dependency for the plugin resource
-            module.depMaps.push(moduleMap);CONTEXT.completeLoad(mN);localRequire([mN], load); //Support anonymous modules. Bind the value of that module to the value for module resource ID.
+            module.depMaps.push(moduleMap);
+            CONTEXT.completeLoad(mN);
+            localRequire([mN], load); //Support anonymous modules. Bind the value of that module to the value for module resource ID.
           };
-          plugin.load(map.name, localRequire, load, CG);//Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
+          plugin.load(map.name, localRequire, load, CG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
         });
         CONTEXT.enable(pluginMap, module);
         module.pluginMaps[pluginMap.id] = pluginMap;
@@ -556,8 +637,14 @@ require = ((dependency, setTimeout) => {
           if (!e_(handlers).yes(id) && m && !m[_ed])
             CONTEXT.enable(depMap, module);
         }); //don't call enable if it is already enabled (circular ds)
-        //prettier-ignore
-        _K(module.pluginMaps).forEach((pM=(x)=>module.pluginMaps[x],i)=>e_(dependencies).yes(pM.id)&&dependencies[pM.id]&&!dependencies[pM.id][_ed]&&CONTEXT.enable(pM,module));
+
+        _K(module.pluginMaps).forEach(
+          (pM = (x) => module.pluginMaps[x], i) =>
+            e_(dependencies).yes(pM.id) &&
+            dependencies[pM.id] &&
+            !dependencies[pM.id][_ed] &&
+            CONTEXT.enable(pM, module)
+        );
         module.enabling = false;
         module.check();
       },
@@ -598,26 +685,43 @@ require = ((dependency, setTimeout) => {
     const initial = {CG,ctn,dependencies,defined,urlFchd,defQueue,defQueueMap:{},Module,makeModuleMap,nextTick: req.nextTick,onError}
     CONTEXT = {
       ...initial,
-      // prettier-ignore
       configure: (c) => {
         if (c[_u] && c[_u].charAt(c[_u].length - 1) !== "/") c[_u] += "/"; //Make sure the baseUrl ends in a slash.
-        if (typeof c[_a] === _t)c[_a] = (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]; // Convert old style urlArgs string to a function.
+        if (typeof c[_a] === _t)
+          c[_a] = (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]; // Convert old style urlArgs string to a function.
         const shim = CG.shim; //save paths for special "additive processing"
-        const mx = (op)=>{const arr = ["paths","bundles","CG","map"];
-          !arr.includes(op)?CG[op]=c[op]:arr.forEach(op=>CG[op]=(!CG[op])?{}:CG[op]);return op}//const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","CG","map"]);
+        const mx = (op) => {
+          const arr = ["paths", "bundles", "CG", "map"];
+          !arr.includes(op)
+            ? (CG[op] = c[op])
+            : // prettier-ignore
+              arr.forEach(op=>CG[op]=(!CG[op])?{}:CG[op]);
+          return op;
+        }; //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","CG","map"]);
         _K(c).forEach((prop = mx, i) => mixin(CG[prop], c[prop], true, true));
-        if (c[_b])_K(c[_b]).forEach((prop, i)=>c[_b][prop].forEach((v)=>(bdlMap[v]=v!==prop?prop:bdlMap[v])));//Reverse map the bundles
-        if (c[_s]) {_K(c[_s]).forEach((id, i) => {var v = c[_s][id];
+        if (c[_b])
+          // prettier-ignore
+          _K(c[_b]).forEach((prop, i)=>c[_b][prop].forEach((v)=>(bdlMap[v]=v!==prop?prop:bdlMap[v]))); //Reverse map the bundles
+        if (c[_s]) {
+          // prettier-ignore
+          _K(c[_s]).forEach((id, i) => {var v = c[_s][id];
             if (e_(v).string() === Ar) v = {ds: v}; //Merge shim, Normalize the structure
-            if ((v[_x] || v[_i]) && !v[_xf])v[_xf] = CONTEXT.makeShimExports(v);shim[id] = v;});CG.shim = shim;}
+            if ((v[_x] || v[_i]) && !v[_xf])v[_xf] = CONTEXT.makeShimExports(v);shim[id] = v;});
+          CG.shim = shim;
+        }
         if (c[_p])
           c[_p].forEach((pkgObj) => {
             pkgObj = typeof pkgObj === _t ? { name: pkgObj } : pkgObj;
-            var name = pkgObj.name, location = pkgObj[_l]; //Adjust packages if necessary.
+            var name = pkgObj.name,
+              location = pkgObj[_l]; //Adjust packages if necessary.
             if (location) CG.paths[name] = pkgObj[_l];
+
+            // prettier-ignore
             CG.pkgs[name] =`${pkgObj.name}/${(pkgObj.main || "main").replace(/^\.\//, "").replace(/\.js$/, "")}`; //normalize pkg name main module ID pointer paths
           }); //Update maps for "waiting to execute" modules in the dependencies.
+        // prettier-ignore
         const mxx = (id) =>(!dependencies[id].inited && !dependencies[id].map.unnormalized) &&id
+        // prettier-ignore
         _K(dependencies).forEach((id=mxx)=>dependencies[id].map=makeModuleMap(id, null, true)); //if inited and transient, unnormalized modules.
         if (c.ds || c.cb) CONTEXT.require(c.ds || [], c.cb); //When require is defined as a CG object before require.js is loaded,
       }, //call require with those args, if a ds arr or a CG cb is specified
@@ -629,12 +733,15 @@ require = ((dependency, setTimeout) => {
         }
         return fn;
       },
-      // prettier-ignore
-      makeRequire:(relMap, o = (options) => options || {}) => {
-          const {tkeGblQue,callGetModule}=BF
-        const localRequire = (ds, cb, eb) => {var id, map, requireMod;
+      makeRequire: (relMap, o = (options) => options || {}) => {
+        const { tkeGblQue, callGetModule } = BF;
+        const localRequire = (ds, cb, eb) => {
+          var id, map, requireMod;
+
+          // prettier-ignore
           if (o.enableBuildCallback &&cb &&e_(cb).string() === Fn)cb.__requireJsBuild = true;
           if (typeof ds === _t) {
+            // prettier-ignore
             if (e_(cb).string() === Fn)
               return onError(makeError("requireargs", "Invalid require call"),eb); //Invalid call; id, msg, err, requireModule
             if (relMap && e_(handlers).yes(ds))
@@ -642,87 +749,147 @@ require = ((dependency, setTimeout) => {
             if (req.get) return req.get(CONTEXT, ds, relMap, localRequire);
             map = makeModuleMap(ds, relMap, false, true);
             id = map.id; //Normalize module name from . or ..
+            // prettier-ignore
             if (!e_(defined).yes(id))
-              return onError(makeError("notloaded",`Module name ${id} has not been loaded yet for CONTEXT: ${ctn+(relMap?"":". Use require([])")}`));return defined[id];}//id, msg, err, requireModules
-          const intakeDefines = () => {var args;tkeGblQue();
-            while(defQueue.length){args=defQueue.shift();if(args[0]===null)return onError(makeError("mismatch",`Mismatched anonymous define() module: ${args[args.length - 1]}`));callGetModule(args);}CONTEXT.defQueueMap = {};};//"intake modules" //id, msg, err, requireModules //...id, ds, factory; "normalized by define()"
+              return onError(makeError("notloaded",`Module name ${id} has not been loaded yet for CONTEXT: ${ctn+(relMap?"":". Use require([])")}`));
+            return defined[id];
+          } //id, msg, err, requireModules
+          const intakeDefines = () => {
+            var args;
+            tkeGblQue();
+            while (defQueue.length) {
+              args = defQueue.shift();
+
+              // prettier-ignore
+              if(args[0]===null)return onError(makeError("mismatch",`Mismatched anonymous define() module: ${args[args.length - 1]}`));
+              callGetModule(args);
+            }
+            CONTEXT.defQueueMap = {};
+          }; //"intake modules" //id, msg, err, requireModules //...id, ds, factory; "normalized by define()"
           intakeDefines(); //Grab defines waiting in the dependency queue.
           CONTEXT.nextTick(() => {
             intakeDefines(); //Mark all the dependencies as needing to be loaded.
             requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
             requireMod.skipMap = o.skipMap; //store if 'map CG' applied to module 'require call' for dependencies
-            requireMod[_i](ds, cb, eb, {enabled: true});
+            requireMod[_i](ds, cb, eb, { enabled: true });
             BM.checkLoaded();
-          });return localRequire;};
-        //prettier-ignore
-        mixin(localRequire,{isBrowser,toUrl: (mNPE) => { //moduleNamePlusExt
-            var ext,i = mNPE.lastIndexOf("."),seg = mNPE.split("/")[0],isRelative = seg === "." || seg === "..";//URL path = module name + .extension; requires 'module name,' not 'plain URLs' like nameToUrl
-            if(i!==-1&&(!isRelative||i > 1)) {ext=mNPE.substring(i, mNPE.length); mNPE = mNPE.substring(0, i);}//file extension alias, not 'relative path dots'
+          });
+          return localRequire;
+        };
+        mixin(localRequire, {
+          isBrowser,
+          toUrl: (mNPE) => {
+            //moduleNamePlusExt
+            var ext,
+              i = mNPE.lastIndexOf("."),
+              seg = mNPE.split("/")[0],
+              isRelative = seg === "." || seg === ".."; //URL path = module name + .extension; requires 'module name,' not 'plain URLs' like nameToUrl
+
+            // prettier-ignore
+            if(i!==-1&&(!isRelative||i > 1)) {ext=mNPE.substring(i, mNPE.length); mNPE = mNPE.substring(0, i);} //file extension alias, not 'relative path dots'
+
+            // prettier-ignore
             const ar = [mNPE,relMap && relMap.id,true,CG.nodeIdCompat,CG.map,CG.pkgs];
             return CONTEXT.nameToUrl(normalize(ar), ext, true);
-          },defined:(id)=>e_(defined).yes(makeModuleMap(id,relMap,false,true).id),
-          specified:(id=(id)=>makeModuleMap(id,relMap,false,true).id)=>e_(defined).yes(id)||e_(dependencies).yes(id)});
-        // prettier-ignore
-        if (!relMap)localRequire.undef = (id) => {
+          },
+          defined: (id) =>
+            e_(defined).yes(makeModuleMap(id, relMap, false, true).id),
+          specified: (id = (id) => makeModuleMap(id, relMap, false, true).id) =>
+            e_(defined).yes(id) || e_(dependencies).yes(id)
+        });
+        if (!relMap)
+          localRequire.undef = (id) => {
             tkeGblQue(); //Only allow undef on top level require calls
             var map = makeModuleMap(id, relMap, true); //Bind define() calls (fixes #408) to 'module' CONTEXT
             var m = e_(dependencies).yes(id) && dependencies[id];
             m.undefed = true;
-            rmvScrpt(id, CONTEXT.ctn);delete defined[id];delete urlFchd[map.url];delete unDE[id];
+            // prettier-ignore
+            (()=>{rmvScrpt(id, CONTEXT.ctn);delete defined[id];delete urlFchd[map.url];delete unDE[id];})()
+
+            // prettier-ignore
             defQueue.sort((a, b) => b - a).map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
-            delete CONTEXT.defQueueMap[id];if(m){if(m.events.defined)unDE[id]=m.events; //if different CG, same listeners
-              clrRegstr(id);}};
+            delete CONTEXT.defQueueMap[id];
+            if (m) {
+              if (m.events.defined) unDE[id] = m.events; //if different CG, same listeners
+              clrRegstr(id);
+            }
+          };
         return localRequire;
       },
       // prettier-ignore
       enable: (depMap) =>e_(dependencies).yes(depMap.id) &&dependencies[depMap.id] && getModule(depMap).enable(),
       //if "m" module is in dependencies, parent's CONTEXT when overridden in "optimizer" (Not shown).
-      // prettier-ignore
+
       completeLoad: (mN) => {
-        const {tkeGblQue,callGetModule,getGlobal}=BF
+        const { tkeGblQue, callGetModule, getGlobal } = BF;
         var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
         tkeGblQue();
-        while (defQueue.length){args = defQueue.shift();if (args[0] === null) {
-            args[0] = mN;if (found) break; found = true; //anonymous module bound to name already  module is another anon module waiting for its completeLoad to fire.
-          } else if (args[0] === mN) found = true;callGetModule(args);} //matched a define call in module script
+        while (defQueue.length) {
+          args = defQueue.shift();
+          if (args[0] === null) {
+            args[0] = mN;
+            if (found) break;
+            found = true; //anonymous module bound to name already  module is another anon module waiting for its completeLoad to fire.
+          } else if (args[0] === mN) found = true;
+          callGetModule(args);
+        } //matched a define call in module script
         CONTEXT.defQueueMap = {};
         var m = e_(dependencies).yes(mN) && dependencies[mN]; // in case-/init-calls change the dependencies
         if (!found && !e_(defined).yes(mN) && m && !m.inited) {
           var shim = e_(CG.shim).yes(mN) ? CG.shim[mN] : {};
-          if (CG.enforceDefine &&(!shim[_x] || !getGlobal(shim[_x])))
+          if (CG.enforceDefine && (!shim[_x] || !getGlobal(shim[_x])))
+            // prettier-ignore
             return hasPathFallback(mN, CG.paths) ? null : onError(makeError("nodefine", "No define call for " + mN, null, [mN])); //id, msg, err, requireModules
-           callGetModule([mN, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
-        } BM.checkLoaded(); //mN = moduleName
+          callGetModule([mN, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
+        }
+        BM.checkLoaded(); //mN = moduleName
       },
-      // prettier-ignore
       nameToUrl: (mN, ext, skipExt) => {
         var pkgMain = e_(CG.pkgs).yes(mN) && CG.pkgs[mN]; //already-normalized-mN as URL. Use toUrl for the public API.
         if (pkgMain) mN = pkgMain; //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
         var bundleId = e_(bdlMap).yes(mN) && bdlMap[mN]; //assume use of an url, not a module id.
         if (bundleId) CONTEXT.nameToUrl(bundleId, ext, skipExt); //filter out dependencies that are already paths.
-        const geturl = (url = "") => {//Just a plain path, not module name lookup, so just return it.
-          if (/^[/:?.]|(.js)$/.test(mN))return url = mN + (ext || ""); //Add extension if it is included. This is a bit wonky, only non-.js things pass
-          var paths = CG.paths,syms = mN.split("/");  //an extension, module method probably needs to be reworked. A module that needs to be converted to a path.
+        const geturl = (url = "") => {
+          //Just a plain path, not module name lookup, so just return it.
+          if (/^[/:?.]|(.js)$/.test(mN)) return (url = mN + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
+          var paths = CG.paths,
+            syms = mN.split("/"); //an extension, module method probably needs to be reworked. A module that needs to be converted to a path.
           for (let i = syms.length; i > 0; i -= 1) {
             var pM = syms.slice(0, i).join("/"); //per module name segment if path registered, start name, and work up
             var pP = e_(paths).yes(pM) && paths[pM]; //parentModule
+            // prettier-ignore
             if (pP) {if (e_(pP).string()===Ar)pP=pP[0];syms.splice(0,i,pP);break;} //arr means a few choices; parentPath
           }
           url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
           url += ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js"); ///^data\:|^blob\:|\?/
-          return `${(url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "": CG.baseUrl) + url}`;///^[\w\+\.\-]+:/
-        };//Delegates to req.load. Broken out as a separate function to
-        return ((url=geturl)=>`${CG.urlArgs && !/^blob:/.test(url) ? url + CG.urlArgs(mN, url) : url}`)()}, //!/^blob\:/ ___ allow overriding in the optimizer.
+          // prettier-ignore
+          return `${(url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "": CG.baseUrl) + url}`; ///^[\w\+\.\-]+:/
+        }; //Delegates to req.load. Broken out as a separate function to
+        return ((url = geturl) =>
+          `${
+            CG.urlArgs && !/^blob:/.test(url) ? url + CG.urlArgs(mN, url) : url
+          }`)();
+      }, //!/^blob\:/ ___ allow overriding in the optimizer.
 
       load: (id, url) => req.load(CONTEXT, id, url), //allow the build system to sequence the files in the built layer, correctly
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
       onScriptLoad: (data = BF.evt) => CONTEXT.completeLoad(data.id),
-      //prettier-ignore
-      onScriptError: (evt) => {var data = BF.getScriptData(evt);
-        if(!hasPathFallback(data.id, CG.paths)){const parents=_K(dependencies).map((key,i)=>
-              key.indexOf("_@r")!==0?dependencies[key].depMaps.forEach((depMap)=>{if(depMap.id === data.id){return key;}else return "";}):"").filter((x) =>x!=="");
+      onScriptError: (evt) => {
+        var data = BF.getScriptData(evt);
+        if (!hasPathFallback(data.id, CG.paths)) {
+          const parents = _K(dependencies)
+            .map((key, i) =>
+              key.indexOf("_@r") !== 0
+                ? // prettier-ignore
+                  dependencies[key].depMaps.forEach((depMap)=>{if(depMap.id === data.id){return key;}else return "";})
+                : ""
+            )
+            .filter((x) => x !== "");
+          // prettier-ignore
           return onError(makeError("scripterror",`Script error for ${data.id+(parents.length?`" needed by: ${parents.join(", ")}` : '"')}`,
-              evt,[data.id]));}}
+              evt,[data.id]));
+        }
+      }
     }; //id, msg, err, requireModules
     CONTEXT.require = CONTEXT.makeRequire();
     return CONTEXT;
