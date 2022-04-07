@@ -19,11 +19,11 @@ var Ar = "[object Array]",
   _AEL = "addEventListener",
   ctxReqProps = ["toUrl", "undef", "defined", "specified"],
   isBrowser = !!(
-    typeof window !== _n &&
-    typeof navigator !== _n &&
+    typeof window !== "undefined" &&
+    typeof navigator !== "undefined" &&
     window.document
   ),
-  isWebWorker = !isBrowser && typeof importScripts !== _n,
+  isWebWorker = !isBrowser && typeof importScripts !== "undefined",
   //'loading', 'loaded', execution, 'complete'
   readyRegExp =
     isBrowser && navigator.platform === "PLAYSTATION 3"
