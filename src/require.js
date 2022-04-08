@@ -11,21 +11,24 @@
 
 const App = (function () {
   //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'this'," else App() function
-  var iifeapp = (construction, keys) => {
-      construction =
-        construction.constructor === Array ? () => {} : construction;
-      keys = keys.constructor === Array ? keys : construction;
-      return ((z, keys) =>
-        function () {
-          keys.constructor === Function && construction();
-          keys.constructor === Array &&
-            keys.forEach((x, i) =>
-              x.includes(".")
-                ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i])
-                : (z[x] = arguments[i])
-            );
-        })(this, keys); //this(and arguments) should relate to wherever function runs (fat has no 'this', iife can to append this[key])
-    },
+  var iifeapp = (z) =>
+      function (
+        construction = arguments[0],
+        keys = arguments[1],
+        buff = construction.constructor === Array ? 0 : 1
+      ) {
+        construction =
+          construction.constructor === Array ? () => {} : construction;
+        keys = keys.constructor === Array ? keys : construction;
+
+        construction.constructor === Function && construction();
+        keys.constructor === Array &&
+          keys.forEach((x, i) =>
+            x.includes(".")
+              ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i + buff])
+              : (z[x] = arguments[i + buff])
+          );
+      }, //this(and arguments) should relate to wherever function runs (fat has no 'this', iife can to append this[key])
     //const iifefunc = (construction, keys) => new iifeapp(construction, keys); //you can tell this is a [proper-]function[-invocation] with thiscontext here for iifeapp
     /**
   * 
@@ -387,7 +390,7 @@ require=(dep,to)=>{
         cfg = ds;
         return !e_(cb).a()
           ? (ds = [])
-          : new iifeapp(["ds", "cb", "eb"], cb, eb, optional);
+          : new iifeapp(["ds", "cb", "eb"], cb, eb, optional)(this);
       } // Determine if have CG object in the call. ds is a CG object Adjust args if there are dependencies
       if (cfg && cfg.context) ctn = cfg.context;
       ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
@@ -452,7 +455,7 @@ require=(dep,to)=>{
                     ? normalize(n, ptName, applyMap, ...configGets)
                     : n,
                   p + "!" + normed + suffix
-                )
+                )(this)
               : new iifeapp(
                   ["normed", "names", "p", "normed", "isNormed", "url", "id"],
                   normalize(n, ptName, applyMap, ...configGets),
@@ -462,7 +465,7 @@ require=(dep,to)=>{
                   true,
                   CONTEXT.nameToUrl(normed),
                   normed + suffix
-                );
+                )(this);
 
           //do not normalize if nested plugin references; albeit module deprecates resourceIds,
           //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
@@ -580,7 +583,7 @@ require=(dep,to)=>{
                   halt && true,
                   true,
                   !halt && noCyc ? false : another
-                )
+                )(this)
           ); //non-plugin-resource; Figure out the state of all the modules.//disabled or in error
           if (halt && hs.length) {
             // prettier-ignore
@@ -604,7 +607,7 @@ require=(dep,to)=>{
                   () => BM.checkLoaded() && null,
                   50
                 ) /*plugin-resource*/
-            );
+            )(this);
         },
         //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same module
         init: (depMaps, factory, eb, o = (o) => o || {}) => {
@@ -1063,7 +1066,7 @@ require=(dep,to)=>{
                   ["pP", "syms"],
                   e_(pP).a() ? pP[0] : pP,
                   syms.splice(0, i, pP)
-                );
+                )(this);
               if (pP) break; //arr means a few choices; parentPath
             }
             url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
@@ -1179,7 +1182,7 @@ require=(dep,to)=>{
                 src.pop(),
                 src.length ? src.join("/") + "/" : "./",
                 subPath
-              );
+              )(this);
             //baseUrl if data-main value is not a loader plugin module ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a module name.
             mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
             if (/^[/:?.]|(.js)$/.test(mainScript)) mainScript = dataMain; //filter out dependencies that are already paths.//^\/|:|\?|\.js$
