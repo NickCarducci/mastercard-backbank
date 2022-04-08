@@ -375,8 +375,12 @@ require=(dep,to)=>{
 
     //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
 
-    var req = (REQUIREJS = (ds, cb, eb, optional) => {
-      var ctx,
+    var req = (REQUIREJS = function () {
+      var ds = arguments[0],
+        cb = arguments[1],
+        eb = arguments[2],
+        optional = arguments[3],
+        ctx,
         cfg,
         ctn = us; //Caja compliant req for minified-scope name of dependency, cb for arr completion Find the right CONTEXT, use default
       if (!e_(ds).string() === Ar && typeof ds !== _t) {
