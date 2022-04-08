@@ -118,7 +118,7 @@ var interscrpt,scriptPends, defineables = [],version = "2.3.6.carducci",configur
 ctx,ga="getAttribute", module= {} //"this";
 
 // prettier-ignore
-const _p ="packages",_b="bundles",_s="shim",_l="location",_u="baseUrl",_a="urlArgs",_t="string",_xf="exportsFn",_x="exports",_m="module",_o="onError",_dd="defined",_dg="defining",_ed="enabled",_e="error",_i="init",_n="undefined",_r="require"
+const _p ="packages",_b="bundles",_s="shim",_l="location",_u="baseUrl",_a="urlArgs",_t="string",_xf="exportsFn",_x="exports",_m="module",_o="onError",_dd="defined",_dg="defining",_ed="enabled",_e="error",_em="emit",_ev="events",_i="init",_n="undefined",_r="require"
 const BINDABLES = {
   mixin: (tgt, s, frc, dSM) =>
     _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
@@ -388,20 +388,19 @@ require = ((dependency, setTimeout) => {
           fin = {prefix:p,name: normed,parentMap: sourcemap,unnormalized: !!suffix,url,gvnName,yesdef,id};
         return fin;
       }, //module mapping includes plugin prefix, module name, and path
-      getModule: (
-        { m, depMap } = function () {
-          //prettier-ignore
-          return { depMap: arguments[0],
-            m:e_(dependencies).yes(arguments[0].id) &&
-              dependencies[arguments[0].id]
-          };
-        }
-      ) => {
+      dp: function () {
+        return {
+          depMap: arguments[0],
+          m:
+            e_(dependencies).yes(arguments[0].id) &&
+            dependencies[arguments[0].id]
+        };
+      },
+      getModule: ({ m, depMap } = BR.dp) => {
         //prettier-ignore
         return m ? m : (dependencies[depMap.id] = new CONTEXT.Module(depMap,unDE,CG.shim));
       },
-      on: (depMap, name, f) => {
-        var m = e_(dependencies).yes(depMap.id) && dependencies[depMap.id];
+      on: ({ m, depMap } = BR.dp, name, f) => {
         if (!e_(defined).yes(depMap.id) || (m && !m.defineEmitComplete))
           return name === _dd && f(defined[depMap.id]);
         m = BINDABLES.getModule(depMap);
@@ -409,20 +408,22 @@ require = ((dependency, setTimeout) => {
         m["on"](name, f);
       },
       onError: (err = BINDABLES.mk, eb) => {
-        var ids = err.ids,
-          moderr = false;
+        var moderr = false;
         if (eb) return eb(err);
-        const r = (em) => {
-          moderr = true;
-          em(_e, err);
-        };
-        ids.forEach(
+        err.ids.forEach(
           (
-            //prettier-ignore
-            m = (id) => {return {...(e_(dependencies).yes(id) && dependencies[id]),error: err};}
-          ) => m["events"] && m["events"][_e] && r(m["emit"])
+            md = (
+              errormodules = (err) =>
+                e_(dependencies).yes(err) && dependencies[err]
+            ) => {
+              return {
+                ...errormodules,
+                error: err
+              };
+            }
+          ) => (moderr = md[_ev] && md[_ev][_e] && md[_em](_e, err) && true)
         );
-        if (!moderr) req["onError"](err);
+        if (!moderr) req[_o](err);
       }
     };
     var handlers = {
@@ -500,7 +501,7 @@ require = ((dependency, setTimeout) => {
           (() => {
             another &&
               reqCalls.forEach((m) =>
-                m[er] ? m["emit"](er, m[er]) : progress(m)
+                m[er] ? m[_em](er, m[er]) : progress(m)
               ); //breakCycle
             (() => {
               watch = false;
