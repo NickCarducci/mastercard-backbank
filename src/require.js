@@ -19,7 +19,11 @@ const App = (function () {
         function () {
           keys.constructor === Function && construction();
           keys.constructor === Array &&
-            keys.forEach((x, i) => (z[x] = arguments[i]));
+            keys.forEach((x, i) =>
+              x.includes(".")
+                ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i])
+                : (z[x] = arguments[i])
+            );
         })(this, keys); //this(and arguments) should relate to wherever function runs (fat has no 'this', iife can to append this[key])
     },
     //const iifefunc = (construction, keys) => new iifeapp(construction, keys); //you can tell this is a [proper-]function[-invocation] with thiscontext here for iifeapp
@@ -353,9 +357,10 @@ require=(dep,to)=>{
     d.amd = { jQuery: true };
     return d;
   })();
-  require = ((dependency, setTimeout) => {
-    //prettier-ignore
-    const { dr,normalize,hasPathFallback,rmvScrpt,Module } = BINDABLES;
+  require = (function () {
+    const dependency = arguments[0],
+      setTimeout = arguments[1],
+      { dr, normalize, hasPathFallback, rmvScrpt, Module } = BINDABLES;
 
     //Do not overwrite an existing REQUIREJS instance/ amd loader.
     if (typeof define !== _n) return; // package-names, cb, returns a value to define the module of argument index[0]
@@ -755,13 +760,13 @@ require=(dep,to)=>{
 
             load.fromText = (text, textAlt) => {
               /*jslint evil: true */
-              var mN = map.name,
-                moduleMap = makeModuleMap(mN),
-                hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass mN, ok, but discard mN for internal ref.
+              var tkn = map.name,
+                moduleMap = makeModuleMap(tkn),
+                hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass tkn, ok, but discard tkn for internal ref.
               if (textAlt) text = textAlt;
               if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
               getModule(moduleMap); //Prime the system by creating a module instance for
-              if (e_(CG.config).yes(id)) CG.config[mN] = CG.config[id]; //Transfer any CG to module other module.
+              if (e_(CG.config).yes(id)) CG.config[tkn] = CG.config[id]; //Transfer any CG to module other module.
               try {
                 req.exec(text);
               } catch (e) {
@@ -776,8 +781,8 @@ require=(dep,to)=>{
               } //type, msg, err, requireModules
               if (hasInteractive) useInteractive = true; //Mark module as a dependency for the plugin resource
               module.depMaps.push(moduleMap);
-              CONTEXT.completeLoad(mN);
-              localRequire([mN], load); //Support anonymous modules. Bind the value of that module to the value for module resource ID.
+              CONTEXT.completeLoad(tkn);
+              localRequire([tkn], load); //Support anonymous modules. Bind the value of that module to the value for module resource ID.
             };
             plugin.load(map.name, localRequire, load, CG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
           });
@@ -1001,54 +1006,62 @@ require=(dep,to)=>{
         enable: (depMap) =>e_(dependencies).yes(depMap.id) &&dependencies[depMap.id] && getModule(depMap).enable(),
         //if "m" module is in dependencies, parent's CONTEXT when overridden in "optimizer" (Not shown).
 
-        completeLoad: (mN) => {
+        completeLoad: (tkn) => {
           const { tkeGblQue, callGetModule, getGlobal } = BF;
           var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
           tkeGblQue();
           while (defQueue.length) {
             args = defQueue.shift();
             if (args[0] === null) {
-              args[0] = mN;
+              args[0] = tkn;
               if (found) break;
               found = true; //anonymous module bound to name already  module is another anon module waiting for its completeLoad to fire.
-            } else if (args[0] === mN) found = true;
+            } else if (args[0] === tkn) found = true;
             callGetModule(args);
           } //matched a define call in module script
           CONTEXT.defQueueMap = {};
-          var m = e_(dependencies).yes(mN) && dependencies[mN]; // in case-/init-calls change the dependencies
-          if (!found && !e_(defined).yes(mN) && m && !m.inited) {
-            var shim = e_(CG.shim).yes(mN) ? CG.shim[mN] : {};
+          var m = e_(dependencies).yes(tkn) && dependencies[tkn]; // in case-/init-calls change the dependencies
+          if (!found && !e_(defined).yes(tkn) && m && !m.inited) {
+            var shim = e_(CG.shim).yes(tkn) ? CG.shim[tkn] : {};
             if (CG.enforceDefine && (!shim[_x] || !getGlobal(shim[_x])))
               return (
-                !hasPathFallback(mN, CG.paths) &&
+                !hasPathFallback(tkn, CG.paths) &&
                 onError(
                   BINDABLES.mk([
                     "nodefine",
-                    "No define call for " + mN,
+                    "No define call for " + tkn,
                     null,
-                    [mN]
+                    [tkn]
                   ])
                 )
               ); //type, msg, err, requireModules
-            callGetModule([mN, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
+            callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
           }
-          BM.checkLoaded(); //mN = moduleName
+          BM.checkLoaded(); //tkn = moduleName
         },
-        nameToUrl: (mN, ext, skipExt) => {
-          var pkgMain = e_(CG.pkgs).yes(mN) && CG.pkgs[mN]; //already-normalized-mN as URL. Use toUrl for the public API.
-          mN = pkgMain ? pkgMain : mN; //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
-          var id = e_(bdlMap).yes(mN) && bdlMap[mN]; //assume use of an url, not a module id.
+        nameToUrl: function () {
+          //token, ext, skipExt, pkgMain
+          var ext = arguments[1],
+            skipExt = arguments[2],
+            pkgMain = e_(CG.pkgs).yes(arguments[0]) && CG.pkgs[arguments[0]], //already-normalized-tkn as URL. Use toUrl for the public API.
+            tkn = pkgMain ? pkgMain : arguments[0], //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
+            id = e_(bdlMap).yes(tkn) && bdlMap[tkn]; //assume use of an url, not a module id.
           id && CONTEXT.nameToUrl(id, ext, skipExt); //filter out dependencies that are already paths.
           const geturl = (url = "") => {
             //Just a plain path, not module name lookup, so just return it.
-            if (/^[/:?.]|(.js)$/.test(mN)) return (url = mN + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
+            if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
             var paths = CG.paths,
-              syms = mN.split("/"); //an extension, module method probably needs to be reworked. A module that needs to be converted to a path.
+              syms = tkn.split("/"); //an extension, module method probably needs to be reworked. A module that needs to be converted to a path.
             for (let i = syms.length; i > 0; i -= 1) {
               var pM = syms.slice(0, i).join("/"); //per module name segment if path registered, start name, and work up
               var pP = e_(paths).yes(pM) && paths[pM]; //parentModule
-              // prettier-ignore
-              pP && (() => { pP = e_(pP).a() ? pP[0] : pP; syms.splice(0, i, pP); })();
+
+              pP &&
+                iifeapp(
+                  ["pP", "syms"],
+                  e_(pP).a() ? pP[0] : pP,
+                  syms.splice(0, i, pP)
+                );
               if (pP) break; //arr means a few choices; parentPath
             }
             url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
@@ -1057,12 +1070,10 @@ require=(dep,to)=>{
             // prettier-ignore
             return `${(url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "": CG.baseUrl) + url}`; ///^[\w\+\.\-]+:/
           }; //Delegates to req.load. Broken out as a separate function to
-          return ((url = geturl) =>
-            `${
-              CG.urlArgs && !/^blob:/.test(url)
-                ? url + CG.urlArgs(mN, url)
-                : url
-            }`)();
+          return ((u) =>
+            `${CG.urlArgs && !/^blob:/.test(u) ? u + CG.urlArgs(tkn, u) : u}`)(
+            geturl
+          );
         }, //!/^blob\:/ ___ allow overriding in the optimizer.
 
         load: (id, url) => req.load(CONTEXT, id, url), //allow the build system to sequence the files in the built layer, correctly
@@ -1097,22 +1108,26 @@ require=(dep,to)=>{
         req[prop]=function(){return ctxs[us].require[prop].apply(ctxs[us],arguments);}
     ); //apply arguments to requires on context
     //for the latest instance of the 'default CONTEXT CG'//not the 'early binding to default CONTEXT,' but ctxs during builds//ticketx to apology tour
-    // prettier-ignore
-    if (isBrowser) (()=>{head = s.head = e_("head").tag();baseElement = e_("base").tag(0);if (baseElement) head = s.head = baseElement.parentNode;})() //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
+
+    if (isBrowser)
+      head = s.head = e_("base").tag(0)
+        ? baseElement.parentNode
+        : e_("head").tag();
+    //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
     req[_o] = (err) => err; // node for the load command in browser env
-    req.createNode = (CG, mN, url) => {
+    req.createNode = (CG, tkn, url) => {
       // prettier-ignore
       return {...(CG.xhtml ? e_().create("NS") : e_().create()),
     type: CG.scriptType || "text/javascript",charset: "utf-8",async: true};
     };
 
-    req.load = (CONTEXT, mN, url) => {
+    req.load = (CONTEXT, tkn, url) => {
       const CG = (CONTEXT && CONTEXT.CG) || {};
-      //handle load request (in browser env); 'CONTEXT' for state, 'mN' for name, 'url' for point
+      //handle load request (in browser env); 'CONTEXT' for state, 'tkn' for name, 'url' for point
       if (isBrowser) {
-        var n = req.createNode(CG, mN, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
+        var n = req.createNode(CG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
         n[_SA](dr(), CONTEXT.ctn);
-        n[_SA](dr(true), mN); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
+        n[_SA](dr(true), tkn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
         // prettier-ignore
         if (n[_AE] &&!(n[_AE].toString && n[_AE].toString().indexOf("[native code") < 0) &&!isOpera) {
         useInteractive = true;n[_AE]("onreadystatechange", CONTEXT.onScriptLoad); //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
@@ -1121,7 +1136,7 @@ require=(dep,to)=>{
         //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
       } else {n[_AEL]("load", CONTEXT.onScriptLoad, false);n[_AEL](_e, CONTEXT.onScriptError, false);} //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', CONTEXT.onScriptError);
         n.src = url; //Calling onNodeCreated after all properties on the node have been
-        if (CG.onNodeCreated) CG.onNodeCreated(n, CG, mN, url); //set, but before it is placed in the DOM.
+        if (CG.onNodeCreated) CG.onNodeCreated(n, CG, tkn, url); //set, but before it is placed in the DOM.
         //IE 6-8 cache, script executes before the end
         scriptPends = n; //of the appendChild execution, so to tie an anonymous define
         if (baseElement) {
@@ -1133,14 +1148,14 @@ require=(dep,to)=>{
         try {
           setTimeout(() => {}, 0);
           importScripts(url);
-          CONTEXT.completeLoad(mN); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
+          CONTEXT.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
         } catch (e) {
           CONTEXT[_o](
             BINDABLES.mk([
               "importscripts",
-              `importScripts failed for ${mN} at ${url}`,
+              `importScripts failed for ${tkn} at ${url}`,
               e,
-              [mN]
+              [tkn]
             ])
           );
         } //type, msg, err, requireModules
@@ -1156,8 +1171,13 @@ require=(dep,to)=>{
           if (dataMain) {
             mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
             if (!configuration.baseUrl && mainScript.indexOf("!") === -1)
-              // prettier-ignore
-              (()=>{ src = mainScript.split("/");mainScript = src.pop(); subPath = src.length ? src.join("/") + "/" : "./";configuration.baseUrl = subPath;})()
+              new iifeapp(
+                ["src", "mainScript", "subPath", "configuration.baseUrl"],
+                mainScript.split("/"),
+                src.pop(),
+                src.length ? src.join("/") + "/" : "./",
+                subPath
+              );
             //baseUrl if data-main value is not a loader plugin module ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a module name.
             mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
             if (/^[/:?.]|(.js)$/.test(mainScript)) mainScript = dataMain; //filter out dependencies that are already paths.//^\/|:|\?|\.js$
