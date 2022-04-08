@@ -10,6 +10,7 @@
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
 const App = (function () {
+  //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'this'," else App() function
   var iifeapp = (construction, keys) => {
       construction =
         construction.constructor === Array ? () => {} : construction;
@@ -433,7 +434,7 @@ require=(dep,to)=>{
           n = names[1];
           if (n)
             p
-              ? iifeapp(
+              ? new iifeapp(
                   ["normed", "id"],
                   isNormed
                     ? n
@@ -445,7 +446,7 @@ require=(dep,to)=>{
                     : n,
                   p + "!" + normed + suffix
                 )
-              : iifeapp(
+              : new iifeapp(
                   ["normed", "names", "p", "normed", "isNormed", "url", "id"],
                   normalize(n, ptName, applyMap, ...configGets),
                   splitPrefix(normed),
@@ -567,7 +568,7 @@ require=(dep,to)=>{
             id && halt && !hasPathFallback(id, CG.paths)
               ? rmvScrpt(id, CONTEXT.ctn) && hs.push(id)
               : id &&
-                iifeapp(
+                new iifeapp(
                   ["fb", "wait", "another"],
                   halt && true,
                   true,
