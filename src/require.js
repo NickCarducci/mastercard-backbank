@@ -12,15 +12,11 @@
 const App = (function () {
   //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'this'," else App() function
   var iifeapp = (z) =>
-      function (
-        construction = arguments[0],
-        keys = arguments[1],
-        buff = construction.constructor === Array ? 0 : 1
-      ) {
+      function (construction = arguments[0], keys = arguments[1]) {
+        const buff = construction.constructor === Array ? 0 : 1;
         construction =
           construction.constructor === Array ? () => {} : construction;
         keys = keys.constructor === Array ? keys : construction;
-
         construction.constructor === Function && construction();
         keys.constructor === Array &&
           keys.forEach((x, i) =>
