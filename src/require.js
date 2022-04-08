@@ -100,11 +100,19 @@ const e_ = (obj /*,string*/) => {
   const yes = (name)=>obj[_P][_H](name), string=()=>_S(obj), tag= (ind) => document.getElementsByTagName(obj ? obj : "script")[ind];
   return {
     yes,
-    //prettier-ignore
-    reducer:(prop,nextProp) => {const s=obj[0],tgt=obj[1],frc=obj[2],dSM=obj[3];
-    if(!s)return tgt;if(frc||!e_(tgt).yes(prop)){const v = s[prop];
-      const go = dSM&&typeof v==="object"&&v&&!e_(v).a()&&!e_(v).string()===Fn&&!(v instanceof RegExp)
-      if(!go){tgt[prop] = v;}else{if(!tgt[prop])tgt[prop]={};BINDABLES.mixin(tgt[prop],v,frc,dSM);}}return tgt;},
+    reducer: (prop, nextProp) =>
+      !obj[0]
+        ? obj[1]
+        : (obj[2] || !e_(obj[1]).yes(prop)) &&
+          ((
+            v,
+            //prettier-ignore
+            go = obj[3] && typeof v === "object" && v && !e_(v).a() && !e_(v).string() === Fn &&  !(v instanceof RegExp)
+          ) => {
+            obj[1][prop] = !go ? v : obj[1][prop] ? obj[1][prop] : {};
+            BINDABLES.mixin(obj[1][prop], v, obj[2], obj[3]);
+            return obj[1];
+          })(obj[0][prop]), //s,tgt,frc,dSM
     create: (ns = n) => createElement(ns),
     string,
     a: (x) => x.string() === Ar,
@@ -113,47 +121,79 @@ const e_ = (obj /*,string*/) => {
   };
 }; //obj.prototype["hasOwnProperty"][name]; const method =string?"toString":"hasOwnProperty"
 
-//prettier-ignore
-var interscrpt,scriptPends, defineables = [],version = "2.3.6.carducci",configuration = {},useInteractive = false,
-ctx,ga="getAttribute", module= {} //"this";
+var interscrpt,
+  scriptPends,
+  defineables = [],
+  version = "2.3.6.carducci",
+  configuration = {},
+  useInteractive = false,
+  ctx,
+  ga = "getAttribute",
+  module = {}; //"this";
 
-// prettier-ignore
-const _p ="packages",_b="bundles",_s="shim",_l="location",_u="baseUrl",_a="urlArgs",_t="string",_xf="exportsFn",_x="exports",_m="module",_o="onError",_dd="defined",_dg="defining",_ed="enabled",_e="error",_em="emit",_ev="events",_i="init",_n="undefined",_r="require"
+const _p = "packages",
+  _b = "bundles",
+  _s = "shim",
+  _l = "location",
+  _u = "baseUrl",
+  _a = "urlArgs",
+  _t = "string",
+  _xf = "exportsFn",
+  _x = "exports",
+  _m = "module",
+  _o = "onError",
+  _dd = "defined",
+  _dg = "defining",
+  _ed = "enabled",
+  _e = "error",
+  _em = "emit",
+  _ev = "events",
+  _i = "init",
+  _n = "undefined",
+  _r = "require";
 const BINDABLES = {
   mixin: (tgt, s, frc, dSM) =>
     _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
-  mk: (err) => {
-    return err.constructor === Object
+  mk: (err) =>
+    err.constructor === Object
       ? err
-      : //prettier-ignore
-        { ...new Error(`${err[1]}\nhttps://REQUIREJS.org/docs/errors.html#${err[0]}`),
+      : {
+          //prettier-ignore
+          ...new Error(`${err[1]}\nhttps://REQUIREJS.org/docs/errors.html#${err[0]}`),
           requireType: err[0],
           ids: err[3],
           originalError: err[2]
-        };
-  },
-  //t, m, e, ids
-  concat: (ds, cb) => {
-    const comment = /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm;
-    const requires = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g;
-    cb.toString()
-      .replace(comment, (match, singlePrefix) => singlePrefix || "")
-      .replace(requires, (match, dep) => ds.push(dep)); //like ')//comment'; keep prefix
-    return (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(ds);
-  }, //Potential-CommonJS use-case of exports and module, without 'require.';
+        }, //t, m, e, ids
+  concat: (
+    { ds, cb } = (ds, cb) => {
+      return {
+        cb: cb
+          .toString()
+          .replace(
+            /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm /*comment */,
+            (match, singlePrefix) => singlePrefix || ""
+          )
+          .replace(
+            /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
+            (match, dep) => ds.push(dep)
+          ),
+        ds
+      };
+    } /*like ')//comment'; keep prefix*/
+  ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(ds), //Potential-CommonJS use-case of exports and module, without 'require.';
   convertName: (nm, mp, applyMap, ph) => {
     if (!applyMap || !mp || (!ph && !mp["*"])) return nm;
-    // prettier-ignore
-    var n,i,map,starMap,nms=nm.split("/"),mpcf=mp&&mp["*"]; //continue search ___ map CG, bigloop:
+    var n,
+      i,
+      map,
+      starMap,
+      nms = nm.split("/"),
+      mpcf = mp && mp["*"]; //continue search ___ map CG, bigloop:
     for (let g = nms.length; g > 0; g -= 1) {
       var name = nms.slice(0, g).join("/"); //favor a "star map" unless shorter matching CG
       // prettier-ignore
-      const yes = !starMap && mpcf && e_(mpcf).yes(name);
-      if (yes)
-        // prettier-ignore
-        (() => {starMap = mpcf[name];n = g;})();
-      if (ph)
-        // prettier-ignore
+      !starMap && mpcf && e_(mpcf).yes(name)&& (() => {starMap = mpcf[name];n = g;})();
+      ph &&
         (() => {
           for (let f = ph.length; f > 0; f--) {
             const fP = ph.slice(0, f).join("/"),
@@ -331,10 +371,20 @@ require = ((dependency, setTimeout) => {
     //prettier-ignore
     var CONTEXT = {CG: {waitSeconds: 7,baseUrl: "./",paths: {},bundles: {},pkgs: {},shim: {},config: {}}};
     var { CG } = CONTEXT;
+    const iifeapp = (keys) =>
+      ((z, keys) =>
+        function () {
+          keys.forEach((x, i) => (z[x] = arguments[i]));
+        })(this, keys); //this should relate to wherever function runs (fat has no 'this', iife can to append this[key])
     //prettier-ignore
     var dependencies={},enRgtry={},unDE={},defQueue=[],defined={},urlFchd={},bdlMap={},rqrCnt=1,abnCnt=1; //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
     const BR = {
-      makeModuleMap: (n, sourcemap, isNormed, applyMap) => {
+      makeModuleMap: function () {
+        //n, sourcemap, isNormed, applyMap
+        var n = arguments[0],
+          sourcemap = arguments[1],
+          isNormed = arguments[2],
+          applyMap = arguments[3];
         //prettier-ignore
         var ptName = sourcemap ? sourcemap.name : null,gvnName = n,yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() module ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
         if (!n) yesdef = false;
@@ -348,43 +398,40 @@ require = ((dependency, setTimeout) => {
           pM,
           url; //pluginModule
         const configGets = [CG.nodeIdCompat, CG.map, CG.pkgs];
-        p &&
-          (() => {
-            p = normalize(p, ptName, applyMap, ...configGets);
-            pM = e_(defined).yes(p) && defined[p];
-          })();
         var normed = "",
-          id;
+          id,
+          suffix = p && !pM && !isNormed ? "_unnormalized" + (abnCnt += 1) : ""; //If it may be a plugin id that doesn't normalization, stamp it with a unique ID
+
         n = names[1];
         if (n)
           p
-            ? (() => {
-                normed = isNormed
+            ? iifeapp(
+                ["normed", "id"],
+                isNormed
                   ? n
                   : pM && pM.normalize
                   ? //prettier-ignore
                     pM.normalize(n, (n) => normalize(n, ptName, applyMap, ...configGets))
                   : n.indexOf("!") === -1
                   ? normalize(n, ptName, applyMap, ...configGets)
-                  : n;
-                id = p + "!" + normed + suffix;
-              })()
-            : (() => {
-                normed = normalize(n, ptName, applyMap, ...configGets);
+                  : n,
+                p + "!" + normed + suffix
+              )
+            : iifeapp(
+                ["normed", "names", "p", "normed", "isNormed", "url", "id"],
+                normalize(n, ptName, applyMap, ...configGets),
+                splitPrefix(normed),
+                names[0],
+                names[1],
+                true,
+                CONTEXT.nameToUrl(normed),
+                normed + suffix
+              );
 
-                names = splitPrefix(normed);
-                p = names[0];
-                normed = names[1];
-                isNormed = true;
-                url = CONTEXT.nameToUrl(normed);
-                id = normed + suffix;
-              })();
         //do not normalize if nested plugin references; albeit module deprecates resourceIds,
         //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
         //ok base name, relative path?.normalize's 'map CG application' might make normalized 'name' a plugin ID.'map CG values' are already normalized at module point.
-        var suffix =
-            p && !pM && !isNormed ? "_unnormalized" + (abnCnt += 1) : "", //If it may be a plugin id that doesn't normalization, stamp it with a unique ID
-          //prettier-ignore
+        var //prettier-ignore
           fin = {prefix:p,name: normed,parentMap: sourcemap,unnormalized: !!suffix,url,gvnName,yesdef,id};
         return fin;
       }, //module mapping includes plugin prefix, module name, and path
@@ -396,10 +443,9 @@ require = ((dependency, setTimeout) => {
             dependencies[arguments[0].id]
         };
       },
-      getModule: ({ m, depMap } = BR.dp) => {
+      getModule: ({ m, depMap } = BR.dp) =>
         //prettier-ignore
-        return m ? m : (dependencies[depMap.id] = new CONTEXT.Module(depMap,unDE,CG.shim));
-      },
+        m ? m : (dependencies[depMap.id] = new CONTEXT.Module(depMap,unDE,CG.shim)),
       on: ({ m, depMap } = BR.dp, name, f) => {
         if (!e_(defined).yes(depMap.id) || (m && !m.defineEmitComplete))
           return name === _dd && f(defined[depMap.id]);
