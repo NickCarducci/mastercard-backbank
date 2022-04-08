@@ -11,8 +11,10 @@
 
 const App = (function () {
   //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'this'," else App() function
-  var iifeapp = (z) =>
-      function (construction = arguments[0], keys = arguments[1]) {
+  class iifeapp {
+    constructor() {
+      const z = arguments[0];
+      return function (construction = arguments[0], keys = arguments[1]) {
         const buff = construction.constructor === Array ? 0 : 1;
         construction =
           construction.constructor === Array ? () => {} : construction;
@@ -24,9 +26,11 @@ const App = (function () {
               ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i + buff])
               : (z[x] = arguments[i + buff])
           );
-      }, //this(and arguments) should relate to wherever function runs (fat has no 'this', iife can to append this[key])
-    //const iifefunc = (construction, keys) => new iifeapp(construction, keys); //you can tell this is a [proper-]function[-invocation] with thiscontext here for iifeapp
-    /**
+      };
+    }
+  } //this(and arguments) should relate to wherever function runs (fat has no 'this', iife can to append this[key])
+  //const iifefunc = (construction, keys) => new iifeapp(construction, keys); //you can tell this is a [proper-]function[-invocation] with thiscontext here for iifeapp
+  /**
     * 
           iifefunc(
             ((z) => {
@@ -41,7 +45,19 @@ const App = (function () {
           );
     * 
     */
-    Ar = "[object Array]",
+  var ctxs = {},
+    REQUIREJS,
+    define,
+    require,
+    timeout = typeof setTimeout === "undefined" ? undefined : setTimeout,
+    interscrpt,
+    scriptPends,
+    defineables = [],
+    configuration = {},
+    useInteractive = false,
+    ctx,
+    module = {}; //"this";
+  const Ar = "[object Array]",
     Fn = "[object Function]",
     _K = Object.keys,
     _S = Object.prototype.toString,
@@ -51,6 +67,7 @@ const App = (function () {
     _AE = "attachEvent",
     _AEL = "addEventListener",
     ctxReqProps = ["toUrl", "undef", "this.defined", "specified"],
+    version = "2.3.6.carducci",
     isBrowser = !!(
       typeof window !== "undefined" &&
       typeof navigator !== "undefined" &&
@@ -66,77 +83,64 @@ const App = (function () {
     //Oh the tragedy, detecting opera. See the usage of isOpera for reason.
     isOpera =
       typeof opera !== "undefined" && opera.toString() === "[object Opera]",
-    ctxs = {},
     createElement = (ns) =>
       document[`createElementNS${ns ? "NS" : ""}`](
         ns ? ("http://www.w3.org/1999/xhtml", "html:script") : "script"
       ),
-    REQUIREJS,
-    define,
-    require,
-    timeout = typeof setTimeout === "undefined" ? undefined : setTimeout,
-    interscrpt,
-    scriptPends,
-    defineables = [],
-    version = "2.3.6.carducci",
-    configuration = {},
-    useInteractive = false,
-    ctx,
     ga = "getAttribute",
-    module = {}; //"this";
-  /*
-  e_
-  mixin
-  BINDABLES.mk
-  concat
+    /*
+    e_
+    mixin
+    BINDABLES.mk
+    concat
 
-  require=(dep,to)=>{
-    define
-    configuration(config?!require,req)
-    convertName
-    rmvScript
-    hasPathFallback
-    parseName
-    normalize
-    module
-    Module
-    req
-    obj
+    require=(dep,to)=>{
+      define
+      configuration(config?!require,req)
+      convertName
+      rmvScript
+      hasPathFallback
+      parseName
+      normalize
+      module
+      Module
+      req
+      obj
 
-    require=req
-    newContext = {
-      CONTEXT:{CG}
-      this.dependencies
-      makeModuleMap
-      getModule
-      on
-      onError
-      handlers
-      clrRegstr
-      checkLoaded
-      init
-      normalizeMod
-      Module[_P]={init,defineDep,fetch,load,check,callPlugin,enable,on,emit}
-      callGetModule
-      getScriptData
-      tkeGblQue
-      evt
-      CONTEXT:{…initial:{CG}}
-      CONTEXT.require = CONTEXT.makeRequire()
-      return CONTEXT
+      require=req
+      newContext = {
+        CONTEXT:{CG}
+        this.dependencies
+        makeModuleMap
+        getModule
+        on
+        onError
+        handlers
+        clrRegstr
+        checkLoaded
+        init
+        normalizeMod
+        Module[_P]={init,defineDep,fetch,load,check,callPlugin,enable,on,emit}
+        callGetModule
+        getScriptData
+        tkeGblQue
+        evt
+        CONTEXT:{…initial:{CG}}
+        CONTEXT.require = CONTEXT.makeRequire()
+        return CONTEXT
+      }
+      
+      s = req.s
+      req({})
+      ctxReqProps
+      head
+      onError,createNode,load
+      exec 
+      req()
     }
-    
-    s = req.s
-    req({})
-    ctxReqProps
-    head
-    onError,createNode,load
-    exec 
-    req()
-  }
-  */
+    */
 
-  const e_ = (obj /*,string*/) => {
+    e_ = (obj /*,string*/) => {
       const n = (NS) =>
         NS.constructor === "String" && NS.toUpperCase() === "NS";
       //prettier-ignore
@@ -174,7 +178,7 @@ const App = (function () {
     _x = "exports",
     _m = "module",
     _o = "onError",
-    _dd = "this.defined",
+    _dd = "defined",
     _dg = "defining",
     _ed = "enabled",
     _e = "error",
@@ -354,7 +358,8 @@ const App = (function () {
   //module named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
 
   require = (function () {
-    const dependency = arguments[0],
+    const z = arguments[0],
+      dependency = arguments[1],
       setTimeout = arguments[1],
       { dr, normalize, hasPathFallback, rmvScrpt, Module } = BINDABLES;
 
@@ -374,34 +379,33 @@ const App = (function () {
     //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
 
     var req = (REQUIREJS = function () {
-      var ds = arguments[0],
-        cb = arguments[1],
-        eb = arguments[2],
-        optional = arguments[3],
-        ctx,
-        cfg,
-        ctn = us; //Caja compliant req for minified-scope name of dependency, cb for arr completion Find the right CONTEXT, use default
-      if (!e_(ds).string() === Ar && typeof ds !== _t) {
-        cfg = ds;
-        return !e_(cb).a()
-          ? (ds = [])
-          : new iifeapp(["ds", "cb", "eb"], cb, eb, optional)(this);
-      } // Determine if have CG object in the call. ds is a CG object Adjust args if there are this.dependencies
-      if (cfg && cfg.context) ctn = cfg.context;
-      ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
-      if (!ctx) ctx = ctxs[ctn] = req.s.newContext(ctn);
-      if (cfg) ctx.configure(cfg);
-      return ctx.require(ds, cb, eb);
-    });
-
-    const obj = {
-      CG: (cfg) => req(cfg),
-      nextTick: (fn) => (typeof setTimeout !== _n ? setTimeout(fn, 4) : fn())
-    }; // globally agreed names for other potential AMD loaders
+        var ds = arguments[0],
+          cb = arguments[1],
+          eb = arguments[2],
+          optional = arguments[3],
+          ctx,
+          cfg,
+          ctn = us; //Caja compliant req for minified-scope name of dependency, cb for arr completion Find the right CONTEXT, use default
+        if (!e_(ds).string() === Ar && typeof ds !== _t) {
+          cfg = ds;
+          return !e_(cb).a()
+            ? (ds = [])
+            : new iifeapp(["ds", "cb", "eb"], cb, eb, optional)(this);
+        } // Determine if have CG object in the call. ds is a CG object Adjust args if there are this.dependencies
+        ctn = cfg && cfg.context ? cfg.context : ctn;
+        ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
+        ctx = ctx ? ctx : (ctxs[ctn] = req.s.newContext(ctn));
+        cfg && ctx.configure(cfg);
+        return ctx.require(ds, cb, eb);
+      }),
+      obj = {
+        CG: (cfg) => req(cfg),
+        nextTick: (fn) => (typeof setTimeout !== _n ? setTimeout(fn, 4) : fn())
+      }; // globally agreed names for other potential AMD loaders
 
     _K(obj).forEach((key) => (req.key = obj[key]));
     if (!require) require = req; //Exportable require
-    ["version", "isBrowser"].forEach((k) => (req[k] = this[k]));
+    ["version", "isBrowser"].forEach((k) => (req[k] = z[k]));
     var dataMain, baseElement, mainScript, subPath, src, head;
     class newContext {
       constructor() {
@@ -1269,7 +1273,7 @@ const App = (function () {
 
     //Set up with CG info.
     req(configuration);
-  })(require, timeout);
+  })(this, require, timeout);
   return { require, define: define };
 })();
 
