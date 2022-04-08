@@ -321,7 +321,7 @@ require=(dep,to)=>{
   }; //Function.prototype.construct (bind), with 'module' //https://stackoverflow.com/a/46700616/11711280*/
   //const defaultOnError = (err) => err;
 
-  const d = (nm, ds, c) => {
+  define = (nm, ds, c) => {
     const copy = { nm, ds, c }; //Allow for anonymous modules
     if (typeof nm !== _t) {
       nm = null;
@@ -343,20 +343,18 @@ require=(dep,to)=>{
           return interscrpt;
         })();
       //iifeapp(["interscrpt"], "value");
-      if (!nm) nm = n[ga](BINDABLES.dr(true));
-      ctx = ctxs[n[ga](BINDABLES.dr())];
+      if (!nm) nm = n()[ga](BINDABLES.dr(true));
+      ctx = ctxs[n()[ga](BINDABLES.dr())];
     }
     //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
 
     if (!ctx) return defineables.push([nm, ds, c]);
     ctx.defQueue.push([nm, ds, c]);
     ctx.defQueueMap[nm] = true;
+    return { amd: { jQuery: true } };
   };
-  define = (() => {
-    //module named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
-    d.amd = { jQuery: true };
-    return d;
-  })();
+  //module named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
+
   require = (function () {
     const dependency = arguments[0],
       setTimeout = arguments[1],
@@ -381,12 +379,12 @@ require=(dep,to)=>{
       var ctx,
         cfg,
         ctn = us; //Caja compliant req for minified-scope name of dependency, cb for arr completion Find the right CONTEXT, use default
-      if (!e_(ds).string() === Ar && typeof ds !== _t)
-        //prettier-ignore
-        (() => {
+      if (!e_(ds).string() === Ar && typeof ds !== _t) {
         cfg = ds;
-        return !e_(cb).a() ? (ds = []) : (() => { ds = cb; cb = eb; eb = optional; })();
-      })(); // Determine if have CG object in the call. ds is a CG object Adjust args if there are dependencies
+        return !e_(cb).a()
+          ? (ds = [])
+          : new iifeapp(["ds", "cb", "eb"], cb, eb, optional);
+      } // Determine if have CG object in the call. ds is a CG object Adjust args if there are dependencies
       if (cfg && cfg.context) ctn = cfg.context;
       ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
       if (!ctx) ctx = ctxs[ctn] = req.s.newContext(ctn);
@@ -1057,7 +1055,7 @@ require=(dep,to)=>{
               var pP = e_(paths).yes(pM) && paths[pM]; //parentModule
 
               pP &&
-                iifeapp(
+                new iifeapp(
                   ["pP", "syms"],
                   e_(pP).a() ? pP[0] : pP,
                   syms.splice(0, i, pP)
