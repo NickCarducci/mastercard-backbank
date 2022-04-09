@@ -66,7 +66,7 @@ const App = (function () {
     _SA = "setAttribute",
     _AE = "attachEvent",
     _AEL = "addEventListener",
-    ctxReqProps = ["toUrl", "undef", "this.defined", "specified"],
+    ctxReqProps = ["toUrl", "undef", "defined", "specified"],
     version = "2.3.6.carducci",
     isBrowser = !!(
       typeof window !== "undefined" &&
@@ -716,7 +716,7 @@ const App = (function () {
             var expts = module[_x],
               factory = module.factory;
             module[_dg] = true; //no redundant require-define
-            if (module.depCount < 1 && !module.this.defined) {
+            if (module.depCount < 1 && !module.defined) {
               const isDefine = module.map.yesdef;
               if (e_(factory).string() === Fn) {
                 var err,
@@ -1062,8 +1062,8 @@ const App = (function () {
                 m.undefed = true;
                 ((z) => {
                   rmvScrpt(id, CONTEXT.ctn);
-                  delete z.this.defined[id];
-                  delete z.this.urlFchd[map.url];
+                  delete z.defined[id];
+                  delete z.urlFchd[map.url];
                   delete z.unDE[id];
                 })(this);
 
