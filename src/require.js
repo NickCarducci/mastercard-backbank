@@ -47,9 +47,7 @@ const App = (function () {
     */
   var ctxs = {},
     REQUIREJS,
-    define,
-    require,
-    timeout = typeof setTimeout === "undefined" ? undefined : setTimeout,
+    setTimeout = typeof setTimeout === "undefined" ? undefined : setTimeout,
     interscrpt,
     scriptPends,
     defineables = [],
@@ -96,7 +94,7 @@ const App = (function () {
 
     require=(dep,to)=>{
       define
-      configuration(config?!require,req)
+      configuration(config?!require,r)
       convertName
       rmvScript
       hasPathFallback
@@ -104,10 +102,10 @@ const App = (function () {
       normalize
       module
       Module
-      req
+      r
       obj
 
-      require=req
+      require=r
       newContext = {
         CONTEXT:{CG}
         this.dependencies
@@ -130,13 +128,13 @@ const App = (function () {
         return CONTEXT
       }
       
-      s = req.s
-      req({})
+      s = r.s
+      r({})
       ctxReqProps
       head
       onError,createNode,load
       exec 
-      req()
+      r()
     }
     */
 
@@ -315,966 +313,1066 @@ const App = (function () {
         };
         _K(obj).forEach((key) => (module.key = obj[key]));
       } //module.exports; module.factory; module.depMaps = [], module[_ed], module.fetched
-    };
-  /*const construct = (f, obj) =>
+    },
+    /*const construct = (f, obj) =>
   function () {
     //in original JQuery RequireJS, obj is this or module
     f.apply(obj, arguments);
   }; //Function.prototype.construct (bind), with 'module' //https://stackoverflow.com/a/46700616/11711280*/
-  //const defaultOnError = (err) => err;
+    //const defaultOnError = (err) => err;
 
-  define = (nm, ds, c) => {
-    const copy = { nm, ds, c }; //Allow for anonymous modules
-    if (typeof nm !== _t) {
-      nm = null;
-      ds = copy.nm;
-      c = copy.ds;
-    } else if (e_(ds).string() !== Ar) {
-      ds = null;
-      c = copy.ds;
-    }
-    if (!ds && e_(c).string() === Fn && c.length) ds = BINDABLES.concat(ds, c); // no deps nor name + cb is func => then CommonJS
-    if (useInteractive) {
-      const n =
-        scriptPends ||
-        (() => {
-          if (interscrpt && e_(interscrpt).interA()) return interscrpt;
-          // prettier-ignore
-          e_().tag().sort((a, b) => b - a)
+    define = (nm, ds, c) => {
+      const copy = { nm, ds, c }; //Allow for anonymous modules
+      if (typeof nm !== _t) {
+        nm = null;
+        ds = copy.nm;
+        c = copy.ds;
+      } else if (e_(ds).string() !== Ar) {
+        ds = null;
+        c = copy.ds;
+      }
+      if (!ds && e_(c).string() === Fn && c.length)
+        ds = BINDABLES.concat(ds, c); // no deps nor name + cb is func => then CommonJS
+      if (useInteractive) {
+        const n =
+          scriptPends ||
+          (() => {
+            if (interscrpt && e_(interscrpt).interA()) return interscrpt;
+            // prettier-ignore
+            e_().tag().sort((a, b) => b - a)
           .map((script) => e_(script).interA() && (interscrpt = script));
-          return interscrpt;
-        })();
-      //iifeapp(["interscrpt"], "value");
-      if (!nm) nm = n()[ga](BINDABLES.dr(true));
-      ctx = ctxs[n()[ga](BINDABLES.dr())];
-    }
-    //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
+            return interscrpt;
+          })();
+        //iifeapp(["interscrpt"], "value");
+        if (!nm) nm = n()[ga](BINDABLES.dr(true));
+        ctx = ctxs[n()[ga](BINDABLES.dr())];
+      }
+      //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
 
-    if (!ctx) return defineables.push([nm, ds, c]);
-    ctx.defQueue.push([nm, ds, c]);
-    ctx.defQueueMap[nm] = true;
-    return { amd: { jQuery: true } };
-  };
+      if (!ctx) return defineables.push([nm, ds, c]);
+      ctx.defQueue.push([nm, ds, c]);
+      ctx.defQueueMap[nm] = true;
+      return { amd: { jQuery: true } };
+    };
   //module named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
+  //uses 'this' as 'z', but when called () the function is returned,
+  var require = ((z) =>
+    function () {
+      const dependency = arguments[0],
+        { dr, normalize, hasPathFallback, rmvScrpt, Module } = BINDABLES;
 
-  require = (function () {
-    const z = arguments[0],
-      dependency = arguments[1],
-      setTimeout = arguments[1],
-      { dr, normalize, hasPathFallback, rmvScrpt, Module } = BINDABLES;
+      //Do not overwrite an existing REQUIREJS instance/ amd loader.
+      if (typeof define !== _n) return; // package-names, cb, returns a value to define the module of argument index[0]
 
-    //Do not overwrite an existing REQUIREJS instance/ amd loader.
-    if (typeof define !== _n) return; // package-names, cb, returns a value to define the module of argument index[0]
+      if (typeof REQUIREJS !== _u) {
+        if (e_(REQUIREJS).string() === Fn) return null;
+        configuration = REQUIREJS;
+        REQUIREJS = undefined;
+      }
+      if (typeof require !== _n && !e_(require).string() === Fn) {
+        configuration = require; //require is a CG object.
+        require = undefined;
+      }
 
-    if (typeof REQUIREJS !== _u) {
-      if (e_(REQUIREJS).string() === Fn) return null;
-      configuration = REQUIREJS;
-      REQUIREJS = undefined;
-    }
-    if (typeof require !== _n && !e_(require).string() === Fn) {
-      configuration = require; //require is a CG object.
-      require = undefined;
-    }
+      //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
 
-    //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
+      var obj = {
+          CG: (cfg) => r(cfg),
+          nextTick: (fn) =>
+            typeof setTimeout !== _n ? setTimeout(fn, 4) : fn()
+        }, // globally agreed names for other potential AMD loaders
+        r = (REQUIREJS = function () {
+          var ds = arguments[0],
+            cb = arguments[1],
+            eb = arguments[2],
+            optional = arguments[3],
+            ctx,
+            cfg,
+            ctn = us; //Caja compliant r for minified-scope name of dependency, cb for arr completion Find the right CONTEXT, use default
+          if (!e_(ds).string() === Ar && typeof ds !== _t) {
+            cfg = ds;
+            return !e_(cb).a()
+              ? (ds = [])
+              : new iifeapp(["ds", "cb", "eb"], cb, eb, optional)(this);
+          } // Determine if have CG object in the call. ds is a CG object Adjust args if there are this.dependencies
+          ctn = cfg && cfg.context ? cfg.context : ctn;
+          ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
+          ctx = ctx ? ctx : (ctxs[ctn] = r.s.newContext(ctn));
+          cfg && ctx.configure(cfg);
+          return ctx.require(ds, cb, eb);
+        });
 
-    var req = (REQUIREJS = function () {
-        var ds = arguments[0],
-          cb = arguments[1],
-          eb = arguments[2],
-          optional = arguments[3],
-          ctx,
-          cfg,
-          ctn = us; //Caja compliant req for minified-scope name of dependency, cb for arr completion Find the right CONTEXT, use default
-        if (!e_(ds).string() === Ar && typeof ds !== _t) {
-          cfg = ds;
-          return !e_(cb).a()
-            ? (ds = [])
-            : new iifeapp(["ds", "cb", "eb"], cb, eb, optional)(this);
-        } // Determine if have CG object in the call. ds is a CG object Adjust args if there are this.dependencies
-        ctn = cfg && cfg.context ? cfg.context : ctn;
-        ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
-        ctx = ctx ? ctx : (ctxs[ctn] = req.s.newContext(ctn));
-        cfg && ctx.configure(cfg);
-        return ctx.require(ds, cb, eb);
-      }),
-      obj = {
-        CG: (cfg) => req(cfg),
-        nextTick: (fn) => (typeof setTimeout !== _n ? setTimeout(fn, 4) : fn())
-      }; // globally agreed names for other potential AMD loaders
-
-    _K(obj).forEach((key) => (req.key = obj[key]));
-    if (!require) require = req; //Exportable require
-    ["version", "isBrowser"].forEach((k) => (req[k] = z[k]));
-    var dataMain, baseElement, mainScript, subPath, src, head;
-    class newContext {
-      constructor() {
-        const ctn = arguments[0];
-        var CONTEXT = {
-          CG: {
-            waitSeconds: 7,
-            baseUrl: "./",
-            ...["paths", "bundles", "pkgs", "shim", "config"].map((x) => {
-              return { [x]: {} };
-            })
-          }
-        };
-        var { CG } = CONTEXT,
-          defQueue = [],
-          rqrCnt = 1,
-          abnCnt = 1;
-        //prettier-ignore
-        [
+      _K(obj).forEach((key) => (r.key = obj[key]));
+      if (!require) require = r; //Exportable require
+      ["version", "isBrowser"].forEach((k) => (r[k] = z[k]));
+      const applycontext = () => {
+        var dataMain, baseElement, mainScript, subPath, src, head;
+        class newContext {
+          constructor() {
+            const ctn = arguments[0];
+            var CONTEXT = {
+                CG: {
+                  waitSeconds: 7,
+                  baseUrl: "./",
+                  ...["paths", "bundles", "pkgs", "shim", "config"].map((x) => {
+                    return { [x]: {} };
+                  })
+                }
+              },
+              { CG } = CONTEXT,
+              defQueue = [],
+              rqrCnt = 1,
+              abnCnt = 1;
+            //prettier-ignore
+            [
           "dependencies", "enRgtry", "unDE", "defined", "urlFchd", "bdlMap"
         ].forEach(k => this[k] = {}); //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
 
-        const BR = {
-          makeModuleMap: function () {
-            //n, sourcemap, isNormed, applyMap
-            var n = arguments[0],
-              sourcemap = arguments[1],
-              isNormed = arguments[2],
-              applyMap = arguments[3];
-            //prettier-ignore
-            var ptName = sourcemap ? sourcemap.name : null, gvnName = n, yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() module ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
-            if (!n) yesdef = false;
-            n = n ? n : "_@r" + (rqrCnt += 1); //internally-name a 'require' call, given no name
+            const BR = {
+              makeModuleMap: function () {
+                //n, sourcemap, isNormed, applyMap
+                var n = arguments[0],
+                  sourcemap = arguments[1],
+                  isNormed = arguments[2],
+                  applyMap = arguments[3];
+                //prettier-ignore
+                var ptName = sourcemap ? sourcemap.name : null, gvnName = n, yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() module ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
+                if (!n) yesdef = false;
+                n = n ? n : "_@r" + (rqrCnt += 1); //internally-name a 'require' call, given no name
 
-            const configGets = [CG.nodeIdCompat, CG.map, CG.pkgs],
-              splitPrefix = (i = (n) => n.indexOf("!")) =>
-                i > -1
-                  ? [n.substring(0, i), n.substring(i + 1, n.length)]
-                  : [n, ""];
-            //[plugin=undefined, resource={}] if the name without a plugin prefix.
-            var names = splitPrefix(n),
-              p = names[0],
-              pM,
-              url,
-              normed = "",
-              id,
-              suffix =
-                p && !pM && !isNormed ? "_unnormalized" + (abnCnt += 1) : ""; //If it may be a plugin id that doesn't normalization, stamp it with a unique ID
+                const configGets = [CG.nodeIdCompat, CG.map, CG.pkgs],
+                  splitPrefix = (i = (n) => n.indexOf("!")) =>
+                    i > -1
+                      ? [n.substring(0, i), n.substring(i + 1, n.length)]
+                      : [n, ""];
+                //[plugin=undefined, resource={}] if the name without a plugin prefix.
+                var names = splitPrefix(n),
+                  p = names[0],
+                  pM,
+                  url,
+                  normed = "",
+                  id,
+                  suffix =
+                    p && !pM && !isNormed
+                      ? "_unnormalized" + (abnCnt += 1)
+                      : ""; //If it may be a plugin id that doesn't normalization, stamp it with a unique ID
 
-            n = names[1];
-            if (n)
-              p
-                ? new iifeapp(
-                    ["normed", "id"],
-                    isNormed
-                      ? n
-                      : pM && pM.normalize
-                      ? //prettier-ignore
-                        pM.normalize(n, (n) => normalize(n, ptName, applyMap, ...configGets))
-                      : n.indexOf("!") === -1
-                      ? normalize(n, ptName, applyMap, ...configGets)
-                      : n,
-                    p + "!" + normed + suffix
-                  )(this)
-                : new iifeapp(
-                    ["normed", "names", "p", "normed", "isNormed", "url", "id"],
-                    normalize(n, ptName, applyMap, ...configGets),
-                    splitPrefix(normed),
-                    names[0],
-                    names[1],
-                    true,
-                    CONTEXT.nameToUrl(normed),
-                    normed + suffix
-                  )(this);
+                n = names[1];
+                if (n)
+                  p
+                    ? new iifeapp(
+                        ["normed", "id"],
+                        isNormed
+                          ? n
+                          : pM && pM.normalize
+                          ? //prettier-ignore
+                            pM.normalize(n, (n) => normalize(n, ptName, applyMap, ...configGets))
+                          : n.indexOf("!") === -1
+                          ? normalize(n, ptName, applyMap, ...configGets)
+                          : n,
+                        p + "!" + normed + suffix
+                      )(this)
+                    : new iifeapp(
+                        [
+                          "normed",
+                          "names",
+                          "p",
+                          "normed",
+                          "isNormed",
+                          "url",
+                          "id"
+                        ],
+                        normalize(n, ptName, applyMap, ...configGets),
+                        splitPrefix(normed),
+                        names[0],
+                        names[1],
+                        true,
+                        CONTEXT.nameToUrl(normed),
+                        normed + suffix
+                      )(this);
 
-            //do not normalize if nested plugin references; albeit module deprecates resourceIds,
-            //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
-            //ok base name, relative path?.normalize's 'map CG application' might make normalized 'name' a plugin ID.'map CG values' are already normalized at module point.
+                //do not normalize if nested plugin references; albeit module deprecates resourceIds,
+                //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
+                //ok base name, relative path?.normalize's 'map CG application' might make normalized 'name' a plugin ID.'map CG values' are already normalized at module point.
 
-            return {
-              prefix: p,
-              name: normed,
-              parentMap: sourcemap,
-              unnormalized: !!suffix,
-              url,
-              gvnName,
-              yesdef,
-              id
+                return {
+                  prefix: p,
+                  name: normed,
+                  parentMap: sourcemap,
+                  unnormalized: !!suffix,
+                  url,
+                  gvnName,
+                  yesdef,
+                  id
+                };
+              },
+              dp: function () {
+                return {
+                  depMap: arguments[0],
+                  m:
+                    e_(this.dependencies).yes(arguments[0].id) &&
+                    this.dependencies[arguments[0].id]
+                };
+              },
+              getModule: ({ m, depMap } = BR.dp) =>
+                //prettier-ignore
+                m ? m : (this.dependencies[depMap.id] = new CONTEXT.Module(depMap, this.unDE, CG.shim)),
+              on: ({ m, depMap } = BR.dp, name, f) => {
+                if (
+                  !e_(this.defined).yes(depMap.id) ||
+                  (m && !m.defineEmitComplete)
+                )
+                  return name === _dd && f(this.defined[depMap.id]);
+                m = BINDABLES.getModule(depMap);
+                if (m[_e] && name === _e) return f(m[_e]);
+                m["on"](name, f);
+              },
+              onError: (err = BINDABLES.mk, eb) => {
+                var moderr = false;
+                if (eb) return eb(err);
+                err.ids.forEach(
+                  (
+                    md = (
+                      errormodules = (err) =>
+                        e_(this.dependencies).yes(err) && this.dependencies[err]
+                    ) => {
+                      return {
+                        ...errormodules,
+                        error: err
+                      };
+                    }
+                  ) =>
+                    (moderr =
+                      md[_ev] && md[_ev][_e] && md[_em](_e, err) && true)
+                );
+                if (!moderr) r[_o](err);
+              }
             };
-          },
-          dp: function () {
-            return {
-              depMap: arguments[0],
-              m:
-                e_(this.dependencies).yes(arguments[0].id) &&
-                this.dependencies[arguments[0].id]
-            };
-          },
-          getModule: ({ m, depMap } = BR.dp) =>
-            //prettier-ignore
-            m ? m : (this.dependencies[depMap.id] = new CONTEXT.Module(depMap, this.unDE, CG.shim)),
-          on: ({ m, depMap } = BR.dp, name, f) => {
-            if (
-              !e_(this.defined).yes(depMap.id) ||
-              (m && !m.defineEmitComplete)
-            )
-              return name === _dd && f(this.defined[depMap.id]);
-            m = BINDABLES.getModule(depMap);
-            if (m[_e] && name === _e) return f(m[_e]);
-            m["on"](name, f);
-          },
-          onError: (err = BINDABLES.mk, eb) => {
-            var moderr = false;
-            if (eb) return eb(err);
-            err.ids.forEach(
-              (
-                md = (
-                  errormodules = (err) =>
-                    e_(this.dependencies).yes(err) && this.dependencies[err]
-                ) => {
-                  return {
-                    ...errormodules,
-                    error: err
-                  };
-                }
-              ) => (moderr = md[_ev] && md[_ev][_e] && md[_em](_e, err) && true)
-            );
-            if (!moderr) req[_o](err);
-          }
-        };
-        var handlers = {
-            require: (m) =>
-              !m.require ? (m.require = CONTEXT.makeRequire(m.map)) : m.require,
-            exports: (m) => {
-              //prettier-ignore
-              m.usingExports = true;
-              if (!m.map.yesdef) return null;
-              if (!m[_x]) return (m[_x] = this.defined[m.map.id] = {});
-              return (this.defined[m.map.id] = m[_x]);
-            },
-            module:
-              //prettier-ignore
-              (m) => (m[_m] = !m[_m] ? {
+            var handlers = {
+                require: (m) =>
+                  !m.require
+                    ? (m.require = CONTEXT.makeRequire(m.map))
+                    : m.require,
+                exports: (m) => {
+                  //prettier-ignore
+                  m.usingExports = true;
+                  if (!m.map.yesdef) return null;
+                  if (!m[_x]) return (m[_x] = this.defined[m.map.id] = {});
+                  return (this.defined[m.map.id] = m[_x]);
+                },
+                module:
+                  //prettier-ignore
+                  (m) => (m[_m] = !m[_m] ? {
               id: m.map.id, uri: m.map.url, config: () => e_(CG.config).yes(m.map.id)
                 ? CG.config[m.map.id] : {}, exports: m[_x] || (m[_x] = {})
             } : m[_m])
-          },
-          clrsec,
-          watch;
-        //prettier-ignore
-        const clrRegstr = (id) => { delete this.dependencies[id]; delete this.enRgtry[id]; },
-         { mixin } = BINDABLES,
-         { makeModuleMap, on, onError, getModule } = BR,
-         BM = {
-          checkLoaded: () => {
-            var err,
-              fb,
-              hs = [],
-              reqCalls = [],
-              wait = false,
-              another = true,
-              sec = CG.waitSeconds * 1000,
-              halt = sec && CONTEXT.startTime + sec < new Date().getTime(); //It is possible to disable the wait interval by using waitSeconds of 0.
+              },
+              clrsec,
+              watch;
+            const clrRegstr = (id) => {
+                delete this.dependencies[id];
+                delete this.enRgtry[id];
+              },
+              { makeModuleMap, on, onError, getModule } = BR,
+              BM = {
+                checkLoaded: () => {
+                  var err,
+                    fb,
+                    hs = [],
+                    reqCalls = [],
+                    wait = false,
+                    another = true,
+                    sec = CG.waitSeconds * 1000,
+                    halt =
+                      sec && CONTEXT.startTime + sec < new Date().getTime(); //It is possible to disable the wait interval by using waitSeconds of 0.
 
-            // waitInterval - Do not bother if module call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
-            if (watch) return null;
-            const mx = (m) => ({ m, s: m.depMaps, i: m.map.id });
-            const progress = ({ m, s, i } = mx, t = {}, p = {}) => {
-              t[i] = true;
-              s.forEach((i = (d) => d.id, ix) => {
-                var dep = e_(this.dependencies).yes(i) && this.dependencies[i]; // depMap force undefined (registered yet not matched in module)
-                const c = dep && !m.depMatched[ix] && !p[i];
-                // prettier-ignore
-                if (c && (!e_(t).yes(i) || !t[i]))
+                  // waitInterval - Do not bother if module call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
+                  if (watch) return null;
+                  const mx = (m) => ({ m, s: m.depMaps, i: m.map.id });
+                  const progress = ({ m, s, i } = mx, t = {}, p = {}) => {
+                    t[i] = true;
+                    s.forEach((i = (d) => d.id, ix) => {
+                      var dep =
+                        e_(this.dependencies).yes(i) && this.dependencies[i]; // depMap force undefined (registered yet not matched in module)
+                      const c = dep && !m.depMatched[ix] && !p[i];
+                      // prettier-ignore
+                      if (c && (!e_(t).yes(i) || !t[i]))
                   return progress(dep, t, p);
-                // prettier-ignore
-                c && m.defineDep(ix, this.defined[i]);
-                c && m.check(); //pass false?
-              });
-              p[i] = true;
-            };
-            const brwr = isBrowser || isWebWorker;
-            watch = true;
-            const er = _e,
-              mxx = (mod = (x) => this.enRgtry[x]) => {
-                const {
-                  yesdef,
-                  fetched,
-                  prefix,
-                  error,
-                  enabled,
-                  inited
-                } = mod.map;
-                if (enabled && !yesdef) reqCalls.push(mod);
-                mod.noCyc = fetched && yesdef && !prefix;
-                return !inited && enabled && !error ? mod : {};
-              };
-            _K(this.enRgtry).forEach(({ id, noCyc } = mxx, i) =>
-              id && halt && !hasPathFallback(id, CG.paths)
-                ? rmvScrpt(id, CONTEXT.ctn) && hs.push(id)
-                : id &&
-                  new iifeapp(
-                    ["fb", "wait", "another"],
-                    halt && true,
-                    true,
-                    !halt && noCyc ? false : another
-                  )(this)
-            ); //non-plugin-resource; Figure out the state of all the modules.//disabled or in error
-            if (halt && hs.length) {
-              // prettier-ignore
-              err = BINDABLES.mk(["timeout", "Load timeout for modules: " + hs, null, hs]); //type, msg, err, requireModules
-              err.ctn = CONTEXT.ctn;
-              return onError(err); //If wait time expired, throw error of unloaded modules.
-            } else
-              new iifeapp(
-                (z) =>
-                  another &&
-                  reqCalls.forEach((m) =>
-                    z[m][er] ? z[m][_em](er, z[m][er]) : progress(z[m])
-                  )(this),
-                ["watch", "clrsec"],
-                false,
-                (!halt || fb) &&
-                  wait &&
-                  brwr &&
-                  !clrsec &&
-                  setTimeout(
-                    () => BM.checkLoaded() && null,
-                    50
-                  ) /*plugin-resource*/
-              )(this);
-          },
-          //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same module
-          init: (depMaps, factory, eb, o = (o) => o || {}) => {
-            // prettier-ignore
-            if (module["inited"])
-              return null;
-            module["factory"] = factory; //Register for errors on module module.
-            if (eb) {
-              module.on(_e, eb); //If no eb already, but there are error listeners
+                      // prettier-ignore
+                      c && m.defineDep(ix, this.defined[i]);
+                      c && m.check(); //pass false?
+                    });
+                    p[i] = true;
+                  };
+                  const brwr = isBrowser || isWebWorker;
+                  watch = true;
+                  const er = _e,
+                    mxx = (mod = (x) => this.enRgtry[x]) => {
+                      const {
+                        yesdef,
+                        fetched,
+                        prefix,
+                        error,
+                        enabled,
+                        inited
+                      } = mod.map;
+                      if (enabled && !yesdef) reqCalls.push(mod);
+                      mod.noCyc = fetched && yesdef && !prefix;
+                      return !inited && enabled && !error ? mod : {};
+                    }; //no keys, -fails
+                  _K(this.enRgtry).forEach(({ id, noCyc } = mxx, i) =>
+                    id && halt && !hasPathFallback(id, CG.paths)
+                      ? rmvScrpt(id, CONTEXT.ctn) && hs.push(id)
+                      : id &&
+                        new iifeapp(
+                          ["fb", "wait", "another"],
+                          halt && true,
+                          true,
+                          !halt && noCyc ? false : another
+                        )(this)
+                  ); //non-plugin-resource; Figure out the state of all the modules.//disabled or in error
+                  if (halt && hs.length) {
+                    // prettier-ignore
+                    err = BINDABLES.mk(["setTimeout", "Load setTimeout for modules: " + hs, null, hs]); //type, msg, err, requireModules
+                    err.ctn = CONTEXT.ctn;
+                    return onError(err); //If wait time expired, throw error of unloaded modules.
+                  } else
+                    return new iifeapp(
+                      (z) =>
+                        another &&
+                        reqCalls.forEach((m) =>
+                          z[m][er] ? z[m][_em](er, z[m][er]) : progress(z[m])
+                        )(this), //construction
+                      ["watch", "clrsec"], //keys,...values
+                      false,
+                      (!halt || fb) &&
+                        wait &&
+                        brwr &&
+                        !clrsec &&
+                        setTimeout(
+                          () => BM.checkLoaded() && null,
+                          50
+                        ) /*plugin-resource*/
+                    )(this); //args'-mutable iife=>"app"
+                },
+                //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same module
+                init: (depMaps, factory, eb, o = (o) => o || {}) => {
+                  if (module["inited"]) return null;
+                  module["factory"] = factory; //Register for errors on module module.
+                  if (eb) {
+                    module.on(_e, eb); //If no eb already, but there are error listeners
+                  } else if (module.events[_e])
+                    eb = (err) => module.emit(_e, err); //construct((err) => module.emit(_e, err), module); //on module module, set up an eb to pass to the ds.
+                  const obj = {
+                    depMaps: depMaps && depMaps.slice(0),
+                    eb,
+                    inited: true,
+                    ignore: o.ignore
+                  }; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
+                  _K(obj).forEach((key) => (module[key] = obj[key]));
+                  if (o[_ed] || module[_ed]) return module.enable();
+                  module.check();
+                },
 
-              // prettier-ignore
-            } else if (module.events[_e]) eb = (err) => module.emit(_e, err); //construct((err) => module.emit(_e, err), module); //on module module, set up an eb to pass to the ds.
-
-            // prettier-ignore
-            const obj = { depMaps: depMaps && depMaps.slice(0), eb, inited: true, ignore: o.ignore }; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
-            _K(obj).forEach((key) => (module[key] = obj[key]));
-            if (o[_ed] || module[_ed]) return module.enable();
-            module.check();
-          },
-
-          normalizeMod: (plugin, mp) => {
-            var { name, parentMap: pM } = module.map; //Normalize the ID if the plugin allows it.
-            const { nodeIdCompat, map, pkgs } = CG;
-            // prettier-ignore
-            const namer = (name) => [name, pM ? pM.name : null, true, nodeIdCompat, map, pkgs]; //ptName
-            if (plugin.normalize)
-              name =
-                plugin.normalize(name, (args = namer) => normalize(args)) || ""; //prefix and name should already be normalized, no need
-            var nM = makeModuleMap(mp.prefix + "!" + name, pM, true); //normalizedMap -for applying map CG again either.
-            on(nM, _dd, (d) => {
-              module.map.normalizedMap = nM;
-              module[_i]([], () => d, null, { enabled: true, ignore: true });
-            }); //construct
-            var normMod =
-              e_(this.dependencies).yes(nM.id) && this.dependencies[nM.id]; //normalizedMod
-            if (normMod) {
-              module["depMaps"].push(nM);
-              if (module.events[_e])
-                normMod.on(_e, (err) => module.emit(_e, err)); //Mark module as a dependency for module plugin, so it can be traced for cycles.
-              normMod.enable();
-            }
-          }
-        };
-        Module[_P] = {
-          init: BM[_i],
-          defineDep: (i, depExports) => {
-            if (!module.depMatched[i]) {
-              module.depMatched[i] = true; //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-              module.depCount -= 1; //prototype is hydratable for async results, init only on module page by 'new' initialization
-              module.depExports[i] = depExports; //multiple cb export cycles
-            }
-          },
-          fetch: () => {
-            if (module.fetched) return null;
-            module.fetched = true;
-            CONTEXT.startTime = new Date().getTime();
-            var map = module.map;
-            if (module.shim) {
-              CONTEXT.makeRequire(module.map, { enableBuildCallback: true })(
-                module.shim.ds || [],
-                map.prefix ? module.callPlugin() : module.load()
-              ); //plugin-managed resource
-            } else return map.prefix ? module.callPlugin() : module.load();
-          },
-          load: () => {
-            if (!this.urlFchd[module.map.url]) {
-              this.urlFchd[module.map.url] = true;
-              CONTEXT.load(module.map.id, module.map.url);
-            }
-          },
-          check: function () {
-            if (!module[_ed] || module.enabling) return null;
-            var id = module.map.id;
-            if (!module["inited"])
-              return !e_(CONTEXT.defQueueMap).yes(id) && module.fetch();
-            if (module[_dg]) return module[_e] && module.emit(_e, module[_e]); // !defQueue.includes(module) module is ready to, and does, define itself
-            var expts = module[_x],
-              factory = module.factory;
-            module[_dg] = true; //no redundant require-define
-            if (module.depCount < 1 && !module.defined) {
-              const isDefine = module.map.yesdef;
-              if (e_(factory).string() === Fn) {
-                var err,
-                  cjs,
-                  depExpo = module.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
-
-                if (
-                  (module.events[_e] && isDefine) ||
-                  req[_o] !== ((err) => err)
-                ) {
+                normalizeMod: (plugin, mp) => {
+                  var { name, parentMap: pM } = module.map; //Normalize the ID if the plugin allows it.
+                  const { nodeIdCompat, map, pkgs } = CG;
                   // prettier-ignore
-                  try { expts = CONTEXT.execCb(id, factory, depExpo, expts); } catch (e) { err = e; } //factory.apply(exports, depExports),
-                } else expts = CONTEXT.execCb(id, factory, depExpo, expts);
-                if (isDefine && expts === undefined) {
-                  cjs = module[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
-                  if (cjs) {
-                    expts = cjs[_x];
-                  } else if (module.usingExports) expts = module[_x];
-                } // module.exports assignment over exports object. exports already set the this.defined value.
-
-                err &&
-                  // new iifeapp(
-                  ((
-                    z,
-                    obj = {
-                      requireMap: module.map,
-                      requireModules: isDefine ? [module.map.id] : null,
-                      requireType: isDefine ? "define" : _r
-                    }
-                  ) => {
-                    _K(obj).forEach((key) => (z.err[key] = obj[key]));
-                    return onError((module[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
-                  })(this); //if there were more solutions to be made, so is redundant here, actually
-
-                //);
-              } else expts = factory;
-
-              module[_x] = expts;
-              if (isDefine && !module.ignore) {
-                this.defined[id] = expts;
-                if (req.onResourceLoad)
-                  // prettier-ignore
-                  req.onResourceLoad(CONTEXT, module.map, module["depMaps"].map((depMap) => depMap.normalizedMap || depMap));
-              }
-              clrRegstr(id);
-              module[_dd] = true;
-            }
-            module[_dg] = false; //Finished definition, so allow call-check again for 'define' notifications, by cycle.
-
-            // prettier-ignore
-            if (module[_dd] && !module.defineEmitted) { module["defineEmitted"] = true; module.emit(_dd, module[_x]); module["defineEmitComplete"] = true; }
-          },
-          callPlugin: () => {
-            var map = module.map; //Map already normalized the prefix.
-            var id = map.id; //Mark module as a dependency for module plugin, so it
-            var pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
-            module.depMaps.push(pluginMap);
-            on(pluginMap, _dd, (plugin) => {
-              if (module.map.unnormalized) return BM.normalizeMod(plugin, map); //If current map is not normalized, wait for that
-              var bundleId =
-                e_(this.bdlMap).yes(module.map.id) &&
-                this.bdlMap[module.map.id]; //normalized name to load instead of continuing.
-
-              // prettier-ignore
-              if (bundleId) { module.map.url = CONTEXT.nameToUrl(bundleId); module.load(); return null; } //If a paths CG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
-              const load = (factory) =>
-                module[_i]([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
-              load[_e] = (err) => {
-                module["inited"] = true;
-                module[_e] = err;
-                err.requireModules = [id];
-                _K(this.dependencies).forEach(
-                  (x, i) =>
-                    this.dependencies[x].map.id.indexOf(
-                      id + "_unnormalized"
-                    ) === 0 && clrRegstr(this.dependencies[x].map.id)
-                );
-                onError(err);
-              }; //Remove temp unnormalized modules for module module, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
-              const localRequire = CONTEXT.makeRequire(map.parentMap, {
-                enableBuildCallback: true
-              }); //CONTEXT or how to 'complete' the load.
-
-              load.fromText = (text, textAlt) => {
-                /*jslint evil: true */
-                var tkn = map.name,
-                  moduleMap = makeModuleMap(tkn),
-                  hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass tkn, ok, but discard tkn for internal ref.
-                if (textAlt) text = textAlt;
-                if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
-                getModule(moduleMap); //Prime the system by creating a module instance for
-                if (e_(CG.config).yes(id)) CG.config[tkn] = CG.config[id]; //Transfer any CG to module other module.
-                try {
-                  req.exec(text);
-                } catch (e) {
-                  return onError(
-                    BINDABLES.mk([
-                      "fromtexteval",
-                      `fromText eval for ${id} failed: ${e}`,
-                      e,
-                      [id]
-                    ])
-                  );
-                } //type, msg, err, requireModules
-                if (hasInteractive) useInteractive = true; //Mark module as a dependency for the plugin resource
-                module.depMaps.push(moduleMap);
-                CONTEXT.completeLoad(tkn);
-                localRequire([tkn], load); //Support anonymous modules. Bind the value of that module to the value for module resource ID.
+                  const namer = (name) => [name, pM ? pM.name : null, true, nodeIdCompat, map, pkgs]; //ptName
+                  if (plugin.normalize)
+                    name =
+                      plugin.normalize(name, (args = namer) =>
+                        normalize(args)
+                      ) || ""; //prefix and name should already be normalized, no need
+                  var nM = makeModuleMap(mp.prefix + "!" + name, pM, true); //normalizedMap -for applying map CG again either.
+                  on(nM, _dd, (d) => {
+                    module.map.normalizedMap = nM;
+                    module[_i]([], () => d, null, {
+                      enabled: true,
+                      ignore: true
+                    });
+                  }); //construct
+                  var normMod =
+                    e_(this.dependencies).yes(nM.id) &&
+                    this.dependencies[nM.id]; //normalizedMod
+                  if (normMod) {
+                    module["depMaps"].push(nM);
+                    if (module.events[_e])
+                      normMod.on(_e, (err) => module.emit(_e, err)); //Mark module as a dependency for module plugin, so it can be traced for cycles.
+                    normMod.enable();
+                  }
+                }
               };
-              plugin.load(map.name, localRequire, load, CG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
-            });
-            CONTEXT.enable(pluginMap, module);
-            module.pluginMaps[pluginMap.id] = pluginMap;
-          },
-          enable: () => {
-            this.enRgtry[module.map.id] = module;
-            module[_ed] = true;
-            module.enabling = true; //no inadvertent load and 0 depCount by
+            Module[_P] = {
+              init: BM[_i],
+              defineDep: (i, depExports) => {
+                if (!module.depMatched[i]) {
+                  module.depMatched[i] = true; //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
+                  module.depCount -= 1; //prototype is hydratable for async results, init only on module page by 'new' initialization
+                  module.depExports[i] = depExports; //multiple cb export cycles
+                }
+              },
+              fetch: () => {
+                if (module.fetched) return null;
+                module.fetched = true;
+                CONTEXT.startTime = new Date().getTime();
+                var map = module.map;
+                if (module.shim) {
+                  CONTEXT.makeRequire(module.map, {
+                    enableBuildCallback: true
+                  })(
+                    module.shim.ds || [],
+                    map.prefix ? module.callPlugin() : module.load()
+                  ); //plugin-managed resource
+                } else return map.prefix ? module.callPlugin() : module.load();
+              },
+              load: () => {
+                if (!this.urlFchd[module.map.url]) {
+                  this.urlFchd[module.map.url] = true;
+                  CONTEXT.load(module.map.id, module.map.url);
+                }
+              },
+              check: function () {
+                if (!module[_ed] || module.enabling) return null;
+                var id = module.map.id;
+                if (!module["inited"])
+                  return !e_(CONTEXT.defQueueMap).yes(id) && module.fetch();
+                if (module[_dg])
+                  return module[_e] && module.emit(_e, module[_e]); // !defQueue.includes(module) module is ready to, and does, define itself
+                var expts = module[_x],
+                  factory = module.factory;
+                module[_dg] = true; //no redundant require-define
+                if (module.depCount < 1 && !module.defined) {
+                  const isDefine = module.map.yesdef;
+                  if (e_(factory).string() === Fn) {
+                    var err,
+                      cjs,
+                      depExpo = module.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
 
-            //immediate calls to the this.defined callbacks for this.dependencies. Enable mapFunction 1,dependency
-            module.depMaps.forEach((depMap, i) => {
-              if (typeof depMap === _t) {
-                // prettier-ignore
-                const mp = module.map.yesdef ? module.map : module.map.parentMap;
-                depMap = makeModuleMap(depMap, mp, false, !module.skipMap); //Dependency needs to be converted to a depMap
-                module.depMaps[i] = depMap; //and wired up to module module.
-                var handler =
-                  e_(handlers).yes(depMap.id) && handlers[depMap.id];
-                if (handler) return (module.depExports[i] = handler(module));
-                module["depCount"] += 1;
-                // prettier-ignore
-                on(depMap, _dd, (depExports) => {
-                  if (module.undefed)
-                    return null; module.defineDep(i, depExports); module.check();
+                    if (
+                      (module.events[_e] && isDefine) ||
+                      r[_o] !== ((err) => err)
+                    ) {
+                      // prettier-ignore
+                      try { expts = CONTEXT.execCb(id, factory, depExpo, expts); } catch (e) { err = e; } //factory.apply(exports, depExports),
+                    } else expts = CONTEXT.execCb(id, factory, depExpo, expts);
+                    if (isDefine && expts === undefined) {
+                      cjs = module[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
+                      if (cjs) {
+                        expts = cjs[_x];
+                      } else if (module.usingExports) expts = module[_x];
+                    } // module.exports assignment over exports object. exports already set the this.defined value.
+
+                    err &&
+                      // new iifeapp(
+                      ((
+                        z,
+                        obj = {
+                          requireMap: module.map,
+                          requireModules: isDefine ? [module.map.id] : null,
+                          requireType: isDefine ? "define" : _r
+                        }
+                      ) => {
+                        _K(obj).forEach((key) => (z.err[key] = obj[key]));
+                        return onError((module[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
+                      })(this); //if there were more solutions to be made, so is redundant here, actually
+                    //);
+                  } else expts = factory;
+
+                  module[_x] = expts;
+                  if (isDefine && !module.ignore) {
+                    this.defined[id] = expts;
+                    if (r.onResourceLoad)
+                      r.onResourceLoad(
+                        CONTEXT,
+                        module.map,
+                        module["depMaps"].map(
+                          (depMap) => depMap.normalizedMap || depMap
+                        )
+                      );
+                  }
+                  clrRegstr(id);
+                  module[_dd] = true;
+                }
+                module[_dg] = false; //Finished definition, so allow call-check again for 'define' notifications, by cycle.
+                if (module[_dd] && !module.defineEmitted) {
+                  module["defineEmitted"] = true;
+                  module.emit(_dd, module[_x]);
+                  module["defineEmitComplete"] = true;
+                }
+              },
+              callPlugin: () => {
+                var map = module.map; //Map already normalized the prefix.
+                var id = map.id; //Mark module as a dependency for module plugin, so it
+                var pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
+                module.depMaps.push(pluginMap);
+                on(pluginMap, _dd, (plugin) => {
+                  if (module.map.unnormalized)
+                    return BM.normalizeMod(plugin, map); //If current map is not normalized, wait for that
+                  var bundleId =
+                    e_(this.bdlMap).yes(module.map.id) &&
+                    this.bdlMap[module.map.id]; //normalized name to load instead of continuing.
+                  if (bundleId) {
+                    module.map.url = CONTEXT.nameToUrl(bundleId);
+                    module.load();
+                    return null;
+                  } //If a paths CG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
+                  const load = (factory) =>
+                    module[_i]([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
+                  load[_e] = (err) => {
+                    module["inited"] = true;
+                    module[_e] = err;
+                    err.requireModules = [id];
+                    _K(this.dependencies).forEach(
+                      (x, i) =>
+                        this.dependencies[x].map.id.indexOf(
+                          id + "_unnormalized"
+                        ) === 0 && clrRegstr(this.dependencies[x].map.id)
+                    );
+                    onError(err);
+                  }; //Remove temp unnormalized modules for module module, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
+                  const localRequire = CONTEXT.makeRequire(map.parentMap, {
+                    enableBuildCallback: true
+                  }); //CONTEXT or how to 'complete' the load.
+
+                  load.fromText = (text, textAlt) => {
+                    /*jslint evil: true */
+                    var tkn = map.name,
+                      moduleMap = makeModuleMap(tkn),
+                      hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass tkn, ok, but discard tkn for internal ref.
+                    if (textAlt) text = textAlt;
+                    if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
+                    getModule(moduleMap); //Prime the system by creating a module instance for
+                    if (e_(CG.config).yes(id)) CG.config[tkn] = CG.config[id]; //Transfer any CG to module other module.
+                    try {
+                      r.exec(text);
+                    } catch (e) {
+                      return onError(
+                        BINDABLES.mk([
+                          "fromtexteval",
+                          `fromText eval for ${id} failed: ${e}`,
+                          e,
+                          [id]
+                        ])
+                      );
+                    } //type, msg, err, requireModules
+                    if (hasInteractive) useInteractive = true; //Mark module as a dependency for the plugin resource
+                    module.depMaps.push(moduleMap);
+                    CONTEXT.completeLoad(tkn);
+                    localRequire([tkn], load); //Support anonymous modules. Bind the value of that module to the value for module resource ID.
+                  };
+                  plugin.load(map.name, localRequire, load, CG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
                 });
-                if (module.eb) {
-                  on(depMap, _e, module.eb); // propagate the error correctly - something else is listening for errors
-                } else if (module.events[_e])
-                  on(depMap, _e, (err) => module.emit(_e, err));
-              } // (No direct eb on module module)
-              var id = depMap.id,
-                m = this.dependencies[id]; //Skip special modules like 'require', 'exports', 'module'
-              if (!e_(handlers).yes(id) && m && !m[_ed])
-                CONTEXT.enable(depMap, module);
-            }); //don't call enable if it is already enabled (circular ds)
+                CONTEXT.enable(pluginMap, module);
+                module.pluginMaps[pluginMap.id] = pluginMap;
+              },
+              enable: () => {
+                this.enRgtry[module.map.id] = module;
+                module[_ed] = true;
+                module.enabling = true; //no inadvertent load and 0 depCount by
 
-            _K(module.pluginMaps).forEach(
-              (pM = (x) => module.pluginMaps[x], i) =>
-                e_(this.dependencies).yes(pM.id) &&
-                this.dependencies[pM.id] &&
-                !this.dependencies[pM.id][_ed] &&
-                CONTEXT.enable(pM, module)
-            );
-            module.enabling = false;
-            module.check();
-          },
-          //prettier-ignore
-          on: (name, cb) => {
-            var cbs = module.events[name]; if (!cbs)
-              cbs = module.events[name] = []; cbs.push(cb);
-          },
-          //prettier-ignore
-          emit: (name, evt) => {
-            module.events[name].forEach((cb) => cb(evt)); if (name === _e)
-              delete module.events[name];
-          }
-        }; //remove broken Module instance from this.dependencies.//BS/BF 'bindingsFetch'
-        const BF = {
-          //prettier-ignore
-          callGetModule: (args) => !e_(this.defined).yes(args[0]) && getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]),
-          getScriptData: (
-            { r, n } = (evt) => {
-              return {
-                r: (node, func, name, ieName) =>
-                  //prettier-ignore
-                  !node.detachEvent || isOpera ? node.removeEventListener(name, func, false) : ieName && node.detachEvent(ieName, func),
-                n: evt.currentTarget || evt.srcElement //REQUIREJS event info, remove listener from node //target
-              };
-            }
-          ) => {
-            r(n, CONTEXT.onScriptLoad, "load", "onreadystatechange");
-            r(n, CONTEXT.onScriptError, _e);
-            return { node: n, id: n && n.getAttribute(dr(true)) };
-          },
-          //prettier-ignore
-          tkeGblQue: () => {
-            if (defineables.length)
-              defineables.forEach((queueItem) => {
-                var id = queueItem[0]; if (typeof id === _t)
-                  CONTEXT.defQueueMap[id] = true; //globalQueue by internal method to module defQueue
-                defQueue.push(queueItem);
-              }); defineables = [];
-          },
+                //immediate calls to the this.defined callbacks for this.dependencies. Enable mapFunction 1,dependency
+                module.depMaps.forEach((depMap, i) => {
+                  if (typeof depMap === _t) {
+                    const mp = module.map.yesdef
+                      ? module.map
+                      : module.map.parentMap;
+                    depMap = makeModuleMap(depMap, mp, false, !module.skipMap); //Dependency needs to be converted to a depMap
+                    module.depMaps[i] = depMap; //and wired up to module module.
+                    var handler =
+                      e_(handlers).yes(depMap.id) && handlers[depMap.id];
+                    if (handler)
+                      return (module.depExports[i] = handler(module));
+                    module["depCount"] += 1;
+                    on(depMap, _dd, (depExports) => {
+                      if (module.undefed) return null;
+                      module.defineDep(i, depExports);
+                      module.check();
+                    });
+                    if (module.eb) {
+                      on(depMap, _e, module.eb); // propagate the error correctly - something else is listening for errors
+                    } else if (module.events[_e])
+                      on(depMap, _e, (err) => module.emit(_e, err));
+                  } // (No direct eb on module module)
+                  var id = depMap.id,
+                    m = this.dependencies[id]; //Skip special modules like 'require', 'exports', 'module'
+                  if (!e_(handlers).yes(id) && m && !m[_ed])
+                    CONTEXT.enable(depMap, module);
+                }); //don't call enable if it is already enabled (circular ds)
 
-          //prettier-ignore
-          getGlobal: (value) => {
-            if (!value)
-              return value; //dont-notation dependency
-            var g = dependency; value.split(".").forEach((part) => { g = g[part]; }); return g;
-          },
-          // prettier-ignore
-          evt: (v = (evt) => evt.type === "load" || readyRegExp.test((evt.currentTarget || evt.srcElement).readyState)) => {
-            interscrpt = v ? null : interscrpt; return v && BF.getScriptData(BF.evt);
-          } //interactiveScript - browser event for script loaded status
-        };
-        // prettier-ignore
-        const initial = { CG, ctn, defQueue, defQueueMap: {}, Module, makeModuleMap, nextTick: req.nextTick, onError };
-        CONTEXT = {
-          ...initial,
-          urlFchd: this.urlFchd,
-          defined: this.defined,
-          dependencies: this.dependencies,
-          configure: (c) => {
-            if (c[_u] && c[_u].charAt(c[_u].length - 1) !== "/") c[_u] += "/"; //Make sure the baseUrl ends in a slash.
-            if (typeof c[_a] === _t)
-              c[_a] = (id, url) =>
-                (url.indexOf("?") === -1 ? "?" : "&") + c[_a]; // Convert old style urlArgs string to a function.
-            const shim = CG.shim; //save paths for special "additive processing"
-            const mx = (op) => {
-              const arr = ["paths", "bundles", "CG", "map"];
-              !arr.includes(op)
-                ? (CG[op] = c[op])
-                : arr.forEach((op) => (CG[op] = !CG[op] ? {} : CG[op]));
-              return op;
-            }; //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","CG","map"]);
-            _K(c).forEach((prop = mx, i) =>
-              mixin(CG[prop], c[prop], true, true)
-            );
-            if (c[_b])
-              _K(c[_b]).forEach((prop, i) =>
-                // prettier-ignore
-                c[_b][prop].forEach((v) => (this.bdlMap[v] = v !== prop ? prop : this.bdlMap[v]))
-              ); //Reverse map the bundles
-            if (c[_s]) {
-              // prettier-ignore
-              _K(c[_s]).forEach((id, i) => {
-                var v = c[_s][id];
-                if (e_(v).string() === Ar)
-                  v = { ds: v }; //Merge shim, Normalize the structure
-                if ((v[_x] || v[_i]) && !v[_xf])
-                  v[_xf] = CONTEXT.makeShimExports(v); shim[id] = v;
-              });
-              CG.shim = shim;
-            }
-            if (c[_p])
-              c[_p].forEach((pkgObj) => {
-                pkgObj = typeof pkgObj === _t ? { name: pkgObj } : pkgObj;
-                var name = pkgObj.name,
-                  location = pkgObj[_l]; //Adjust packages if necessary.
-                if (location) CG.paths[name] = pkgObj[_l];
+                _K(module.pluginMaps).forEach(
+                  (pM = (x) => module.pluginMaps[x], i) =>
+                    e_(this.dependencies).yes(pM.id) &&
+                    this.dependencies[pM.id] &&
+                    !this.dependencies[pM.id][_ed] &&
+                    CONTEXT.enable(pM, module)
+                );
+                module.enabling = false;
+                module.check();
+              },
+              on: (name, cb) =>
+                (module.events[name]
+                  ? module.events[name]
+                  : (module.events[name] = [])
+                ).push(cb),
+              emit: (name, evt) => {
+                module.events[name].forEach((cb) => cb(evt));
+                if (name === _e) delete module.events[name];
+              }
+            }; //remove broken Module instance from this.dependencies.//BS/BF 'bindingsFetch'
+            const BF = {
+              callGetModule: (args) =>
+                !e_(this.defined).yes(args[0]) &&
+                getModule(makeModuleMap(args[0], null, true))[_i](
+                  args[1],
+                  args[2]
+                ),
+              getScriptData: (
+                { rm, n } = (evt) => {
+                  return {
+                    rm: (node, func, name, ieName) =>
+                      //prettier-ignore
+                      !node.detachEvent || isOpera ? node.removeEventListener(name, func, false) : ieName && node.detachEvent(ieName, func),
+                    n: evt.currentTarget || evt.srcElement //REQUIREJS event info, remove listener from node //target
+                  };
+                }
+              ) => {
+                rm(n, CONTEXT.onScriptLoad, "load", "onreadystatechange");
+                rm(n, CONTEXT.onScriptError, _e);
+                return { node: n, id: n && n.getAttribute(dr(true)) };
+              },
+              tkeGblQue: () => {
+                if (defineables.length)
+                  defineables.forEach((queueItem) => {
+                    var id = queueItem[0];
+                    if (typeof id === _t) CONTEXT.defQueueMap[id] = true;
+                    defQueue.push(queueItem);
+                  }); //globalQueue by internal method to module defQueue
+                defineables = [];
+              },
+              getGlobal: (value) =>
+                !value
+                  ? value //dont-notation dependency
+                  : value
+                      .split(".")
+                      .reduce((previous, key) => dependency[previous], {}),
+              evt: (
+                v = (evt) =>
+                  evt.type === "load" ||
+                  readyRegExp.test(
+                    (evt.currentTarget || evt.srcElement).readyState
+                  )
+              ) => {
+                interscrpt = v ? null : interscrpt;
+                return v && BF.getScriptData(BF.evt);
+              } //interactiveScript - browser event for script loaded status
+            };
+            const initial = {
+              CG,
+              ctn,
+              defQueue,
+              defQueueMap: {},
+              Module,
+              makeModuleMap,
+              nextTick: r.nextTick,
+              onError
+            };
+            CONTEXT = {
+              ...initial,
+              urlFchd: this.urlFchd,
+              defined: this.defined,
+              dependencies: this.dependencies,
+              configure: (c) => {
+                if (c[_u] && c[_u].charAt(c[_u].length - 1) !== "/")
+                  c[_u] += "/"; //Make sure the baseUrl ends in a slash.
+                if (typeof c[_a] === _t)
+                  c[_a] = (id, url) =>
+                    (url.indexOf("?") === -1 ? "?" : "&") + c[_a]; // Convert old style urlArgs string to a function.
+                const shim = CG.shim; //save paths for special "additive processing"
+                const mx = (op) => {
+                  const arr = ["paths", "bundles", "CG", "map"];
+                  !arr.includes(op)
+                    ? (CG[op] = c[op])
+                    : arr.forEach((op) => (CG[op] = !CG[op] ? {} : CG[op]));
+                  return op;
+                }; //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","CG","map"]);
+                _K(c).forEach((prop = mx, i) =>
+                  BINDABLES.mixin(CG[prop], c[prop], true, true)
+                );
+                c[_b] &&
+                  _K(c[_b]).forEach((prop, i) =>
+                    c[_b][prop].forEach(
+                      (v) =>
+                        (this.bdlMap[v] = v !== prop ? prop : this.bdlMap[v])
+                    )
+                  ); //Reverse map the bundles
+                if (c[_s]) {
+                  _K(c[_s]).forEach((id, i) => {
+                    var v = c[_s][id];
+                    if (e_(v).string() === Ar) v = { ds: v }; //Merge shim, Normalize the structure
+                    if ((v[_x] || v[_i]) && !v[_xf])
+                      v[_xf] = CONTEXT.makeShimExports(v);
+                    shim[id] = v;
+                  });
+                  CG.shim = shim;
+                }
+                if (c[_p])
+                  c[_p].forEach((pkgObj) => {
+                    pkgObj = typeof pkgObj === _t ? { name: pkgObj } : pkgObj;
+                    var name = pkgObj.name,
+                      location = pkgObj[_l]; //Adjust packages if necessary.
+                    if (location) CG.paths[name] = pkgObj[_l];
 
-                // prettier-ignore
-                CG.pkgs[name] = `${pkgObj.name}/${(pkgObj.main || "main").replace(/^\.\//, "").replace(/\.js$/, "")}`; //normalize pkg name main module ID pointer paths
-              }); //Update maps for "waiting to execute" modules in the this.dependencies.
+                    CG.pkgs[name] = `${pkgObj.name}/${(pkgObj.main || "main")
+                      .replace(/^\.\//, "")
+                      .replace(/\.js$/, "")}`; //normalize pkg name main module ID pointer paths
+                  }); //Update maps for "waiting to execute" modules in the this.dependencies.
 
-            // prettier-ignore
-            const mxx = (id) => (!this.dependencies[id].inited && !this.dependencies[id].map.unnormalized) && id;
-            // prettier-ignore
-            _K(this.dependencies).forEach((id = mxx) => this.dependencies[id].map = makeModuleMap(id, null, true)); //if inited and transient, unnormalized modules.
-            if (c.ds || c.cb) CONTEXT.require(c.ds || [], c.cb); //When require is this.defined as a CG object before require.js is loaded,
-          },
-          makeShimExports: (value) => {
-            function fn() {
-              var ret; //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
-              if (value[_i]) ret = value[_i].apply(dependency, arguments);
-              return ret || (value[_x] && BF.getGlobal(value[_x]));
-            }
-            return fn;
-          },
-          makeRequire: (relMap, o = (options) => options || {}) => {
-            const { tkeGblQue, callGetModule } = BF;
-            const localRequire = (ds, cb, eb) => {
-              var id, map, requireMod;
+                _K(this.dependencies).forEach(
+                  (
+                    id = (id) =>
+                      !this.dependencies[id].inited &&
+                      !this.dependencies[id].map.unnormalized &&
+                      id
+                  ) =>
+                    (this.dependencies[id].map = makeModuleMap(id, null, true))
+                ); //if inited and transient, unnormalized modules.
+                if (c.ds || c.cb) CONTEXT.require(c.ds || [], c.cb); //When require is this.defined as a CG object before require.js is loaded,
+              },
+              makeShimExports: (value) =>
+                function () {
+                  return (
+                    (value[_i] && value[_i].apply(dependency, arguments)) ||
+                    (value[_x] && BF.getGlobal(value[_x]))
+                  );
+                }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
+              makeRequire: (relMap, o = (options) => options || {}) => {
+                const { tkeGblQue, callGetModule } = BF;
+                const localRequire = (ds, cb, eb) => {
+                  var id, map, requireMod;
 
-              // prettier-ignore
-              if (o.enableBuildCallback && cb && e_(cb).string() === Fn)
-                cb.__requireJsBuild = true;
-              if (typeof ds === _t) {
-                // prettier-ignore
-                if (e_(cb).string() === Fn)
-                  return onError(BINDABLES.mk(["requireargs", "Invalid require call"]), eb); //Invalid call; id, msg, err, requireModule
-                if (relMap && e_(handlers).yes(ds))
-                  return handlers[ds](this.dependencies[relMap.id]); //when require|exports|module are requested && while module is being this.defined
-                if (req.get) return req.get(CONTEXT, ds, relMap, localRequire);
-                map = makeModuleMap(ds, relMap, false, true);
-                id = map.id; //Normalize module name from . or ..
+                  if (o.enableBuildCallback && cb && e_(cb).string() === Fn)
+                    cb.__requireJsBuild = true;
+                  if (typeof ds === _t)
+                    return e_(cb).string() === Fn
+                      ? onError(
+                          BINDABLES.mk(["requireargs", "Invalid require call"]),
+                          eb
+                        ) //Invalid call; id, msg, err, requireModule
+                      : relMap && e_(handlers).yes(ds)
+                      ? handlers[ds](this.dependencies[relMap.id]) //when require|exports|module are requested && while module is being this.defined
+                      : r.get
+                      ? r.get(CONTEXT, ds, relMap, localRequire)
+                      : () => {
+                          map = makeModuleMap(ds, relMap, false, true);
+                          id = map.id; //Normalize module name from . or ..
+                          return !e_(this.defined).yes(id)
+                            ? // prettier-ignore
+                              onError(BINDABLES.mk(["notloaded", `Module name ${id} has not been loaded yet for CONTEXT: ${ctn + (relMap ? "" : ". Use require([])")}`]))
+                            : this.defined[id];
+                        };
+                  //type, msg, err, requireModules
+                  const intakeDefines = () => {
+                    var args;
+                    tkeGblQue();
+                    while (defQueue.length) {
+                      args = defQueue.shift();
 
-                // prettier-ignore
-                if (!e_(this.defined).yes(id))
-                  return onError(BINDABLES.mk(["notloaded", `Module name ${id} has not been loaded yet for CONTEXT: ${ctn + (relMap ? "" : ". Use require([])")}`]));
-                return this.defined[id];
-              } //type, msg, err, requireModules
-              const intakeDefines = () => {
-                var args;
+                      // prettier-ignore
+                      if (args[0] === null)
+                    return onError(BINDABLES.mk(["mismatch", `Mismatched anonymous define() module: ${args[args.length - 1]}`]));
+                      callGetModule(args);
+                    }
+                    CONTEXT.defQueueMap = {};
+                  }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
+                  intakeDefines(); //Grab defines waiting in the dependency queue.
+                  CONTEXT.nextTick(() => {
+                    intakeDefines(); //Mark all the this.dependencies as needing to be loaded.
+                    requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
+                    requireMod.skipMap = o.skipMap; //store if 'map CG' applied to module 'require call' for this.dependencies
+                    requireMod[_i](ds, cb, eb, { enabled: true });
+                    BM.checkLoaded();
+                  });
+                  return localRequire;
+                };
+                BINDABLES.mixin(localRequire, {
+                  isBrowser,
+                  toUrl: (mNPE) => {
+                    //moduleNamePlusExt
+                    var ext,
+                      i = mNPE.lastIndexOf("."),
+                      seg = mNPE.split("/")[0],
+                      isRelative = seg === "." || seg === ".."; //URL path = module name + .extension; requires 'module name,' not 'plain URLs' like nameToUrl
+
+                    if (i !== -1 && (!isRelative || i > 1)) {
+                      ext = mNPE.substring(i, mNPE.length);
+                      mNPE = mNPE.substring(0, i);
+                    } //file extension alias, not 'relative path dots'
+
+                    const ar = [
+                      mNPE,
+                      relMap && relMap.id,
+                      true,
+                      CG.nodeIdCompat,
+                      CG.map,
+                      CG.pkgs
+                    ];
+                    return CONTEXT.nameToUrl(normalize(ar), ext, true);
+                  },
+                  defined: (id) =>
+                    e_(this.defined).yes(
+                      makeModuleMap(id, relMap, false, true).id
+                    ),
+                  specified: (
+                    id = (id) => makeModuleMap(id, relMap, false, true).id
+                  ) => e_(this.defined).yes(id) || e_(this.dependencies).yes(id)
+                });
+                if (!relMap)
+                  localRequire.undef = (id) => {
+                    tkeGblQue(); //Only allow undef on top level require calls
+                    var map = makeModuleMap(id, relMap, true), //Bind define() calls (fixes #408) to 'module' CONTEXT
+                      m =
+                        e_(this.dependencies).yes(id) && this.dependencies[id];
+                    m.undefed = true;
+                    ((z) => {
+                      rmvScrpt(id, CONTEXT.ctn);
+                      delete z.defined[id];
+                      delete z.urlFchd[map.url];
+                      delete z.unDE[id];
+                    })(this);
+                    defQueue
+                      .sort((a, b) => b - a)
+                      .map(
+                        (args, i) => args[0] === id && defQueue.splice(i, 1)
+                      ); //Clean queued defines, backwards, so splices don't destroy the iteration
+                    delete CONTEXT.defQueueMap[id];
+                    this.unDE[id] =
+                      m && m.events.this.defined ? m.events : this.unDE[id]; //if different CG, same listeners
+                    m && clrRegstr(id);
+                  };
+                return localRequire;
+              },
+              enable: (depMap) =>
+                e_(this.dependencies).yes(depMap.id) &&
+                this.dependencies[depMap.id] &&
+                getModule(depMap).enable(),
+              //if "m" module is in this.dependencies, parent's CONTEXT when overridden in "optimizer" (Not shown).
+              completeLoad: (tkn) => {
+                const { tkeGblQue, callGetModule, getGlobal } = BF;
+                var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
                 tkeGblQue();
                 while (defQueue.length) {
                   args = defQueue.shift();
+                  if (args[0] === null) {
+                    args[0] = tkn;
+                    if (found) break;
+                    found = true; //anonymous module bound to name already  module is another anon module waiting for its completeLoad to fire.
+                  } else if (args[0] === tkn) found = true;
+                  callGetModule(args);
+                } //matched a define call in module script
+                CONTEXT.defQueueMap = {};
+                var m =
+                  e_(this.dependencies).yes(tkn) && this.dependencies[tkn]; // in case-/init-calls change the this.dependencies
+                if (!found && !e_(this.defined).yes(tkn) && m && !m.inited) {
+                  var shim = e_(CG.shim).yes(tkn) ? CG.shim[tkn] : {};
+                  if (CG.enforceDefine && (!shim[_x] || !getGlobal(shim[_x])))
+                    return (
+                      !hasPathFallback(tkn, CG.paths) &&
+                      onError(
+                        BINDABLES.mk([
+                          "nodefine",
+                          "No define call for " + tkn,
+                          null,
+                          [tkn]
+                        ])
+                      )
+                    ); //type, msg, err, requireModules
+                  callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
+                }
+                BM.checkLoaded(); //tkn = moduleName
+              },
+              nameToUrl: function () {
+                //token, ext, skipExt, pkgMain
+                var ext = arguments[1],
+                  skipExt = arguments[2],
+                  pkgMain =
+                    e_(CG.pkgs).yes(arguments[0]) && CG.pkgs[arguments[0]], //already-normalized-tkn as URL. Use toUrl for the public API.
+                  tkn = pkgMain ? pkgMain : arguments[0], //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
+                  id = e_(this.bdlMap).yes(tkn) && this.bdlMap[tkn]; //assume use of an url, not a module id.
+                id && CONTEXT.nameToUrl(id, ext, skipExt); //filter out this.dependencies that are already paths.
+                const geturl = (url = "") => {
+                  //Just a plain path, not module name lookup, so just return it.
+                  if (/^[/:?.]|(.js)$/.test(tkn))
+                    return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
+                  var paths = CG.paths,
+                    syms = tkn.split("/"); //an extension, module method probably needs to be reworked. A module that needs to be converted to a path.
+                  for (let i = syms.length; i > 0; i -= 1) {
+                    var pM = syms.slice(0, i).join("/"); //per module name segment if path registered, start name, and work up
+                    var pP = e_(paths).yes(pM) && paths[pM]; //parentModule
+
+                    pP &&
+                      new iifeapp(
+                        ["pP", "syms"],
+                        e_(pP).a() ? pP[0] : pP,
+                        syms.splice(0, i, pP)
+                      )(this);
+                    if (pP) break; //arr means a few choices; parentPath
+                  }
+                  url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
+                  url +=
+                    ext ||
+                    (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js"); ///^data\:|^blob\:|\?/
 
                   // prettier-ignore
-                  if (args[0] === null)
-                    return onError(BINDABLES.mk(["mismatch", `Mismatched anonymous define() module: ${args[args.length - 1]}`]));
-                  callGetModule(args);
-                }
-                CONTEXT.defQueueMap = {};
-              }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
-              intakeDefines(); //Grab defines waiting in the dependency queue.
-              CONTEXT.nextTick(() => {
-                intakeDefines(); //Mark all the this.dependencies as needing to be loaded.
-                requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
-                requireMod.skipMap = o.skipMap; //store if 'map CG' applied to module 'require call' for this.dependencies
-                requireMod[_i](ds, cb, eb, { enabled: true });
-                BM.checkLoaded();
-              });
-              return localRequire;
-            };
-            mixin(localRequire, {
-              isBrowser,
-              toUrl: (mNPE) => {
-                //moduleNamePlusExt
-                var ext,
-                  i = mNPE.lastIndexOf("."),
-                  seg = mNPE.split("/")[0],
-                  isRelative = seg === "." || seg === ".."; //URL path = module name + .extension; requires 'module name,' not 'plain URLs' like nameToUrl
-
-                // prettier-ignore
-                if (i !== -1 && (!isRelative || i > 1)) { ext = mNPE.substring(i, mNPE.length); mNPE = mNPE.substring(0, i); } //file extension alias, not 'relative path dots'
-
-                // prettier-ignore
-                const ar = [mNPE, relMap && relMap.id, true, CG.nodeIdCompat, CG.map, CG.pkgs];
-                return CONTEXT.nameToUrl(normalize(ar), ext, true);
+                  return `${(url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : CG.baseUrl) + url}`; ///^[\w\+\.\-]+:/
+                }; //Delegates to r.load. Broken out as a separate function to
+                return ((u) =>
+                  `${
+                    CG.urlArgs && !/^blob:/.test(u) ? u + CG.urlArgs(tkn, u) : u
+                  }`)(geturl);
               },
-              defined: (id) =>
-                e_(this.defined).yes(makeModuleMap(id, relMap, false, true).id),
-              specified: (
-                id = (id) => makeModuleMap(id, relMap, false, true).id
-              ) => e_(this.defined).yes(id) || e_(this.dependencies).yes(id)
-            });
-            if (!relMap)
-              localRequire.undef = (id) => {
-                tkeGblQue(); //Only allow undef on top level require calls
-                var map = makeModuleMap(id, relMap, true); //Bind define() calls (fixes #408) to 'module' CONTEXT
-                var m = e_(this.dependencies).yes(id) && this.dependencies[id];
-                m.undefed = true;
-                ((z) => {
-                  rmvScrpt(id, CONTEXT.ctn);
-                  delete z.defined[id];
-                  delete z.urlFchd[map.url];
-                  delete z.unDE[id];
-                })(this);
 
-                // prettier-ignore
-                defQueue.sort((a, b) => b - a).map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
-                delete CONTEXT.defQueueMap[id];
-                if (m) {
-                  if (m.events.this.defined) this.unDE[id] = m.events; //if different CG, same listeners
-                  clrRegstr(id);
-                }
-              };
-            return localRequire;
-          },
-          // prettier-ignore
-          enable: (depMap) => e_(this.dependencies).yes(depMap.id) && this.dependencies[depMap.id] && getModule(depMap).enable(),
-          //if "m" module is in this.dependencies, parent's CONTEXT when overridden in "optimizer" (Not shown).
-          completeLoad: (tkn) => {
-            const { tkeGblQue, callGetModule, getGlobal } = BF;
-            var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
-            tkeGblQue();
-            while (defQueue.length) {
-              args = defQueue.shift();
-              if (args[0] === null) {
-                args[0] = tkn;
-                if (found) break;
-                found = true; //anonymous module bound to name already  module is another anon module waiting for its completeLoad to fire.
-              } else if (args[0] === tkn) found = true;
-              callGetModule(args);
-            } //matched a define call in module script
-            CONTEXT.defQueueMap = {};
-            var m = e_(this.dependencies).yes(tkn) && this.dependencies[tkn]; // in case-/init-calls change the this.dependencies
-            if (!found && !e_(this.defined).yes(tkn) && m && !m.inited) {
-              var shim = e_(CG.shim).yes(tkn) ? CG.shim[tkn] : {};
-              if (CG.enforceDefine && (!shim[_x] || !getGlobal(shim[_x])))
-                return (
-                  !hasPathFallback(tkn, CG.paths) &&
-                  onError(
-                    BINDABLES.mk([
-                      "nodefine",
-                      "No define call for " + tkn,
-                      null,
-                      [tkn]
-                    ])
-                  )
-                ); //type, msg, err, requireModules
-              callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
-            }
-            BM.checkLoaded(); //tkn = moduleName
-          },
-          nameToUrl: function () {
-            //token, ext, skipExt, pkgMain
-            var ext = arguments[1],
-              skipExt = arguments[2],
-              pkgMain = e_(CG.pkgs).yes(arguments[0]) && CG.pkgs[arguments[0]], //already-normalized-tkn as URL. Use toUrl for the public API.
-              tkn = pkgMain ? pkgMain : arguments[0], //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
-              id = e_(this.bdlMap).yes(tkn) && this.bdlMap[tkn]; //assume use of an url, not a module id.
-            id && CONTEXT.nameToUrl(id, ext, skipExt); //filter out this.dependencies that are already paths.
-            const geturl = (url = "") => {
-              //Just a plain path, not module name lookup, so just return it.
-              if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
-              var paths = CG.paths,
-                syms = tkn.split("/"); //an extension, module method probably needs to be reworked. A module that needs to be converted to a path.
-              for (let i = syms.length; i > 0; i -= 1) {
-                var pM = syms.slice(0, i).join("/"); //per module name segment if path registered, start name, and work up
-                var pP = e_(paths).yes(pM) && paths[pM]; //parentModule
-
-                pP &&
-                  new iifeapp(
-                    ["pP", "syms"],
-                    e_(pP).a() ? pP[0] : pP,
-                    syms.splice(0, i, pP)
-                  )(this);
-                if (pP) break; //arr means a few choices; parentPath
-              }
-              url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
-              url +=
-                ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js"); ///^data\:|^blob\:|\?/
-
-              // prettier-ignore
-              return `${(url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : CG.baseUrl) + url}`; ///^[\w\+\.\-]+:/
-            }; //Delegates to req.load. Broken out as a separate function to
-            return ((u) =>
-              `${
-                CG.urlArgs && !/^blob:/.test(u) ? u + CG.urlArgs(tkn, u) : u
-              }`)(geturl);
-          },
-
-          load: (id, url) => req.load(CONTEXT, id, url),
-          execCb: (name, cb, args, exports) => cb.apply(exports, args),
-          onScriptLoad: (data = BF.evt) => CONTEXT.completeLoad(data.id),
-          onScriptError: (evt) => {
-            var data = BF.getScriptData(evt);
-            if (!hasPathFallback(data.id, CG.paths)) {
-              const parents = _K(this.dependencies)
-                .map((key, i) =>
-                  key.indexOf("_@r") !== 0
-                    ? // prettier-ignore
-                      this.dependencies[key].depMaps.forEach((depMap) => {
+              load: (id, url) => r.load(CONTEXT, id, url),
+              execCb: (name, cb, args, exports) => cb.apply(exports, args),
+              onScriptLoad: (data = BF.evt) => CONTEXT.completeLoad(data.id),
+              onScriptError: (evt) => {
+                var data = BF.getScriptData(evt);
+                if (!hasPathFallback(data.id, CG.paths)) {
+                  const parents = _K(this.dependencies)
+                    .map((key, i) =>
+                      key.indexOf("_@r") !== 0
+                        ? // prettier-ignore
+                          this.dependencies[key].depMaps.forEach((depMap) => {
                     if (depMap.id === data.id) { return key; } else
                       return "";
                   })
-                    : ""
-                )
-                .filter((x) => x !== "");
-              // prettier-ignore
-              return onError(BINDABLES.mk(["scripterror", `Script error for ${data.id + (parents.length ? `" needed by: ${parents.join(", ")}` : '"')}`,
-                evt, [data.id]]));
-            }
+                        : ""
+                    )
+                    .filter((x) => x !== "");
+                  return onError(
+                    // prettier-ignore
+                    BINDABLES.mk(["scripterror",`Script error for ${data.id+(parents.length?`" needed by: ${parents.join(", ")}` : '"')}`,evt,[data.id]])
+                  );
+                }
+              }
+            }; //type, msg, err, requireModules
+            CONTEXT.require = CONTEXT.makeRequire();
+            return CONTEXT;
           }
-        }; //type, msg, err, requireModules
-        CONTEXT.require = CONTEXT.makeRequire();
-        return CONTEXT;
-      }
-    }
-    // prettier-ignore
-    var s = (req.s = {contexts:ctxs,newContext}); //Create default CONTEXT.
-    req({}); //'dependency require' CONTEXT-sensitive exported methods
-    ctxReqProps.forEach(
-      (prop) =>
-        // prettier-ignore
-        req[prop]=function(){return ctxs[us].require[prop].apply(ctxs[us],arguments);}
-    ); //apply arguments to requires on context
-    //for the latest instance of the 'default CONTEXT CG'//not the 'early binding to default CONTEXT,' but ctxs during builds//ticketx to apology tour
+        }
+        var s = (r.s = { contexts: ctxs, newContext }); //Create default CONTEXT.
+        r({}); //'dependency require' CONTEXT-sensitive exported methods
+        ctxReqProps.forEach(
+          (prop) =>
+            (r[prop] = function () {
+              return ctxs[us].require[prop].apply(ctxs[us], arguments);
+            })
+        ); //apply arguments to requires on context
+        //for the latest instance of the 'default CONTEXT CG'//not the 'early binding to default CONTEXT,' but ctxs during builds//ticketx to apology tour
 
-    if (isBrowser)
-      head = s.head = e_("base").tag(0)
-        ? baseElement.parentNode
-        : e_("head").tag();
-    //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
-    req[_o] = (err) => err; // node for the load command in browser env
-    req.createNode = (CG, tkn, url) => {
-      // prettier-ignore
-      return {...(CG.xhtml ? e_().create("NS") : e_().create()),
-    type: CG.scriptType || "text/javascript",charset: "utf-8",async: true};
-    };
+        if (isBrowser)
+          head = s.head = e_("base").tag(0)
+            ? baseElement.parentNode
+            : e_("head").tag();
+        //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
+        r[_o] = (err) => err; // node for the load command in browser env
+        r.createNode = (CG, tkn, url) => {
+          return {
+            ...(CG.xhtml ? e_().create("NS") : e_().create()),
+            type: CG.scriptType || "text/javascript",
+            charset: "utf-8",
+            async: true
+          };
+        };
 
-    req.load = (CONTEXT, tkn, url) => {
-      const CG = (CONTEXT && CONTEXT.CG) || {};
-      //handle load request (in browser env); 'CONTEXT' for state, 'tkn' for name, 'url' for point
-      if (isBrowser) {
-        var n = req.createNode(CG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
-        n[_SA](dr(), CONTEXT.ctn);
-        n[_SA](dr(true), tkn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
-        // prettier-ignore
-        if (n[_AE] &&!(n[_AE].toString && n[_AE].toString().indexOf("[native code") < 0) &&!isOpera) {
-        useInteractive = true;n[_AE]("onreadystatechange", CONTEXT.onScriptLoad); //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
-        //yet for 'interactive'-script, 'readyState' triggers by 'define' call IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
-        //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
-        //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
-      } else {n[_AEL]("load", CONTEXT.onScriptLoad, false);n[_AEL](_e, CONTEXT.onScriptError, false);} //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', CONTEXT.onScriptError);
-        n.src = url; //Calling onNodeCreated after all properties on the node have been
-        if (CG.onNodeCreated) CG.onNodeCreated(n, CG, tkn, url); //set, but before it is placed in the DOM.
-        //IE 6-8 cache, script executes before the end
-        scriptPends = n; //of the appendChild execution, so to tie an anonymous define
-        if (baseElement) {
-          head.insertBefore(n, baseElement);
-        } else head.appendChild(n); //call to the module name (which is stored on the node), hold on to a reference to module node, but clear after the DOM insertion.
-        scriptPends = null;
-        return n; // bug in WebKit where the worker gets garbage-collected after calling
-      } else if (isWebWorker) {
-        try {
-          setTimeout(() => {}, 0);
-          importScripts(url);
-          CONTEXT.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
-        } catch (e) {
-          CONTEXT[_o](
-            BINDABLES.mk([
-              "importscripts",
-              `importScripts failed for ${tkn} at ${url}`,
-              e,
-              [tkn]
-            ])
-          );
-        } //type, msg, err, requireModules
-      }
-    };
-    if (isBrowser && !configuration.skipDataMain)
-      e_()
-        .tag()
-        .sort((a, b) => b - a)
-        .forEach((script) => {
-          // prettier-ignore
-          if (!head) (()=>{head = script.parentNode;dataMain = script.getAttribute("data-main");})(); //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
-          if (dataMain) {
-            mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
-            if (!configuration.baseUrl && mainScript.indexOf("!") === -1)
-              new iifeapp(
-                ["src", "mainScript", "subPath", "configuration.baseUrl"],
-                mainScript.split("/"),
-                src.pop(),
-                src.length ? src.join("/") + "/" : "./",
-                subPath
-              )(this);
-            //baseUrl if data-main value is not a loader plugin module ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a module name.
-            mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
-            if (/^[/:?.]|(.js)$/.test(mainScript)) mainScript = dataMain; //filter out this.dependencies that are already paths.//^\/|:|\?|\.js$
-            configuration.ds = configuration.ds
-              ? configuration.ds.concat(mainScript)
-              : [mainScript]; //Put the data-main script in the files to load.
-            return true;
+        r.load = (CONTEXT, tkn, url) => {
+          const CG = (CONTEXT && CONTEXT.CG) || {};
+          //handle load request (in browser env); 'CONTEXT' for state, 'tkn' for name, 'url' for point
+          if (isBrowser) {
+            var n = r.createNode(CG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
+            n[_SA](dr(), CONTEXT.ctn);
+            n[_SA](dr(true), tkn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
+
+            if (
+              //prettier-ignore
+              n[_AE] &&!(n[_AE].toString && n[_AE].toString().indexOf("[native code") < 0) &&!isOpera
+            ) {
+              useInteractive = true;
+              n[_AE]("onreadystatechange", CONTEXT.onScriptLoad); //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
+              //yet for 'interactive'-script, 'readyState' triggers by 'define' call IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
+              //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
+              //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
+            } else
+              (function () {
+                n[_AEL]("load", CONTEXT.onScriptLoad, false);
+                n[_AEL](_e, CONTEXT.onScriptError, false);
+              })(); //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', CONTEXT.onScriptError);
+            n.src = url; //Calling onNodeCreated after all properties on the node have been
+            if (CG.onNodeCreated) CG.onNodeCreated(n, CG, tkn, url); //set, but before it is placed in the DOM.
+            //IE 6-8 cache, script executes before the end
+            scriptPends = n; //of the appendChild execution, so to tie an anonymous define
+            if (baseElement) {
+              head.insertBefore(n, baseElement);
+            } else head.appendChild(n); //call to the module name (which is stored on the node), hold on to a reference to module node, but clear after the DOM insertion.
+            scriptPends = null;
+            return n; // bug in WebKit where the worker gets garbage-collected after calling
+          } else if (isWebWorker) {
+            try {
+              setTimeout(() => {}, 0);
+              importScripts(url);
+              CONTEXT.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
+            } catch (e) {
+              CONTEXT[_o](
+                BINDABLES.mk([
+                  "importscripts",
+                  `importScripts failed for ${tkn} at ${url}`,
+                  e,
+                  [tkn]
+                ])
+              );
+            } //type, msg, err, requireModules
           }
-        });
+        };
+        if (isBrowser && !configuration.skipDataMain)
+          e_()
+            .tag()
+            .sort((a, b) => b - a)
+            .forEach((script) => {
+              !head &&
+                (() => {
+                  head = script.parentNode;
+                  dataMain = script.getAttribute("data-main");
+                })(); //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
+              if (dataMain) {
+                mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
+                if (!configuration.baseUrl && mainScript.indexOf("!") === -1)
+                  new iifeapp(
+                    ["src", "mainScript", "subPath", "configuration.baseUrl"],
+                    mainScript.split("/"),
+                    src.pop(),
+                    src.length ? src.join("/") + "/" : "./",
+                    subPath
+                  )(this);
+                //baseUrl if data-main value is not a loader plugin module ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a module name.
+                mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
+                if (/^[/:?.]|(.js)$/.test(mainScript)) mainScript = dataMain; //filter out this.dependencies that are already paths.//^\/|:|\?|\.js$
+                configuration.ds = configuration.ds
+                  ? configuration.ds.concat(mainScript)
+                  : [mainScript]; //Put the data-main script in the files to load.
+                return true;
+              }
+            });
+      };
+      applycontext();
 
-    //prettier-ignore
-    /*jslint evil: true */
-    req.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
+      //prettier-ignore
+      /*jslint evil: true */
+      r.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
 
-    //Set up with CG info.
-    req(configuration);
-  })(this, require, timeout);
-  return { require, define: define };
+      //Set up with CG info.
+      r(configuration);
+    })(this);
+  return { require: new require(), define: define };
 })();
 
 const Required = () => new App();
