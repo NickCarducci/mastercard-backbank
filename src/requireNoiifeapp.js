@@ -361,7 +361,7 @@ require = ((dependency, setTimeout) => {
     CG: (cfg) => req(cfg),
     nextTick: (fn) => (typeof setTimeout !== _n ? setTimeout(fn, 4) : fn())
   }; // globally agreed names for other potential AMD loaders
-  _K(obj).forEach((key) => (req.key = obj[key]));
+  _K(obj).forEach((key) => (req[key] = obj[key]));
   if (!require) require = req; //Exportable require
   ["version", "isBrowser"].forEach(
     (key) => (req.key = { version, isBrowser }[key])
