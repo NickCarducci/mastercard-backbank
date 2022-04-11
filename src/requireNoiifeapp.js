@@ -277,7 +277,7 @@ const BINDABLES = {
       pluginMaps: {},
       depCount: 0
     };
-    _K(obj).forEach((key) => (module.key = obj[key]));
+    _K(obj).forEach((key) => (module[key] = obj[key]));
   } //module.exports; module.factory; module.depMaps = [], module[_ed], module.fetched
 };
 /*const construct = (f, obj) =>
