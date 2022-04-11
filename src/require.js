@@ -949,12 +949,14 @@ const App = function () {
       optional = arguments[3],
       ctx,
       cfg,
-      ctn = us; //Caja compliant build for minified-scope name of dependency, cb for arr completion Find the right ABLE, use default
-    if (!e_(ds).string() === Ar && T(ds !== _t)) {
+      ctn = us, //Caja compliant build for minified-scope name of dependency, cb for arr completion Find the right ABLE, use default
+      notDeps = e_(ds).string() !== Ar,
+      notString = T(ds !== _t);
+    if (notDeps && notString) {
       cfg = ds;
       return !e_(cb).a()
         ? (ds = [])
-        : iifeapp(this)(["ds", "cb", "eb"], cb, eb, optional);
+        : this.iifeapp(this)(["ds", "cb", "eb"], cb, eb, optional);
     } // Determine if have CG object in the call. ds is a CG object Adjust args if there are ABLE.dependencies
     ctn = cfg && cfg.context ? cfg.context : ctn;
     ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
@@ -969,7 +971,9 @@ const App = function () {
   return {
     //This...
     //The 'rest parameter:' spread a fat arrow's args for function arguments
-    iifeapp: (...args) => new iifeapp(this)(args), //(object/class/prototype-'this'-prop)
+    iifeapp: (ths) => {
+      return (...args) => new iifeapp(ths)(args);
+    }, //(object/class/prototype-'this'-prop)
     build, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'build' function
 
     require:
