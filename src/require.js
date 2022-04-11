@@ -63,7 +63,7 @@ const App = function () {
         return ABLE
       }
       
-      s = build.s
+      s = build.start
       build({})
       ctxReqProps
       head
@@ -91,11 +91,11 @@ const App = function () {
         var pP = e_(paths).yes(pM) && paths[pM]; //parentModule
 
         pP &&
-          new iifeapp(
+          iifeapp(this)(
             ["pP", "syms"],
             e_(pP).a() ? pP[0] : pP,
             syms.splice(0, i, pP)
-          )(this);
+          );
         if (pP) break; //arr means a few choices; parentPath
       }
       url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
@@ -243,7 +243,7 @@ const App = function () {
     n = names[1];
     if (n)
       p
-        ? new iifeapp(
+        ? iifeapp(this)(
             ["normed", "id"],
             isNormed
               ? n
@@ -254,8 +254,8 @@ const App = function () {
               ? BINDABLES.normalize(n, ptName, applyMap, ...configGets)
               : n,
             p + "!" + normed + suffix
-          )(this)
-        : new iifeapp(
+          )
+        : iifeapp(this)(
             ["normed", "names", "p", "normed", "isNormed", "url", "id"],
             BINDABLES.normalize(n, ptName, applyMap, ...configGets),
             splitPrefix(normed),
@@ -264,7 +264,7 @@ const App = function () {
             true,
             nameToUrl(normed),
             normed + suffix
-          )(this);
+          );
 
     //do not normalize if nested plugin references; albeit this deprecates resourceIds,
     //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
@@ -358,7 +358,7 @@ const App = function () {
                 } // this.exports assignment over exports object. exports already set the this.defined value.
 
                 err &&
-                  // new iifeapp(
+                  // new iifeapp(this)(
                   ((
                     z,
                     obj = {
@@ -637,12 +637,12 @@ const App = function () {
             id && halt && !BINDABLES.hasPathFallback(id, CG.paths)
               ? BINDABLES.rmvScrpt(id, ABLE.ctn) && hs.push(id)
               : id &&
-                new iifeapp(
+                iifeapp(this)(
                   ["fb", "wait", "another"],
                   halt && true,
                   true,
                   !halt && noCyc ? false : another
-                )(this)
+                )
           ); //non-plugin-resource; Figure out the state of all the modules.//disabled or in error
           if (halt && hs.length) {
             // prettier-ignore
@@ -650,7 +650,7 @@ const App = function () {
             err.ctn = ABLE.ctn;
             return onError(err); //If wait time expired, throw error of unloaded modules.
           } else
-            return new iifeapp(
+            return iifeapp(this)(
               (z) =>
                 another &&
                 reqCalls.forEach((m) =>
@@ -663,7 +663,7 @@ const App = function () {
                 brwr &&
                 !clrsec &&
                 setTimeout(() => checkLoaded() && null, 50) /*plugin-resource*/
-            )(this); //args'-mutable iife=>"app"
+            ); //args'-mutable iife=>"app"
         },
         //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
 
@@ -701,38 +701,29 @@ const App = function () {
         urlFchd: this.urlFchd ? this.urlFchd : {}, //this able's
         defined: this.defined ? this.defined : {},
         dependencies: this.dependencies ? this.dependencies : {},
-        configure: (c) => {
-          if (c[_u] && c[_u].charAt(c[_u].length - 1) !== "/") c[_u] += "/"; //Make sure the baseUrl ends in a slash.
-          if (T(c[_a] === _t))
-            c[_a] = (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]; // Convert old style urlArgs string to a function.
-          const shim = CG.shim; //save paths for special "additive processing"
-          const mx = (op) => {
-            const arr = ["paths", "bundles", "CG", "map"];
-            !arr.includes(op)
-              ? (CG[op] = c[op])
-              : arr.forEach((op) => (CG[op] = !CG[op] ? {} : CG[op]));
-            return op;
-          }; //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","CG","map"]);
-          _K(c).forEach((prop = mx, i) =>
-            BINDABLES.mixin(CG[prop], c[prop], true, true)
-          );
-          c[_b] &&
-            _K(c[_b]).forEach((prop, i) =>
-              c[_b][prop].forEach(
-                (v) => (this.bdlMap[v] = v !== prop ? prop : this.bdlMap[v])
-              )
-            ); //Reverse map the bundles
-          c[_s] &&
-            _K(c[_s]).forEach((id, i) => {
-              var v = c[_s][id];
-              if (e_(v).string() === Ar) v = { ds: v }; //Merge shim, Normalize the structure
-              if ((v[_x] || v[_i]) && !v[_xf]) v[_xf] = ABLE.makeShimExports(v);
-              shim[id] = v;
-            });
-          CG.shim = c[_s] ? shim : CG.shim;
+        configure: (
+          c = (c) => {
+            c[_a] = T(c[_a] !== _t)
+              ? c[_a]
+              : (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]; // Convert old style urlArgs string to a function.
+            return c[_u].charAt(c[_u].length - 1) === "/"
+              ? c
+              : { ...c, [_u]: `${c[_u]}/` };
+          }
+        ) => {
+          const map = () =>
+            _K(ABLE.dependencies).forEach(
+              (
+                id = (id) =>
+                  !ABLE.dependencies[id].inited &&
+                  !ABLE.dependencies[id].map.unnormalized &&
+                  id
+              ) => (ABLE.dependencies[id].map = makeModuleMap(id, null, true))
+            ); //if inited and transient, unnormalized modules.
 
-          c[_p] &&
-            c[_p].forEach((pkgObj) => {
+          const bundle = (packages = (c) => c[_p]) =>
+            packages &&
+            packages.forEach((pkgObj) => {
               pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
               var name = pkgObj.name,
                 location = pkgObj[_l]; //Adjust packages if necessary.
@@ -743,15 +734,44 @@ const App = function () {
                 .replace(/\.js$/, "")}`; //normalize pkg name main this ID pointer paths
             }); //Update maps for "waiting to execute" modules in the ABLE.dependencies.
 
-          _K(ABLE.dependencies).forEach(
-            (
-              id = (id) =>
-                !ABLE.dependencies[id].inited &&
-                !ABLE.dependencies[id].map.unnormalized &&
-                id
-            ) => (ABLE.dependencies[id].map = makeModuleMap(id, null, true))
-          ); //if inited and transient, unnormalized modules.
-          if (c.ds || c.cb) ABLE.require(c.ds || [], c.cb); //When require is this.defined as a CG object before require.js is loaded,
+          const apply = (
+            { bundles, shims } = (c) => {
+              return { bundles: c[_b], shims: c[_s] };
+            }
+          ) => {
+            bundles &&
+              _K(bundles).forEach((prop, i) =>
+                bundles[prop].forEach(
+                  (v) => (this.bdlMap[v] = v !== prop ? prop : this.bdlMap[v])
+                )
+              ); //Reverse map the bundles
+            var shim = CG.shim; //save paths for special "additive processing"
+            shims &&
+              _K(shims).forEach((id, i) => {
+                var v = shims[id];
+                if (e_(v).string() === Ar) v = { ds: v }; //Merge shim, Normalize the structure
+                if ((v[_x] || v[_i]) && !v[_xf])
+                  v[_xf] = ABLE.makeShimExports(v);
+                shim[id] = v;
+              });
+            return { shim, shims };
+          };
+          const mx = (op) => {
+            const arr = ["paths", "bundles", "CG", "map"];
+            !arr.includes(op)
+              ? (CG[op] = c[op])
+              : arr.forEach((op) => (CG[op] = !CG[op] ? {} : CG[op]));
+            return op;
+          }; //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","CG","map"]);
+          _K(c).forEach((prop = mx, i) =>
+            BINDABLES.mixin(CG[prop], c[prop], true, true)
+          );
+
+          const { shims, shim } = apply(c);
+          CG.shim = shims ? shim : CG.shim;
+          bundle(c);
+          map(); //When require is this.defined, as a CG object, before require.js is loaded,
+          (c.ds || c.cb) && ABLE.require(c.ds || [], c.cb);
         },
         makeShimExports: (value) =>
           function () {
@@ -760,6 +780,13 @@ const App = function () {
               (value[_x] && getGlobal(value[_x]))
             );
           }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
+        /* makeShimExports: (value) =>
+            function () {
+              return (
+                (value[_i] && value[_i].apply(dependency, arguments)) ||
+                (value[_x] && getGlobal(value[_x]))
+              );
+            }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
         makeRequire: (relMap, o = (options) => options || {}) => {
           const localRequire = (ds, cb, eb) => {
             var id, map, requireMod;
@@ -927,11 +954,11 @@ const App = function () {
       cfg = ds;
       return !e_(cb).a()
         ? (ds = [])
-        : new iifeapp(["ds", "cb", "eb"], cb, eb, optional)(this);
+        : iifeapp(this)(["ds", "cb", "eb"], cb, eb, optional);
     } // Determine if have CG object in the call. ds is a CG object Adjust args if there are ABLE.dependencies
     ctn = cfg && cfg.context ? cfg.context : ctn;
     ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
-    ctx = ctx ? ctx : (ctxs[ctn] = new build.s.newRequireable(ctn)); //dependency
+    ctx = ctx ? ctx : (ctxs[ctn] = new build.start.newRequireable(ctn)); //dependency
     cfg && ctx.configure(cfg);
     return ctx.require(ds, cb, eb);
   });
@@ -942,46 +969,14 @@ const App = function () {
   return {
     //This...
     //The 'rest parameter:' spread a fat arrow's args for function arguments
-    iifeapp: (...args) => new iifeapp(args), //(object/class/prototype-'this'-prop)
+    iifeapp: (...args) => new iifeapp(this)(args), //(object/class/prototype-'this'-prop)
     build, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'build' function
-    define: (
-      { nm, ds, c, n } = (...copy) => {
-        const notString = T(copy.nm !== _t),
-          notDeps = e_(copy.ds).string() !== Ar;
-        return {
-          nm: notString ? null : copy.nm, //copy = { nm, ds, c }; Allow for anonymous modules
-          ds: notString ? copy.nm : notDeps ? null : copy.ds,
-          c: notString ? copy.ds : notDeps ? copy.ds : copy.c,
-          n:
-            scriptPends ||
-            (() => {
-              if (interscrpt && e_(interscrpt).interA()) return interscrpt;
-              // prettier-ignore
-              e_().tag().sort((a, b) => b - a)
-            .map((script) => e_(script).interA() && (interscrpt = script));
-              return interscrpt;
-            })()
-        };
-      }
-    ) => {
-      ds =
-        !ds && e_(c).string() === Fn && c.length ? BINDABLES.concat(ds, c) : ds;
-      // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
-      nm = useInteractive && !nm ? n()[ga](BINDABLES.dr(true)) : nm;
-      ctx = useInteractive ? ctxs[n()[ga](BINDABLES.dr())] : ctx;
 
-      //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
-
-      if (!ctx) return defineables.push([nm, ds, c]);
-      ctx.defQueue.push([nm, ds, c]);
-      ctx.defQueueMap[nm] = true;
-      return { amd: { jQuery: true } };
-    },
     require:
       /*T(define === _n) ||*/ T(REQUIREJS === _u) ||
       e_(REQUIREJS).string() !== Fn
         ? build // package-names, cb, returns a value to define the this of argument index[0]
-        : function () {
+        : () => {
             //dependency = arguments[0],
             const notBaseUrl = T(REQUIREJS !== _u),
               notrequire = T(require !== _n) && !e_(require).string() === Fn;
@@ -1011,7 +1006,7 @@ const App = function () {
             /*jslint evil: true */
             build.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
 
-            var s = (build.s = { contexts: ctxs, newRequireable }); //Create default ABLE.
+            var start = (build.start = { contexts: ctxs, newRequireable }); //Create default ABLE.
             build({}); //'dependency require' ABLE-sensitive exported methods
             ctxReqProps.forEach(
               (prop) =>
@@ -1022,7 +1017,7 @@ const App = function () {
             //for the latest instance of the 'default ABLE CG'//not the 'early binding to default ABLE,' but ctxs during builds//ticketx to apology tour
 
             if (isBrowser)
-              head = s.head = e_("base").tag(0)
+              head = start.head = e_("base").tag(0)
                 ? baseElement.parentNode
                 : e_("head").tag();
             //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
@@ -1101,7 +1096,7 @@ const App = function () {
                       !configuration.baseUrl &&
                       mainScript.indexOf("!") === -1
                     )
-                      new iifeapp(
+                      iifeapp(
                         [
                           "src",
                           "mainScript",
@@ -1125,14 +1120,48 @@ const App = function () {
                 });
             //Set up with CG info.
             build(configuration);
-          }
+          },
+    define
   };
 };
 
 const Required = () => new App();
 export { Required as default };
 
-var ctxs = {},
+var define = (
+    { nm, ds, c, n } = (...copy) => {
+      const notString = T(copy.nm !== _t),
+        notDeps = e_(copy.ds).string() !== Ar;
+      return {
+        nm: notString ? null : copy.nm, //copy = { nm, ds, c }; Allow for anonymous modules
+        ds: notString ? copy.nm : notDeps ? null : copy.ds,
+        c: notString ? copy.ds : notDeps ? copy.ds : copy.c,
+        n:
+          scriptPends ||
+          (() => {
+            if (interscrpt && e_(interscrpt).interA()) return interscrpt;
+            // prettier-ignore
+            e_().tag().sort((a, b) => b - a)
+        .map((script) => e_(script).interA() && (interscrpt = script));
+            return interscrpt;
+          })()
+      };
+    }
+  ) => {
+    ds =
+      !ds && e_(c).string() === Fn && c.length ? BINDABLES.concat(ds, c) : ds;
+    // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
+    nm = useInteractive && !nm ? n()[ga](BINDABLES.dr(true)) : nm;
+    ctx = useInteractive ? ctxs[n()[ga](BINDABLES.dr())] : ctx;
+
+    //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
+
+    if (!ctx) return defineables.push([nm, ds, c]);
+    ctx.defQueue.push([nm, ds, c]);
+    ctx.defQueueMap[nm] = true;
+    return { amd: { jQuery: true } };
+  },
+  ctxs = {},
   REQUIREJS,
   // eslint-disable-next-line
   setTimeout = T(setTimeout === "undefined") ? undefined : setTimeout,
@@ -1152,7 +1181,7 @@ var ctxs = {},
   /**
     ctx.require.undef(id);
     ctx.makeRequire(null, { skipMap: true })([id]);
-    ctx = ctx ? ctx : (ctxs[ctn] = new build.s.newRequireable(ctn)); //dependency
+    ctx = ctx ? ctx : (ctxs[ctn] = new build.start.newRequireable(ctn)); //dependency
     cfg && ctx.configure(cfg);
     return ctx.require(ds, cb, eb);
   */
@@ -1350,11 +1379,11 @@ var ctxs = {},
       cfg = ds;
       return !e_(cb).a()
         ? (ds = [])
-        : new iifeapp(["ds", "cb", "eb"], cb, eb, optional)(this);
+        : iifeapp(this)(["ds", "cb", "eb"], cb, eb, optional);
     } // Determine if have CG object in the call. ds is a CG object Adjust args if there are ABLE.dependencies
     ctn = cfg && cfg.context ? cfg.context : ctn;
     ctx = e_(ctxs).yes(ctn) && ctxs[ctn];
-    ctx = ctx ? ctx : (ctxs[ctn] = new build.s.newRequireable(ctn)); //dependency
+    ctx = ctx ? ctx : (ctxs[ctn] = new build.start.newRequireable(ctn)); //dependency
     cfg && ctx.configure(cfg);
     return ctx.require(ds, cb, eb);
   }),
