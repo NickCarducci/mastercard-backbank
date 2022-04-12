@@ -10,6 +10,7 @@
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
 //cannot this never get to the string regex?
+
 export class Require {
   constructor() {
     //const Required = () => new App();
@@ -1272,7 +1273,7 @@ export class Require {
     //this named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
     //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
 
-    return {
+    const state = {
       //This...
       //The 'rest parameter:' spread a fat arrow's args for function arguments
       /*iifeapp: (ths) => {
@@ -1428,5 +1429,18 @@ export class Require {
             },
       define
     };
+
+    _K(state).forEach((key) => (this[key] = state[key]));
+  }
+
+  async fetch(req, env) {
+    const dataHead = {
+      "Content-Type": "application/json"
+    };
+    return new Response(this, {
+      status: "200",
+      message: "success: " + req.url,
+      headers: dataHead
+    });
   }
 }
