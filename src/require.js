@@ -1004,7 +1004,7 @@ const App = () => {
 
             _K(obj).forEach((key) => (build[key] = obj[key]));
             // if (!require) require = build; //Exportable require
-            ["version", "isBrowser"].forEach((k) => (build[k] = this[k]));
+            ["version", "isBrowser"].forEach((k) => (build[k] = sign[k]));
 
             //prettier-ignore
             /*jslint evil: true */
@@ -1246,6 +1246,7 @@ var define = (
   _i = "init",
   _n = "undefined",
   isBrowser = !!(T(window !== _n) && T(navigator !== _n) && window.document),
+  sign = { version, isBrowser },
   _r = "require",
   Ar = "[object Array]",
   Fn = "[object Function]",
