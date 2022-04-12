@@ -161,13 +161,13 @@ const App = () => {
                   ((
                     z,
                     obj = {
-                      requireMap: this.map,
+                      requireMap: z.map,
                       requireModules: isDefine ? [this.map.id] : null,
                       requireType: isDefine ? "define" : _r
                     }
                   ) => {
                     _K(obj).forEach((key) => (z.err[key] = obj[key]));
-                    return onError((this[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
+                    return onError((z[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
                   })(this); //if there were more solutions to be made, so is redundant here, actually
 
                 //);
