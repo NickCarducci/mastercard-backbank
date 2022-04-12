@@ -1,6 +1,6 @@
 //exports, and imports, at the same time!
-import x from "./index.mjs";
-export { DurableObjectExample, Require } = x
+
+export { DurableObjectExample, Require } = from "./index.mjs";
 
 export default {
   async fetch(request, env/*, ctx*/) {
