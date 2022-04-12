@@ -10,7 +10,7 @@
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
 //cannot this never get to the string regex?
-export class App {
+export class Require {
   constructor() {
     var clrsec, watch;
     const checkLoaded = (z) => {
