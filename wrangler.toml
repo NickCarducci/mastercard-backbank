@@ -28,8 +28,12 @@ bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObject
 bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" },{ name = "REQUIRE_CLASS_DURABLE_OBJECT", class_name = "Require" }]
 
 [[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["DurableObjectExample"]
+
+[[migrations]]
 tag = "v2" # Should be unique for each entry
-new_classes = ["DurableObjectExample", "Require"]
+new_classes = ["Require"]
 
 # [build.upload.rules]
 # type = "CommonJS"
