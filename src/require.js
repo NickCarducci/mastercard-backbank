@@ -34,7 +34,7 @@ const App = () => {
         if (c && (!e_(t).yes(i) || !t[i]))
           return progress(dep, t, p);
         // prettier-ignore
-        c && m.defineDep(ix, z.defined[i]);
+        c && m.defineDep(ix, ABLE.defined[i]);
         c && m.check(); //pass false?
       });
       p[i] = true;
@@ -83,7 +83,11 @@ const App = () => {
   //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
 
   class Module {
-    constructor() {
+    constructor(
+      map = arguments[0],
+      unDE = arguments[1],
+      configShim = arguments[2]
+    ) {
       const on = ({ m, dm } = depMap, name, f) => {
           if (!e_(ABLE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
             return name === _dd && f(ABLE.defined[dm.id]);
@@ -91,10 +95,7 @@ const App = () => {
           if (m[_e] && name === _e) return f(m[_e]);
           m["on"](name, f);
         },
-        map = arguments[0],
-        unDE = arguments[1],
-        configShim = arguments[2],
-        thiss = {
+        state = {
           init: (depMaps, factory, eb, o = (o) => o || {}) => {
             if (this["inited"]) return null;
             this["factory"] = factory; //Register for errors on this this.
@@ -349,7 +350,7 @@ const App = () => {
           }
         }; //remove broken Module instance from ABLE.dependencies.//BS/BF 'bindingsFetch'
 
-      _K(thiss).forEach((key) => (this[key] = thiss[key]));
+      _K(state).forEach((key) => (this[key] = state[key]));
 
       const obj = {
         events: (e_(unDE).yes(map.id) && unDE[map.id]) || {},
@@ -835,7 +836,7 @@ const App = () => {
             delete z.defined[id];
             delete z.urlFchd[map.url];
             delete z.unDE[id];
-          })(this);
+          })(ABLE);
           defQueue
             .sort((a, b) => b - a)
             .map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
