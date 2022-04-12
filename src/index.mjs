@@ -4,7 +4,7 @@
 //import { rollup } from "rollup";
 //import require from "./dependencies/shim.mjs";
 //import Window from ".././dist/built.mjs";
-export { Require } from '../src/require.js';
+import { Require } from '../src/require.js';
 const { require, define } = new Require()//(); //Window() //this.modules; //Window.sourcesContent();
 
 /*watcher.on("event", (event) => {
