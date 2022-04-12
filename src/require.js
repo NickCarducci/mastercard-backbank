@@ -82,280 +82,283 @@ const App = () => {
   };
   //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
 
-  function Module(
-    map = arguments[0],
-    unDE = arguments[1],
-    configShim = arguments[2]
-  ) {
-    const on = ({ m, dm } = depMap, name, f) => {
-        if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
-          return name === _dd && f(STATE.defined[dm.id]);
-        m = getModule(dm);
-        if (m[_e] && name === _e) return f(m[_e]);
-        m.on(name, f);
-      },
-      state = {
-        events: (e_(unDE).yes(map.id) && unDE[map.id]) || {},
-        map,
-        shim: e_(configShim).yes(map.id) && configShim[map.id],
-        depExports: [],
-        depMaps: [],
-        depMatched: [],
-        pluginMaps: {},
-        depCount: 0,
-        init: (depMaps, factory, eb, o = (o) => o || {}) => {
-          if (this.INITED) return null;
-          this["factory"] = factory; //Register for errors
-          if (eb) {
-            this.on(_e, eb); //If no eb already, but there are error listeners
-          } else if (this.events[_e]) eb = (err) => this.emit(_e, err); //construct((err) => this.emit(_e, err), this); //on this this, set up an eb to pass to the ds.
-          const obj = {
-            depMaps: depMaps && depMaps.slice(0),
-            eb,
-            inited: true,
-            ignore: o.ignore
-          }; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
-          _K(obj).forEach((key) => (this[key] = obj[key]));
-          if (o[_ed] || this[_ed]) return this.enable();
-          this.check();
+  class Module {
+    constructor(
+      map = arguments[0],
+      unDE = arguments[1],
+      configShim = arguments[2]
+    ) {
+      const on = ({ m, dm } = depMap, name, f) => {
+          if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
+            return name === _dd && f(STATE.defined[dm.id]);
+          m = getModule(dm);
+          if (m[_e] && name === _e) return f(m[_e]);
+          m.on(name, f);
         },
-        load: () => {
-          if (!this.urlFchd[this.map.url]) {
-            this.urlFchd[this.map.url] = true;
-            STATE.load(this.map.id, this.map.url);
-          }
-        },
-        check: () => {
-          if (!this[_ed] || this.enabling) return null;
-          var id = this.map.id;
-          if (!this.INITED)
-            return !e_(STATE.defQueueMap).yes(id) && this.fetch();
-          if (this[_dg]) return this[_e] && this.emit(_e, this[_e]); // !defQueue.includes(this) this is ready to, and does, define itself
-          var expts = this[_x],
-            factory = this.factory;
-          this[_dg] = true; //no redundant require-define
-          if (this.depCount < 1 && !STATE.defined) {
-            const isDefine = this.map.yesdef;
-            if (e_(factory).string() === Fn) {
-              var err,
-                cjs,
-                depExpo = this.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
-
-              if (
-                (this.events[_e] && isDefine) ||
-                build[_o] !== ((err) => err)
-              ) {
-                // prettier-ignore
-                try { expts = STATE.execCb(id, factory, depExpo, expts); } catch (e) { err = e; } //factory.apply(exports, depExports),
-              } else expts = STATE.execCb(id, factory, depExpo, expts);
-              if (isDefine && expts === undefined) {
-                cjs = this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
-                if (cjs) {
-                  expts = cjs[_x];
-                } else if (this.usingExports) expts = this[_x];
-              } // this.exports assignment over exports object. exports already set the STATE.defined value.
-
-              err &&
-                // new iifeapp(this)(
-                ((
-                  z,
-                  obj = {
-                    requireMap: z.map,
-                    requireModules: isDefine ? [this.map.id] : null,
-                    requireType: isDefine ? "define" : _r
-                  }
-                ) => {
-                  _K(obj).forEach((key) => (z.err[key] = obj[key]));
-                  return onError((z[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
-                })(this); //if there were more solutions to be made, so is redundant here, actually
-
-              //);
-            } else expts = factory;
-
-            this[_x] = expts;
-            if (isDefine && !this.ignore) {
-              STATE.defined[id] = expts;
-              if (build.onResourceLoad)
-                build.onResourceLoad(
-                  STATE,
-                  this.map,
-                  this.depMaps.map((depMap) => depMap.normalizedMap || depMap)
-                );
+        state = {
+          events: (e_(unDE).yes(map.id) && unDE[map.id]) || {},
+          map,
+          shim: e_(configShim).yes(map.id) && configShim[map.id],
+          depExports: [],
+          depMaps: [],
+          depMatched: [],
+          pluginMaps: {},
+          depCount: 0,
+          init: (depMaps, factory, eb, o = (o) => o || {}) => {
+            if (this.INITED) return null;
+            this["factory"] = factory; //Register for errors
+            if (eb) {
+              this.on(_e, eb); //If no eb already, but there are error listeners
+            } else if (this.events[_e]) eb = (err) => this.emit(_e, err); //construct((err) => this.emit(_e, err), this); //on this this, set up an eb to pass to the ds.
+            const obj = {
+              depMaps: depMaps && depMaps.slice(0),
+              eb,
+              inited: true,
+              ignore: o.ignore
+            }; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
+            _K(obj).forEach((key) => (this[key] = obj[key]));
+            if (o[_ed] || this[_ed]) return this.enable();
+            this.check();
+          },
+          load: () => {
+            if (!this.urlFchd[this.map.url]) {
+              this.urlFchd[this.map.url] = true;
+              STATE.load(this.map.id, this.map.url);
             }
-            clrRegstr(id);
-            this[_dd] = true;
-          }
-          this[_dg] = false; //Finished definition, so allow call-check again for 'define' notifications, by cycle.
-          if (this[_dd] && !this.defineEmitted) {
-            this["defineEmitted"] = true;
-            this.emit(_dd, this[_x]);
-            this["defineEmitComplete"] = true;
-          }
-        },
-        normalizeMod: (plugin, mp) => {
-          var { name, parentMap: pM } = this.map; //Normalize the ID if the plugin allows it.
-          const { nodeIdCompat, map, pkgs } = STATE.CONFIG;
-          // prettier-ignore
-          const namer = (name) => [name, pM ? pM.name : null, true, nodeIdCompat, map, pkgs]; //ptName
-          if (plugin.normalize)
-            name =
-              plugin.normalize(name, (args = namer) =>
-                WINDOW.normalize(args)
-              ) || ""; //prefix and name should already be normalized, no need
-          var nM = makeModuleMap(mp.prefix + "!" + name, pM, true); //normalizedMap -for applying map STATE.CONFIG again either.
-          on(nM, _dd, (d) => {
-            this.map.normalizedMap = nM;
-            this[_i]([], () => d, null, {
-              enabled: true,
-              ignore: true
-            });
-          }); //construct
-          var normMod =
-            e_(STATE.dependencies).yes(nM.id) && STATE.dependencies[nM.id]; //normalizedMod
-          if (normMod) {
-            this.depMaps.push(nM);
-            if (this.events[_e]) normMod.on(_e, (err) => this.emit(_e, err)); //Mark this as a dependency for this plugin, so it can be traced for cycles.
-            normMod.enable();
-          }
-        },
-        enable: () => {
-          STATE.enRgtry[this.map.id] = this;
-          this[_ed] = true;
-          this.enabling = true; //no inadvertent load and 0 depCount by
+          },
+          check: () => {
+            if (!this[_ed] || this.enabling) return null;
+            var id = this.map.id;
+            if (!this.INITED)
+              return !e_(STATE.defQueueMap).yes(id) && this.fetch();
+            if (this[_dg]) return this[_e] && this.emit(_e, this[_e]); // !defQueue.includes(this) this is ready to, and does, define itself
+            var expts = this[_x],
+              factory = this.factory;
+            this[_dg] = true; //no redundant require-define
+            if (this.depCount < 1 && !STATE.defined) {
+              const isDefine = this.map.yesdef;
+              if (e_(factory).string() === Fn) {
+                var err,
+                  cjs,
+                  depExpo = this.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
 
-          //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
-          this.depMaps.forEach((depMap, i) => {
-            if (T(depMap === _t)) {
-              const mp = this.map.yesdef ? this.map : this.map.parentMap;
-              depMap = makeModuleMap(depMap, mp, false, !this.skipMap); //Dependency needs to be converted to a depMap
-              this.depMaps[i] = depMap; //and wired up to this this.
-              var handler = e_(handlers).yes(depMap.id) && handlers[depMap.id];
-              if (handler) return (this.depExports[i] = handler(this));
-              this["depCount"] += 1;
-              on(depMap, _dd, (depExports) => {
-                if (this.undefed) return null;
-                this.defineDep(i, depExports);
-                this.check();
+                if (
+                  (this.events[_e] && isDefine) ||
+                  build[_o] !== ((err) => err)
+                ) {
+                  // prettier-ignore
+                  try { expts = STATE.execCb(id, factory, depExpo, expts); } catch (e) { err = e; } //factory.apply(exports, depExports),
+                } else expts = STATE.execCb(id, factory, depExpo, expts);
+                if (isDefine && expts === undefined) {
+                  cjs = this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
+                  if (cjs) {
+                    expts = cjs[_x];
+                  } else if (this.usingExports) expts = this[_x];
+                } // this.exports assignment over exports object. exports already set the STATE.defined value.
+
+                err &&
+                  // new iifeapp(this)(
+                  ((
+                    z,
+                    obj = {
+                      requireMap: z.map,
+                      requireModules: isDefine ? [this.map.id] : null,
+                      requireType: isDefine ? "define" : _r
+                    }
+                  ) => {
+                    _K(obj).forEach((key) => (z.err[key] = obj[key]));
+                    return onError((z[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
+                  })(this); //if there were more solutions to be made, so is redundant here, actually
+
+                //);
+              } else expts = factory;
+
+              this[_x] = expts;
+              if (isDefine && !this.ignore) {
+                STATE.defined[id] = expts;
+                if (build.onResourceLoad)
+                  build.onResourceLoad(
+                    STATE,
+                    this.map,
+                    this.depMaps.map((depMap) => depMap.normalizedMap || depMap)
+                  );
+              }
+              clrRegstr(id);
+              this[_dd] = true;
+            }
+            this[_dg] = false; //Finished definition, so allow call-check again for 'define' notifications, by cycle.
+            if (this[_dd] && !this.defineEmitted) {
+              this["defineEmitted"] = true;
+              this.emit(_dd, this[_x]);
+              this["defineEmitComplete"] = true;
+            }
+          },
+          normalizeMod: (plugin, mp) => {
+            var { name, parentMap: pM } = this.map; //Normalize the ID if the plugin allows it.
+            const { nodeIdCompat, map, pkgs } = STATE.CONFIG;
+            // prettier-ignore
+            const namer = (name) => [name, pM ? pM.name : null, true, nodeIdCompat, map, pkgs]; //ptName
+            if (plugin.normalize)
+              name =
+                plugin.normalize(name, (args = namer) =>
+                  WINDOW.normalize(args)
+                ) || ""; //prefix and name should already be normalized, no need
+            var nM = makeModuleMap(mp.prefix + "!" + name, pM, true); //normalizedMap -for applying map STATE.CONFIG again either.
+            on(nM, _dd, (d) => {
+              this.map.normalizedMap = nM;
+              this[_i]([], () => d, null, {
+                enabled: true,
+                ignore: true
               });
-              if (this.eb) {
-                on(depMap, _e, this.eb); // propagate the error correctly - something else is listening for errors
-              } else if (this.events[_e])
-                on(depMap, _e, (err) => this.emit(_e, err));
-            } // (No direct eb on this this)
-            var id = depMap.id,
-              m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
-            if (!e_(handlers).yes(id) && m && !m[_ed])
-              STATE.enable(depMap, this);
-          }); //don't call enable if it is already enabled (circular ds)
+            }); //construct
+            var normMod =
+              e_(STATE.dependencies).yes(nM.id) && STATE.dependencies[nM.id]; //normalizedMod
+            if (normMod) {
+              this.depMaps.push(nM);
+              if (this.events[_e]) normMod.on(_e, (err) => this.emit(_e, err)); //Mark this as a dependency for this plugin, so it can be traced for cycles.
+              normMod.enable();
+            }
+          },
+          enable: () => {
+            STATE.enRgtry[this.map.id] = this;
+            this[_ed] = true;
+            this.enabling = true; //no inadvertent load and 0 depCount by
 
-          _K(this.pluginMaps).forEach(
-            (pM = (x) => this.pluginMaps[x], i) =>
-              e_(STATE.dependencies).yes(pM.id) &&
-              STATE.dependencies[pM.id] &&
-              !STATE.dependencies[pM.id][_ed] &&
-              STATE.enable(pM, this)
-          );
-          this.enabling = false;
-          this.check();
-        },
-        on: (name, cb) =>
-          (this.events[name]
-            ? this.events[name]
-            : (this.events[name] = [])
-          ).push(cb),
-        emit: (name, evt) => {
-          this.events[name].forEach((cb) => cb(evt));
-          if (name === _e) delete this.events[name];
-        },
-        defineDep: (i, depExports) => {
-          if (!this.depMatched[i]) {
-            this.depMatched[i] = true; //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-            this.depCount -= 1; //prototype is hydratable for async results, init only on this page by 'new' initialization
-            this.depExports[i] = depExports; //multiple cb export cycles
-          }
-        },
-        callPlugin: () => {
-          var map = this.map; //Map already normalized the prefix.
-          var id = map.id; //Mark this as a dependency for this plugin, so it
-          var pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
-          this.depMaps.push(pluginMap);
-          on(pluginMap, _dd, (plugin) => {
-            if (this.map.unnormalized)
-              return Module[_P].normalizeMod(plugin, map); //If current map is not normalized, wait for that
-            var bundleId =
-              e_(STATE.bdlMap).yes(this.map.id) && STATE.bdlMap[this.map.id]; //normalized name to load instead of continuing.
-            if (bundleId) {
-              this.map.url = nameToUrl(bundleId);
-              this.load();
-              return null;
-            } //If a paths STATE.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
-            const load = (factory) =>
-              this[_i]([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
-            load[_e] = (err) => {
-              this.INITED = true;
-              this[_e] = err;
-              err.requireModules = [id];
-              _K(STATE.dependencies).forEach(
-                (x, i) =>
-                  STATE.dependencies[x].map.id.indexOf(id + "_unnormalized") ===
-                    0 && clrRegstr(STATE.dependencies[x].map.id)
-              );
-              onError(err);
-            }; //Remove temp unnormalized modules for this this, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
-            const parser = STATE.makeRequire(map.parentMap, {
-              enableBuildCallback: true
-            }); //STATE or how to 'complete' the load.
+            //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
+            this.depMaps.forEach((depMap, i) => {
+              if (T(depMap === _t)) {
+                const mp = this.map.yesdef ? this.map : this.map.parentMap;
+                depMap = makeModuleMap(depMap, mp, false, !this.skipMap); //Dependency needs to be converted to a depMap
+                this.depMaps[i] = depMap; //and wired up to this this.
+                var handler =
+                  e_(handlers).yes(depMap.id) && handlers[depMap.id];
+                if (handler) return (this.depExports[i] = handler(this));
+                this["depCount"] += 1;
+                on(depMap, _dd, (depExports) => {
+                  if (this.undefed) return null;
+                  this.defineDep(i, depExports);
+                  this.check();
+                });
+                if (this.eb) {
+                  on(depMap, _e, this.eb); // propagate the error correctly - something else is listening for errors
+                } else if (this.events[_e])
+                  on(depMap, _e, (err) => this.emit(_e, err));
+              } // (No direct eb on this this)
+              var id = depMap.id,
+                m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
+              if (!e_(handlers).yes(id) && m && !m[_ed])
+                STATE.enable(depMap, this);
+            }); //don't call enable if it is already enabled (circular ds)
 
-            load.fromText = (text, textAlt) => {
-              /*jslint evil: true */
-              var tkn = map.name,
-                moduleMap = makeModuleMap(tkn),
-                hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass tkn, ok, but discard tkn for internal ref.
-              if (textAlt) text = textAlt;
-              if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
-              getModule(moduleMap); //Prime the system by creating a this instance for
-              if (e_(STATE.CONFIG.config).yes(id))
-                STATE.CONFIG.config[tkn] = STATE.CONFIG.config[id]; //Transfer any STATE.CONFIG to this other this.
-              try {
-                build.exec(text);
-              } catch (e) {
-                return onError(
-                  WINDOW.mk([
-                    "fromtexteval",
-                    `fromText eval for ${id} failed: ${e}`,
-                    e,
-                    [id]
-                  ])
+            _K(this.pluginMaps).forEach(
+              (pM = (x) => this.pluginMaps[x], i) =>
+                e_(STATE.dependencies).yes(pM.id) &&
+                STATE.dependencies[pM.id] &&
+                !STATE.dependencies[pM.id][_ed] &&
+                STATE.enable(pM, this)
+            );
+            this.enabling = false;
+            this.check();
+          },
+          on: (name, cb) =>
+            (this.events[name]
+              ? this.events[name]
+              : (this.events[name] = [])
+            ).push(cb),
+          emit: (name, evt) => {
+            this.events[name].forEach((cb) => cb(evt));
+            if (name === _e) delete this.events[name];
+          },
+          defineDep: (i, depExports) => {
+            if (!this.depMatched[i]) {
+              this.depMatched[i] = true; //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
+              this.depCount -= 1; //prototype is hydratable for async results, init only on this page by 'new' initialization
+              this.depExports[i] = depExports; //multiple cb export cycles
+            }
+          },
+          callPlugin: () => {
+            var map = this.map; //Map already normalized the prefix.
+            var id = map.id; //Mark this as a dependency for this plugin, so it
+            var pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
+            this.depMaps.push(pluginMap);
+            on(pluginMap, _dd, (plugin) => {
+              if (this.map.unnormalized)
+                return Module[_P].normalizeMod(plugin, map); //If current map is not normalized, wait for that
+              var bundleId =
+                e_(STATE.bdlMap).yes(this.map.id) && STATE.bdlMap[this.map.id]; //normalized name to load instead of continuing.
+              if (bundleId) {
+                this.map.url = nameToUrl(bundleId);
+                this.load();
+                return null;
+              } //If a paths STATE.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
+              const load = (factory) =>
+                this[_i]([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
+              load[_e] = (err) => {
+                this.INITED = true;
+                this[_e] = err;
+                err.requireModules = [id];
+                _K(STATE.dependencies).forEach(
+                  (x, i) =>
+                    STATE.dependencies[x].map.id.indexOf(
+                      id + "_unnormalized"
+                    ) === 0 && clrRegstr(STATE.dependencies[x].map.id)
                 );
-              } //type, msg, err, requireModules
-              if (hasInteractive) useInteractive = true; //Mark this as a dependency for the plugin resource
-              this.depMaps.push(moduleMap);
-              STATE.completeLoad(tkn);
-              parser([tkn], load); //Support anonymous modules. Bind the value of that this to the value for this resource ID.
-            };
-            plugin.load(map.name, parser, load, STATE.CONFIG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
-          });
-          STATE.enable(pluginMap, this);
-          this.pluginMaps[pluginMap.id] = pluginMap;
-        },
-        fetch: () => {
-          if (this.fetched) return null;
-          this.fetched = true;
-          STATE.startTime = new Date().getTime();
-          var map = this.map;
-          if (this.shim) {
-            STATE.makeRequire(this.map, {
-              enableBuildCallback: true
-            })(
-              this.shim.ds || [],
-              map.prefix ? this.callPlugin() : this.load()
-            ); //plugin-managed resource
-          } else return map.prefix ? this.callPlugin() : this.load();
-        }
-      }; //remove broken Module instance from STATE.dependencies.//BS/BF 'bindingsFetch'
+                onError(err);
+              }; //Remove temp unnormalized modules for this this, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
+              const parser = STATE.makeRequire(map.parentMap, {
+                enableBuildCallback: true
+              }); //STATE or how to 'complete' the load.
 
-    _K(state).forEach((key) => (this[key] = state[key]));
-    return this;
+              load.fromText = (text, textAlt) => {
+                /*jslint evil: true */
+                var tkn = map.name,
+                  moduleMap = makeModuleMap(tkn),
+                  hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass tkn, ok, but discard tkn for internal ref.
+                if (textAlt) text = textAlt;
+                if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
+                getModule(moduleMap); //Prime the system by creating a this instance for
+                if (e_(STATE.CONFIG.config).yes(id))
+                  STATE.CONFIG.config[tkn] = STATE.CONFIG.config[id]; //Transfer any STATE.CONFIG to this other this.
+                try {
+                  build.exec(text);
+                } catch (e) {
+                  return onError(
+                    WINDOW.mk([
+                      "fromtexteval",
+                      `fromText eval for ${id} failed: ${e}`,
+                      e,
+                      [id]
+                    ])
+                  );
+                } //type, msg, err, requireModules
+                if (hasInteractive) useInteractive = true; //Mark this as a dependency for the plugin resource
+                this.depMaps.push(moduleMap);
+                STATE.completeLoad(tkn);
+                parser([tkn], load); //Support anonymous modules. Bind the value of that this to the value for this resource ID.
+              };
+              plugin.load(map.name, parser, load, STATE.CONFIG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
+            });
+            STATE.enable(pluginMap, this);
+            this.pluginMaps[pluginMap.id] = pluginMap;
+          },
+          fetch: () => {
+            if (this.fetched) return null;
+            this.fetched = true;
+            STATE.startTime = new Date().getTime();
+            var map = this.map;
+            if (this.shim) {
+              STATE.makeRequire(this.map, {
+                enableBuildCallback: true
+              })(
+                this.shim.ds || [],
+                map.prefix ? this.callPlugin() : this.load()
+              ); //plugin-managed resource
+            } else return map.prefix ? this.callPlugin() : this.load();
+          }
+        }; //remove broken Module instance from STATE.dependencies.//BS/BF 'bindingsFetch'
+
+      _K(state).forEach((key) => (this[key] = state[key]));
+    }
   } //this.exports; this.factory; this.depMaps = [], this[_ed], this.fetched //const defaultOnError = (err) => err;
   //const construct = (f, obj) => function () { f.apply(obj, arguments); //in original JQuery RequireJS, obj is this or this }; //Function.prototype.construct (bind), with 'this' //https://stackoverflow.com/a/46700616/11711280
 
@@ -681,26 +684,28 @@ const App = () => {
       rm(n, onScriptError, _e);
       return { node: n, id: n && n.getAttribute(WINDOW.dr(true)) };
     };
-  function handlers() {
-    this.require = (m) =>
-      !m.require ? (m.require = STATE.makeRequire(m.map)) : m.require;
-    this.exports = (m) => {
-      m.usingExports = true;
-      if (!m.map.yesdef) return null;
-      if (!m[_x]) return (m[_x] = STATE.defined[m.map.id] = {});
-      return (STATE.defined[m.map.id] = m[_x]);
-    };
-    return (m) =>
-      !m[_m] &&
-      (m[_m] = {
-        id: m.map.id,
-        uri: m.map.url,
-        config: () =>
-          e_(STATE.CONFIG.config).yes(m.map.id)
-            ? STATE.CONFIG.config[m.map.id]
-            : {},
-        exports: m[_x] || (m[_x] = {})
-      });
+  class handlers {
+    constructor() {
+      this.require = (m) =>
+        !m.require ? (m.require = STATE.makeRequire(m.map)) : m.require;
+      this.exports = (m) => {
+        m.usingExports = true;
+        if (!m.map.yesdef) return null;
+        if (!m[_x]) return (m[_x] = STATE.defined[m.map.id] = {});
+        return (STATE.defined[m.map.id] = m[_x]);
+      };
+      return (m) =>
+        !m[_m] &&
+        (m[_m] = {
+          id: m.map.id,
+          uri: m.map.url,
+          config: () =>
+            e_(STATE.CONFIG.config).yes(m.map.id)
+              ? STATE.CONFIG.config[m.map.id]
+              : {},
+          exports: m[_x] || (m[_x] = {})
+        });
+    }
   }
   const depMap = (a0) => {
       return {
@@ -853,90 +858,99 @@ const App = () => {
       return tool(relMap, o, NAME).parser;
     };
 
-  function newRequireable() {
-    const NAME = arguments[0];
+  class newRequireable {
+    constructor() {
+      const NAME = arguments[0];
 
-    ["dependencies", "enRgtry", "unDE", "defined", "urlFchd", "bdlMap"].forEach(
-      (k) => (this[k] = {})
-    ); //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
+      [
+        "dependencies",
+        "enRgtry",
+        "unDE",
+        "defined",
+        "urlFchd",
+        "bdlMap"
+      ].forEach((k) => (this[k] = {})); //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
 
-    checkLoaded(this);
-    STATE = {
-      NAME,
-      defQueue,
-      defQueueMap: {},
-      makeModuleMap,
-      nextTick: build.nextTick,
-      Module,
-      load: (id, url) => build.load(STATE, id, url),
-      execCb: (name, cb, args, exports) => cb.apply(exports, args),
-      onError,
-      CONFIG: STATE.CONFIG,
-      unDe: this.unDE ? this.unDE : {},
-      enRgtry: this.enRgtry ? this.enRgtry : {},
-      urlFchd: this.urlFchd ? this.urlFchd : {}, //this able's
-      defined: this.defined ? this.defined : {},
-      dependencies: this.dependencies ? this.dependencies : {},
-      configure,
-      makeShimExports: (value) =>
-        function () {
-          return (
-            (value[_i] && value[_i].apply(dependency, arguments)) ||
-            (value[_x] && getGlobal(value[_x]))
-          );
-        }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
-      /* makeShimExports: (value) =>
+      checkLoaded(this);
+      STATE = {
+        NAME,
+        defQueue,
+        defQueueMap: {},
+        makeModuleMap,
+        nextTick: build.nextTick,
+        Module,
+        load: (id, url) => build.load(STATE, id, url),
+        execCb: (name, cb, args, exports) => cb.apply(exports, args),
+        onError,
+        CONFIG: STATE.CONFIG,
+        unDe: this.unDE ? this.unDE : {},
+        enRgtry: this.enRgtry ? this.enRgtry : {},
+        urlFchd: this.urlFchd ? this.urlFchd : {}, //this able's
+        defined: this.defined ? this.defined : {},
+        dependencies: this.dependencies ? this.dependencies : {},
+        configure,
+        makeShimExports: (value) =>
+          function () {
+            return (
+              (value[_i] && value[_i].apply(dependency, arguments)) ||
+              (value[_x] && getGlobal(value[_x]))
+            );
+          }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
+        /* makeShimExports: (value) =>
             function () {
               return (
                 (value[_i] && value[_i].apply(dependency, arguments)) ||
                 (value[_x] && getGlobal(value[_x]))
               );
             }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
-      makeRequire: (relMap, options) => makeRequire(relMap, options, NAME),
-      require: STATE.makeRequire(),
-      enable: (depMap) =>
-        e_(STATE.dependencies).yes(depMap.id) &&
-        STATE.dependencies[depMap.id] &&
-        getModule(depMap).enable(),
-      //if "m" this is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
-      completeLoad: (tkn) => {
-        var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
-        tkeGblQue();
-        while (defQueue.length) {
-          args = defQueue.shift();
-          if (args[0] === null) {
-            args[0] = tkn;
-            if (found) break;
-            found = true; //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
-          } else if (args[0] === tkn) found = true;
-          callGetModule(args);
-        } //matched a define call in this script
-        STATE.defQueueMap = {};
-        var m = e_(STATE.dependencies).yes(tkn) && STATE.dependencies[tkn]; // in case-/init-calls change the STATE.dependencies
-        if (!found && !e_(STATE.defined).yes(tkn) && m && !m.inited) {
-          var shim = e_(STATE.CONFIG.shim).yes(tkn)
-            ? STATE.CONFIG.shim[tkn]
-            : {};
-          if (STATE.CONFIG.enforceDefine && (!shim[_x] || !getGlobal(shim[_x])))
-            return (
-              !WINDOW.hasPathFallback(tkn, STATE.CONFIG.paths) &&
-              onError(
-                WINDOW.mk([
-                  "nodefine",
-                  "No define call for " + tkn,
-                  null,
-                  [tkn]
-                ])
-              )
-            ); //type, msg, err, requireModules
-          callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
+        makeRequire: (relMap, options) => makeRequire(relMap, options, NAME),
+        require: STATE.makeRequire(),
+        enable: (depMap) =>
+          e_(STATE.dependencies).yes(depMap.id) &&
+          STATE.dependencies[depMap.id] &&
+          getModule(depMap).enable(),
+        //if "m" this is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
+        completeLoad: (tkn) => {
+          var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
+          tkeGblQue();
+          while (defQueue.length) {
+            args = defQueue.shift();
+            if (args[0] === null) {
+              args[0] = tkn;
+              if (found) break;
+              found = true; //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
+            } else if (args[0] === tkn) found = true;
+            callGetModule(args);
+          } //matched a define call in this script
+          STATE.defQueueMap = {};
+          var m = e_(STATE.dependencies).yes(tkn) && STATE.dependencies[tkn]; // in case-/init-calls change the STATE.dependencies
+          if (!found && !e_(STATE.defined).yes(tkn) && m && !m.inited) {
+            var shim = e_(STATE.CONFIG.shim).yes(tkn)
+              ? STATE.CONFIG.shim[tkn]
+              : {};
+            if (
+              STATE.CONFIG.enforceDefine &&
+              (!shim[_x] || !getGlobal(shim[_x]))
+            )
+              return (
+                !WINDOW.hasPathFallback(tkn, STATE.CONFIG.paths) &&
+                onError(
+                  WINDOW.mk([
+                    "nodefine",
+                    "No define call for " + tkn,
+                    null,
+                    [tkn]
+                  ])
+                )
+              ); //type, msg, err, requireModules
+            callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
+          }
+          checkLoaded(); //tkn = moduleName
         }
-        checkLoaded(); //tkn = moduleName
-      }
-    };
+      };
 
-    _K(STATE).forEach((key) => (this[key] = STATE[key]));
-    return this;
+      _K(STATE).forEach((key) => (this[key] = STATE[key]));
+    }
   }
 
   //uses 'this' as 'z', but when called () the function is returned,
@@ -1071,6 +1085,7 @@ const App = () => {
               } else if (isWebWorker) {
                 try {
                   setTimeout(() => {}, 0);
+                  // eslint-disable-next-line
                   importScripts(url);
                   STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
                 } catch (e) {
@@ -1172,21 +1187,23 @@ var mainScript,
     ),
   // eslint-disable-next-line
   version = "2.3.6.carducci",
-  iifeapp = function iifeapp() {
-    const z = arguments[0]; //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'this'," else App() function
-    return function (construction = arguments[0], keys = arguments[1]) {
-      const buff = construction.constructor === Array ? 0 : 1;
-      construction =
-        construction.constructor === Array ? () => {} : construction;
-      keys = keys.constructor === Array ? keys : construction;
-      construction.constructor === Function && construction();
-      keys.constructor === Array &&
-        keys.forEach((x, i) =>
-          x.includes(".")
-            ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i + buff])
-            : (z[x] = arguments[i + buff])
-        );
-    };
+  iifeapp = class iifeapp {
+    constructor() {
+      const z = arguments[0]; //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'this'," else App() function
+      return function (construction = arguments[0], keys = arguments[1]) {
+        const buff = construction.constructor === Array ? 0 : 1;
+        construction =
+          construction.constructor === Array ? () => {} : construction;
+        keys = keys.constructor === Array ? keys : construction;
+        construction.constructor === Function && construction();
+        keys.constructor === Array &&
+          keys.forEach((x, i) =>
+            x.includes(".")
+              ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i + buff])
+              : (z[x] = arguments[i + buff])
+          );
+      };
+    }
   }, //this(and arguments) should relate to wherever function runs (fat has no 'this', iife can to append this[key])
   //const iifefunc = (construction, keys) => new iifeapp(construction, keys); //you can tell this is a [proper-]function[-invocation] with thiscontext here for iifeapp
   /**
