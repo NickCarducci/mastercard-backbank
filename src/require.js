@@ -24,22 +24,22 @@ const App = () => {
 
     // waitInterval - Do not bother if this call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
     if (watch) return null;
-    const mx = (m) => ({ m, s: m.depMaps, i: m.map.id });
-    const progress = ({ m, s, i } = mx, t = {}, p = {}) => {
-      t[i] = true;
-      s.forEach((i = (d) => d.id, ix) => {
-        var dep = e_(STATE.dependencies).yes(i) && STATE.dependencies[i]; // depMap force undefined (registered yet not matched in this)
-        const c = dep && !m.depMatched[ix] && !p[i];
-        // prettier-ignore
-        if (c && (!e_(t).yes(i) || !t[i]))
-          return progress(dep, t, p);
-        // prettier-ignore
-        c && m.defineDep(ix, STATE.defined[i]);
-        c && m.check(); //pass false?
-      });
-      p[i] = true;
-    };
-    const brwr = isBrowser || isWebWorker;
+    const mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
+      progress = ({ m, s, i } = mx, tt = {}, p = {}) => {
+        tt[i] = true;
+        s.forEach((i = (d) => d.id, ix) => {
+          var dep = e_(STATE.dependencies).yes(i) && STATE.dependencies[i]; // depMap force undefined (registered yet not matched in this)
+          const c = dep && !m.depMatched[ix] && !p[i];
+          // prettier-ignore
+          if (c && (!e_(tt).yes(i) || !tt[i]))
+          return progress(dep, tt, p);
+          // prettier-ignore
+          c && m.defineDep(ix, STATE.defined[i]);
+          c && m.check(); //pass false?
+        });
+        p[i] = true;
+      },
+      brwr = isBrowser || isWebWorker;
     watch = true;
     const er = _e,
       mxx = (mod = (x) => STATE.enRgtry[x]) => {
