@@ -9,7 +9,8 @@
 /*jslint regexp: true, nomen: true, sloppy: true */
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
-const App = function () {
+//cannot this never get to the string regex?
+const App = () => {
   var clrsec, watch;
   const checkLoaded = (z) => {
     var err,
@@ -727,98 +728,101 @@ const App = function () {
       !value
         ? value //dont-notation dependency
         : value.split(".").reduce((previous, key) => dependency[previous], {}),
-    tool = (relMap, o, ctn) => {
-      return {
-        suspend: (ds, cb, eb) => {
-          var id, map;
-
-          if (o.enableBuildCallback && cb && e_(cb).string() === Fn)
-            cb.__requireJsBuild = true;
-
-          return T(ds !== _t)
-            ? null
-            : e_(cb).string() === Fn
-            ? onError(WINDOW.mk(["requireargs", "Invalid require call"]), eb) //Invalid call; id, msg, err, requireModule
-            : relMap && e_(handlers).yes(ds)
-            ? handlers[ds](ABLE.dependencies[relMap.id]) //when require|exports|this are requested && while this is being ABLE.defined
-            : build.get
-            ? build.get(ABLE, ds, relMap, tool.parser)
-            : () => {
-                map = makeModuleMap(ds, relMap, false, true);
-                id = map.id; //Normalize this name from . or ..
-                return !e_(ABLE.defined).yes(id)
-                  ? // prettier-ignore
-                    onError(WINDOW.mk(["notloaded", `Module name ${id} has not been loaded yet for ABLE: ${ctn + (relMap ? "" : ". Use require([])")}`]))
-                  : ABLE.defined[id];
-              };
-        },
-        parser: (...args) => {
-          if (tool.suspend(...args)) return null;
-          const ds = args[0],
-            cb = args[1],
-            eb = args[2];
-
-          var requireMod;
-          const intakeDefines = () => {
-            var args;
-            tkeGblQue();
-            while (defQueue.length) {
-              args = defQueue.shift();
-
-              if (args[0] === null)
-                return onError(
-                  WINDOW.mk([
-                    "mismatch",
-                    `Mismatched anonymous define() this: ${
-                      args[args.length - 1]
-                    }`
-                  ])
-                );
-              callGetModule(args);
-            }
-            ABLE.defQueueMap = {};
-          }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
-          intakeDefines(); //Grab defines waiting in the dependency queue.
-          ABLE.nextTick(() => {
-            intakeDefines(); //Mark all the ABLE.dependencies as needing to be loaded.
-            requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
-            requireMod.skipMap = o.skipMap; //store if 'map CG' applied to this 'require call' for ABLE.dependencies
-            requireMod[_i](ds, cb, eb, { enabled: true });
-            checkLoaded();
-          });
-          return tool.parser;
-        }
-      };
-    },
     makeRequire = (relMap, o = (options) => options || {}, ctn) => {
-      const app = {
-        isBrowser,
-        defined: (id) =>
-          e_(ABLE.defined).yes(makeModuleMap(id, relMap, false, true).id),
-        specified: (id = (id) => makeModuleMap(id, relMap, false, true).id) =>
-          e_(ABLE.defined).yes(id) || e_(ABLE.dependencies).yes(id),
-        toUrl: (mNPE) => {
-          //moduleNamePlusExt
-          var i = mNPE.lastIndexOf("."),
-            seg = mNPE.split("/")[0],
-            isRelative = seg === "." || seg === ".."; //URL path = this name + .extension; requires 'this name,' not 'plain URLs' like nameToUrl
+      const tool = (relMap, o, ctn) => {
+          return {
+            suspend: (ds, cb, eb) => {
+              var id, map;
 
-          const isAlias = i !== -1 && (!isRelative || i > 1);
-          const ext = isAlias ? mNPE.substring(i, mNPE.length) : null;
-          mNPE = isAlias ? mNPE.substring(0, i) : mNPE;
-          //file extension alias, not 'relative path dots'
+              if (o.enableBuildCallback && cb && e_(cb).string() === Fn)
+                cb.__requireJsBuild = true;
 
-          const ar = WINDOW.normalize([
-            mNPE,
-            relMap && relMap.id,
-            true,
-            CG.nodeIdCompat,
-            CG.map,
-            CG.pkgs
-          ]);
-          return nameToUrl(ar, ext, true);
-        }
-      };
+              return T(ds !== _t)
+                ? null
+                : e_(cb).string() === Fn
+                ? onError(
+                    WINDOW.mk(["requireargs", "Invalid require call"]),
+                    eb
+                  ) //Invalid call; id, msg, err, requireModule
+                : relMap && e_(handlers).yes(ds)
+                ? handlers[ds](ABLE.dependencies[relMap.id]) //when require|exports|this are requested && while this is being ABLE.defined
+                : build.get
+                ? build.get(ABLE, ds, relMap, tool.parser)
+                : () => {
+                    map = makeModuleMap(ds, relMap, false, true);
+                    id = map.id; //Normalize this name from . or ..
+                    return !e_(ABLE.defined).yes(id)
+                      ? // prettier-ignore
+                        onError(WINDOW.mk(["notloaded", `Module name ${id} has not been loaded yet for ABLE: ${ctn + (relMap ? "" : ". Use require([])")}`]))
+                      : ABLE.defined[id];
+                  };
+            },
+            parser: (...args) => {
+              if (tool.suspend(...args)) return null;
+              const ds = args[0],
+                cb = args[1],
+                eb = args[2];
+
+              var requireMod;
+              const intakeDefines = () => {
+                var args;
+                tkeGblQue();
+                while (defQueue.length) {
+                  args = defQueue.shift();
+
+                  if (args[0] === null)
+                    return onError(
+                      WINDOW.mk([
+                        "mismatch",
+                        `Mismatched anonymous define() this: ${
+                          args[args.length - 1]
+                        }`
+                      ])
+                    );
+                  callGetModule(args);
+                }
+                ABLE.defQueueMap = {};
+              }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
+              intakeDefines(); //Grab defines waiting in the dependency queue.
+              ABLE.nextTick(() => {
+                intakeDefines(); //Mark all the ABLE.dependencies as needing to be loaded.
+                requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
+                requireMod.skipMap = o.skipMap; //store if 'map CG' applied to this 'require call' for ABLE.dependencies
+                requireMod[_i](ds, cb, eb, { enabled: true });
+                checkLoaded();
+              });
+              return tool.parser;
+            }
+          };
+        },
+        app = {
+          isBrowser,
+          defined: (id) =>
+            e_(ABLE.defined).yes(makeModuleMap(id, relMap, false, true).id),
+          specified: (id = (id) => makeModuleMap(id, relMap, false, true).id) =>
+            e_(ABLE.defined).yes(id) || e_(ABLE.dependencies).yes(id),
+          toUrl: (mNPE) => {
+            //moduleNamePlusExt
+            var i = mNPE.lastIndexOf("."),
+              seg = mNPE.split("/")[0],
+              isRelative = seg === "." || seg === ".."; //URL path = this name + .extension; requires 'this name,' not 'plain URLs' like nameToUrl
+
+            const isAlias = i !== -1 && (!isRelative || i > 1);
+            const ext = isAlias ? mNPE.substring(i, mNPE.length) : null;
+            mNPE = isAlias ? mNPE.substring(0, i) : mNPE;
+            //file extension alias, not 'relative path dots'
+
+            const ar = WINDOW.normalize([
+              mNPE,
+              relMap && relMap.id,
+              true,
+              CG.nodeIdCompat,
+              CG.map,
+              CG.pkgs
+            ]);
+            return nameToUrl(ar, ext, true);
+          }
+        };
       WINDOW.mixin(tool(relMap, o, ctn).parser, app);
       if (!relMap)
         tool(relMap, o, ctn).parser.undef = (id) => {
@@ -937,12 +941,13 @@ const App = function () {
   }
 
   //uses 'this' as 'z', but when called () the function is returned,
-  const build = (REQUIREJS = function () {
-    var ds = arguments[0],
-      cb = arguments[1],
-      eb = arguments[2],
-      optional = arguments[3],
-      ctx,
+  const build = (REQUIREJS = function (
+    ds = arguments[0],
+    cb = arguments[1],
+    eb = arguments[2],
+    optional = arguments[3]
+  ) {
+    var ctx,
       cfg,
       ctn = us, //Caja compliant build for minified-scope name of dependency, cb for arr completion Find the right ABLE, use default
       notDeps = e_(ds).string() !== Ar,
@@ -970,7 +975,6 @@ const App = function () {
       return (...args) => new iifeapp(ths)(args);
     },*/ //(object/class/prototype-'this'-prop)
     build, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'build' function
-
     require:
       /*T(define === _n) ||*/ T(REQUIREJS === _u) ||
       e_(REQUIREJS).string() !== Fn
@@ -1003,7 +1007,9 @@ const App = function () {
 
             //prettier-ignore
             /*jslint evil: true */
-            build.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
+            //build.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
+            //build.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
+            //merely to prepend with 'use strict', don't bother
 
             var start = (build.start = { contexts: ctxs, newRequireable }); //Create default ABLE.
             build({}); //'dependency require' ABLE-sensitive exported methods
@@ -1049,7 +1055,7 @@ const App = function () {
                   //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
                   //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
                 } else
-                  (function () {
+                  (() => {
                     n[_AEL]("load", onScriptLoad, false);
                     n[_AEL](_e, onScriptError, false);
                   })(); //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', ABLE.onScriptError);
