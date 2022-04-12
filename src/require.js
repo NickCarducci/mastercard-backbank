@@ -603,9 +603,7 @@ const App = () => {
   } // If package-name, package 'main,' roots
   var dataMain,
     baseElement,
-    mainScript,
     subPath,
-    src,
     head,
     dependency,
     STATE = {
@@ -1113,22 +1111,15 @@ const App = () => {
                     })(); //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
                   if (dataMain) {
                     mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
-                    if (
-                      !configuration.baseUrl &&
-                      mainScript.indexOf("!") === -1
-                    )
-                      iifeapp(this)(
-                        [
-                          "src",
-                          "mainScript",
-                          "subPath",
-                          "configuration.baseUrl"
-                        ],
-                        mainScript.split("/"),
-                        src.pop(),
-                        src.length ? src.join("/") + "/" : "./",
-                        subPath
-                      );
+                    const pop =
+                      !configuration.baseUrl && mainScript.indexOf("!") === -1;
+                    if (pop) {
+                      src = mainScript.split("/");
+                      mainScript = src.pop();
+                      subPath = src.length ? src.join("/") + "/" : "./";
+                      configuration.baseUrl = subPath;
+                    }
+
                     //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
                     mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
                     if (/^[/:?.]|(.js)$/.test(mainScript))
@@ -1149,7 +1140,9 @@ const App = () => {
 const Required = () => new App();
 export { Required as default };
 
-var define = (
+var mainScript,
+  src,
+  define = (
     { nm, ds, c, n } = (...copy) => {
       const notString = T(copy.nm !== _t),
         notDeps = e_(copy.ds).string() !== Ar;
