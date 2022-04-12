@@ -1269,31 +1269,6 @@ export class Require {
       }
     }
 
-    //uses 'this' as 'z', but when called () the function is returned,
-    const build = (REQUIREJS = function (
-      ds = arguments[0],
-      cb = arguments[1],
-      eb = arguments[2],
-      optional = arguments[3]
-    ) {
-      var ctx,
-        cfg,
-        NAME = us, //Caja compliant build for minified-scope name of dependency, cb for arr completion Find the right STATE, use default
-        notDeps = e_(ds).string() !== Ar,
-        notString = T(ds !== _t);
-      if (notDeps && notString) {
-        cfg = ds;
-        return !e_(cb).a()
-          ? (ds = [])
-          : iifeapp(this)(["ds", "cb", "eb"], cb, eb, optional);
-      } // Determine if have STATE.CONFIG object in the call. ds is a STATE.CONFIG object Adjust args if there are STATE.dependencies
-      NAME = cfg && cfg.context ? cfg.context : NAME;
-      ctx = e_(ctxs).yes(NAME) && ctxs[NAME];
-      ctx = ctx ? ctx : (ctxs[NAME] = new build.start.newRequireable(NAME)); //dependency
-      cfg && ctx.configure(cfg);
-      return ctx.require(ds, cb, eb);
-    });
-
     //this named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
     //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
 
