@@ -37,7 +37,7 @@ async function noException(req, env) {
       }
   
      const require = await makeRequire(req,env)
-  const resp = await instance.fetch(req, env, require);
+  const resp = await require && instance.fetch(req, env, require);
   const r = await resp.json();
     /*return new Response(`{
         ok: true,
@@ -65,7 +65,7 @@ async function noException(req, env) {
     },
     {
       status: r.status,
-      message: r.statusText? r.statusText : message,
+      message: r.statusText? r.statusText : r.message,
       headers: dataHead
     }
   );
