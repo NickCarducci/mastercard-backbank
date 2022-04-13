@@ -13,7 +13,7 @@
 
 export class Require {
   constructor(el, env) {
-    console.log(el.textContent, "- From the example (Require) module");
+    console.log(JSON.stringify(el), "- From the example (Require) module");
     this.el = el;
     this.env = env;
     this.el.blockConcurrencyWhile(async () => {
@@ -1438,17 +1438,17 @@ export class Require {
     };
 
     _K(state).forEach((key) => (this[key] = state[key]));
-    this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
+    //this.fetch = async (req, env) => new Response((resolve) => resolve(this)); //await ((z)=>z)(this));
   }
 
-  /*async fetch(req, env) {
+  async fetch(req, env) {
     const dataHead = {
       "Content-Type": "text/plain" //"application/json"
     };
-    return new Response(JSON.stringify(this), {
+    return new Response(this, {
       status: "200",
       message: "success: " + req.url,
       headers: dataHead
     });
-  }*/
+  }
 }
