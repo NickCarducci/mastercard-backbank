@@ -5,7 +5,7 @@ export { DurableObjectExample } from "./index.mjs";
 export { Require } from "./require.mjs";
 
 export default {
-  async fetch(request, env/*, ctx*/) {
+  async fetch(request, env /*, ctx*/) {
     //Response class must be a promise
     try {
       return await noException(request, env);
@@ -19,57 +19,73 @@ export default {
 async function noException(req, env) {
   // key => Object ID
   //https://linc.sh/blog/durable-objects-in-production
-    //const clientId = request.headers.get("cf-connecting-ip");
-  const backbank = env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName(new URL(req.url).pathname);
- 
-      //return new Response(JSON.stringify(backbank));
+  //const clientId = request.headers.get("cf-connecting-ip");
+  const backbank = env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName(
+    new URL(req.url).pathname
+  );
+
+  //return new Response(JSON.stringify(backbank));
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   const instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(backbank);
   // Forward the current HTTP request to it
-  const makeRequire = async (req,env) => {
-        const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
-          new URL(req.url).pathname
-        );
-        const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-        const resp = await instance.fetch(req, env);
-        const require = resp && await resp.json();
-        return new Promise(resolve=>require && resolve(require));
-      }
-  
-     const require = await makeRequire(req,env)
-  const resp = await require && instance.fetch(req, env, require);
+  const makeRequire = async (req, env) => {
+    const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+      new URL(req.url).pathname
+    );
+    const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
+    const resp = await instance.fetch(req, env);
+    const require = resp && (await resp.json());
+    return new Promise((resolve) => require && resolve(require));
+  };
+
+  const require = await makeRequire(req, env);
+  const resp = (await require) && instance.fetch(req, env, require);
   const r = await resp.json();
-    /*return new Response(`{
+  /*return new Response(`{
         ok: true,
         data: ${r}
     }`);*/
   const dataHead = {
     "Content-Type": "application/json"
   };
-  if(r&&r.data){
-    return new Response(
-      {
+  if (r) {
+    if (r.data) {
+      return new Response(
+        {
           data: r.data,
           ok: true
+        },
+        {
+          status: "200",
+          message: "success: " + req.url,
+          headers: dataHead
+        }
+      );
+    } else
+      return new Response(
+        {
+          data: r.data,
+          ok: false
+        },
+        {
+          status: r.status,
+          message: r.statusText ? r.statusText : r.message,
+          headers: dataHead
+        }
+      );
+  } else
+    return new Response(
+      {
+        data: {},
+        ok: false
       },
       {
-        status: "200",
-        message: "success: " + req.url,
+        status: "no response from durable object chain",
+        message: "",
         headers: dataHead
       }
     );
-  } else return new Response(
-    {
-        data: r.data,
-        ok: false
-    },
-    {
-      status: r.status,
-      message: r.statusText? r.statusText : r.message,
-      headers: dataHead
-    }
-  );
-  
+
   //new Response({})
 }
 //new instance class fetch waits without await
