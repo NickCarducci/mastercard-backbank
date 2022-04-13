@@ -51,10 +51,10 @@ async function noException(req, env) {
   if (r) {
     if (r.data) {
       return new Response(
-        {
-          data: r.data,
+        `{
+          data: ${r.data},
           ok: true
-        },
+        }`,
         {
           status: "200",
           message: "success: " + req.url,
@@ -63,10 +63,10 @@ async function noException(req, env) {
       );
     } else
       return new Response(
-        {
-          data: r.data,
+        `{
+          data: ${r.data},
           ok: false
-        },
+        }`,
         {
           status: r.status,
           message: r.statusText ? r.statusText : r.message,
@@ -75,10 +75,10 @@ async function noException(req, env) {
       );
   } else
     return new Response(
-      {
+      `{
         data: {},
         ok: false
-      },
+      }`,
       {
         status: "no response from durable object chain",
         message: "",
