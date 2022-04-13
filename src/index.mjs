@@ -27,11 +27,11 @@ export class DurableObjectExample {
     });
   }
 
-  async fetch(req, env, makeRequire) {
+  async fetch(req, env, require) {
     const dataHead = {
       "Content-Type": "application/json"
     };
-    if (!this.value) {
+    if (false /*!this.value*/) {
       //this.modules) {
       return new Response(`{}`, {
         status: "400",
@@ -40,7 +40,7 @@ export class DurableObjectExample {
         headers: dataHead
       });
     } else {
-      const require = await makeRequire(req, env);
+      //const require = await makeRequire(req, env);
       if (require) {
         const locs = require("mastercard-locations");
         const places = require("mastercard-places");
