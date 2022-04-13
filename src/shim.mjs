@@ -1,7 +1,7 @@
 //exports, and imports, at the same time!
 import * as Read from "./index.mjs";
 //const Require = { ...Read };
-export { DurableObjectExample:Read.DurableObjectExample, Require:Read.Require };
+export { Read.DurableObjectExample as DurableObjectExample, Read.Require as Require };
 //export { Require } from "./require.mjs";
 
 export default {
