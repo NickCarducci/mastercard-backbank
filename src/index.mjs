@@ -1,5 +1,5 @@
 import * as Require from '../src/require.mjs';
-export default function () { Require };
+export default new Require();
 
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
