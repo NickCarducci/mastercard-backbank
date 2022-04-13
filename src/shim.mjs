@@ -27,11 +27,13 @@ async function noException(req, env) {
   const instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(backbank);
   // Forward the current HTTP request to it
   const resp = await instance.fetch(req, env);
-  const r = await resp.json();
-  return {
-      ok: true,
-      data: r
-  };
+  const r = resp && await resp.json();
+  if(resp){
+    return {
+        ok: true,
+        data: r
+    };
+  }
   //new Response({})
 }
 //new instance class fetch waits without await
