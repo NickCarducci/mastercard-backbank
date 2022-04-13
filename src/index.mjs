@@ -147,6 +147,7 @@ export class DurableObjectExample {
               `{}`,
               {
                 status: "200",
+                message: "not ready for use",
                 statusText:
                   "successful header check for POST process: " + req.url,
                 headers: {
@@ -203,6 +204,7 @@ export class DurableObjectExample {
               `{}`,
               {
                 status: "400",
+                message: "not ready for use",
                 statusText:
                   "this.require not ready for: " + req.url,
                 headers: {
