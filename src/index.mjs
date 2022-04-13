@@ -50,7 +50,7 @@ export class DurableObjectExample {
     if (!this.value) {
       //this.modules) {
       return new Response(
-        {},
+        `{}`,
         {
           status: "400",
           message: "not ready for use",
@@ -63,7 +63,6 @@ export class DurableObjectExample {
       );
       const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
       const resp = await instance.fetch(req, env);
-      console.log(resp);
       const require = require && await resp.json();
       if (require) {
         const locs = require("mastercard-locations");
@@ -150,7 +149,7 @@ export class DurableObjectExample {
           if (req.method === "OPTIONS") {
             // Method accepted for next request
             return new Response(
-              {},
+              `{}`,
               {
                 status: "200",
                 statusText:
@@ -176,9 +175,9 @@ export class DurableObjectExample {
               //isBase64Encoded: false,
 
               return new Response(
-                {
-                  data: rs
-                },
+                `{
+                  data: ${rs}
+                }`,
                 {
                   status: "200",
                   message: "success: " + req.url,
@@ -187,7 +186,7 @@ export class DurableObjectExample {
               );
             } else {
               return new Response(
-                {},
+                `{}`,
                 {
                   status: "500",
                   message: "no success doof: " + req.url,
@@ -198,7 +197,7 @@ export class DurableObjectExample {
           }
         } else
           return new Response(
-            {},
+            `{}`,
             {
               status: "400",
               message: "no access for this origin: " + origin,
