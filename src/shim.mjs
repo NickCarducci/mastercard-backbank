@@ -30,8 +30,8 @@ async function noException(req, env) {
   const r = resp && await resp.json();
   if(resp){
     return {
-        ok: true,
-        data: r
+        "ok": true,
+        "data": r
     };
   }
   //new Response({})
