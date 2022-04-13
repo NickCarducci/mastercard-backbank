@@ -16,6 +16,10 @@ export class Require {
     //const Required = () => new App();
     //export { Required as default };
 
+    var setTimeout,
+      T = (x) => typeof x;
+    //s eslint-disable-next-line
+    setTimeout = T(setTimeout === "undefined") ? undefined : setTimeout;
     var mainScript,
       src,
       define = (
@@ -53,15 +57,11 @@ export class Require {
       },
       ctxs = {},
       REQUIREJS,
-      // eslint-disable-next-line
-      setTimeout = T(setTimeout === "undefined") ? undefined : setTimeout,
-      T = (x) => typeof x,
       us = "_",
       createElement = (ns) =>
         document[`createElementNS${ns ? "NS" : ""}`](
           ns ? ("http://www.w3.org/1999/xhtml", "html:script") : "script"
         ),
-      // eslint-disable-next-line
       version = "2.3.6.carducci",
       iifeapp = class iifeapp {
         constructor() {
@@ -812,8 +812,8 @@ export class Require {
         map(); //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
         (c.ds || c.cb) && STATE.require(c.ds || [], c.cb);
       },
-      // eslint-disable-next-line
-      isWebWorker = !isBrowser && T(importScripts !== _n),
+      //s eslint-disable-next-line
+      isWebWorker = !isBrowser && false, // && T(importScripts !== _n),
       //'loading', 'loaded', execution, 'complete'
       readyRegExp =
         isBrowser && navigator.platform === "PLAYSTATION 3"
@@ -821,8 +821,8 @@ export class Require {
           : /^(complete|loaded)$/,
       //Oh the tragedy, detecting opera. See the usage of isOpera for reason.
       isOpera =
-        // eslint-disable-next-line
-        T(opera !== _n) && opera.toString() === "[object Opera]";
+        //s eslint-disable-next-line
+        false; //T(opera !== _n) && opera.toString() === "[object Opera]";
     /*
     e_
     mixin
@@ -1377,8 +1377,8 @@ export class Require {
                 } else if (isWebWorker) {
                   try {
                     setTimeout(() => {}, 0);
-                    // eslint-disable-next-line
-                    importScripts(url);
+                    //s eslint-disable-next-line
+                    //importScripts(url);
                     STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
                   } catch (e) {
                     STATE[_o](
