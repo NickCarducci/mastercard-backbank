@@ -1,23 +1,3 @@
-//import Window from "./built.js"; //"./dependencies/commonUMD.js"
-//https://developers.cloudflare.com/workers/platform/limits#durable-objects-limits
-//import { watcher, manifest } from "./rollup/helpers.mjs";
-//import { rollup } from "rollup";
-//import require from "./dependencies/shim.mjs";
-//import Window from ".././dist/built.mjs";
-//import { Require } from '../src/require.mjs';
-//const { require, define } = Require//(); //Window() //this.modules; //Window.sourcesContent();
-/**UNLICENSED BUT FOR PARTS OF OTHERS */
-
-/** vim: et:ts=4:sw=4:sts=4
- * @license RequireJS 2.3.6.carducci Copyright jQuery Foundation and other contributors.
- * Released under MIT license, https://github.com/REQUIREJS/REQUIREJS/blob/master/LICENSE
- */
-//Not using strict: uneven strict support in browsers, #392, and causes
-//problems with REQUIREJS.exec()/transpiler plugins that may not be strict.
-/*jslint regexp: true, nomen: true, sloppy: true */
-/*dependency window, navigator, document, importScripts, setTimeout, opera */
-
-//cannot this never get to the string regex?
 import * as Require from '../src/require.mjs';
 export default { Require };
 
