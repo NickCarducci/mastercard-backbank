@@ -18,8 +18,8 @@
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
 //cannot this never get to the string regex?
-
-export { Require } from '../src/require.mjs';
+import * as Require from '../src/require.mjs';
+export { Require };
 
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
