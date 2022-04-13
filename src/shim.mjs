@@ -26,8 +26,8 @@ async function noException(req, env) {
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   const instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(backbank);
   // Forward the current HTTP request to it
-  const r = await instance.fetch(req, env);
-  //const r = await resp.json();
+  const resp = await instance.fetch(req, env);
+  const r = await resp.json();
     /*return new Response(`{
         ok: true,
         data: ${r}
