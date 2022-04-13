@@ -28,12 +28,15 @@ export class DurableObjectExample {
       this.value = stored || 0;
       //this.require = require;
 
-      const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
-        new URL(req.url).pathname
-      );
-      const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-      const resp = await instance.fetch(req, env);
-      this.require = resp && await resp.json();
+      this.makeRequire = async (req,env) => {
+        const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+          new URL(req.url).pathname
+        );
+        const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
+        const resp = await instance.fetch(req, env);
+        const require = resp && await resp.json();
+        return new Promise(resolve=>resolve(require));
+      }
       //fn.apply(this, [locs,places,crs])
       //this.value = {locs,places,crs}//Window;
 
@@ -64,10 +67,11 @@ export class DurableObjectExample {
         }
       );
     } else {
-      if (this.require) {
-        const locs = this.require("mastercard-locations");
-        const places = this.require("mastercard-places");
-        const crs = this.require("cors");
+     const require = await this.makeRequire()
+      if (require) {
+        const locs = require("mastercard-locations");
+        const places = require("mastercard-places");
+        const crs = require("cors");
         //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
         var iMCard = null,
