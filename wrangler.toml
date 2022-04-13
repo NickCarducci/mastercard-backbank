@@ -37,7 +37,7 @@ new_classes = ["Require"]
 
 [[migrations]]
 tag = "v3"
-renamed_classes = [{from = "Require", to = "Require" }] # Array of rename directives
+renamed_classes = [{from = "Require", to = "* as Require" }] # Array of rename directives
 
 # [build.upload.rules]
 # type = "CommonJS"
