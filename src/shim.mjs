@@ -1,8 +1,8 @@
 //exports, and imports, at the same time!
 //import * as Read from "./index.mjs";
 //const Require = { ...Read };
-export { DurableObjectExample, Require } from "./index.mjs";
-//export { Require } from "./require.mjs";
+export { DurableObjectExample } from "./index.mjs";
+export { Require } from "./require.mjs";
 
 export default {
   async fetch(request, env/*, ctx*/) {
