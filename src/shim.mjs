@@ -28,10 +28,10 @@ async function noException(req, env) {
   // Forward the current HTTP request to it
   const resp = await instance.fetch(req, env);
   const r = await resp.json();
-    return new Response({
+    return new Response(`{
         ok: true,
-        data: r
-    });
+        data: ${r}
+    }`);
   
   //new Response({})
 }
