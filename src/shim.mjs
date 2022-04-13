@@ -35,10 +35,11 @@ async function noException(req, env) {
     const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
     const resp = instance && (await instance.fetch(req, env));
     const require = resp && (await resp.json());
-    return new Promise((resolve) => require && resolve(require));
+    return new Promise((resolve) => require && resolve(JSON.stringify(require)));
   };
 
-  const require = await makeRequire(req, env);
+  const re = await makeRequire(req, env);
+  const require = re && JSON.parse(re);
   const resp = instance && require && (await instance.fetch(req, env, require));
   const r = resp && (await resp.json());
   /*return new Response(`{
