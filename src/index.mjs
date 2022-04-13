@@ -1,4 +1,4 @@
-export { * as Require } from '../src/require.mjs';
+export * as { Require } from '../src/require.mjs';
 //export default Require;
 
 /*watcher.on("event", (event) => {
