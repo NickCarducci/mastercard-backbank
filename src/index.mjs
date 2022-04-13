@@ -1,6 +1,7 @@
-import { Require } from '../src/require.mjs';
+
+import { Require } from "../src/require.mjs";
 export { Require };
-const { require } = Require
+const { require } = Require;
 
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
@@ -17,12 +18,25 @@ const { require } = Require
   }
 });
 */
+export default {
+  async fetch(request, env /*, ctx*/) {
+    //Response class must be a promise
+    try {
+      return await noException(request, env);
+      // wrap the body of your callback in a try/catch block to ensure it cannot throw an exception.
+      // is return, "the body?"
+    } catch (e) {
+      return new Response(e.message);
+    }
+  }
+};
+
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(el.textContent, "- From the example module");
     this.el = el;
     this.env = env;
-      /*const locs = require("mastercard-locations");
+    /*const locs = require("mastercard-locations");
       const places = require("mastercard-places");
       const crs = require("cors"); */
     this.el.blockConcurrencyWhile(async () => {
@@ -30,12 +44,11 @@ export class DurableObjectExample {
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       //this.require = require;
-      
+
       //fn.apply(this, [locs,places,crs])
       //this.value = {locs,places,crs}//Window;
-      
-      
-     /* rollup(manifest)
+
+      /* rollup(manifest)
         .then(async (bundle) => {
           console.log(Object.keys(bundle), " is bundle");
           pages.forEach(async (output) => await bundle.write(output));
@@ -62,145 +75,153 @@ export class DurableObjectExample {
         }
       );
     } else {
-      const locs = require("mastercard-locations");
-      const places = require("mastercard-places");
-      const crs = require("cors");
-      //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
+      const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+        new URL(req.url).pathname
+      );
+      const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
+      const resp = await instance.fetch(req, env);
+      const require = await resp.json();
+      if (require) {
+        const locs = require("mastercard-locations");
+        const places = require("mastercard-places");
+        const crs = require("cors");
+        //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
-      var iMCard = null,
-        mc = null;
-      const initializeMCard = () => {
-        if (!iMCard) {
-          console.log("initializing mastercard api");
-          mc = locs.MasterCardAPI;
-          iMCard = true;
-          mc.init({
-            sandbox: secrets.NODE_ENV !== "production",
-            authentication: new mc.OAuth(
-              secrets.MASTERCARD_CONSUMER_KEY,
-              Buffer.from(secrets.MASTERCARD_P12_BINARY, "base64"),
-              "keyalias",
-              "keystorepassword"
-            )
-          });
-        }
-      };
-      const mastercardRoute = async (req, func) => {
-        const cb = (error, data) => (error ? error : data);
-        initializeMCard();
-        let rs = null;
-        if (func === "getAtms") {
-          const {
-            PageLength, //"5"
-            PostalCode, //"11101"
-            PageOffset //"0"
-          } = req.body; //query
-          rs = await locs.ATMLocations.query(
-            {
-              PageLength,
-              PostalCode,
-              PageOffset
-            },
-            cb
-          );
-        } else if (func === "getMerchants") {
-          const { countryCode, latitude, longitude, distance } = req.body; //query
-          const q = {
-            pageOffset: 0,
-            pageLength: 10,
-            radiusSearch: "true",
-            unit: "km",
-            distance,
-            place: {
-              countryCode,
-              latitude,
-              longitude
-            }
-          };
-          rs = await places.MerchantPointOfInterest.create(q, cb);
-        } else if (func === "getNames") {
-          rs = await places.MerchantCategoryCodes.query({}, cb);
-        } else if (func === "getTypes") {
-          rs = await places.MerchantIndustries.query({}, cb);
-        }
-        return rs && rs;
-      };
-      const cors = crs({
-        origin: true,
-        allowedHeaders: [
-          "Access-Control-Allow-Origin",
-          "Access-Control-Allow-Methods",
-          "Content-Type",
-          "Origin",
-          "X-Requested-With",
-          "Accept"
-        ],
-        methods: ["POST", "OPTIONS"],
-        credentials: true
-      });
-      //return async handleRequest(request)async (req) => {
-      var origin = req.get("Origin");
-      var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
-      if (allowedOrigins.indexOf(origin) > -1) {
-        // Origin Allowed!!
-        if (req.method === "OPTIONS") {
-          // Method accepted for next request
-          return new Response(
-            {},
-            {
-              status: "200",
-              statusText:
-                "successful header check for POST process: " + req.url,
-              headers: {
-                ...dataHead,
-                "Access-Control-Allow-Methods": "POST"
-              }
-            }
-          );
-        } else {
-          let rs = null;
-          if (req.url === "/deposit") {
-            rs = await mastercardRoute(req, "getAtms");
-          } else if (req.url === "/merchant_names") {
-            rs = await mastercardRoute(req, "getNames");
-          } else if (req.url === "/merchant_types") {
-            rs = await mastercardRoute(req, "getTypes");
-          } else if (req.url === "/merchants") {
-            rs = await mastercardRoute(req, "getMerchants");
+        var iMCard = null,
+          mc = null;
+        const initializeMCard = () => {
+          if (!iMCard) {
+            console.log("initializing mastercard api");
+            mc = locs.MasterCardAPI;
+            iMCard = true;
+            mc.init({
+              sandbox: secrets.NODE_ENV !== "production",
+              authentication: new mc.OAuth(
+                secrets.MASTERCARD_CONSUMER_KEY,
+                Buffer.from(secrets.MASTERCARD_P12_BINARY, "base64"),
+                "keyalias",
+                "keystorepassword"
+              )
+            });
           }
-          if (rs) {
-            //isBase64Encoded: false,
-
-            return new Response(
+        };
+        const mastercardRoute = async (req, func) => {
+          const cb = (error, data) => (error ? error : data);
+          initializeMCard();
+          let rs = null;
+          if (func === "getAtms") {
+            const {
+              PageLength, //"5"
+              PostalCode, //"11101"
+              PageOffset //"0"
+            } = req.body; //query
+            rs = await locs.ATMLocations.query(
               {
-                data: rs
+                PageLength,
+                PostalCode,
+                PageOffset
               },
-              {
-                status: "200",
-                message: "success: " + req.url,
-                headers: dataHead
-              }
+              cb
             );
-          } else {
+          } else if (func === "getMerchants") {
+            const { countryCode, latitude, longitude, distance } = req.body; //query
+            const q = {
+              pageOffset: 0,
+              pageLength: 10,
+              radiusSearch: "true",
+              unit: "km",
+              distance,
+              place: {
+                countryCode,
+                latitude,
+                longitude
+              }
+            };
+            rs = await places.MerchantPointOfInterest.create(q, cb);
+          } else if (func === "getNames") {
+            rs = await places.MerchantCategoryCodes.query({}, cb);
+          } else if (func === "getTypes") {
+            rs = await places.MerchantIndustries.query({}, cb);
+          }
+          return rs && rs;
+        };
+        const cors = crs({
+          origin: true,
+          allowedHeaders: [
+            "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Methods",
+            "Content-Type",
+            "Origin",
+            "X-Requested-With",
+            "Accept"
+          ],
+          methods: ["POST", "OPTIONS"],
+          credentials: true
+        });
+        //return async handleRequest(request)async (req) => {
+        var origin = req.get("Origin");
+        var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
+        if (allowedOrigins.indexOf(origin) > -1) {
+          // Origin Allowed!!
+          if (req.method === "OPTIONS") {
+            // Method accepted for next request
             return new Response(
               {},
               {
-                status: "500",
-                message: "no success doof: " + req.url,
-                headers: dataHead
+                status: "200",
+                statusText:
+                  "successful header check for POST process: " + req.url,
+                headers: {
+                  ...dataHead,
+                  "Access-Control-Allow-Methods": "POST"
+                }
               }
             );
+          } else {
+            let rs = null;
+            if (req.url === "/deposit") {
+              rs = await mastercardRoute(req, "getAtms");
+            } else if (req.url === "/merchant_names") {
+              rs = await mastercardRoute(req, "getNames");
+            } else if (req.url === "/merchant_types") {
+              rs = await mastercardRoute(req, "getTypes");
+            } else if (req.url === "/merchants") {
+              rs = await mastercardRoute(req, "getMerchants");
+            }
+            if (rs) {
+              //isBase64Encoded: false,
+
+              return new Response(
+                {
+                  data: rs
+                },
+                {
+                  status: "200",
+                  message: "success: " + req.url,
+                  headers: dataHead
+                }
+              );
+            } else {
+              return new Response(
+                {},
+                {
+                  status: "500",
+                  message: "no success doof: " + req.url,
+                  headers: dataHead
+                }
+              );
+            }
           }
-        }
-      } else
-        return new Response(
-          {},
-          {
-            status: "400",
-            message: "no access for this origin: " + origin,
-            headers: dataHead
-          }
-        );
+        } else
+          return new Response(
+            {},
+            {
+              status: "400",
+              message: "no access for this origin: " + origin,
+              headers: dataHead
+            }
+          );
+      }
     }
   }
 }
