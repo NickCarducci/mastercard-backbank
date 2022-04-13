@@ -135,12 +135,12 @@ export class Require {
       _ev = "events",
       _i = "init",
       _n = "undefined",
-      isBrowser =
-        /*!!*/ window &&
+      isBrowser = false,/*
+        /*!!/ window &&
         T(window !== _n) &&
         navigator &&
         T(navigator !== _n) &&
-        window.document,
+        window.document,*/
       sign = { version, isBrowser },
       _r = "require",
       Ar = "[object Array]",
