@@ -35,14 +35,26 @@ async function noException(req, env) {
   const dataHead = {
     "Content-Type": "application/json"
   };
-  return new Response(
+  if(r.data){
+    return new Response(
+      {
+          data: r.data,
+          ok: true
+      },
+      {
+        status: "200",
+        message: "success: " + req.url,
+        headers: dataHead
+      }
+    );
+  } else return new Response(
     {
         data: r.data,
-        ok: true
+        ok: false
     },
     {
-      status: "200",
-      message: "success: " + req.url,
+      status: r.status,
+      message: r.statusText? r.statusText : message,
       headers: dataHead
     }
   );
