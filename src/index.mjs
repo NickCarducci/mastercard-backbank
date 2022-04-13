@@ -19,7 +19,8 @@
 
 //cannot this never get to the string regex?
 
-export class Require {
+import { Require } from '../src/require.mjs';
+export class R {
   constructor() {
     //const Required = () => new App();
     //export { Required as default };
