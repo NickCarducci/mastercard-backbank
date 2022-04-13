@@ -204,7 +204,18 @@ export class DurableObjectExample {
               headers: dataHead
             }
           );
-      }
+      } else return new Response(
+              `{}`,
+              {
+                status: "400",
+                statusText:
+                  "this.require not ready for: " + req.url,
+                headers: {
+                  ...dataHead,
+                  "Access-Control-Allow-Methods": "POST"
+                }
+              }
+            );
     }
   }
 }
