@@ -19,7 +19,7 @@
 
 //cannot this never get to the string regex?
 import * as Require from '../src/require.mjs';
-export { Require };
+export default Require;
 
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
