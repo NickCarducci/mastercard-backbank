@@ -13,10 +13,9 @@
   }
 });
 */
-
 export class DurableObjectExample {
   constructor(el, env) {
-    console.log(JSON.stringify(el), "- From the example module");//el.textContent
+    console.log(JSON.stringify(el), "- From the example module"); //el.textContent
     this.el = el;
     this.env = env;
     /*const locs = require("mastercard-locations");
@@ -43,24 +42,23 @@ export class DurableObjectExample {
     });
   }
 
-  async fetch(req, env, require) {
+  async fetch(req, env, makeRequire) {
     const dataHead = {
       "Content-Type": "application/json"
     };
     if (!this.value) {
       //this.modules) {
       return new Response(
-        `{}`,
+        {},
         {
           status: "400",
           message: "not ready for use",
-          statusText:
-            "still retrieving {Key: Value} storage: " + req.url,
+          statusText: "still retrieving {Key: Value} storage: " + req.url,
           headers: dataHead
         }
       );
     } else {
-     //const require = await makeRequire(req,env)
+      const require = await makeRequire(req, env);
       if (require) {
         const locs = require("mastercard-locations");
         const places = require("mastercard-places");
@@ -146,7 +144,7 @@ export class DurableObjectExample {
           if (req.method === "OPTIONS") {
             // Method accepted for next request
             return new Response(
-              `{}`,
+              {},
               {
                 status: "200",
                 message: "not ready for use",
@@ -173,9 +171,9 @@ export class DurableObjectExample {
               //isBase64Encoded: false,
 
               return new Response(
-                `{
-                  data: ${rs}
-                }`,
+                {
+                  data: rs
+                },
                 {
                   status: "200",
                   message: "success: " + req.url,
@@ -184,7 +182,7 @@ export class DurableObjectExample {
               );
             } else {
               return new Response(
-                `{}`,
+                {},
                 {
                   status: "500",
                   message: "no success doof: " + req.url,
@@ -195,29 +193,30 @@ export class DurableObjectExample {
           }
         } else
           return new Response(
-            `{}`,
+            {},
             {
               status: "400",
               message: "no access for this origin: " + origin,
               headers: dataHead
             }
           );
-      } else return new Response(
-              `{}`,
-              {
-                status: "400",
-                message: "not ready for use",
-                statusText:
-                  "this.require not ready for: " + req.url,
-                headers: {
-                  ...dataHead,
-                  "Access-Control-Allow-Methods": "POST"
-                }
-              }
-            );
+      } else
+        return new Response(
+          {},
+          {
+            status: "400",
+            message: "not ready for use",
+            statusText: "this.require not ready for: " + req.url,
+            headers: {
+              ...dataHead,
+              "Access-Control-Allow-Methods": "POST"
+            }
+          }
+        );
     }
   }
 }
+
 /*console.log("this.value", this.value, "Window.hash", Window.hash);
 
 Window &&
