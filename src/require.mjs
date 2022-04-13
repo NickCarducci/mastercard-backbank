@@ -1437,10 +1437,10 @@ export class Require {
     const dataHead = {
       "Content-Type": "application/json"
     };
-    return new Response(this, {
+    return this; /*new Response(this, {
       status: "200",
       message: "success: " + req.url,
       headers: dataHead
-    });
+    });*/
   }
 }
