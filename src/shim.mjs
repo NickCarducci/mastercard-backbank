@@ -44,7 +44,7 @@ async function noException(req, env) {
   const dataHead = {
     "Content-Type": "application/json"
   };
-  if(r.data){
+  if(r&&r.data){
     return new Response(
       {
           data: r.data,
