@@ -1,18 +1,3 @@
-/*watcher.on("event", (event) => {
-  if (event.code === "BUNDLE_START") {
-  } else if (event.code === "START") {
-  } else if (event.code === "END") {
-    watcher.close();
-  } else if (event.code === "ERROR") {
-  } else if (event.code === "BUNDLE_END") {
-  }
-  if (event.result) {
-    const ast = event.result.cache.modules[0].ast; //.body
-    console.log(ast, " is Abstract Syntax Tree of dependencies");
-    event.result.close();
-  }
-});
-*/
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(JSON.stringify(el), "- From the example module"); //el.textContent
@@ -48,15 +33,12 @@ export class DurableObjectExample {
     };
     if (!this.value) {
       //this.modules) {
-      return new Response(
-        {},
-        {
-          status: "400",
-          message: "not ready for use",
-          statusText: "still retrieving {Key: Value} storage: " + req.url,
-          headers: dataHead
-        }
-      );
+      return new Response(`{}`, {
+        status: "400",
+        message: "not ready for use",
+        statusText: "still retrieving {Key: Value} storage: " + req.url,
+        headers: dataHead
+      });
     } else {
       const require = await makeRequire(req, env);
       if (require) {
@@ -143,19 +125,16 @@ export class DurableObjectExample {
           // Origin Allowed!!
           if (req.method === "OPTIONS") {
             // Method accepted for next request
-            return new Response(
-              {},
-              {
-                status: "200",
-                message: "not ready for use",
-                statusText:
-                  "successful header check for POST process: " + req.url,
-                headers: {
-                  ...dataHead,
-                  "Access-Control-Allow-Methods": "POST"
-                }
+            return new Response(`{}`, {
+              status: "200",
+              message: "not ready for use",
+              statusText:
+                "successful header check for POST process: " + req.url,
+              headers: {
+                ...dataHead,
+                "Access-Control-Allow-Methods": "POST"
               }
-            );
+            });
           } else {
             let rs = null;
             if (req.url === "/deposit") {
@@ -171,9 +150,9 @@ export class DurableObjectExample {
               //isBase64Encoded: false,
 
               return new Response(
-                {
-                  data: rs
-                },
+                `{
+                  data: ${rs}
+                }`,
                 {
                   status: "200",
                   message: "success: " + req.url,
@@ -181,60 +160,29 @@ export class DurableObjectExample {
                 }
               );
             } else {
-              return new Response(
-                {},
-                {
-                  status: "500",
-                  message: "no success doof: " + req.url,
-                  headers: dataHead
-                }
-              );
+              return new Response(`{}`, {
+                status: "500",
+                message: "no success doof: " + req.url,
+                headers: dataHead
+              });
             }
           }
         } else
-          return new Response(
-            {},
-            {
-              status: "400",
-              message: "no access for this origin: " + origin,
-              headers: dataHead
-            }
-          );
-      } else
-        return new Response(
-          {},
-          {
+          return new Response(`{}`, {
             status: "400",
-            message: "not ready for use",
-            statusText: "this.require not ready for: " + req.url,
-            headers: {
-              ...dataHead,
-              "Access-Control-Allow-Methods": "POST"
-            }
+            message: "no access for this origin: " + origin,
+            headers: dataHead
+          });
+      } else
+        return new Response(`{}`, {
+          status: "400",
+          message: "not ready for use",
+          statusText: "this.require not ready for: " + req.url,
+          headers: {
+            ...dataHead,
+            "Access-Control-Allow-Methods": "POST"
           }
-        );
+        });
     }
   }
 }
-
-/*console.log("this.value", this.value, "Window.hash", Window.hash);
-
-Window &&
-  Window.hash &&
-  Window.hash !== undefined &&
-  this.el.storage.put("esm", Window.hash); // write hash to manifest //import manifest from "./build/manifest.json"; //`${manifest.default}`
-//II
-*/
-
-/*fs.writeFileSync(
-  `${__dirname}/build/common-${hash}.js`,
-  vendorString,
-  "utf8"
-); // write contents to bundle
-fs.writeFileSync(
-  `${__dirname}/build/manifest.json`,
-  `{"default": "common-${hash}.js"}`,
-  "utf8"
-);
-//I
-*/
