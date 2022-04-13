@@ -28,15 +28,6 @@ export class DurableObjectExample {
       this.value = stored || 0;
       //this.require = require;
 
-      this.makeRequire = async (req,env) => {
-        const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
-          new URL(req.url).pathname
-        );
-        const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-        const resp = await instance.fetch(req, env);
-        const require = resp && await resp.json();
-        return new Promise(resolve=>require && resolve(require));
-      }
       //fn.apply(this, [locs,places,crs])
       //this.value = {locs,places,crs}//Window;
 
@@ -52,7 +43,7 @@ export class DurableObjectExample {
     });
   }
 
-  async fetch(req, env) {
+  async fetch(req, env, makeRequire) {
     const dataHead = {
       "Content-Type": "application/json"
     };
@@ -67,7 +58,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-     const require = await this.makeRequire()
+     const require = await makeRequire()
       if (require) {
         const locs = require("mastercard-locations");
         const places = require("mastercard-places");
