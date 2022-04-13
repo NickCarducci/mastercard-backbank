@@ -1435,7 +1435,7 @@ export class Require {
 
   async fetch(req, env) {
     const dataHead = {
-      "Content-Type": "application/json"
+      "Content-Type": "text/plain" //"application/json"
     };
     return new Response(JSON.stringify(this), {
       status: "200",
