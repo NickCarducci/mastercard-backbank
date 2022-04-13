@@ -52,7 +52,7 @@ async function noException(req, env) {
     if (r.data) {
       return new Response(
         `{
-          data: ${resp.data},
+          data: ${JSON.stringify(r.data)},
           ok: true
         }`,
         {
@@ -64,7 +64,7 @@ async function noException(req, env) {
     } else
       return new Response(
         `{
-          response: ${resp},
+          response: ${JSON.stringify(resp)},
           ok: false
         }`,
         {
