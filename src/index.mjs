@@ -58,7 +58,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-     const require = await makeRequire()
+     const require = await makeRequire(req,env)
       if (require) {
         const locs = require("mastercard-locations");
         const places = require("mastercard-places");
