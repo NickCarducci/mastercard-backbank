@@ -37,8 +37,8 @@ async function noException(req, env) {
   };
   return new Response(
     {
-        ok: true,
-        data: r.data
+        data: r.data,
+        ok: true
     },
     {
       status: "200",
