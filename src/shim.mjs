@@ -52,7 +52,7 @@ async function noException(req, env) {
     if (r.data) {
       return new Response(
         `{
-          data: ${r.data},
+          data: ${resp.data},
           ok: true
         }`,
         {
@@ -64,7 +64,7 @@ async function noException(req, env) {
     } else
       return new Response(
         `{
-          response: ${r},
+          response: ${resp},
           ok: false
         }`,
         {
