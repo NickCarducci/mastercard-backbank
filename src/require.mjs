@@ -1431,9 +1431,10 @@ export class Require {
     };
 
     _K(state).forEach((key) => (this[key] = state[key]));
+    this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
   }
 
-  async fetch(req, env) {
+  /*async fetch(req, env) {
     const dataHead = {
       "Content-Type": "text/plain" //"application/json"
     };
@@ -1442,5 +1443,5 @@ export class Require {
       message: "success: " + req.url,
       headers: dataHead
     });
-  }
+  }*/
 }
