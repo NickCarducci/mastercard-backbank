@@ -16,7 +16,7 @@
 
 export class DurableObjectExample {
   constructor(el, env) {
-    console.log(el.textContent, "- From the example module");
+    console.log(JSON.stringify(el), "- From the example module");//el.textContent
     this.el = el;
     this.env = env;
     /*const locs = require("mastercard-locations");
