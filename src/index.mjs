@@ -1,5 +1,6 @@
-export * as { Require } from '../src/require.mjs';
+export * as Require from '../src/require.mjs';
 //export default Require;
+const { require } = Require
 
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
@@ -61,9 +62,9 @@ export class DurableObjectExample {
         }
       );
     } else {
-      /*const locs = require("mastercard-locations");
+      const locs = require("mastercard-locations");
       const places = require("mastercard-places");
-      const crs = require("cors");*/ 
+      const crs = require("cors");
       //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
