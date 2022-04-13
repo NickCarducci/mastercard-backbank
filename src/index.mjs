@@ -35,7 +35,7 @@ export class DurableObjectExample {
         const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
         const resp = await instance.fetch(req, env);
         const require = resp && await resp.json();
-        return require && new Promise(resolve=>resolve(require));
+        return new Promise(resolve=>require && resolve(require));
       }
       //fn.apply(this, [locs,places,crs])
       //this.value = {locs,places,crs}//Window;
