@@ -1,8 +1,3 @@
-
-import { Require } from "../src/require.mjs";
-export { Require };
-const { require } = Require;
-
 /*watcher.on("event", (event) => {
   if (event.code === "BUNDLE_START") {
   } else if (event.code === "START") {
@@ -18,18 +13,6 @@ const { require } = Require;
   }
 });
 */
-export default {
-  async fetch(request, env /*, ctx*/) {
-    //Response class must be a promise
-    try {
-      return await noException(request, env);
-      // wrap the body of your callback in a try/catch block to ensure it cannot throw an exception.
-      // is return, "the body?"
-    } catch (e) {
-      return new Response(e.message);
-    }
-  }
-};
 
 export class DurableObjectExample {
   constructor(el, env) {
