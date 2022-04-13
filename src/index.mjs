@@ -43,7 +43,7 @@ export class DurableObjectExample {
     });
   }
 
-  async fetch(req, env, makeRequire) {
+  async fetch(req, env, require) {
     const dataHead = {
       "Content-Type": "application/json"
     };
@@ -60,7 +60,7 @@ export class DurableObjectExample {
         }
       );
     } else {
-     const require = await makeRequire(req,env)
+     //const require = await makeRequire(req,env)
       if (require) {
         const locs = require("mastercard-locations");
         const places = require("mastercard-places");
