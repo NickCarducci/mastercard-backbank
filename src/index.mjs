@@ -54,6 +54,8 @@ export class DurableObjectExample {
         {
           status: "400",
           message: "not ready for use",
+          statusText:
+            "still retrieving {Key: Value} storage: " + req.url,
           headers: dataHead
         }
       );
