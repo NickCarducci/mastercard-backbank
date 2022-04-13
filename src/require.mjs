@@ -20,7 +20,7 @@ export class Require {
       //let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       //this.value = stored || 0;
     });
-    
+
     var setTimeout,
       T = (x) => typeof x;
     //s eslint-disable-next-line
@@ -136,7 +136,9 @@ export class Require {
       _i = "init",
       _n = "undefined",
       isBrowser = !!(
+        window &&
         T(window !== _n) &&
+        navigator &&
         T(navigator !== _n) &&
         window.document
       ),
