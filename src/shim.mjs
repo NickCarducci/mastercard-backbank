@@ -35,7 +35,9 @@ async function noException(req, env) {
         const require = resp && await resp.json();
         return new Promise(resolve=>require && resolve(require));
       }
-  const resp = await instance.fetch(req, env, makeRequire);
+  
+     const require = await makeRequire(req,env)
+  const resp = await instance.fetch(req, env, require);
   const r = await resp.json();
     /*return new Response(`{
         ok: true,
