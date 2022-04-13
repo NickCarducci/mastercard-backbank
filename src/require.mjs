@@ -12,10 +12,15 @@
 //cannot this never get to the string regex?
 
 export class Require {
-  constructor() {
-    //const Required = () => new App();
-    //export { Required as default };
-
+  constructor(el, env) {
+    console.log(el.textContent, "- From the example (Require) module");
+    this.el = el;
+    this.env = env;
+    this.el.blockConcurrencyWhile(async () => {
+      let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
+      this.value = stored || 0;
+    });
+    
     var setTimeout,
       T = (x) => typeof x;
     //s eslint-disable-next-line
