@@ -1,6 +1,6 @@
 //exports, and imports, at the same time!
 import * as R from "./index.mjs";
-export { DurableObjectExample, Require } from R
+export { ...R }// { DurableObjectExample, Require } = R
 //export { Require } from "./require.mjs";
 
 export default {
