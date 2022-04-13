@@ -1,5 +1,5 @@
-export * as Require from '../src/require.mjs';
-export default Require;
+import { Require } from '../src/require.mjs';
+export { Require };
 const { require } = Require
 
 /*watcher.on("event", (event) => {
