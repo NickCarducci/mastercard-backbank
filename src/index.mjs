@@ -63,7 +63,7 @@ export class DurableObjectExample {
       );
       const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
       const resp = await instance.fetch(req, env);
-      const require = await resp.json();
+      const require = require && await resp.json();
       if (require) {
         const locs = require("mastercard-locations");
         const places = require("mastercard-places");
