@@ -30,7 +30,7 @@ export class Require {
 
   fetch(req, env) {
     var setTimeout,
-      T = (x) => typeof x;
+      T = (x) => /*typeof*/ x;
     //s eslint-disable-next-line
     setTimeout = T(setTimeout === "undefined") ? undefined : setTimeout;
     var mainScript,
