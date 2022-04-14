@@ -7,7 +7,7 @@ export class DurableObjectExample {
       const places = require("mastercard-places");
       const crs = require("cors"); */
     this.el.blockConcurrencyWhile(async () => {
-      let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
+      let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
       this.makeRequire = async (req) => {
@@ -15,8 +15,8 @@ export class DurableObjectExample {
           new URL(req.url).pathname
         );
         const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-        const resp = instance && (await instance.fetch(req, env));
-        const require = resp && (await resp.json());
+        const resp = instance && instance.fetch(req, env);
+        const require = resp && resp.json();
         return new Promise(
           (resolve) => require && resolve(JSON.stringify(require))
         );
@@ -29,7 +29,7 @@ export class DurableObjectExample {
       /* rollup(manifest)
         .then(async (bundle) => {
           console.log(Object.keys(bundle), " is bundle");
-          pages.forEach(async (output) => await bundle.write(output));
+          pages.forEach(async (output) =>  bundle.write(output));
         this.value = bundle
          // return hydrate(bundle)
         })
@@ -37,7 +37,7 @@ export class DurableObjectExample {
       //this.el.storage.put("esm", product);
     });
   }
-  //Omit await for syncronous defer, -ish
+  //Omit  for syncronous defer, -ish
   fetch(req, env, require) {
     const dataHead = {
       "Content-Type": "application/json"
@@ -51,7 +51,7 @@ export class DurableObjectExample {
         headers: dataHead
       });
     } else {
-      //const require = await makeRequire(req, env);
+      //const require =  makeRequire(req, env);
       const re = this.makeRequire(req);
       const requirer = re && JSON.parse(re);
       if (requirer) {
@@ -89,7 +89,7 @@ export class DurableObjectExample {
               PostalCode, //"11101"
               PageOffset //"0"
             } = req.body; //query
-            rs = await locs.ATMLocations.query(
+            rs = locs.ATMLocations.query(
               {
                 PageLength,
                 PostalCode,
@@ -111,11 +111,11 @@ export class DurableObjectExample {
                 longitude
               }
             };
-            rs = await places.MerchantPointOfInterest.create(q, cb);
+            rs = places.MerchantPointOfInterest.create(q, cb);
           } else if (func === "getNames") {
-            rs = await places.MerchantCategoryCodes.query({}, cb);
+            rs = places.MerchantCategoryCodes.query({}, cb);
           } else if (func === "getTypes") {
-            rs = await places.MerchantIndustries.query({}, cb);
+            rs = places.MerchantIndustries.query({}, cb);
           }
           return rs && rs;
         };
@@ -157,13 +157,13 @@ export class DurableObjectExample {
           } else {
             let rs = null;
             if (req.url === "/deposit") {
-              rs = await mastercardRoute(req, "getAtms");
+              rs = mastercardRoute(req, "getAtms");
             } else if (req.url === "/merchant_names") {
-              rs = await mastercardRoute(req, "getNames");
+              rs = mastercardRoute(req, "getNames");
             } else if (req.url === "/merchant_types") {
-              rs = await mastercardRoute(req, "getTypes");
+              rs = mastercardRoute(req, "getTypes");
             } else if (req.url === "/merchants") {
-              rs = await mastercardRoute(req, "getMerchants");
+              rs = mastercardRoute(req, "getMerchants");
             }
             if (rs) {
               //isBase64Encoded: false,
