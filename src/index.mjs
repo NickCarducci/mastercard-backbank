@@ -15,12 +15,14 @@ export class DurableObjectExample {
           new URL(req.url).pathname
         );
         const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-        const resp = instance && instance.fetch(req, env);
+        const resp = instance.fetch(req, env);
+        return new Promise((resolve) => resp && resolve(JSON.stringify(resp)));
+        /*const resp = instance && instance.fetch(req, env);
 
         const require = resp && (await resp.json());
         return new Promise(
           (resolve) => require && resolve(JSON.stringify(require))
-        );
+        );*/
       };
       //this.require = require;
 
