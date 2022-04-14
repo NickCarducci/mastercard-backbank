@@ -16,6 +16,7 @@ export class DurableObjectExample {
         );
         const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
         const resp = instance && instance.fetch(req, env);
+        console.log(resp);
         const require = resp && (await resp.json());
         return new Promise(
           (resolve) => require && resolve(JSON.stringify(require))
@@ -141,13 +142,15 @@ export class DurableObjectExample {
             // Method accepted for next request
             return new Response(
               JSON.stringify(
-                `{${"successful header check for POST process: " + req.url}}`
+                `{error:"${
+                  "successful header check for POST process- " + req.url
+                }"}`
               ),
               {
                 status: "200",
                 message: "not ready for use",
                 statusText:
-                  "successful header check for POST process: " + req.url,
+                  "successful header check for POST process- " + req.url,
                 headers: {
                   ...dataHead,
                   "Access-Control-Allow-Methods": "POST"
@@ -182,7 +185,7 @@ export class DurableObjectExample {
               );
             } else {
               return new Response(
-                JSON.stringify(`{error:${"no success doof: " + req.url}}`),
+                JSON.stringify(`{error:${"no success doof- " + req.url}}`),
                 {
                   status: "500",
                   message: "no success doof: " + req.url,
@@ -193,7 +196,7 @@ export class DurableObjectExample {
           }
         } else
           return new Response(
-            JSON.stringify(`{error:${"no access for this origin: " + origin}}`),
+            JSON.stringify(`{error:${"no access for this origin- " + origin}}`),
             {
               status: "400",
               message: "no access for this origin: " + origin,
