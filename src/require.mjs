@@ -13,7 +13,7 @@
 
 export class Require {
   constructor(el, env) {
-    console.log(JSON.stringify(el), "- From the example (Require) module");
+    console.log(el.textContent, "- From the example (Require) module");
     this.el = el;
     this.env = env;
     this.el.blockConcurrencyWhile(async () => {
@@ -135,13 +135,9 @@ export class Require {
       _ev = "events",
       _i = "init",
       _n = "undefined",
-      window = null,
-      isBrowser = 
-        /*!!*/ window &&
-        T(window !== _n) &&
-        navigator &&
-        T(navigator !== _n) &&
-        window.document,
+      window = _n,
+      navigator = _n,
+      isBrowser = T(window !== _n) && T(navigator !== _n) && window.document,
       sign = { version, isBrowser },
       _r = "require",
       Ar = "[object Array]",
@@ -1438,17 +1434,22 @@ export class Require {
     };
 
     _K(state).forEach((key) => (this[key] = state[key]));
-    //this.fetch = async (req, env) => new Response((resolve) => resolve(this)); //await ((z)=>z)(this));
+    // this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
   }
 
   async fetch(req, env) {
     const dataHead = {
-      "Content-Type": "application/json"//"text/plain"
+      "Content-Type": "application/json" //"text/plain"
     };
-    return new Response(JSON.stringify(this), {
-      status: "200",
-      message: "success: " + req.url,
-      headers: dataHead
+    return new Promise((resolve) => {
+      const re =
+        this &&
+        new Response(JSON.stringify(this), {
+          status: "200",
+          message: "success: " + req.url,
+          headers: dataHead
+        });
+      re && resolve(re);
     });
   }
 }
