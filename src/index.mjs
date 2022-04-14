@@ -16,10 +16,10 @@ export class DurableObjectExample {
         );
         const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
         const resp = instance && instance.fetch(req, env);
-        console.log(resp);
+
         //const require = resp && (await resp.json());
         return new Promise(
-          (resolve) => require && resolve(JSON.stringify(require))
+          (resolve) => resp && resolve(JSON.stringify(require))
         );
       };
       //this.require = require;
@@ -39,7 +39,7 @@ export class DurableObjectExample {
     });
   }
   //Omit  for syncronous defer, -ish
-  fetch(req, env, require) {
+  fetch(req, env) {
     const dataHead = {
       "Content-Type": "application/json"
     };
