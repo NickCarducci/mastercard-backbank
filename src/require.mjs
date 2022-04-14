@@ -22,7 +22,8 @@ export class Require {
     this.el.blockConcurrencyWhile(async () => {
       //let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       //this.value = stored || 0;
-      var b;
+      var b = () => {};
+      b();
 
       var setTimeout,
         T = (x) => typeof x;
