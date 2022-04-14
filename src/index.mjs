@@ -16,7 +16,7 @@ export class DurableObjectExample {
         );
         const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
         const resp = instance.fetch(req, env);
-        return new Promise((resolve) => resp && resolve(JSON.stringify(resp)));
+        return new Promise((resolve) => resp && resolve(resp));
         /*const resp = instance && instance.fetch(req, env);
 
         const require = resp && (await resp.json());
