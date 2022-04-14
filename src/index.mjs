@@ -53,11 +53,12 @@ export class DurableObjectExample {
     } else {
       //const require = await makeRequire(req, env);
       const re = await this.makeRequire(req);
-      const require = re && JSON.parse(re);
-      if (require) {
-        const locs = require("mastercard-locations");
-        const places = require("mastercard-places");
-        const crs = require("cors");
+      const requirer = re && JSON.parse(re);
+      if (requirer) {
+        console.log(JSON.stringify(requirer));
+        const locs = requirer("mastercard-locations");
+        const places = requirer("mastercard-places");
+        const crs = requirer("cors");
         //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
         var iMCard = null,
