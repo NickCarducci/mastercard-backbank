@@ -221,13 +221,13 @@ export class DurableObjectExample {
           }
         );*/
         })
-        .catch(
+        /*.catch(
           (err) =>
             new Response(JSON.stringify(`{thenError:${err.message}}`), {
               status: "400",
               message: err.message,
               headers: dataHead
             })
-        );
+        );*/
   }
 }
