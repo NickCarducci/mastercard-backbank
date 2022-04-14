@@ -13,7 +13,10 @@
 
 export class Require {
   constructor(el, env) {
-    console.log(el.textContent, "- From the example (Require) module");
+    console.log(
+      JSON.stringify(el.textContent),
+      "- From the example (Require) module"
+    );
     this.el = el;
     this.env = env;
     this.el.blockConcurrencyWhile(async () => {
@@ -336,9 +339,9 @@ export class Require {
       // waitInterval - Do not bother if this call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
       if (watch) return null;
       const mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
-        progress = ({ m, s, i } = mx, tt = {}, p = {}) => {
+        progress = ({ m, ss, i } = mx, tt = {}, p = {}) => {
           tt[i] = true;
-          s.forEach((i = (d) => d.id, ix) => {
+          ss.forEach((i = (d) => d.id, ix) => {
             var dep = e_(STATE.dependencies).yes(i) && STATE.dependencies[i]; // depMap force undefined (registered yet not matched in this)
             const c = dep && !m.depMatched[ix] && !p[i];
             // prettier-ignore
