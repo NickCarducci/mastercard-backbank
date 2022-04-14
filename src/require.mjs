@@ -1459,16 +1459,18 @@ export class Require {
     const dataHead = {
       "Content-Type": "application/json" //"text/plain"
     };
+    const str = JSON.stringify(this);
+    console.log(str);
     /* return new Promise((resolve) => {
       const re =
         this &&
-        */ return new Response(
-      JSON.stringify(this),
-      {
+        */ return (
+      str &&
+      new Response(str, {
         status: "200",
         message: "success: " + req.url,
         headers: dataHead
-      }
+      })
     );
     // re && resolve(re);
     //});
