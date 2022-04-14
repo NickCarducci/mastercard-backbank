@@ -10,6 +10,17 @@ export class DurableObjectExample {
       let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
+      this.makeRequire = async (req) => {
+        const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+          new URL(req.url).pathname
+        );
+        const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
+        const resp = instance && (await instance.fetch(req, env));
+        const require = resp && (await resp.json());
+        return new Promise(
+          (resolve) => require && resolve(JSON.stringify(require))
+        );
+      };
       //this.require = require;
 
       //fn.apply(this, [locs,places,crs])
@@ -41,19 +52,7 @@ export class DurableObjectExample {
       });
     } else {
       //const require = await makeRequire(req, env);
-      const makeRequire = async (req, env) => {
-        const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
-          new URL(req.url).pathname
-        );
-        const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-        const resp = instance && (await instance.fetch(req, env));
-        const require = resp && (await resp.json());
-        return new Promise(
-          (resolve) => require && resolve(JSON.stringify(require))
-        );
-      };
-
-      const re = await makeRequire(req, env);
+      const re = await this.makeRequire(req);
       const require = re && JSON.parse(re);
       if (require) {
         const locs = require("mastercard-locations");
