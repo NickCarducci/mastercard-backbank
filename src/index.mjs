@@ -125,16 +125,19 @@ export class DurableObjectExample {
           // Origin Allowed!!
           if (req.method === "OPTIONS") {
             // Method accepted for next request
-            return new Response(`{}`, {
-              status: "200",
-              message: "not ready for use",
-              statusText:
-                "successful header check for POST process: " + req.url,
-              headers: {
-                ...dataHead,
-                "Access-Control-Allow-Methods": "POST"
+            return new Response(
+              `{${"successful header check for POST process: " + req.url}}`,
+              {
+                status: "200",
+                message: "not ready for use",
+                statusText:
+                  "successful header check for POST process: " + req.url,
+                headers: {
+                  ...dataHead,
+                  "Access-Control-Allow-Methods": "POST"
+                }
               }
-            });
+            );
           } else {
             let rs = null;
             if (req.url === "/deposit") {
@@ -160,7 +163,7 @@ export class DurableObjectExample {
                 }
               );
             } else {
-              return new Response(`{}`, {
+              return new Response(`{error:${"no success doof: " + req.url}}`, {
                 status: "500",
                 message: "no success doof: " + req.url,
                 headers: dataHead
@@ -174,7 +177,7 @@ export class DurableObjectExample {
             headers: dataHead
           });
       } else
-        return new Response(`{}`, {
+        return new Response(`{${"this.require not ready for: " + req.url}}`, {
           status: "400",
           message: "not ready for use",
           statusText: "this.require not ready for: " + req.url,
