@@ -41,6 +41,20 @@ export class DurableObjectExample {
       });
     } else {
       //const require = await makeRequire(req, env);
+      const makeRequire = async (req, env) => {
+        const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+          new URL(req.url).pathname
+        );
+        const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
+        const resp = instance && (await instance.fetch(req, env));
+        const require = resp && (await resp.json());
+        return new Promise(
+          (resolve) => require && resolve(JSON.stringify(require))
+        );
+      };
+
+      const re = await makeRequire(req, env);
+      const require = re && JSON.parse(re);
       if (require) {
         const locs = require("mastercard-locations");
         const places = require("mastercard-places");
@@ -186,7 +200,7 @@ export class DurableObjectExample {
               headers: dataHead
             }
           );
-      } else
+      } /*else
         return new Response(
           JSON.stringify(`{error: ${"require not ready for: " + require}}`),
           {
@@ -198,7 +212,7 @@ export class DurableObjectExample {
               "Access-Control-Allow-Methods": "POST"
             }
           }
-        );
+        );*/
     }
   }
 }
