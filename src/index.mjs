@@ -171,21 +171,27 @@ export class DurableObjectExample {
             }
           }
         } else
-          return new Response(`{}`, {
-            status: "400",
-            message: "no access for this origin: " + origin,
-            headers: dataHead
-          });
+          return new Response(
+            `{error:${"no access for this origin: " + origin}}`,
+            {
+              status: "400",
+              message: "no access for this origin: " + origin,
+              headers: dataHead
+            }
+          );
       } else
-        return new Response(`{${"this.require not ready for: " + req.url}}`, {
-          status: "400",
-          message: "not ready for use",
-          statusText: "this.require not ready for: " + req.url,
-          headers: {
-            ...dataHead,
-            "Access-Control-Allow-Methods": "POST"
+        return new Response(
+          `{error:${"this.require not ready for: " + req.url}}`,
+          {
+            status: "400",
+            message: "not ready for use",
+            statusText: "this.require not ready for: " + req.url,
+            headers: {
+              ...dataHead,
+              "Access-Control-Allow-Methods": "POST"
+            }
           }
-        });
+        );
     }
   }
 }
