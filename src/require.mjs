@@ -19,12 +19,11 @@ export class Require {
     );
     this.el = el;
     this.env = env;
-    this.el.blockConcurrencyWhile(async () => {
+    this.el.blockConcurrencyWhile(() => {
       //let stored = await this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       //this.value = stored || 0;
       var b = () => {};
       b();
-
       var setTimeout,
         T = (x) => typeof x;
       //s eslint-disable-next-line
@@ -1460,15 +1459,18 @@ export class Require {
     const dataHead = {
       "Content-Type": "application/json" //"text/plain"
     };
-    return //new Promise((resolve) => {
-      //const re =
+    /* return new Promise((resolve) => {
+      const re =
         this &&
-        new Response(JSON.stringify(this), {
-          status: "200",
-          message: "success: " + req.url,
-          headers: dataHead
-        });
-      //re && resolve(re);
+        */ return new Response(
+      JSON.stringify(this),
+      {
+        status: "200",
+        message: "success: " + req.url,
+        headers: dataHead
+      }
+    );
+    // re && resolve(re);
     //});
   }
 }
