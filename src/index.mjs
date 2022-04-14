@@ -55,7 +55,7 @@ export class DurableObjectExample {
       //const require =  makeRequire(req, env);
       this.makeRequire(req)
         .then(async (r) => await r.json())
-        .then((requirer) => {
+        .then(async (requirer) => {
           if (requirer) {
             console.log(JSON.stringify(requirer));
             const locs = requirer("mastercard-locations");
@@ -81,7 +81,7 @@ export class DurableObjectExample {
                 });
               }
             };
-            const mastercardRoute = (req, func) => {
+            const mastercardRoute = async (req, func) => {
               const cb = (error, data) => (error ? error : data);
               initializeMCard();
               let rs = null;
@@ -91,7 +91,7 @@ export class DurableObjectExample {
                   PostalCode, //"11101"
                   PageOffset //"0"
                 } = req.body; //query
-                rs = locs.ATMLocations.query(
+                rs = await locs.ATMLocations.query(
                   {
                     PageLength,
                     PostalCode,
@@ -113,11 +113,11 @@ export class DurableObjectExample {
                     longitude
                   }
                 };
-                rs = places.MerchantPointOfInterest.create(q, cb);
+                rs = await places.MerchantPointOfInterest.create(q, cb);
               } else if (func === "getNames") {
-                rs = places.MerchantCategoryCodes.query({}, cb);
+                rs = await places.MerchantCategoryCodes.query({}, cb);
               } else if (func === "getTypes") {
-                rs = places.MerchantIndustries.query({}, cb);
+                rs = await places.MerchantIndustries.query({}, cb);
               }
               return rs && rs;
             };
@@ -161,13 +161,13 @@ export class DurableObjectExample {
               } else {
                 let rs = null;
                 if (req.url === "/deposit") {
-                  rs = mastercardRoute(req, "getAtms");
+                  rs = await mastercardRoute(req, "getAtms");
                 } else if (req.url === "/merchant_names") {
-                  rs = mastercardRoute(req, "getNames");
+                  rs = await mastercardRoute(req, "getNames");
                 } else if (req.url === "/merchant_types") {
-                  rs = mastercardRoute(req, "getTypes");
+                  rs = await mastercardRoute(req, "getTypes");
                 } else if (req.url === "/merchants") {
-                  rs = mastercardRoute(req, "getMerchants");
+                  rs = await mastercardRoute(req, "getMerchants");
                 }
                 if (rs) {
                   //isBase64Encoded: false,
