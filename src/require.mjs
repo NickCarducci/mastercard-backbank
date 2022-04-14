@@ -1451,7 +1451,7 @@ export class Require {
       };
 
       //_K(state).forEach((key) => (this[key] = state[key]));
-      state !== this.stored && this.el.storage.put("require", state);
+      state !== stored && this.el.storage.put("require", state);
     });
     // this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
   }
