@@ -52,7 +52,7 @@ export class DurableObjectExample {
       });
     } else {
       //const require = await makeRequire(req, env);
-      const re = await this.makeRequire(req);
+      const re = this.makeRequire(req);
       const requirer = re && JSON.parse(re);
       if (requirer) {
         console.log(JSON.stringify(requirer));
