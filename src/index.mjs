@@ -10,13 +10,13 @@ export class DurableObjectExample {
       let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
-      this.makeRequire = (req) => {
+      this.makeRequire = async (req) => {
         const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
           new URL(req.url).pathname
         );
         const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
         const resp = instance && instance.fetch(req, env);
-        const require = resp && resp.json();
+        const require = resp && (await resp.json());
         return new Promise(
           (resolve) => require && resolve(JSON.stringify(require))
         );
