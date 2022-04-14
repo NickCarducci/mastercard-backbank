@@ -1446,7 +1446,7 @@ export class Require {
     const dataHead = {
       "Content-Type": "application/json" //"text/plain"
     };
-    const str = JSON.stringify(this.state);
+    const str = JSON.stringify(state);
     console.log(str);
     /* return new Promise((resolve) => {
       const re =
