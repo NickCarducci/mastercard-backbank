@@ -37,8 +37,8 @@ export class DurableObjectExample {
       //this.el.storage.put("esm", product);
     });
   }
-
-  async fetch(req, env, require) {
+  //Omit await for syncronous defer, -ish
+  fetch(req, env, require) {
     const dataHead = {
       "Content-Type": "application/json"
     };
