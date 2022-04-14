@@ -1456,19 +1456,19 @@ export class Require {
     // this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
   }
 
-  async fetch(req, env) {
+  fetch(req, env) {
     const dataHead = {
       "Content-Type": "application/json" //"text/plain"
     };
-    return new Promise((resolve) => {
-      const re =
+    return //new Promise((resolve) => {
+      //const re =
         this &&
         new Response(JSON.stringify(this), {
           status: "200",
           message: "success: " + req.url,
           headers: dataHead
         });
-      re && resolve(re);
-    });
+      //re && resolve(re);
+    //});
   }
 }
