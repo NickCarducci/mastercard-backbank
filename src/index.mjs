@@ -181,7 +181,7 @@ export class DurableObjectExample {
           );
       } else
         return new Response(
-          `{error:${"this.require not ready for: " + req.url}}`,
+          JSON.stringify(`{error:${"this.require not ready for: " + req.url}}`),
           {
             status: "400",
             message: "not ready for use",
