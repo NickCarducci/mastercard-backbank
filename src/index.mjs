@@ -6,11 +6,11 @@ export class DurableObjectExample {
     /*const locs = require("mastercard-locations");
       const places = require("mastercard-places");
       const crs = require("cors"); */
-    this.el.blockConcurrencyWhile(async () => {
+    this.el.blockConcurrencyWhile(() => {
       let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
       // After initialization, future reads do not need to access storage.
       this.value = stored || 0;
-      this.makeRequire = async (req) => {
+      this.makeRequire = (req) => {
         const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
           new URL(req.url).pathname
         );
@@ -27,9 +27,9 @@ export class DurableObjectExample {
       //this.value = {locs,places,crs}//Window;
 
       /* rollup(manifest)
-        .then(async (bundle) => {
+        .then( (bundle) => {
           console.log(Object.keys(bundle), " is bundle");
-          pages.forEach(async (output) =>  bundle.write(output));
+          pages.forEach( (output) =>  bundle.write(output));
         this.value = bundle
          // return hydrate(bundle)
         })
@@ -79,7 +79,7 @@ export class DurableObjectExample {
             });
           }
         };
-        const mastercardRoute = async (req, func) => {
+        const mastercardRoute = (req, func) => {
           const cb = (error, data) => (error ? error : data);
           initializeMCard();
           let rs = null;
@@ -132,7 +132,7 @@ export class DurableObjectExample {
           methods: ["POST", "OPTIONS"],
           credentials: true
         });
-        //return async handleRequest(request)async (req) => {
+        //return  handleRequest(request) (req) => {
         var origin = req.get("Origin");
         var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
         if (allowedOrigins.indexOf(origin) > -1) {
