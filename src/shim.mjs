@@ -28,53 +28,58 @@ async function noException(req, env) {
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   const instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(backbank);
   // Forward the current HTTP request to it
-  const resp = instance && (await instance.fetch(req, env));
-  const r = resp && (await resp.json());
-  /*return new Response(`{
+  return (
+    instance &&
+    instance
+      .fetch(req, env)
+      .then(async (res) => await res.json())
+      .then((r) => {
+        /*return new Response(`{
         ok: true,
         data: ${r}
     }`);*/
-  const dataHead = {
-    "Content-Type": "application/json"
-  };
-  if (r) {
-    if (r.data) {
-      return new Response(
-        `{
+        const dataHead = {
+          "Content-Type": "application/json"
+        };
+        if (r) {
+          if (r.data) {
+            return new Response(
+              `{
           data: ${JSON.stringify(r.data)},
           ok: true
         }`,
-        {
-          status: "200",
-          message: "success: " + req.url,
-          headers: dataHead
-        }
-      );
-    } else
-      return new Response(
-        `{
+              {
+                status: "200",
+                message: "success: " + req.url,
+                headers: dataHead
+              }
+            );
+          } else
+            return new Response(
+              `{
           response: ${JSON.stringify(r)},
           ok: false
         }`,
-        {
-          status: r.status,
-          message: r.statusText ? r.statusText : r.message,
-          headers: dataHead
-        }
-      );
-  } else
-    return new Response(
-      `{
+              {
+                status: r.status,
+                message: r.statusText ? r.statusText : r.message,
+                headers: dataHead
+              }
+            );
+        } else
+          return new Response(
+            `{
         data: {},
         ok: false
       }`,
-      {
-        status: "no response from durable object chain",
-        message: "",
-        headers: dataHead
-      }
-    );
-
+            {
+              status: "no response from durable object chain",
+              message: "",
+              headers: dataHead
+            }
+          );
+      })
+  );
   //new Response({})
 }
 //new instance class fetch waits without await
