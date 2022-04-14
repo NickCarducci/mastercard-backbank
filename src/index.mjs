@@ -126,7 +126,9 @@ export class DurableObjectExample {
           if (req.method === "OPTIONS") {
             // Method accepted for next request
             return new Response(
-              `{${"successful header check for POST process: " + req.url}}`,
+              JSON.stringify(
+                `{${"successful header check for POST process: " + req.url}}`
+              ),
               {
                 status: "200",
                 message: "not ready for use",
@@ -153,9 +155,11 @@ export class DurableObjectExample {
               //isBase64Encoded: false,
 
               return new Response(
-                `{
+                JSON.stringify(
+                  `{
                   data: ${rs}
-                }`,
+                }`
+                ),
                 {
                   status: "200",
                   message: "success: " + req.url,
@@ -163,16 +167,19 @@ export class DurableObjectExample {
                 }
               );
             } else {
-              return new Response(`{error:${"no success doof: " + req.url}}`, {
-                status: "500",
-                message: "no success doof: " + req.url,
-                headers: dataHead
-              });
+              return new Response(
+                JSON.stringify(`{error:${"no success doof: " + req.url}}`),
+                {
+                  status: "500",
+                  message: "no success doof: " + req.url,
+                  headers: dataHead
+                }
+              );
             }
           }
         } else
           return new Response(
-            `{error:${"no access for this origin: " + origin}}`,
+            JSON.stringify(`{error:${"no access for this origin: " + origin}}`),
             {
               status: "400",
               message: "no access for this origin: " + origin,
@@ -181,7 +188,7 @@ export class DurableObjectExample {
           );
       } else
         return new Response(
-          JSON.stringify(`{error:${"this.require not ready for: " + req.url}}`),
+          JSON.stringify(`{error: ${"require not ready for: " + require}}`),
           {
             status: "400",
             message: "not ready for use",
