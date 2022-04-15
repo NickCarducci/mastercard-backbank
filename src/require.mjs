@@ -261,19 +261,19 @@ export class Require {
                     nms = nm.split("/"),
                     mpcf = mp && mp["*"]; //continue search ___ map STATE.CONFIG, bigloop:
                   for (let g = nms.length; g > 0; g -= 1) {
-                    var name = nms.slice(0, g).join("/"); //favor a "star map" unless shorter matching STATE.CONFIG
-                    // prettier-ignore
-                    !starMap && mpcf && e_(mpcf).yes(name)&& ((z) => {z.starMap = z.mpcf[name];n = g;})(this);
-                    ph &&
-                      ((z) => {
+                    const name = nms.slice(0, g).join("/"), //favor a "star map" unless shorter matching STATE.CONFIG
+                      mV = (fP = (f) => ph.slice(0, f).join("/")) =>
+                        e_(mp).yes(fP) && mp[fP],
+                      s = mV && e_(mV).yes(name) && mV[name],
+                      loop = (z) => {
                         for (let f = z.ph.length; f > 0; f--) {
-                          const mV = (fP = (f) => z.ph.slice(0, f).join("/")) =>
-                              e_(z.mp).yes(fP) && z.mp[fP],
-                            s = mV && e_(mV).yes(name) && mV[name];
-                          i = mV && e_(mV).yes(name) && mV[name] ? g : i;
+                          i = z.mV && e_(z.mV).yes(name) && z.mV[name] ? g : i;
                           if (s) break;
                         }
-                      })(this);
+                      };
+                    //prettier-ignore
+                    !starMap && mpcf && e_(mpcf).yes(name)&& ((z) => {z.starMap = z.mpcf[name];n = g;})(this);
+                    ph && loop(this);
                   } // bigloop; //Match, update name to the new value.
                   if (map) return (nm = nms.splice(0, i, map).join("/"));
                   if (starMap) {
@@ -342,7 +342,7 @@ export class Require {
       }; //obj.prototype["hasOwnProperty"][name]; const method =string?"toString":"hasOwnProperty"
 
     var clrsec, watch;
-    const checkLoaded = (z) => {
+    function checkLoaded(parentThis = arguments[0]) {
       var err,
         fb,
         hs = [],
@@ -355,15 +355,11 @@ export class Require {
       // waitInterval - Do not bother if this call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
       if (watch) return null;
       const mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
-        progress = ({ m, ss, i } = mx, tt = {}, p = {}) => {
-          tt[i] = true;
+        progress = ({ m, ss, i } = mx, tt = { [mx.i]: true }, p = {}) => {
           ss.forEach((i = (d) => d.id, ix) => {
             var dep = e_(STATE.dependencies).yes(i) && STATE.dependencies[i]; // depMap force undefined (registered yet not matched in this)
             const c = dep && !m.depMatched[ix] && !p[i];
-            // prettier-ignore
-            if (c && (!e_(tt).yes(i) || !tt[i]))
-        return progress(dep, tt, p);
-            // prettier-ignore
+            if (c && (!e_(tt).yes(i) || !tt[i])) return progress(dep, tt, p);
             c && m.defineDep(ix, STATE.defined[i]);
             c && m.check(); //pass false?
           });
@@ -382,7 +378,7 @@ export class Require {
         id && halt && !WINDOW.hasPathFallback(id, STATE.CONFIG.paths)
           ? WINDOW.rmvScrpt(id, STATE.NAME) && hs.push(id)
           : id &&
-            iifeapp(z)(
+            iifeapp(parentThis)(
               ["fb", "wait", "another"],
               halt && true,
               true,
@@ -395,11 +391,13 @@ export class Require {
         err.NAME = STATE.NAME;
         return onError(err); //If wait time expired, throw error of unloaded modules.
       } else
-        return iifeapp(z)(
+        return iifeapp(parentThis)(
           () =>
             another &&
             reqCalls.forEach((m) =>
-              z[m][er] ? z[m][_em](er, z[m][er]) : progress(z[m])
+              parentThis[m][er]
+                ? parentThis[m][_em](er, parentThis[m][er])
+                : progress(parentThis[m])
             ), //construction
           ["watch", "clrsec"], //keys,...values
           false,
@@ -409,7 +407,7 @@ export class Require {
             !clrsec &&
             setTimeout(() => checkLoaded() && null, 50) /*plugin-resource*/
         ); //args'-mutable iife=>"app"
-    };
+    }
     //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
 
     class Module {
