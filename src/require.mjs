@@ -5,7 +5,7 @@
  * Released under MIT license, https://github.com/REQUIREJS/REQUIREJS/blob/master/LICENSE
  */
 //Not using strict: uneven strict support in browsers, #392, and causes
-//problems with REQUIREJS.exec()/transpiler plugins that may not be strict.
+//problems with variables.REQUIREJS.exec()/transpiler plugins that may not be strict.
 /*jslint regexp: true, nomen: true, sloppy: true */
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
@@ -29,6 +29,10 @@ export class Require {
   }
 
   fetch(req, env) {
+    var variables = {
+      configuration: {},
+      REQUIREJS: null
+    };
     var setTimeout,
       T = (x) => typeof x;
     //s eslint-disable-next-line
@@ -69,7 +73,6 @@ export class Require {
         return { amd: { jQuery: true } };
       },
       ctxs = {},
-      REQUIREJS,
       us = "_",
       createElement = (ns) =>
         document[`createElementNS${ns ? "NS" : ""}`](
@@ -116,7 +119,6 @@ export class Require {
       interscrpt,
       scriptPends,
       defineables = [],
-      configuration = {},
       useInteractive = false,
       ctx,
       /**
@@ -304,7 +306,7 @@ export class Require {
         }
       },
       //uses 'this' as 'z', but when called () the function is returned,
-      build = (REQUIREJS = function () {
+      build = (variables.REQUIREJS = function () {
         var ds = arguments[0],
           cb = arguments[1],
           eb = arguments[2],
@@ -437,6 +439,10 @@ export class Require {
         ); //args'-mutable iife=>"app"
     }
     //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
+    const seratimNull = (z, _, value) => {
+      z[_] = value;
+      return true;
+    };
 
     class Module {
       constructor(
@@ -444,11 +450,7 @@ export class Require {
         unDE = arguments[1],
         configShim = arguments[2]
       ) {
-        const seratimNull = (z, _, value) => {
-            z[_] = value;
-            return true;
-          },
-          on = ({ m, dm } = depMap, name, f) => {
+        const on = ({ m, dm } = depMap, name, f) => {
             if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
               return name === _dd && f(STATE.defined[dm.id]);
             const s = (m = (dm) => getModule(dm)) =>
@@ -1201,12 +1203,9 @@ export class Require {
 
                 var requireMod;
                 const intakeDefines = () => {
-                  var args;
-                  tkeGblQue();
-                  while (defQueue.length) {
-                    args = defQueue.shift();
-
-                    if (args[0] === null)
+                  for (tkeGblQue(); defQueue.length; ) {
+                    const args = defQueue.shift()[0];
+                    if (null === args)
                       return onError(
                         WINDOW.mk([
                           "mismatch",
@@ -1215,18 +1214,21 @@ export class Require {
                           }`
                         ])
                       );
+
                     callGetModule(args);
                   }
                   STATE.defQueueMap = {};
+                  return true;
                 }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
                 intakeDefines(); //Grab defines waiting in the dependency queue.
-                STATE.nextTick(() => {
-                  intakeDefines(); //Mark all the STATE.dependencies as needing to be loaded.
-                  requireMod = getModule(makeModuleMap(null, relMap)); //collect defines that could have been added since the 'require call'
-                  requireMod.skipMap = o.skipMap; //store if 'map STATE.CONFIG' applied to this 'require call' for STATE.dependencies
-                  requireMod[_i](ds, cb, eb, { enabled: true });
-                  checkLoaded();
-                });
+                STATE.nextTick(
+                  () =>
+                    intakeDefines() && //Mark all the STATE.dependencies as needing to be loaded.
+                    (requireMod = getModule(makeModuleMap(null, relMap))) && //collect defines that could have been added since the 'require call'
+                    (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to this 'require call' for STATE.dependencies
+                    requireMod[_i](ds, cb, eb, { enabled: true }) &&
+                    checkLoaded()
+                );
                 return tool.parser;
               }
             };
@@ -1337,8 +1339,7 @@ export class Require {
             //if "m" this is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
             completeLoad: (tkn) => {
               var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
-              tkeGblQue();
-              while (defQueue.length) {
+              for (tkeGblQue(); defQueue.length; ) {
                 args = defQueue.shift();
                 if (args[0] === null) {
                   args[0] = tkn;
@@ -1389,23 +1390,23 @@ export class Require {
   },*/ //(object/class/prototype-'this'-prop)
       build, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'build' function
       require:
-        /*T(define === _n) ||*/ T(REQUIREJS === _u) ||
-        e_(REQUIREJS).string() !== Fn
+        /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
+        e_(variables.REQUIREJS).string() !== Fn
           ? build // package-names, cb, returns a value to define the this of argument index[0]
           : () => {
               //dependency = arguments[0],
-              const notBaseUrl = T(REQUIREJS !== _u),
+              const notBaseUrl = T(variables.REQUIREJS !== _u),
                 notrequire = T(require !== _n) && !e_(require).string() === Fn;
-              configuration = notBaseUrl
-                ? REQUIREJS
-                  ? notrequire
-                  : require
-                : null;
-              REQUIREJS = notBaseUrl
-                ? undefined
-                  ? notrequire
-                  : undefined
-                : null;
+              seratimNull(
+                variables,
+                "configuration",
+                notBaseUrl ? (variables.REQUIREJS ? notrequire : require) : null
+              ) &&
+                seratimNull(
+                  variables,
+                  "REQUIREJS",
+                  notBaseUrl ? (undefined ? notrequire : undefined) : null
+                );
               //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
 
               const obj = {
@@ -1414,126 +1415,147 @@ export class Require {
                   T(setTimeout !== _n) ? setTimeout(fn, 4) : fn()
               }; // globally agreed names for other potential AMD loaders
 
-              _K(obj).forEach((key) => (build[key] = obj[key]));
-              // if (!require) require = build; //Exportable require
-              ["version", "isBrowser"].forEach((k) => (build[k] = sign[k]));
+              return (
+                seratimNull(
+                  variables,
+                  "undefined",
+                  _K(obj).forEach((key) => (build[key] = obj[key]))
+                ) &&
+                // if (!require) require = build; //Exportable require
+                seratimNull(
+                  variables,
+                  "undefined",
+                  ["version", "isBrowser"].forEach((k) => (build[k] = sign[k]))
+                ) &&
+                //prettier-ignore
+                /*jslint evil: true */
+                //build.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
+                //build.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
+                //merely to prepend with 'use strict', don't bother
 
-              //prettier-ignore
-              /*jslint evil: true */
-              //build.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
-              //build.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
-              //merely to prepend with 'use strict', don't bother
+                build({}) && //'dependency require' STATE-sensitive exported methods
+                seratimNull(
+                  variables,
+                  "undefined",
+                  ctxReqProps.forEach(
+                    (prop) =>
+                      (build[prop] = function () {
+                        return ctxs[us].require[prop].apply(
+                          ctxs[us],
+                          arguments
+                        );
+                      })
+                  )
+                ) && //apply arguments to requires on context
+                //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but ctxs during builds//ticketx to apology tour
+                (isBrowser
+                  ? (head = (build.start = {
+                      contexts: ctxs,
+                      newRequireable
+                    }).head = e_("base").tag(0)
+                      ? baseElement.parentNode
+                      : e_("head").tag())
+                  : true) &&
+                //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
+                (build[_o] = (err) => err) && // node for the load command in browser env
+                (build.createNode = (CONFIG, tkn, url) => {
+                  return {
+                    ...(CONFIG.xhtml ? e_().create("NS") : e_().create()),
+                    type: CONFIG.scriptType || "text/javascript",
+                    charset: "utf-8",
+                    async: true
+                  };
+                }) &&
+                (build.load = (STATE, tkn, url) => {
+                  // normalize, hasPathFallback, rmvScrpt, Module Do not overwrite an existing variables.REQUIREJS instance/ amd loader.
+                  const CONFIG = (STATE && STATE.CONFIG) || {};
+                  //handle load request (in browser env); 'STATE' for state, 'tkn' for name, 'url' for point
+                  if (isBrowser) {
+                    var n = build.createNode(CONFIG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
+                    n[_SA](WINDOW.dr(), STATE.NAME);
+                    n[_SA](WINDOW.dr(true), tkn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
 
-              var start = (build.start = { contexts: ctxs, newRequireable }); //Create default STATE.
-              build({}); //'dependency require' STATE-sensitive exported methods
-              ctxReqProps.forEach(
-                (prop) =>
-                  (build[prop] = function () {
-                    return ctxs[us].require[prop].apply(ctxs[us], arguments);
-                  })
-              ); //apply arguments to requires on context
-              //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but ctxs during builds//ticketx to apology tour
-
-              if (isBrowser)
-                head = start.head = e_("base").tag(0)
-                  ? baseElement.parentNode
-                  : e_("head").tag();
-              //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
-              build[_o] = (err) => err; // node for the load command in browser env
-              build.createNode = (CONFIG, tkn, url) => {
-                return {
-                  ...(CONFIG.xhtml ? e_().create("NS") : e_().create()),
-                  type: CONFIG.scriptType || "text/javascript",
-                  charset: "utf-8",
-                  async: true
-                };
-              };
-
-              build.load = (STATE, tkn, url) => {
-                // normalize, hasPathFallback, rmvScrpt, Module Do not overwrite an existing REQUIREJS instance/ amd loader.
-                const CONFIG = (STATE && STATE.CONFIG) || {};
-                //handle load request (in browser env); 'STATE' for state, 'tkn' for name, 'url' for point
-                if (isBrowser) {
-                  var n = build.createNode(CONFIG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
-                  n[_SA](WINDOW.dr(), STATE.NAME);
-                  n[_SA](WINDOW.dr(true), tkn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
-
-                  if (
-                    //prettier-ignore
-                    n[_AE] &&!(n[_AE].toString && n[_AE].toString().indexOf("[native code") < 0) &&!isOpera
-                  ) {
-                    useInteractive = true;
-                    n[_AE]("onreadystatechange", onScriptLoad); //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
-                    //yet for 'interactive'-script, 'readyState' triggers by 'define' call IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
-                    //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
-                    //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
-                  } else
-                    (() => {
-                      n[_AEL]("load", onScriptLoad, false);
-                      n[_AEL](_e, onScriptError, false);
-                    })(); //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', STATE.onScriptError);
-                  n.src = url; //Calling onNodeCreated after all properties on the node have been
-                  if (CONFIG.onNodeCreated)
-                    CONFIG.onNodeCreated(n, CONFIG, tkn, url); //set, but before it is placed in the DOM.
-                  //IE 6-8 cache, script executes before the end
-                  scriptPends = n; //of the appendChild execution, so to tie an anonymous define
-                  if (baseElement) {
-                    head.insertBefore(n, baseElement);
-                  } else head.appendChild(n); //call to the this name (which is stored on the node), hold on to a reference to this node, but clear after the DOM insertion.
-                  scriptPends = null;
-                  return n; // bug in WebKit where the worker gets garbage-collected after calling
-                } else if (isWebWorker) {
-                  try {
-                    setTimeout(() => {}, 0);
-                    //s eslint-disable-next-line
-                    //importScripts(url);
-                    STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
-                  } catch (e) {
-                    STATE[_o](
-                      WINDOW.mk([
-                        "importscripts",
-                        `importScripts failed for ${tkn} at ${url}`,
-                        e,
-                        [tkn]
-                      ])
-                    );
-                  } //type, msg, err, requireModules
-                }
-              };
-              if (isBrowser && !configuration.skipDataMain)
-                e_()
-                  .tag()
-                  .sort((a, b) => b - a)
-                  .forEach((script) => {
-                    !head &&
+                    if (
+                      //prettier-ignore
+                      n[_AE] &&!(n[_AE].toString && n[_AE].toString().indexOf("[native code") < 0) &&!isOpera
+                    ) {
+                      useInteractive = true;
+                      n[_AE]("onreadystatechange", onScriptLoad); //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
+                      //yet for 'interactive'-script, 'readyState' triggers by 'define' call IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
+                      //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
+                      //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
+                    } else
                       (() => {
-                        head = script.parentNode;
-                        dataMain = script.getAttribute("data-main");
-                      })(); //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
-                    if (dataMain) {
-                      mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
-                      const pop =
-                        !configuration.baseUrl &&
-                        mainScript.indexOf("!") === -1;
-                      if (pop) {
-                        src = mainScript.split("/");
-                        mainScript = src.pop();
-                        subPath = src.length ? src.join("/") + "/" : "./";
-                        configuration.baseUrl = subPath;
-                      }
+                        n[_AEL]("load", onScriptLoad, false);
+                        n[_AEL](_e, onScriptError, false);
+                      })(); //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', STATE.onScriptError);
+                    n.src = url; //Calling onNodeCreated after all properties on the node have been
+                    if (CONFIG.onNodeCreated)
+                      CONFIG.onNodeCreated(n, CONFIG, tkn, url); //set, but before it is placed in the DOM.
+                    //IE 6-8 cache, script executes before the end
+                    scriptPends = n; //of the appendChild execution, so to tie an anonymous define
+                    if (baseElement) {
+                      head.insertBefore(n, baseElement);
+                    } else head.appendChild(n); //call to the this name (which is stored on the node), hold on to a reference to this node, but clear after the DOM insertion.
+                    scriptPends = null;
+                    return n; // bug in WebKit where the worker gets garbage-collected after calling
+                  } else if (isWebWorker) {
+                    try {
+                      setTimeout(() => {}, 0);
+                      //s eslint-disable-next-line
+                      //importScripts(url);
+                      STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
+                    } catch (e) {
+                      STATE[_o](
+                        WINDOW.mk([
+                          "importscripts",
+                          `importScripts failed for ${tkn} at ${url}`,
+                          e,
+                          [tkn]
+                        ])
+                      );
+                    } //type, msg, err, requireModules
+                  }
+                }) &&
+                (isBrowser && !variables.configuration.skipDataMain
+                  ? seratimNull(
+                      e_()
+                        .tag()
+                        .sort((a, b) => b - a)
+                        .forEach((script) => {
+                          !head &&
+                            (() => {
+                              head = script.parentNode;
+                              dataMain = script.getAttribute("data-main");
+                            })(); //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
+                          if (dataMain) {
+                            mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
+                            const pop =
+                              !variables.configuration.baseUrl &&
+                              mainScript.indexOf("!") === -1;
+                            if (pop) {
+                              src = mainScript.split("/");
+                              mainScript = src.pop();
+                              subPath = src.length ? src.join("/") + "/" : "./";
+                              variables.configuration.baseUrl = subPath;
+                            }
 
-                      //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
-                      mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
-                      if (/^[/:?.]|(.js)$/.test(mainScript))
-                        mainScript = dataMain; //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
-                      configuration.ds = configuration.ds
-                        ? configuration.ds.concat(mainScript)
-                        : [mainScript]; //Put the data-main script in the files to load.
-                      return true;
-                    }
-                  });
-              //Set up with STATE.CONFIG info.
-              build(configuration);
+                            //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
+                            mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
+                            if (/^[/:?.]|(.js)$/.test(mainScript))
+                              mainScript = dataMain; //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
+                            variables.configuration.ds = variables.configuration
+                              .ds
+                              ? variables.configuration.ds.concat(mainScript)
+                              : [mainScript]; //Put the data-main script in the files to load.
+                            return true;
+                          }
+                        })
+                    )
+                  : true) &&
+                //Set up with STATE.CONFIG info.
+                build(variables.configuration)
+              );
             },
       define
     };
