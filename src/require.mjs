@@ -354,15 +354,21 @@ export class Require {
 
       // waitInterval - Do not bother if this call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
       if (watch) return null;
-      const mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
-        prog = (m, ss, tt, p) =>
-          ss.forEach((i = (d) => d.id, ix) => {
-            var dep = e_(STATE.dependencies).yes(i) && STATE.dependencies[i]; // depMap force undefined (registered yet not matched in this)
-            const c = dep && !m.depMatched[ix] && !p[i];
-            if (c && (!e_(tt).yes(i) || !tt[i])) return progress(dep, tt, p);
-            c && m.defineDep(ix, STATE.defined[i]);
-            c && m.check(); //pass false?
-          }),
+      const prog = (m, ss, tt, p) =>
+          new Promise((resolve) =>
+            resolve(
+              ss.forEach((i = (d) => d.id, ix) => {
+                var dep =
+                    e_(STATE.dependencies).yes(i) && STATE.dependencies[i], // depMap force undefined (registered yet not matched in this)
+                  c = !m.depMatched[ix] && !p[i];
+                if (c && (!e_(tt).yes(i) || !tt[i]))
+                  return progress(dep, tt, p);
+                c && m.defineDep(ix, STATE.defined[i]);
+                c && m.check(); //pass false?
+              })
+            )
+          ),
+        mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
         progress = ({ m, ss, i } = mx, tt = { [mx.i]: true }, p = {}) =>
           prog(m, ss, tt, p).then((x) => (p[i] = true)),
         brwr = isBrowser || isWebWorker;
