@@ -361,10 +361,11 @@ export class Require {
                 var dep =
                     e_(STATE.dependencies).yes(i) && STATE.dependencies[i], // depMap force undefined (registered yet not matched in this)
                   c = !m.depMatched[ix] && !p[i];
-                if (c && (!e_(tt).yes(i) || !tt[i]))
-                  return progress(dep, tt, p);
-                c && m.defineDep(ix, STATE.defined[i]);
-                c && m.check(); //pass false?
+                if (c) {
+                  if (!e_(tt).yes(i) || !tt[i]) return progress(dep, tt, p);
+                  c && m.defineDep(ix, STATE.defined[i]);
+                  c && m.check(); //pass false?
+                }
               }) && resolve("")
           ),
         mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
@@ -425,8 +426,7 @@ export class Require {
             if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
               return name === _dd && f(STATE.defined[dm.id]);
             m = getModule(dm);
-            if (m[_e] && name === _e) return f(m[_e]);
-            m.on(name, f);
+            return m[_e] && name === _e ? f(m[_e]) : m.on(name, f);
           },
           state = {
             events: (e_(unDE).yes(map.id) && unDE[map.id]) || {},
@@ -437,37 +437,46 @@ export class Require {
             depMatched: [],
             pluginMaps: {},
             depCount: 0,
-            init: (depMaps, factory, eb, o = (o) => o || {}) => {
-              if (this.INITED) return null;
-              this["factory"] = factory; //Register for errors
-              if (eb) {
-                this.on(_e, eb); //If no eb already, but there are error listeners
-              } else if (this.events[_e]) eb = (err) => this.emit(_e, err); //construct((err) => this.emit(_e, err), this); //on this this, set up an eb to pass to the ds.
-              const obj = {
-                depMaps: depMaps && depMaps.slice(0),
-                eb,
-                inited: true,
-                ignore: o.ignore
-              }; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
-              _K(obj).forEach((key) => (this[key] = obj[key]));
-              if (o[_ed] || this[_ed]) return this.enable();
-              this.check();
-            },
-            load: () => {
-              if (!this.urlFchd[this.map.url]) {
-                this.urlFchd[this.map.url] = true;
-                STATE.load(this.map.id, this.map.url);
-              }
-            },
+            init: this.INITED
+              ? () => null
+              : (
+                  depMaps,
+                  factory = (factory) => (this.factory = factory), //Register for errors
+                  eb = (eb) =>
+                    eb
+                      ? this.on(_e, eb) //If no eb already, but there are error listeners
+                      : this.events[_e]
+                      ? (eb = (err) => this.emit(_e, err))
+                      : null, //construct((err) => this.emit(_e, err), this); //on this this, set up an eb to pass to the ds.
+                  o = (o) => o || {}
+                ) => {
+                  const obj = {
+                    depMaps: depMaps && depMaps.slice(0),
+                    eb,
+                    inited: true,
+                    ignore: o.ignore
+                  }; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
+                  _K(obj).forEach((key) => (this[key] = obj[key]));
+                  if (o[_ed] || this[_ed]) return this.enable();
+                  this.check();
+                },
+            load: this.urlFchd[this.map.url]
+              ? () => null
+              : ((z) => STATE.load(z.map.id, z.map.url))(
+                  this,
+                  (this.urlFchd[this.map.url] = true)
+                ),
             check: () => {
-              if (!this[_ed] || this.enabling) return null;
-              var id = this.map.id;
-              if (!this.INITED)
-                return !e_(STATE.defQueueMap).yes(id) && this.fetch();
-              if (this[_dg]) return this[_e] && this.emit(_e, this[_e]); // !defQueue.includes(this) this is ready to, and does, define itself
+              ((z) => {
+                if (!z[_ed] || z.enabling) return null;
+                var id = z.map.id;
+                if (!z.INITED)
+                  return !e_(STATE.defQueueMap).yes(id) && z.fetch();
+                if (z[_dg]) return z[_e] && z.emit(_e, z[_e]); // !defQueue.includes(this) this is ready to, and does, define itself
+                z[_dg] = true; //no redundant require-define
+              })(this);
               var expts = this[_x],
                 factory = this.factory;
-              this[_dg] = true; //no redundant require-define
               if (this.depCount < 1 && !STATE.defined) {
                 const isDefine = this.map.yesdef;
                 if (e_(factory).string() === Fn) {
