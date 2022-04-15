@@ -644,11 +644,14 @@ export class Require {
                 e_(STATE.dependencies).yes(nM.id) && STATE.dependencies[nM.id]
               );
             },
-            enable: () => {
+            enable: () =>
               (STATE.enRgtry[this.map.id] = this) &&
               (this[_ed] = true) && //no inadvertent load and 0 depCount by
-                (this.enabling = true) &&
-                //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
+              (this.enabling = true) &&
+              //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
+              seratimNull(
+                variables,
+                "undefined",
                 this.depMaps.forEach((depMap, i) => {
                   if (T(depMap === _t)) {
                     const mp = this.map.yesdef ? this.map : this.map.parentMap;
@@ -680,99 +683,106 @@ export class Require {
                     m &&
                     !m[_ed] &&
                     STATE.enable(depMap, this);
-                }); //don't call enable if it is already enabled (circular ds)
-
-              _K(this.pluginMaps).forEach(
-                (pM = (x) => this.pluginMaps[x], i) =>
-                  e_(STATE.dependencies).yes(pM.id) &&
-                  STATE.dependencies[pM.id] &&
-                  !STATE.dependencies[pM.id][_ed] &&
-                  STATE.enable(pM, this)
-              );
-              this.enabling = false;
-              this.check();
-            },
+                })
+              ) && //don't call enable if it is already enabled (circular ds)
+              seratimNull(
+                variables,
+                "undefined",
+                _K(this.pluginMaps).forEach(
+                  (pM = (x) => this.pluginMaps[x], i) =>
+                    e_(STATE.dependencies).yes(pM.id) &&
+                    STATE.dependencies[pM.id] &&
+                    !STATE.dependencies[pM.id][_ed] &&
+                    STATE.enable(pM, this)
+                )
+              ) &&
+              seratimNull((this.enabling = false)) &&
+              this.check(),
             on: (name, cb) =>
               (this.events[name]
                 ? this.events[name]
                 : (this.events[name] = [])
               ).push(cb),
-            emit: (name, evt) => {
-              this.events[name].forEach((cb) => cb(evt));
-              if (name === _e) delete this.events[name];
-            },
-            defineDep: (i, depExports) => {
-              if (!this.depMatched[i]) {
-                this.depMatched[i] = true; //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-                this.depCount -= 1; //prototype is hydratable for async results, init only on this page by 'new' initialization
-                this.depExports[i] = depExports; //multiple cb export cycles
-              }
-            },
-            callPlugin: () => {
-              var map = this.map; //Map already normalized the prefix.
-              var id = map.id; //Mark this as a dependency for this plugin, so it
-              var pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
-              this.depMaps.push(pluginMap);
-              on(pluginMap, _dd, (plugin) => {
-                if (this.map.unnormalized)
-                  return Module[_P].normalizeMod(plugin, map); //If current map is not normalized, wait for that
-                var bundleId =
-                  e_(STATE.bdlMap).yes(this.map.id) &&
-                  STATE.bdlMap[this.map.id]; //normalized name to load instead of continuing.
-                if (bundleId) {
-                  this.map.url = nameToUrl(bundleId);
-                  this.load();
-                  return null;
-                } //If a paths STATE.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
-                const load = (factory) =>
-                  this[_i]([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
-                load[_e] = (err) => {
-                  this.INITED = true;
-                  this[_e] = err;
-                  err.requireModules = [id];
-                  _K(STATE.dependencies).forEach(
-                    (x, i) =>
-                      STATE.dependencies[x].map.id.indexOf(
-                        id + "_unnormalized"
-                      ) === 0 && clrRegstr(STATE.dependencies[x].map.id)
-                  );
-                  onError(err);
-                }; //Remove temp unnormalized modules for this this, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
-                const parser = STATE.makeRequire(map.parentMap, {
-                  enableBuildCallback: true
-                }); //STATE or how to 'complete' the load.
+            emit: (name, evt) =>
+              seratimNull(
+                variables,
+                "undefined",
+                this.events[name].forEach((cb) => cb(evt))
+              ) &&
+              name === _e &&
+              delete this.events[name],
+            //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND#short-circuit_evaluation
+            defineDep: (i, depExports) =>
+              !this.depMatched[i] &&
+              (this.depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
+              seratimNull((this.depCount -= 1)) && //prototype is hydratable for async results, init only on this page by 'new' initialization
+              (this.depExports[i] = depExports), //multiple cb export cycles
 
-                load.fromText = (text, textAlt) => {
-                  /*jslint evil: true */
-                  var tkn = map.name,
-                    moduleMap = makeModuleMap(tkn),
-                    hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass tkn, ok, but discard tkn for internal ref.
-                  if (textAlt) text = textAlt;
-                  if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
-                  getModule(moduleMap); //Prime the system by creating a this instance for
-                  if (e_(STATE.CONFIG.config).yes(id))
-                    STATE.CONFIG.config[tkn] = STATE.CONFIG.config[id]; //Transfer any STATE.CONFIG to this other this.
-                  try {
-                    build.exec(text);
-                  } catch (e) {
-                    return onError(
-                      WINDOW.mk([
-                        "fromtexteval",
-                        `fromText eval for ${id} failed: ${e}`,
-                        e,
-                        [id]
-                      ])
+            callPlugin: () => {
+              var map = this.map, //Map already normalized the prefix.
+                id = map.id, //Mark this as a dependency for this plugin, so it
+                pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
+              this.depMaps.push(pluginMap) &&
+                on(pluginMap, _dd, (plugin) => {
+                  if (this.map.unnormalized)
+                    return Module[_P].normalizeMod(plugin, map); //If current map is not normalized, wait for that
+                  var bundleId =
+                    e_(STATE.bdlMap).yes(this.map.id) &&
+                    STATE.bdlMap[this.map.id]; //normalized name to load instead of continuing.
+                  if (bundleId) {
+                    this.map.url = nameToUrl(bundleId);
+                    this.load();
+                    return null;
+                  } //If a paths STATE.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
+                  const load = (factory) =>
+                    this[_i]([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
+                  load[_e] = (err) => {
+                    this.INITED = true;
+                    this[_e] = err;
+                    err.requireModules = [id];
+                    _K(STATE.dependencies).forEach(
+                      (x, i) =>
+                        STATE.dependencies[x].map.id.indexOf(
+                          id + "_unnormalized"
+                        ) === 0 && clrRegstr(STATE.dependencies[x].map.id)
                     );
-                  } //type, msg, err, requireModules
-                  if (hasInteractive) useInteractive = true; //Mark this as a dependency for the plugin resource
-                  this.depMaps.push(moduleMap);
-                  STATE.completeLoad(tkn);
-                  parser([tkn], load); //Support anonymous modules. Bind the value of that this to the value for this resource ID.
-                };
-                plugin.load(map.name, parser, load, STATE.CONFIG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
-              });
-              STATE.enable(pluginMap, this);
-              this.pluginMaps[pluginMap.id] = pluginMap;
+                    onError(err);
+                  }; //Remove temp unnormalized modules for this this, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
+                  const parser = STATE.makeRequire(map.parentMap, {
+                    enableBuildCallback: true
+                  }); //STATE or how to 'complete' the load.
+
+                  load.fromText = (text, textAlt) => {
+                    /*jslint evil: true */
+                    var tkn = map.name,
+                      moduleMap = makeModuleMap(tkn),
+                      hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass tkn, ok, but discard tkn for internal ref.
+                    if (textAlt) text = textAlt;
+                    if (hasInteractive) useInteractive = false; //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
+                    getModule(moduleMap); //Prime the system by creating a this instance for
+                    if (e_(STATE.CONFIG.config).yes(id))
+                      STATE.CONFIG.config[tkn] = STATE.CONFIG.config[id]; //Transfer any STATE.CONFIG to this other this.
+                    try {
+                      build.exec(text);
+                    } catch (e) {
+                      return onError(
+                        WINDOW.mk([
+                          "fromtexteval",
+                          `fromText eval for ${id} failed: ${e}`,
+                          e,
+                          [id]
+                        ])
+                      );
+                    } //type, msg, err, requireModules
+                    if (hasInteractive) useInteractive = true; //Mark this as a dependency for the plugin resource
+                    this.depMaps.push(moduleMap);
+                    STATE.completeLoad(tkn);
+                    parser([tkn], load); //Support anonymous modules. Bind the value of that this to the value for this resource ID.
+                  };
+                  plugin.load(map.name, parser, load, STATE.CONFIG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
+                }) &&
+                STATE.enable(pluginMap, this) &&
+                (this.pluginMaps[pluginMap.id] = pluginMap);
             },
             fetch: () => {
               if (this.fetched) return null;
