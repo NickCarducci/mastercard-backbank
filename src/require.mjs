@@ -355,8 +355,8 @@ export class Require {
       // waitInterval - Do not bother if this call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
       if (watch) return null;
       const prog = (m, ss, tt, p) =>
-          new Promise((resolve) =>
-            resolve(
+          new Promise(
+            (resolve) =>
               ss.forEach((i = (d) => d.id, ix) => {
                 var dep =
                     e_(STATE.dependencies).yes(i) && STATE.dependencies[i], // depMap force undefined (registered yet not matched in this)
@@ -365,12 +365,11 @@ export class Require {
                   return progress(dep, tt, p);
                 c && m.defineDep(ix, STATE.defined[i]);
                 c && m.check(); //pass false?
-              })
-            )
+              }) && resolve("")
           ),
         mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
         progress = ({ m, ss, i } = mx, tt = { [mx.i]: true }, p = {}) =>
-          prog(m, ss, tt, p).then((x) => (p[i] = true)),
+          prog(m, ss, tt, p).then(() => (p[i] = true)),
         brwr = isBrowser || isWebWorker;
       watch = true;
       const er = _e,
