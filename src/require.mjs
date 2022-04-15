@@ -363,8 +363,8 @@ export class Require {
                   c = !m.depMatched[ix] && !p[i];
                 if (c) {
                   if (!e_(tt).yes(i) || !tt[i]) return progress(dep, tt, p);
-                  c && m.defineDep(ix, STATE.defined[i]);
-                  c && m.check(); //pass false?
+                  m.defineDep(ix, STATE.defined[i]);
+                  m.check(); //pass false?
                 }
               }) && resolve("")
           ),
@@ -425,8 +425,9 @@ export class Require {
         const on = ({ m, dm } = depMap, name, f) => {
             if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
               return name === _dd && f(STATE.defined[dm.id]);
-            m = getModule(dm);
-            return m[_e] && name === _e ? f(m[_e]) : m.on(name, f);
+            const s = (m = (dm) => getModule(dm)) =>
+              m[_e] && name === _e ? f(m[_e]) : m.on(name, f);
+            return s(dm);
           },
           state = {
             events: (e_(unDE).yes(map.id) && unDE[map.id]) || {},
@@ -478,52 +479,61 @@ export class Require {
                 factory = this.factory;
               if (this.depCount < 1 && !STATE.defined) {
                 const isDefine = this.map.yesdef;
-                if (e_(factory).string() === Fn) {
-                  var err,
-                    cjs,
-                    depExpo = this.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
 
-                  if (
-                    (this.events[_e] && isDefine) ||
-                    build[_o] !== ((err) => err)
-                  ) {
+                this[_x] = () => {
+                  if (e_(factory).string() === Fn) {
+                    var err,
+                      cjs,
+                      depExpo = this.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
+
+                    const readyToDefine = isDefine && expts === undefined;
+                    cjs = readyToDefine && this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
+
                     try {
                       expts = STATE.execCb(id, factory, depExpo, expts);
                     } catch (e) {
-                      err = e;
+                      err =
+                        ((this.events[_e] && isDefine) ||
+                          build[_o] !== ((err) => err)) &&
+                        e;
                     } //factory.apply(exports, depExports),
-                  } else expts = STATE.execCb(id, factory, depExpo, expts);
-                  const readyToDefine = isDefine && expts === undefined;
-                  cjs = readyToDefine && this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
-                  if (readyToDefine)
-                    expts = cjs ? cjs[_x] : this.usingExports ? this[_x] : null;
-                  // this.exports assignment over exports object. exports already set the STATE.defined value.
+                    // this.exports assignment over exports object. exports already set the STATE.defined value.
 
-                  err &&
-                    // new iifeapp(this)(
-                    ((z, obj) => {
-                      _K(obj).forEach((key) => (z.err[key] = obj[key]));
-                      return onError((z[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
-                    })(this, {
-                      requireMap: this.map,
-                      requireModules: isDefine ? [this.map.id] : null,
-                      requireType: isDefine ? "define" : _r
-                    }); //if there were more solutions to be made, so is redundant here, actually
+                    err &&
+                      // new iifeapp(this)(
+                      ((z, obj) => {
+                        _K(obj).forEach((key) => (z.err[key] = obj[key]));
+                        return onError((z[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
+                      })(this, {
+                        requireMap: this.map,
+                        requireModules: isDefine ? [this.map.id] : null,
+                        requireType: isDefine ? "define" : _r
+                      }); //if there were more solutions to be made, so is redundant here, actually
 
-                  //);
-                } else expts = factory;
-
-                this[_x] = expts;
+                    return !readyToDefine
+                      ? expts
+                      : cjs
+                      ? cjs[_x]
+                      : this.usingExports
+                      ? this[_x]
+                      : null;
+                    //);
+                  } else return factory;
+                };
                 if (isDefine && !this.ignore) {
-                  STATE.defined[id] = expts;
-                  if (build.onResourceLoad)
-                    build.onResourceLoad(
-                      STATE,
-                      this.map,
-                      this.depMaps.map(
-                        (depMap) => depMap.normalizedMap || depMap
+                  new Promise(
+                    (resolve) => (STATE.defined[id] = this[_x] && resolve(""))
+                  ).then(
+                    () =>
+                      build.onResourceLoad &&
+                      build.onResourceLoad(
+                        STATE,
+                        this.map,
+                        this.depMaps.map(
+                          (depMap) => depMap.normalizedMap || depMap
+                        )
                       )
-                    );
+                  );
                 }
                 clrRegstr(id);
                 this[_dd] = true;
@@ -546,52 +556,70 @@ export class Require {
                     WINDOW.normalize(args)
                   ) || ""; //prefix and name should already be normalized, no need
               var nM = makeModuleMap(mp.prefix + "!" + name, pM, true); //normalizedMap -for applying map STATE.CONFIG again either.
-              on(nM, _dd, (d) => {
-                this.map.normalizedMap = nM;
-                this[_i]([], () => d, null, {
-                  enabled: true,
-                  ignore: true
-                });
-              }); //construct
-              var normMod =
-                e_(STATE.dependencies).yes(nM.id) && STATE.dependencies[nM.id]; //normalizedMod
-              if (normMod) {
-                this.depMaps.push(nM);
-                if (this.events[_e])
-                  normMod.on(_e, (err) => this.emit(_e, err)); //Mark this as a dependency for this plugin, so it can be traced for cycles.
-                normMod.enable();
-              }
+              on(
+                nM,
+                _dd,
+                (d) =>
+                  (this.map.normalizedMap =
+                    nM &&
+                    this[_i]([], () => d, null, {
+                      enabled: true,
+                      ignore: true
+                    }))
+              ); //construct
+              const prt = (
+                normMod = (normMod) => {
+                  normMod && this.depMaps.push(nM);
+                  return (
+                    this.events[_e] &&
+                    normMod.on(_e, (err) => this.emit(_e, err)) &&
+                    normMod
+                  ); //Mark this as a dependency for this plugin, so it can be traced for cycles.
+                }
+              ) => normMod && normMod.enable();
+
+              //normalizedMod
+              prt(
+                e_(STATE.dependencies).yes(nM.id) && STATE.dependencies[nM.id]
+              );
             },
             enable: () => {
-              STATE.enRgtry[this.map.id] = this;
-              this[_ed] = true;
-              this.enabling = true; //no inadvertent load and 0 depCount by
-
-              //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
-              this.depMaps.forEach((depMap, i) => {
-                if (T(depMap === _t)) {
-                  const mp = this.map.yesdef ? this.map : this.map.parentMap;
-                  depMap = makeModuleMap(depMap, mp, false, !this.skipMap); //Dependency needs to be converted to a depMap
-                  this.depMaps[i] = depMap; //and wired up to this this.
-                  var handler =
-                    e_(handlers).yes(depMap.id) && handlers[depMap.id];
-                  if (handler) return (this.depExports[i] = handler(this));
-                  this["depCount"] += 1;
-                  on(depMap, _dd, (depExports) => {
-                    if (this.undefed) return null;
-                    this.defineDep(i, depExports);
-                    this.check();
-                  });
-                  if (this.eb) {
-                    on(depMap, _e, this.eb); // propagate the error correctly - something else is listening for errors
-                  } else if (this.events[_e])
-                    on(depMap, _e, (err) => this.emit(_e, err));
-                } // (No direct eb on this this)
-                var id = depMap.id,
-                  m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
-                if (!e_(handlers).yes(id) && m && !m[_ed])
-                  STATE.enable(depMap, this);
-              }); //don't call enable if it is already enabled (circular ds)
+              (STATE.enRgtry[this.map.id] = this) &&
+              (this[_ed] = true) && //no inadvertent load and 0 depCount by
+                (this.enabling = true) &&
+                //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
+                this.depMaps.forEach((depMap, i) => {
+                  if (T(depMap === _t)) {
+                    const mp = this.map.yesdef ? this.map : this.map.parentMap;
+                    (depMap = makeModuleMap(
+                      depMap,
+                      mp,
+                      false,
+                      !this.skipMap
+                    )) && (this.depMaps[i] = depMap); //Dependency needs to be converted to a depMap //and wired up to this this.
+                    var handler =
+                      e_(handlers).yes(depMap.id) && handlers[depMap.id];
+                    if (handler) return (this.depExports[i] = handler(this));
+                    (this["depCount"] += 1) &&
+                      on(depMap, _dd, (depExports) => {
+                        if (this.undefed) return null;
+                        this.defineDep(i, depExports);
+                        this.check();
+                      });
+                    ((z) =>
+                      z.eb
+                        ? on(depMap, _e, z.eb) // propagate the error correctly - something else is listening for errors
+                        : z.events[_e]
+                        ? on(depMap, _e, (err) => z.emit(_e, err))
+                        : null)(this);
+                  } // (No direct eb on this this)
+                  var id = depMap.id,
+                    m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
+                  !e_(handlers).yes(id) &&
+                    m &&
+                    !m[_ed] &&
+                    STATE.enable(depMap, this);
+                }); //don't call enable if it is already enabled (circular ds)
 
               _K(this.pluginMaps).forEach(
                 (pM = (x) => this.pluginMaps[x], i) =>
