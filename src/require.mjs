@@ -236,9 +236,9 @@ export class Require {
                   ) => {
                     //Adjust any relative paths. node allows either .js or non .js, yet not in nameToUrl;baseName.push(nm), but new instead of length report
                     for (let i = 0; i < nm.length; i++) {
-                      const solid = nm[i] === "." && nm.splice(i, 1); //:part === "..":null
-                      i = solid ? i - 1 : i;
+                      const solid = nm[i] === "." && nm.splice(i, 1);
                       if (solid) continue;
+                      i = solid ? i - 1 : i;
                       const more =
                         i === 0 ||
                         (i === 1 && nm[2] === "..") ||
@@ -247,7 +247,12 @@ export class Require {
                     }
                     return nm.join("/");
                   })((nm = nm.split("/"))), //just enabled, but unactivated, modules
-                convertName: (nm, mp, applyMap, ph) => {
+                convertName: function (
+                  nm = arguments[0],
+                  mp = arguments[1],
+                  applyMap = arguments[2],
+                  ph = arguments[3]
+                ) {
                   if (!applyMap || !mp || (!ph && !mp["*"])) return nm;
                   var n,
                     i,
@@ -258,18 +263,17 @@ export class Require {
                   for (let g = nms.length; g > 0; g -= 1) {
                     var name = nms.slice(0, g).join("/"); //favor a "star map" unless shorter matching STATE.CONFIG
                     // prettier-ignore
-                    !starMap && mpcf && e_(mpcf).yes(name)&& (() => {starMap = mpcf[name];n = g;})();
+                    !starMap && mpcf && e_(mpcf).yes(name)&& ((z) => {z.starMap = z.mpcf[name];n = g;})(this);
                     ph &&
-                      (() => {
-                        for (let f = ph.length; f > 0; f--) {
-                          const fP = ph.slice(0, f).join("/"),
-                            mV = e_(mp).yes(fP) && mp[fP];
-                          if (!mV) continue;
-                          const s = e_(mV).yes(name) && mV[name];
-                          i = s ? g : i;
+                      ((z) => {
+                        for (let f = z.ph.length; f > 0; f--) {
+                          const mV = (fP = (f) => z.ph.slice(0, f).join("/")) =>
+                              e_(z.mp).yes(fP) && z.mp[fP],
+                            s = mV && e_(mV).yes(name) && mV[name];
+                          i = mV && e_(mV).yes(name) && mV[name] ? g : i;
                           if (s) break;
                         }
-                      })();
+                      })(this);
                   } // bigloop; //Match, update name to the new value.
                   if (map) return (nm = nms.splice(0, i, map).join("/"));
                   if (starMap) {
