@@ -58,20 +58,31 @@ export class Require {
               })()
           };
         }
-      ) => {
-        ds =
-          !ds && e_(c).string() === Fn && c.length ? WINDOW.concat(ds, c) : ds;
+      ) =>
+        seratimNull(
+          variables,
+          "undefined",
+          (ds =
+            !ds && e_(c).string() === Fn && c.length
+              ? WINDOW.concat(ds, c)
+              : ds)
+        ) &&
         // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
-        nm = useInteractive && !nm ? n()[ga](WINDOW.dr(true)) : nm;
-        ctx = useInteractive ? ctxs[n()[ga](WINDOW.dr())] : ctx;
-
+        seratimNull(
+          variables,
+          "undefined",
+          (nm = useInteractive && !nm ? n()[ga](WINDOW.dr(true)) : nm)
+        ) &&
+        seratimNull(
+          variables,
+          "undefined",
+          (ctx = useInteractive ? ctxs[n()[ga](WINDOW.dr())] : ctx)
+        ) &&
         //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
 
-        if (!ctx) return defineables.push([nm, ds, c]);
-        ctx.defQueue.push([nm, ds, c]);
-        ctx.defQueueMap[nm] = true;
-        return { amd: { jQuery: true } };
-      },
+        (!ctx ? defineables.push([nm, ds, c]) : true) &&
+        ctx.defQueue.push([nm, ds, c]) &&
+        (ctx.defQueueMap[nm] = true) && { amd: { jQuery: true } },
       ctxs = {},
       us = "_",
       createElement = (ns) =>
@@ -1519,38 +1530,52 @@ export class Require {
                 }) &&
                 (isBrowser && !variables.configuration.skipDataMain
                   ? seratimNull(
+                      variables,
+                      "undefined",
                       e_()
                         .tag()
                         .sort((a, b) => b - a)
-                        .forEach((script) => {
-                          !head &&
-                            (() => {
-                              head = script.parentNode;
-                              dataMain = script.getAttribute("data-main");
-                            })(); //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
-                          if (dataMain) {
-                            mainScript = dataMain; //Preserve dataMain in case it is a path (i.e. contains '?')
-                            const pop =
-                              !variables.configuration.baseUrl &&
-                              mainScript.indexOf("!") === -1;
-                            if (pop) {
-                              src = mainScript.split("/");
-                              mainScript = src.pop();
-                              subPath = src.length ? src.join("/") + "/" : "./";
-                              variables.configuration.baseUrl = subPath;
+                        .forEach(
+                          (
+                            { head, dataMain } = (script) => {
+                              return head
+                                ? { head, dataMain }
+                                : {
+                                    head: script.parentNode,
+                                    dataMain: script.getAttribute("data-main")
+                                  };
                             }
+                          ) => {
+                            if (dataMain) {
+                              //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
 
-                            //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
-                            mainScript = mainScript.replace(/\.js$/, ""); //If mainScript is still a mere path, fall back to dataMain
-                            if (/^[/:?.]|(.js)$/.test(mainScript))
-                              mainScript = dataMain; //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
-                            variables.configuration.ds = variables.configuration
-                              .ds
-                              ? variables.configuration.ds.concat(mainScript)
-                              : [mainScript]; //Put the data-main script in the files to load.
-                            return true;
+                              mainScript = dataMain ? dataMain : mainScript; //Preserve dataMain in case it is a path (i.e. contains '?')
+                              const s =
+                                !variables.configuration.baseUrl &&
+                                mainScript.indexOf("!") === -1;
+                              if (s) {
+                                src = mainScript.split("/");
+                                mainScript = src.pop();
+                                subPath = src.length
+                                  ? src.join("/") + "/"
+                                  : "./";
+                                variables.configuration.baseUrl = subPath;
+                              }
+
+                              //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
+                              (mainScript = mainScript.replace(/\.js$/, "")) && //If mainScript is still a mere path, fall back to dataMain
+                              (/^[/:?.]|(.js)$/.test(mainScript)
+                                ? (mainScript = dataMain)
+                                : true) && //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
+                                (variables.configuration.ds = variables
+                                  .configuration.ds
+                                  ? variables.configuration.ds.concat(
+                                      mainScript
+                                    )
+                                  : [mainScript]); //Put the data-main script in the files to load.
+                            }
                           }
-                        })
+                        )
                     )
                   : true) &&
                 //Set up with STATE.CONFIG info.
