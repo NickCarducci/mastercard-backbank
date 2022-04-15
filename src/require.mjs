@@ -271,6 +271,12 @@ export class Require {
                           if (s) break;
                         }
                       };
+                    mp &&
+                      mp["*"] &&
+                      e_(mp["*"]).yes(name) &&
+                      ((i = this).starMap = i.mpcf[name]) &&
+                      ph &&
+                      loop(this);
                     //prettier-ignore
                     !starMap && mpcf && e_(mpcf).yes(name)&& ((z) => {z.starMap = z.mpcf[name];n = g;})(this);
                     ph && loop(this);
@@ -357,16 +363,25 @@ export class Require {
       const prog = (m, ss, tt, p) =>
           new Promise(
             (resolve) =>
-              ss.forEach((i = (d) => d.id, ix) => {
-                var dep =
-                    e_(STATE.dependencies).yes(i) && STATE.dependencies[i], // depMap force undefined (registered yet not matched in this)
-                  c = !m.depMatched[ix] && !p[i];
-                if (c) {
-                  if (!e_(tt).yes(i) || !tt[i]) return progress(dep, tt, p);
-                  m.defineDep(ix, STATE.defined[i]);
-                  m.check(); //pass false?
-                }
-              }) && resolve("")
+              ss.forEach(
+                (
+                  { i, dep } = (d) => {
+                    return {
+                      i: d.id,
+                      dep:
+                        e_(STATE.dependencies).yes(i) && STATE.dependencies[i]
+                    };
+                  },
+                  ix
+                ) =>
+                  !m.depMatched[ix] &&
+                  !p[i] && // depMap force undefined (registered yet not matched in this)
+                  (!e_(tt).yes(i) || !tt[i]
+                    ? progress(dep, tt, p)
+                    : ["defineDep", "check"].forEach(
+                        (cd, n) => n === 0 && m[cd](ix, STATE.defined[i])
+                      )) //pass false?
+              ) && resolve("")
           ),
         mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
         progress = ({ m, ss, i } = mx, tt = { [mx.i]: true }, p = {}) =>
@@ -422,7 +437,11 @@ export class Require {
         unDE = arguments[1],
         configShim = arguments[2]
       ) {
-        const on = ({ m, dm } = depMap, name, f) => {
+        const seratimFalse = (z, _) => {
+            z[_] = false;
+            return true;
+          },
+          on = ({ m, dm } = depMap, name, f) => {
             if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
               return name === _dd && f(STATE.defined[dm.id]);
             const s = (m = (dm) => getModule(dm)) =>
@@ -466,85 +485,95 @@ export class Require {
               : ((z) =>
                   (this.urlFchd[this.map.url] = true) &&
                   STATE.load(z.map.id, z.map.url))(this),
-            check: () => {
-              var id = this.map.id;
-              ((z) => {
-                if (!z[_ed] || z.enabling) return null;
-                if (!z.INITED)
-                  return !e_(STATE.defQueueMap).yes(id) && z.fetch();
-                if (z[_dg]) return z[_e] && z.emit(_e, z[_e]); // !defQueue.includes(this) this is ready to, and does, define itself
-                z[_dg] = true; //no redundant require-define
-              })(this);
-              var expts = this[_x],
-                factory = this.factory;
-              if (this.depCount < 1 && !STATE.defined) {
-                const isDefine = this.map.yesdef;
+            check: (
+              { id, v } = (...args) => {
+                return { id: (id) => this.map.id, v: {} };
+              }
+            ) =>
+              this[_ed] && !this.enabling && !this.INITED
+                ? !e_(STATE.defQueueMap).yes(id) && this.fetch()
+                : this[_dg] //new Promise(r=>r(""))
+                ? this[_e] && this.emit(_e, this[_e]) // !defQueue.includes(this) this is ready to, and does, define itself
+                : (this[_dg] = true) && //no redundant require-define
+                  (this.depCount > 0 || STATE.defined
+                    ? () => {}
+                    : () => {
+                        (v.isDefine = this.map.yesdef) &&
+                          (this[_x] =
+                            e_(this.factory).string() !== Fn
+                              ? () => this.factory
+                              : () => {
+                                  var depExpo = this.depExports, //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
+                                    cjs =
+                                      v.isDefine &&
+                                      this[_x] === undefined &&
+                                      this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
 
-                this[_x] = () => {
-                  if (e_(factory).string() === Fn) {
-                    var err,
-                      cjs,
-                      depExpo = this.depExports; //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
+                                  try {
+                                    this[_x] = STATE.execCb(
+                                      id,
+                                      this.factory,
+                                      depExpo,
+                                      this[_x]
+                                    );
+                                  } catch (e) {
+                                    ((this.events[_e] && v.isDefine) ||
+                                      build[_o] !== ((err) => err)) &&
+                                      e &&
+                                      // new iifeapp(this)(
+                                      ((z, obj) => {
+                                        _K(obj).forEach(
+                                          (key) => (z.err[key] = obj[key])
+                                        );
+                                        return onError((z[_e] = e)); //good example how 'err' prop read, no write, without iifeapp
+                                      })(this, {
+                                        requireMap: this.map,
+                                        requireModules: v.isDefine
+                                          ? [this.map.id]
+                                          : null,
+                                        requireType: v.isDefine ? "define" : _r
+                                      }); //if there were more solutions to be made, so is redundant here, actually
+                                  } //factory.apply(exports, depExports),
+                                  // this.exports assignment over exports object. exports already set the STATE.defined value.
 
-                    const readyToDefine = isDefine && expts === undefined;
-                    cjs = readyToDefine && this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
-
-                    try {
-                      expts = STATE.execCb(id, factory, depExpo, expts);
-                    } catch (e) {
-                      err =
-                        ((this.events[_e] && isDefine) ||
-                          build[_o] !== ((err) => err)) &&
-                        e;
-                    } //factory.apply(exports, depExports),
-                    // this.exports assignment over exports object. exports already set the STATE.defined value.
-
-                    err &&
-                      // new iifeapp(this)(
-                      ((z, obj) => {
-                        _K(obj).forEach((key) => (z.err[key] = obj[key]));
-                        return onError((z[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
-                      })(this, {
-                        requireMap: this.map,
-                        requireModules: isDefine ? [this.map.id] : null,
-                        requireType: isDefine ? "define" : _r
-                      }); //if there were more solutions to be made, so is redundant here, actually
-
-                    return !readyToDefine
-                      ? expts
-                      : cjs
-                      ? cjs[_x]
-                      : this.usingExports
-                      ? this[_x]
-                      : null;
-                    //);
-                  } else return factory;
-                };
-                if (isDefine && !this.ignore) {
-                  new Promise(
-                    (resolve) => (STATE.defined[id] = this[_x] && resolve(""))
-                  ).then(
-                    () =>
-                      build.onResourceLoad &&
-                      build.onResourceLoad(
-                        STATE,
-                        this.map,
-                        this.depMaps.map(
-                          (depMap) => depMap.normalizedMap || depMap
-                        )
+                                  return !cjs
+                                    ? this[_x]
+                                    : cjs
+                                    ? cjs[_x]
+                                    : this.usingExports
+                                    ? this[_x]
+                                    : null;
+                                  //);
+                                });
+                      }) &&
+                  (v.isDefine && !this.ignore
+                    ? new Promise(
+                        (resolve) =>
+                          (STATE.defined[id] = this[_x] && resolve(""))
+                      ).then(
+                        () =>
+                          build.onResourceLoad &&
+                          build.onResourceLoad(
+                            STATE,
+                            this.map,
+                            this.depMaps.map(
+                              (depMap) => depMap.normalizedMap || depMap
+                            )
+                          )
                       )
-                  );
-                }
-                clrRegstr(id);
-                this[_dd] = true;
-              }
-              this[_dg] = false; //Finished definition, so allow call-check again for 'define' notifications, by cycle.
-              if (this[_dd] && !this.defineEmitted) {
-                this["defineEmitted"] = true;
-                this.emit(_dd, this[_x]);
-                this["defineEmitComplete"] = true;
-              }
-            },
+                    : null) &&
+                  clrRegstr(id) &&
+                  (this[_dd] = true) &&
+                  seratimFalse(this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
+                  this[_dd] &&
+                  !this.defineEmitted &&
+                  [
+                    "defineEmitted",
+                    "emit",
+                    "defineEmitComplete"
+                  ].forEach((de, n) =>
+                    n === 1 ? this.emit(_dd, this[_x]) : (this[de] = true)
+                  ),
             normalizeMod: (plugin, mp) => {
               var { name, parentMap: pM } = this.map; //Normalize the ID if the plugin allows it.
               const { nodeIdCompat, map, pkgs } = STATE.CONFIG;
