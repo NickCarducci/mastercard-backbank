@@ -267,18 +267,25 @@ export class Require {
                       s = mV && e_(mV).yes(name) && mV[name],
                       loop = (z) => {
                         for (let f = z.ph.length; f > 0; f--) {
-                          i = z.mV && e_(z.mV).yes(name) && z.mV[name] ? g : i;
+                          if (z.mV && e_(z.mV).yes(name) && z.mV[name]) i = g;
                           if (s) break;
                         }
+                        return true;
                       };
                     mp &&
                       mp["*"] &&
                       e_(mp["*"]).yes(name) &&
                       ((i = this).starMap = i.mpcf[name]) &&
                       ph &&
-                      loop(this);
-                    //prettier-ignore
-                    !starMap && mpcf && e_(mpcf).yes(name)&& ((z) => {z.starMap = z.mpcf[name];n = g;})(this);
+                      loop(this) &&
+                      //prettier-ignore
+                      !starMap &&
+                      mpcf &&
+                      e_(mpcf).yes(name) &&
+                      ((z) => {
+                        z.starMap = z.mpcf[name];
+                        n = g;
+                      })(this);
                     ph && loop(this);
                   } // bigloop; //Match, update name to the new value.
                   if (map) return (nm = nms.splice(0, i, map).join("/"));
@@ -437,8 +444,8 @@ export class Require {
         unDE = arguments[1],
         configShim = arguments[2]
       ) {
-        const seratimFalse = (z, _) => {
-            z[_] = false;
+        const seratimNull = (z, _, value) => {
+            z[_] = value;
             return true;
           },
           on = ({ m, dm } = depMap, name, f) => {
@@ -509,23 +516,35 @@ export class Require {
                                       this[_x] === undefined &&
                                       this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
 
-                                  try {
-                                    this[_x] = STATE.execCb(
+                                  const tryCatch = (z, key, value) => {
+                                    var er = null;
+                                    try {
+                                      z[key] = value;
+                                    } catch (e) {
+                                      er = e;
+                                    }
+                                    return er;
+                                  };
+                                  const er = tryCatch(
+                                    this,
+                                    _x,
+                                    STATE.execCb(
                                       id,
                                       this.factory,
                                       depExpo,
                                       this[_x]
-                                    );
-                                  } catch (e) {
+                                    )
+                                  );
+                                  if (er) {
                                     ((this.events[_e] && v.isDefine) ||
                                       build[_o] !== ((err) => err)) &&
-                                      e &&
+                                      er &&
                                       // new iifeapp(this)(
                                       ((z, obj) => {
                                         _K(obj).forEach(
                                           (key) => (z.err[key] = obj[key])
                                         );
-                                        return onError((z[_e] = e)); //good example how 'err' prop read, no write, without iifeapp
+                                        return onError((z[_e] = er)); //good example how 'err' prop read, no write, without iifeapp
                                       })(this, {
                                         requireMap: this.map,
                                         requireModules: v.isDefine
@@ -564,7 +583,7 @@ export class Require {
                     : null) &&
                   clrRegstr(id) &&
                   (this[_dd] = true) &&
-                  seratimFalse(this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
+                  seratimNull(this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
                   this[_dd] &&
                   !this.defineEmitted &&
                   [
