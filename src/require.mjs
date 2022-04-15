@@ -462,14 +462,13 @@ export class Require {
                 },
             load: this.urlFchd[this.map.url]
               ? () => null
-              : ((z) => STATE.load(z.map.id, z.map.url))(
-                  this,
-                  (this.urlFchd[this.map.url] = true)
-                ),
+              : ((z) =>
+                  (this.urlFchd[this.map.url] = true) &&
+                  STATE.load(z.map.id, z.map.url))(this),
             check: () => {
+              var id = this.map.id;
               ((z) => {
                 if (!z[_ed] || z.enabling) return null;
-                var id = z.map.id;
                 if (!z.INITED)
                   return !e_(STATE.defQueueMap).yes(id) && z.fetch();
                 if (z[_dg]) return z[_e] && z.emit(_e, z[_e]); // !defQueue.includes(this) this is ready to, and does, define itself
@@ -488,29 +487,28 @@ export class Require {
                     (this.events[_e] && isDefine) ||
                     build[_o] !== ((err) => err)
                   ) {
-                    // prettier-ignore
-                    try { expts = STATE.execCb(id, factory, depExpo, expts); } catch (e) { err = e; } //factory.apply(exports, depExports),
+                    try {
+                      expts = STATE.execCb(id, factory, depExpo, expts);
+                    } catch (e) {
+                      err = e;
+                    } //factory.apply(exports, depExports),
                   } else expts = STATE.execCb(id, factory, depExpo, expts);
-                  if (isDefine && expts === undefined) {
-                    cjs = this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
-                    if (cjs) {
-                      expts = cjs[_x];
-                    } else if (this.usingExports) expts = this[_x];
-                  } // this.exports assignment over exports object. exports already set the STATE.defined value.
+                  const readyToDefine = isDefine && expts === undefined;
+                  cjs = readyToDefine && this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
+                  if (readyToDefine)
+                    expts = cjs ? cjs[_x] : this.usingExports ? this[_x] : null;
+                  // this.exports assignment over exports object. exports already set the STATE.defined value.
 
                   err &&
                     // new iifeapp(this)(
-                    ((
-                      z,
-                      obj = {
-                        requireMap: z.map,
-                        requireModules: isDefine ? [this.map.id] : null,
-                        requireType: isDefine ? "define" : _r
-                      }
-                    ) => {
+                    ((z, obj) => {
                       _K(obj).forEach((key) => (z.err[key] = obj[key]));
                       return onError((z[_e] = err)); //good example how 'err' prop read, no write, without iifeapp
-                    })(this); //if there were more solutions to be made, so is redundant here, actually
+                    })(this, {
+                      requireMap: this.map,
+                      requireModules: isDefine ? [this.map.id] : null,
+                      requireType: isDefine ? "define" : _r
+                    }); //if there were more solutions to be made, so is redundant here, actually
 
                   //);
                 } else expts = factory;
