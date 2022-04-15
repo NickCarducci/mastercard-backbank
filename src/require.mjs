@@ -79,7 +79,9 @@ export class Require {
       iifeapp = class iifeapp {
         constructor() {
           const z = arguments[0]; //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'this'," else App() function
-          return function (construction = arguments[0], keys = arguments[1]) {
+          return function () {
+            var construction = arguments[0],
+              keys = arguments[1];
             const buff = construction.constructor === Array ? 0 : 1;
             construction =
               construction.constructor === Array ? () => {} : construction;
@@ -217,17 +219,22 @@ export class Require {
         normalize: (nm, bn, applyMap, conId, map, configPkgs) => {
           const tool = () => {
               return {
-                parseName: (nm, roots, conId) =>
+                parseName: (nm, roots, suffjs) =>
                   nm &&
-                  ((nm) => {
-                    //prettier-ignore
-                    const l = nm.length - 1,isjs = /\.js$/,suffjs = conId && isjs.test(nm[l]);
-                    nm[l] = suffjs ? nm[l].replace(isjs, "") : nm[l];
-
-                    nm =
-                      nm[0].charAt(0) === "." && roots
-                        ? roots.slice(0, roots.length - 1).concat(nm)
-                        : nm; //Adjust any relative paths. node allows either .js or non .js, yet not in nameToUrl;baseName.push(nm), but new instead of length report
+                  ((
+                    { nm, nml = (nm) => /\.js$/.test(nm[nm.length - 1]) } = (
+                      o
+                    ) => {
+                      return {
+                        nm:
+                          o.nm[0].charAt(0) === "." && roots
+                            ? roots.slice(0, roots.length - 1).concat(o.nm)
+                            : o.nm,
+                        nml: suffjs ? o.nml.replace(/\.js$/, "") : o.nml
+                      };
+                    }
+                  ) => {
+                    //Adjust any relative paths. node allows either .js or non .js, yet not in nameToUrl;baseName.push(nm), but new instead of length report
                     for (let i = 0; i < nm.length; i++) {
                       const solid = nm[i] === "." && nm.splice(i, 1); //:part === "..":null
                       i = solid ? i - 1 : i;
