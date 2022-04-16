@@ -21,17 +21,21 @@ async function noException(req, env) {
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   //https://linc.sh/blog/durable-objects-in-production
   //const clientId = request.headers.get("cf-connecting-ip");
-  const path = new URL(req.url).pathname,
-    Backbank = env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName(path),
-    instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(Backbank);
+  const path = new URL(req.url).pathname;
   //Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path);
   //env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
+
   console.log("env", env);
   return (
-    instance &&
     //env.instanceR &&
-    instance
-      .fetch(req, Object.assign(env)) // Forward the current HTTP request to it
+    env.EXAMPLE_CLASS_DURABLE_OBJECT.get(
+      env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName(path)
+    )
+      .fetch(req, {
+        env: env.REQUIRE_CLASS_DURABLE_OBJECT.get(
+          env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path)
+        ).instanceR.fetch(req, env)
+      }) // Forward the current HTTP request to it
       .then(async (res) => await res.json())
       .then((r) => {
         /*return new Response(`{
