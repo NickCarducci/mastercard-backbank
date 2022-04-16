@@ -61,7 +61,9 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
+      console.log("this :", this);
       const requirer = this.makeRequire(req);
+      console.loh("requirer: ", requirer);
       return new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
