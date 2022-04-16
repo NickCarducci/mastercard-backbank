@@ -26,15 +26,12 @@ async function noException(req, env) {
   //env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
 
   console.log("env", env);
+  const getter = (eo) => eo.get(eo.idFromName(path));
   return (
     //env.instanceR &&
-    env.EXAMPLE_CLASS_DURABLE_OBJECT.get(
-      env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName(path)
-    )
+    getter(env.EXAMPLE_CLASS_DURABLE_OBJECT)
       .fetch(req, {
-        env: env.REQUIRE_CLASS_DURABLE_OBJECT.get(
-          env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path)
-        ).fetch(req, env)
+        require: getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env)
       }) // Forward the current HTTP request to it
       .then(async (res) => await res.json())
       .then((r) => {
