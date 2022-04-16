@@ -14,7 +14,7 @@
 export class Require {
   constructor(el, env) {
     //logical && https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND#short-circuit_evaluation
-    console.log(JSON.stringify(el), "- From the example (Require) module") &&
+    console.log("Require headers", JSON.stringify(el)) &&
       (this.el = el) &&
       (this.env = env) &&
       this.el.blockConcurrencyWhile(async () => {
@@ -26,7 +26,7 @@ export class Require {
 
   fetch(req, env) {
     //this.b("fetched require :");
-    console.log("fetched require :" + JSON.stringify(req));
+    console.log("fetch require request :", JSON.stringify(req));
     var variables = {
       configuration: {},
       REQUIREJS: null
@@ -1683,7 +1683,7 @@ export class Require {
       "Content-Type": "application/json" //"text/plain"
     };
     const str = JSON.stringify(state);
-    console.log(str);
+    console.log("Require product :", str);
     //return new Promise((resolve) => str && resolve(str));
 
     return new Response(str, {
