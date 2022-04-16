@@ -9,8 +9,8 @@ export class DurableObjectExample {
       this.el.blockConcurrencyWhile(() => {
         let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
         // After initialization, future reads do not need to access storage.
-        (this.value = stored || 0) &&
-          (this.require = async (req) => {
+        this.value = stored || 0;
+        /*(this.require = async (req) => {
             const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
               new URL(req.url).pathname
             );
@@ -22,8 +22,8 @@ export class DurableObjectExample {
         const require = resp && (await resp.json());
         return new Promise(
           (resolve) => require && resolve(JSON.stringify(require))
-        );*/
-          });
+        );*
+          });*/
         //this.require = require;
 
         //fn.apply(this, [locs,places,crs])
@@ -55,7 +55,8 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      return new Promise((resolve) => this.require && resolve(this.require)) // this.makeRequire(req)
+      const require = env.instanceR.fetch(req, env);
+      return new Promise((resolve) => require && resolve(require)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
           console.log(JSON.stringify(requirer));
