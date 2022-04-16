@@ -28,8 +28,15 @@ async function noException(req, env) {
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   const instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(backbank);
   // Forward the current HTTP request to it
+
+  const backbankR = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+    new URL(req.url).pathname
+  );
+  env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbankR);
+
   return (
     instance &&
+    env.instanceR &&
     instance
       .fetch(req, env)
       .then(async (res) => await res.json())
