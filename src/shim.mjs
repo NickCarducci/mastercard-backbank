@@ -24,14 +24,14 @@ async function noException(req, env) {
   const path = new URL(req.url).pathname,
     Backbank = env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName(path),
     instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(Backbank);
-    //Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path);
+  //Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path);
   //env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
 
   return (
     instance &&
     //env.instanceR &&
     instance
-      .fetch(req, env) // Forward the current HTTP request to it
+      .fetch(req, env.clone().into()) // Forward the current HTTP request to it
       .then(async (res) => await res.json())
       .then((r) => {
         /*return new Response(`{
