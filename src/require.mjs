@@ -13,22 +13,25 @@
 
 export class Require {
   constructor(el, env) {
+    //logical && https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND#short-circuit_evaluation
     console.log(
       JSON.stringify(el.textContent),
       "- From the example (Require) module"
-    );
-    this.el = el;
-    this.env = env;
-    this.el.blockConcurrencyWhile(async () => {
-      let stored = await this.el.storage.get("require"); //Read requests	100,000 / day, ($free)
-      this.state = stored || 0;
-      var b = () => {};
-      b();
-    });
+    ) &&
+      (this.el = el) &&
+      (this.env = env) &&
+      this.el.blockConcurrencyWhile(async () => {
+        let stored = await this.el.storage.get("require"); //Read requests	100,000 / day, ($free)
+        this.state = stored || 0;
+        var b = (b) => console.log(b);
+        b();
+        this.b = b;
+      });
     // this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
   }
 
   fetch(req, env) {
+    this.b("fetched require :");
     var variables = {
       configuration: {},
       REQUIREJS: null
@@ -289,9 +292,12 @@ export class Require {
                       loop = (z) => {
                         let f;
                         var set = () => (i = g);
+                        function brek() {
+                          return;
+                        }
                         for (f = z.ph.length; f > 0; f--) {
                           if (z.mV && e_(z.mV).yes(name) && z.mV[name]) set();
-                          if (s) break;
+                          if (s) brek();
                         }
                         return true;
                       };
@@ -727,7 +733,6 @@ export class Require {
               ) &&
               name === _e &&
               delete this.events[name],
-            //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND#short-circuit_evaluation
             defineDep: (i, depExports) =>
               !this.depMatched[i] &&
               (this.depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
