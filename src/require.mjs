@@ -26,7 +26,8 @@ export class Require {
 
   fetch(req, env) {
     //this.b("fetched require :");
-    console.log("fetch require request :", JSON.stringify(req));
+    console.log("fetch require request :", JSON.stringify(req)) &&
+      console.log("fetch require environment variables :", JSON.stringify(env));
     var variables = {
       configuration: {},
       REQUIREJS: null
