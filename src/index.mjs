@@ -55,11 +55,11 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+      const backbank = this.env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
         new URL(req.url).pathname
       );
-      const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-      const resp = instance.fetch(req, env);
+      const instance = this.env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
+      const resp = instance.fetch(req, this.env);
       return new Promise((resolve) => resp && resolve(resp)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
