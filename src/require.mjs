@@ -696,7 +696,7 @@ export class Require {
                     STATE.enable(pM, this)
                 )
               ) &&
-              seratimNull((this.enabling = false)) &&
+              seratimNull(variables, "undefined", (this.enabling = false)) &&
               this.check(),
             on: (name, cb) =>
               (this.events[name]
@@ -715,7 +715,7 @@ export class Require {
             defineDep: (i, depExports) =>
               !this.depMatched[i] &&
               (this.depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-              seratimNull((this.depCount -= 1)) && //prototype is hydratable for async results, init only on this page by 'new' initialization
+              seratimNull(variables, "undefined", (this.depCount -= 1)) && //prototype is hydratable for async results, init only on this page by 'new' initialization
               (this.depExports[i] = depExports), //multiple cb export cycles
 
             callPlugin: () => {
@@ -743,6 +743,8 @@ export class Require {
                       (this[_e] = err) &&
                       (err.requireModules = [id]) &&
                       seratimNull(
+                        variables,
+                        "undefined",
                         _K(STATE.dependencies).forEach(
                           (x, i) =>
                             STATE.dependencies[x].map.id.indexOf(
@@ -764,7 +766,11 @@ export class Require {
                     const go = () =>
                       (textAlt ? (text = textAlt) : true) &&
                       (hasInteractive
-                        ? seratimNull((useInteractive = false))
+                        ? seratimNull(
+                            variables,
+                            "undefined",
+                            (useInteractive = false)
+                          )
                         : true) && //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
                       getModule(moduleMap) && //Prime the system by creating a this instance for
                       (e_(STATE.CONFIG.config).yes(id)
@@ -1050,7 +1056,7 @@ export class Require {
         url += ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js"); ///^data\:|^blob\:|\?/
 
         // prettier-ignore
-        return `${(url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : STATE.CONFIG.baseUrl) + url}`; ///^[\w\+\.\-]+:/
+        return (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : STATE.CONFIG.baseUrl) + url; ///^[\w\+\.\-]+:/
       }; //Delegates to build.load. Broken out as a separate function to
       return ((u) =>
         `${
@@ -1059,8 +1065,7 @@ export class Require {
             : u
         }`)(geturl);
     } // If package-name, package 'main,' roots
-    var dataMain,
-      baseElement,
+    var baseElement,
       subPath,
       head,
       dependency,
@@ -1081,10 +1086,13 @@ export class Require {
         v = (evt) =>
           evt.type === "load" ||
           readyRegExp.test((evt.currentTarget || evt.srcElement).readyState)
-      ) => {
-        interscrpt = v ? null : interscrpt;
-        return v && getScriptData(evt);
-      }, //interactiveScript - browser event for script loaded status
+      ) =>
+        seratimNull(
+          variables,
+          "undefined"((interscrpt = v ? null : interscrpt))
+        ) &&
+        v &&
+        getScriptData(evt), //interactiveScript - browser event for script loaded status
       onScriptLoad = (data = evt) => STATE.completeLoad(data.id),
       clrRegstr = (id) => {
         delete STATE.dependencies[id];
@@ -1179,15 +1187,18 @@ export class Require {
       callGetModule = (args) =>
         !e_(STATE.defined).yes(args[0]) &&
         getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]),
-      tkeGblQue = () => {
-        if (defineables.length)
-          defineables.forEach((queueItem) => {
-            var id = queueItem[0];
-            if (T(id === _t)) STATE.defQueueMap[id] = true;
-            defQueue.push(queueItem);
-          }); //globalQueue by internal method to this defQueue
-        defineables = [];
-      },
+      tkeGblQue = () =>
+        (defineables.length
+          ? seratimNull(
+              variables,
+              "undefined",
+              defineables.forEach((queueItem) => {
+                var id = queueItem[0];
+                if (T(id === _t)) STATE.defQueueMap[id] = true;
+                defQueue.push(queueItem);
+              })
+            )
+          : true) && (defineables = []), //globalQueue by internal method to this defQueue
       getGlobal = (value) =>
         !value
           ? value //dot-notation dependency
@@ -1251,8 +1262,7 @@ export class Require {
 
                     callGetModule(args);
                   }
-                  STATE.defQueueMap = {};
-                  return true;
+                  return (STATE.defQueueMap = {}) && true;
                 }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
                 intakeDefines(); //Grab defines waiting in the dependency queue.
                 STATE.nextTick(
@@ -1296,27 +1306,31 @@ export class Require {
               return nameToUrl(ar, ext, true);
             }
           };
-        WINDOW.mixin(tool(relMap, o, NAME).parser, app);
-        if (!relMap)
-          tool(relMap, o, NAME).parser.undef = (id) => {
-            tkeGblQue(); //Only allow undef on top level require calls
-            var map = makeModuleMap(id, relMap, true), //Bind define() calls (fixes #408) to 'this' STATE
-              m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
-            m.undefed = true;
-            ((z) => {
-              WINDOW.rmvScrpt(id, STATE.NAME);
-              delete z.defined[id];
-              delete z.urlFchd[map.url];
-              delete z.unDE[id];
-            })(STATE);
-            defQueue
-              .sort((a, b) => b - a)
-              .map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
-            delete STATE.defQueueMap[id];
-            STATE.unDE[id] = m && m.events.defined ? m.events : STATE.unDE[id]; //if different STATE.CONFIG, same listeners
-            m && clrRegstr(id);
-          };
-        return tool(relMap, o, NAME).parser;
+        return (
+          WINDOW.mixin(tool(relMap, o, NAME).parser, app) &&
+          (!relMap
+            ? (tool(relMap, o, NAME).parser.undef = (id) => {
+                tkeGblQue(); //Only allow undef on top level require calls
+                var map = makeModuleMap(id, relMap, true), //Bind define() calls (fixes #408) to 'this' STATE
+                  m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
+                m.undefed = true;
+                ((z) => {
+                  WINDOW.rmvScrpt(id, STATE.NAME);
+                  delete z.defined[id];
+                  delete z.urlFchd[map.url];
+                  delete z.unDE[id];
+                })(STATE);
+                defQueue
+                  .sort((a, b) => b - a)
+                  .map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
+                delete STATE.defQueueMap[id];
+                STATE.unDE[id] =
+                  m && m.events.defined ? m.events : STATE.unDE[id]; //if different STATE.CONFIG, same listeners
+                m && clrRegstr(id);
+              })
+            : true) &&
+          tool(relMap, o, NAME).parser
+        );
       };
 
     class newRequireable {
@@ -1374,12 +1388,16 @@ export class Require {
             completeLoad: (tkn) => {
               var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
               for (tkeGblQue(); defQueue.length; ) {
-                args = defQueue.shift();
-                if (args[0] === null) {
-                  args[0] = tkn;
-                  if (found) break;
-                  found = true; //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
-                } else if (args[0] === tkn) found = true;
+                (args = defQueue.shift()) &&
+                  (args[0] =
+                    args[0] === null
+                      ? tkn
+                      : args[0] === tkn
+                      ? (found = true)
+                      : null);
+                if (found) break;
+                found = true; //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
+
                 callGetModule(args);
               } //matched a define call in this script
               STATE.defQueueMap = {};
@@ -1536,10 +1554,10 @@ export class Require {
                     return n; // bug in WebKit where the worker gets garbage-collected after calling
                   } else if (isWebWorker) {
                     try {
-                      setTimeout(() => {}, 0);
-                      //s eslint-disable-next-line
-                      //importScripts(url);
-                      STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
+                      setTimeout(() => {}, 0) &&
+                        //s eslint-disable-next-line
+                        //importScripts(url);
+                        STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
                     } catch (e) {
                       STATE[_o](
                         WINDOW.mk([
@@ -1562,43 +1580,45 @@ export class Require {
                         .forEach(
                           (
                             { head, dataMain } = (script) => {
-                              return head
+                              const pro = head
                                 ? { head, dataMain }
                                 : {
                                     head: script.parentNode,
                                     dataMain: script.getAttribute("data-main")
                                   };
+                              return (
+                                (head = pro.head) &&
+                                (dataMain = pro.dataMain) &&
+                                pro
+                              );
                             }
-                          ) => {
-                            if (dataMain) {
-                              //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
+                          ) =>
+                            dataMain &&
+                            //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
 
-                              mainScript = dataMain ? dataMain : mainScript; //Preserve dataMain in case it is a path (i.e. contains '?')
-                              const s =
-                                !variables.configuration.baseUrl &&
-                                mainScript.indexOf("!") === -1;
-                              if (s) {
-                                src = mainScript.split("/");
-                                mainScript = src.pop();
-                                subPath = src.length
+                            seratimNull(
+                              variables,
+                              "undefined",
+                              (mainScript = dataMain ? dataMain : mainScript)
+                            ) && //Preserve dataMain in case it is a path (i.e. contains '?')
+                            (!variables.configuration.baseUrl &&
+                            mainScript.indexOf("!") === -1
+                              ? (src = mainScript.split("/")) &&
+                                (mainScript = src.pop()) &&
+                                (subPath = src.length
                                   ? src.join("/") + "/"
-                                  : "./";
-                                variables.configuration.baseUrl = subPath;
-                              }
-
-                              //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
-                              (mainScript = mainScript.replace(/\.js$/, "")) && //If mainScript is still a mere path, fall back to dataMain
-                              (/^[/:?.]|(.js)$/.test(mainScript)
-                                ? (mainScript = dataMain)
-                                : true) && //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
-                                (variables.configuration.ds = variables
-                                  .configuration.ds
-                                  ? variables.configuration.ds.concat(
-                                      mainScript
-                                    )
-                                  : [mainScript]); //Put the data-main script in the files to load.
-                            }
-                          }
+                                  : "./") &&
+                                (variables.configuration.baseUrl = subPath)
+                              : true) &&
+                            //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
+                            (mainScript = mainScript.replace(/\.js$/, "")) && //If mainScript is still a mere path, fall back to dataMain
+                            (/^[/:?.]|(.js)$/.test(mainScript)
+                              ? (mainScript = dataMain)
+                              : true) && //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
+                            (variables.configuration.ds = variables
+                              .configuration.ds
+                              ? variables.configuration.ds.concat(mainScript)
+                              : [mainScript]) //Put the data-main script in the files to load.
                         )
                     )
                   : true) &&
