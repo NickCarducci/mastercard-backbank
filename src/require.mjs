@@ -146,6 +146,7 @@ export class Require {
       cfg && ctx.configure(cfg);
       return ctx.require(ds, cb, eb);
     */
+      _f = "*",
       _p = "packages",
       _b = "bundles",
       _s = "shim",
@@ -240,7 +241,7 @@ export class Require {
           }
         },
         //'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
-        normalize: (nm, bn, applyMap, conId, map, configPkgs) => {
+        normalize: (nm, bn, applyMap, conId, system, configPkgs) => {
           const tool = () => {
               return {
                 parseName: (nm, roots, suffjs) =>
@@ -277,54 +278,58 @@ export class Require {
                   applyMap = arguments[2],
                   ph = arguments[3]
                 ) {
-                  if (!applyMap || !mp || (!ph && !mp["*"])) return nm;
+                  if (!applyMap || !mp || (!ph && !mp[_f])) return nm;
                   var n,
                     i,
-                    map,
-                    starMap,
+                    folder,
                     nms = nm.split("/"),
-                    mpcf = mp && mp["*"]; //continue search ___ map STATE.CONFIG, bigloop:
+                    configMap = mp && mp[_f]; //continue search ___ map STATE.CONFIG, bigloop:
+
                   for (let g = nms.length; g > 0; g -= 1) {
                     const name = nms.slice(0, g).join("/"), //favor a "star map" unless shorter matching STATE.CONFIG
                       mV = (fP = (f) => ph.slice(0, f).join("/")) =>
                         e_(mp).yes(fP) && mp[fP],
-                      s = mV && e_(mV).yes(name) && mV[name],
-                      loop = (z) => {
-                        let f;
-                        var set = () => (i = g);
-                        function brek() {
-                          return;
-                        }
-                        for (f = z.ph.length; f > 0; f--) {
+                      loop = (z, sum = 0) => {
+                        let add = (sum = z.ph.length);
+                        var maybe = z.mV && e_(z.mV).yes(name) && z.mV[name],
+                          set = () => (i = g),
+                          more = mV && e_(mV).yes(name) && mV[name],
+                          loo = (add, sum) => (sum = add);
+                        /*for (f = z.ph.length; f > 0; f--) {
+                          var bre = null;
+                          if (s) bre = true;
                           if (z.mV && e_(z.mV).yes(name) && z.mV[name]) set();
-                          if (s) brek();
-                        }
-                        return true;
+                          if (bre) break;
+                        }*/
+
+                        if (maybe) set();
+                        return more ? loo(add--, sum) : null;
                       };
                     seratimNull(
                       variables,
                       "undefined",
                       mp &&
-                        mp["*"] &&
-                        e_(mp["*"]).yes(name) &&
-                        ((i = this).starMap = i.mpcf[name]) &&
+                        mp[_f] &&
+                        e_(mp[_f]).yes(name) &&
+                        ((i = this).folder = i.configMap[name]) &&
                         ph &&
                         loop(this) &&
                         //prettier-ignore
-                        !starMap &&
-                        mpcf &&
-                        e_(mpcf).yes(name) &&
+                        !folder &&
+                        configMap &&
+                        e_(configMap).yes(name) &&
                         ((z) => {
-                          z.starMap = z.mpcf[name];
+                          z.folder = z.configMap[name];
                           n = g;
                         })(this)
                     ) &&
                       ph &&
                       loop(this);
                   } // bigloop; //Match, update name to the new value.
-                  if (map) return (nm = nms.splice(0, i, map).join("/"));
-                  if (starMap) {
-                    map = starMap;
+
+                  if (system) return (nm = nms.splice(0, i, system).join("/"));
+                  if (folder) {
+                    system = folder;
                     i = n;
                   }
                   return nm;
@@ -332,8 +337,9 @@ export class Require {
               };
             },
             rs = bn && bn.split("/");
-          nm = tool().parseName(nm, rs, conId);
-          nm = tool().convertName(nm, map, applyMap, rs);
+          nm =
+            tool().parseName(nm, rs, conId) &&
+            tool().convertName(nm, system, applyMap, rs);
           return e_(configPkgs).yes(nm) ? configPkgs[nm] : nm;
         }
       },
@@ -625,9 +631,9 @@ export class Require {
                   ),
             normalizeMod: (plugin, mp) => {
               var { name, parentMap: pM } = this.map; //Normalize the ID if the plugin allows it.
-              const { nodeIdCompat, map, pkgs } = STATE.CONFIG;
+              const { nodeIdCompat, map, bundle } = STATE.CONFIG;
               // prettier-ignore
-              const namer = (name) => [name, pM ? pM.name : null, true, nodeIdCompat, map, pkgs]; //ptName
+              const namer = (name) => [name, pM ? pM.name : null, true, nodeIdCompat, map, bundle]; //ptName
               if (plugin.normalize)
                 name =
                   plugin.normalize(name, (args = namer) =>
@@ -860,8 +866,8 @@ export class Require {
 
       const configGets = [
           STATE.CONFIG.nodeIdCompat,
-          STATE.CONFIG.map,
-          STATE.CONFIG.pkgs
+          STATE.CONFIG.system,
+          STATE.CONFIG.bundle
         ],
         splitPrefix = (i = (n) => n.indexOf("!")) =>
           i > -1 ? [n.substring(0, i), n.substring(i + 1, n.length)] : [n, ""];
@@ -953,7 +959,7 @@ export class Require {
                     (location
                       ? (STATE.CONFIG.paths[name] = pkgObj[_l])
                       : true) &&
-                      (STATE.CONFIG.pkgs[name] = `${pkgObj.name}/${(
+                      (STATE.CONFIG.bundle[name] = `${pkgObj.name}/${(
                         pkgObj.main || "main"
                       )
                         .replace(/^\.\//, "")
@@ -1072,8 +1078,8 @@ export class Require {
       var ext = arguments[1],
         skipExt = arguments[2],
         pkgMain =
-          e_(STATE.CONFIG.pkgs).yes(arguments[0]) &&
-          STATE.CONFIG.pkgs[arguments[0]], //already-normalized-tkn as URL. Use toUrl for the public API.
+          e_(STATE.CONFIG.bundle).yes(arguments[0]) &&
+          STATE.CONFIG.bundle[arguments[0]], //already-normalized-tkn as URL. Use toUrl for the public API.
         tkn = pkgMain ? pkgMain : arguments[0], //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
         id = e_(STATE.bdlMap).yes(tkn) && STATE.bdlMap[tkn]; //assume use of an url, not a this id.
       id && nameToUrl(id, ext, skipExt); //filter out STATE.dependencies that are already paths.
@@ -1117,7 +1123,7 @@ export class Require {
         CONFIG: {
           waitSeconds: 7,
           baseUrl: "./",
-          ...["paths", "bundles", "pkgs", "shim", "config"].map((x) => {
+          ...["paths", "bundles", "bundle", "shim", "config"].map((x) => {
             return { [x]: {} };
           })
         }
@@ -1343,8 +1349,8 @@ export class Require {
                 relMap && relMap.id,
                 true,
                 STATE.CONFIG.nodeIdCompat,
-                STATE.CONFIG.map,
-                STATE.CONFIG.pkgs
+                STATE.CONFIG.system, //also, "map" for outward facing code...
+                STATE.CONFIG.bundle //also, "packages" ""
               ]);
               return nameToUrl(ar, ext, true);
             }
