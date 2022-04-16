@@ -17,28 +17,21 @@ export default {
   }
 };
 async function noException(req, env) {
-  // key => Object ID
+  // key => Object ID; return new Response(JSON.stringify(backbank));
+  // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   //https://linc.sh/blog/durable-objects-in-production
   //const clientId = request.headers.get("cf-connecting-ip");
-  const backbank = env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName(
-    new URL(req.url).pathname
-  );
-
-  //return new Response(JSON.stringify(backbank));
-  // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
-  const instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(backbank);
-  // Forward the current HTTP request to it
-
-  const backbankR = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
-    new URL(req.url).pathname
-  );
-  env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbankR);
+  const path = new URL(req.url).pathname,
+    Backbank = env.EXAMPLE_CLASS_DURABLE_OBJECT.idFromName(path),
+    instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(Backbank),
+    Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path);
+  env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
 
   return (
     instance &&
     env.instanceR &&
     instance
-      .fetch(req, env)
+      .fetch(req, env) // Forward the current HTTP request to it
       .then(async (res) => await res.json())
       .then((r) => {
         /*return new Response(`{
@@ -46,45 +39,27 @@ async function noException(req, env) {
         data: ${r}
     }`);*/
         const dataHead = {
-          "Content-Type": "application/json"
-        };
-        if (r) {
-          if (r.data) {
-            return new Response(
-              `{
-          data: ${JSON.stringify(r.data)},
-          ok: true
-        }`,
-              {
-                status: "200",
-                message: "success: " + req.url,
-                headers: dataHead
-              }
-            );
-          } else
-            return new Response(
-              `{
-          response: ${JSON.stringify(r)},
-          ok: false
-        }`,
-              {
-                status: r.status,
-                message: r.statusText ? r.statusText : r.message,
-                headers: dataHead
-              }
-            );
-        } else
-          return new Response(
-            `{
-        data: {},
-        ok: false
-      }`,
-            {
+            "Content-Type": "application/json"
+          },
+          responseobject = (key, r, ok) => `{${key}: ${r}, ${ok}}`;
+
+        return !r
+          ? new Response(responseobject("data", {}), {
               status: "no response from durable object chain",
               message: "",
               headers: dataHead
-            }
-          );
+            })
+          : !r.data
+          ? new Response(responseobject("response", JSON.stringify(r)), {
+              status: r.status,
+              message: r.statusText ? r.statusText : r.message,
+              headers: dataHead
+            })
+          : new Response(responseobject(true, JSON.stringify(r.data), true), {
+              status: "200",
+              message: "success: " + req.url,
+              headers: dataHead
+            });
       })
   );
   //new Response({})
