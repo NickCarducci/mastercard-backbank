@@ -97,11 +97,15 @@ export class Require {
             var construction = arguments[0],
               keys = arguments[1];
             const buff = construction.constructor === Array ? 0 : 1;
-            construction =
-              construction.constructor === Array ? () => {} : construction;
-            keys = keys.constructor === Array ? keys : construction;
-            construction.constructor === Function && construction();
-            keys.constructor === Array &&
+            (construction =
+              construction.constructor === Array ? () => {} : construction) &&
+              (keys = keys.constructor === Array ? keys : construction) &&
+              seratimNull(
+                variables,
+                "undefined",
+                construction.constructor === Function && construction()
+              ) &&
+              seratimNull(variables, "undefined", keys.constructor === Array) &&
               keys.forEach((x, i) =>
                 x.includes(".")
                   ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i + buff])
@@ -283,27 +287,33 @@ export class Require {
                         e_(mp).yes(fP) && mp[fP],
                       s = mV && e_(mV).yes(name) && mV[name],
                       loop = (z) => {
-                        for (let f = z.ph.length; f > 0; f--) {
+                        let f;
+                        for (f = z.ph.length; f > 0; f--) {
                           if (z.mV && e_(z.mV).yes(name) && z.mV[name]) i = g;
                           if (s) break;
                         }
                         return true;
                       };
-                    mp &&
-                      mp["*"] &&
-                      e_(mp["*"]).yes(name) &&
-                      ((i = this).starMap = i.mpcf[name]) &&
+                    seratimNull(
+                      variables,
+                      "undefined",
+                      mp &&
+                        mp["*"] &&
+                        e_(mp["*"]).yes(name) &&
+                        ((i = this).starMap = i.mpcf[name]) &&
+                        ph &&
+                        loop(this) &&
+                        //prettier-ignore
+                        !starMap &&
+                        mpcf &&
+                        e_(mpcf).yes(name) &&
+                        ((z) => {
+                          z.starMap = z.mpcf[name];
+                          n = g;
+                        })(this)
+                    ) &&
                       ph &&
-                      loop(this) &&
-                      //prettier-ignore
-                      !starMap &&
-                      mpcf &&
-                      e_(mpcf).yes(name) &&
-                      ((z) => {
-                        z.starMap = z.mpcf[name];
-                        n = g;
-                      })(this);
-                    ph && loop(this);
+                      loop(this);
                   } // bigloop; //Match, update name to the new value.
                   if (map) return (nm = nms.splice(0, i, map).join("/"));
                   if (starMap) {
@@ -358,11 +368,10 @@ export class Require {
                   v,
                   //prettier-ignore
                   go = obj[3] && T( v === "object") && v && !e_(v).a() && !e_(v).string() === Fn &&  !(v instanceof RegExp)
-                ) => {
-                  obj[1][prop] = !go ? v : obj[1][prop] ? obj[1][prop] : {};
-                  WINDOW.mixin(obj[1][prop], v, obj[2], obj[3]);
-                  return obj[1];
-                })(obj[0][prop]), //s,tgt,frc,dSM
+                ) =>
+                  (obj[1][prop] = !go ? v : obj[1][prop] ? obj[1][prop] : {}) &&
+                  WINDOW.mixin(obj[1][prop], v, obj[2], obj[3]) &&
+                  obj[1])(obj[0][prop]), //s,tgt,frc,dSM
           create: (ns = n) => createElement(ns),
           string,
           a: (x) => x.string() === Ar,
@@ -454,20 +463,17 @@ export class Require {
         ); //args'-mutable iife=>"app"
     }
     //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
-    const seratimNull = (z, _, value) => {
-      z[_] = value;
-      return true;
-    };
-
-    const tryCatch = (z, key, value) => {
-      var er = null;
-      try {
-        z[key] = value;
-      } catch (e) {
-        er = e;
-      }
-      return er;
-    };
+    const seratimNull = (z, _, value) =>
+        seratimNull(variables, "undefined", (z[_] = value)),
+      tryCatch = (z, key, value) => {
+        var er = null;
+        try {
+          z[key] = value;
+        } catch (e) {
+          er = e;
+        }
+        return er;
+      };
     class Module {
       constructor(
         map = arguments[0],
@@ -668,18 +674,22 @@ export class Require {
                     var handler =
                       e_(handlers).yes(depMap.id) && handlers[depMap.id];
                     if (handler) return (this.depExports[i] = handler(this));
-                    (this["depCount"] += 1) &&
+                    seratimNull(
+                      variables,
+                      "undefined",
+                      (this["depCount"] += 1)
+                    ) &&
                       on(depMap, _dd, (depExports) => {
                         if (this.undefed) return null;
                         this.defineDep(i, depExports);
                         this.check();
-                      });
-                    ((z) =>
-                      z.eb
-                        ? on(depMap, _e, z.eb) // propagate the error correctly - something else is listening for errors
-                        : z.events[_e]
-                        ? on(depMap, _e, (err) => z.emit(_e, err))
-                        : null)(this);
+                      }) &&
+                      ((z) =>
+                        z.eb
+                          ? on(depMap, _e, z.eb) // propagate the error correctly - something else is listening for errors
+                          : z.events[_e]
+                          ? on(depMap, _e, (err) => z.emit(_e, err))
+                          : null)(this);
                   } // (No direct eb on this this)
                   var id = depMap.id,
                     m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
@@ -809,8 +819,7 @@ export class Require {
             },
             fetch: () => {
               if (this.fetched) return null;
-              this.fetched = true;
-              STATE.startTime = new Date().getTime();
+              (this.fetched = true) && (STATE.startTime = new Date().getTime());
               var map = this.map;
               if (this.shim) {
                 STATE.makeRequire(this.map, {
@@ -838,8 +847,9 @@ export class Require {
       var ptName = sourcemap ? sourcemap.name : null,
         gvnName = n,
         yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() this ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
-      if (!n) yesdef = false;
-      n = n ? n : "_@r" + (rqrCnt += 1); //internally-name a 'require' call, given no name
+      n =
+        (!n ? seratimNull(variables, "undefined", (yesdef = false)) : true) &&
+        (n ? n : "_@r" + (rqrCnt += 1)); //internally-name a 'require' call, given no name
 
       const configGets = [
           STATE.CONFIG.nodeIdCompat,
@@ -900,10 +910,11 @@ export class Require {
     }
     const configure = (
         c = (c) => {
-          c[_a] = T(c[_a] !== _t)
-            ? c[_a]
-            : (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]; // Convert old style urlArgs string to a function.
-          return c[_u].charAt(c[_u].length - 1) === "/"
+          T(c[_a] === _t) &&
+            (c[_a] = (id, url) =>
+              (url.indexOf("?") === -1 ? "?" : "&") + c[_a]);
+
+          return c[_u].charAt(c[_u].length - 1) === "/" // Convert old style urlArgs string to a function.
             ? c
             : { ...c, [_u]: `${c[_u]}/` };
         }
@@ -932,13 +943,14 @@ export class Require {
                     pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
                     var name = pkgObj.name,
                       location = pkgObj[_l]; //Adjust packages if necessary.
-                    if (location) STATE.CONFIG.paths[name] = pkgObj[_l];
-
-                    STATE.CONFIG.pkgs[name] = `${pkgObj.name}/${(
-                      pkgObj.main || "main"
-                    )
-                      .replace(/^\.\//, "")
-                      .replace(/\.js$/, "")}`; //normalize pkg name main this ID pointer paths
+                    (location
+                      ? (STATE.CONFIG.paths[name] = pkgObj[_l])
+                      : true) &&
+                      (STATE.CONFIG.pkgs[name] = `${pkgObj.name}/${(
+                        pkgObj.main || "main"
+                      )
+                        .replace(/^\.\//, "")
+                        .replace(/\.js$/, "")}`); //normalize pkg name main this ID pointer paths
                   })
                 ), //Update maps for "waiting to execute" modules in the STATE.dependencies.
           apply = (
@@ -1060,35 +1072,35 @@ export class Require {
         id = e_(STATE.bdlMap).yes(tkn) && STATE.bdlMap[tkn]; //assume use of an url, not a this id.
       id && nameToUrl(id, ext, skipExt); //filter out STATE.dependencies that are already paths.
       const geturl = (url = "") => {
-        //Just a plain path, not this name lookup, so just return it.
-        if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
-        var paths = STATE.CONFIG.paths,
-          syms = tkn.split("/"); //an extension, this method probably needs to be reworked. A this that needs to be converted to a path.
-        for (let i = syms.length; i > 0; i -= 1) {
-          var pM = syms.slice(0, i).join("/"), //per this name segment if path registered, start name, and work up
-            pP = e_(paths).yes(pM) && paths[pM]; //parentModule
+          //Just a plain path, not this name lookup, so just return it.
+          if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
+          var paths = STATE.CONFIG.paths,
+            syms = tkn.split("/"); //an extension, this method probably needs to be reworked. A this that needs to be converted to a path.
+          for (let i = syms.length; i > 0; i -= 1) {
+            var pM = syms.slice(0, i).join("/"), //per this name segment if path registered, start name, and work up
+              pP = e_(paths).yes(pM) && paths[pM]; //parentModule
 
-          pP &&
-            iifeapp(this)(
-              ["pP", "syms"],
-              e_(pP).a() ? pP[0] : pP,
-              syms.splice(0, i, pP)
-            );
-          if (pP) break; //arr means a few choices; parentPath
-        }
-        (url = syms.join("/")) && //Join the path parts together, then figure out if baseUrl is needed.
-          (url +=
-            ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js")); ///^data\:|^blob\:|\?/
+            pP &&
+              iifeapp(this)(
+                ["pP", "syms"],
+                e_(pP).a() ? pP[0] : pP,
+                syms.splice(0, i, pP)
+              );
+            if (pP) break; //arr means a few choices; parentPath
+          }
+          (url = syms.join("/")) && //Join the path parts together, then figure out if baseUrl is needed.
+            (url +=
+              ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js")); ///^data\:|^blob\:|\?/
 
-        // prettier-ignore
-        return (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : STATE.CONFIG.baseUrl) + url; ///^[\w\+\.\-]+:/
-      }; //Delegates to build.load. Broken out as a separate function to
-      return ((u) =>
-        `${
-          STATE.CONFIG.urlArgs && !/^blob:/.test(u)
-            ? u + STATE.CONFIG.urlArgs(tkn, u)
-            : u
-        }`)(geturl);
+          // prettier-ignore
+          return (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : STATE.CONFIG.baseUrl) + url; ///^[\w\+\.\-]+:/
+        }, //Delegates to build.load. Broken out as a separate function to
+        u = geturl;
+      return `${
+        STATE.CONFIG.urlArgs && !/^blob:/.test(u)
+          ? u + STATE.CONFIG.urlArgs(tkn, u)
+          : u
+      }`;
     } // If package-name, package 'main,' roots
     var baseElement,
       subPath,
@@ -1218,8 +1230,8 @@ export class Require {
               "undefined",
               defineables.forEach((queueItem) => {
                 var id = queueItem[0];
-                if (T(id === _t)) STATE.defQueueMap[id] = true;
-                defQueue.push(queueItem);
+                (T(id === _t) ? (STATE.defQueueMap[id] = true) : true) &&
+                  defQueue.push(queueItem);
               })
             )
           : true) && (defineables = []), //globalQueue by internal method to this defQueue
@@ -1414,17 +1426,16 @@ export class Require {
             completeLoad: (tkn) => {
               var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
               for (tkeGblQue(); defQueue.length; ) {
-                (args = defQueue.shift()) &&
-                  (args[0] =
+                defQueue.shift();
+                if (found) break;
+                (found = true) && //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
+                  (args = args[0] =
                     args[0] === null
                       ? tkn
                       : args[0] === tkn
                       ? (found = true)
-                      : null);
-                if (found) break;
-                found = true; //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
-
-                callGetModule(args);
+                      : null) &&
+                  callGetModule(args);
               } //matched a define call in this script
               STATE.defQueueMap = {};
               var m =
