@@ -43,7 +43,8 @@ export class DurableObjectExample {
     this.makeRequire = (req) => {
       const path = new URL(req.url).pathname,
         getter = (eo) => eo.get(eo.idFromName(path));
-      getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env);
+      console.log(path, ": making require");
+      return getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env);
     };
   }
   //Omit  for syncronous defer, -ish
