@@ -30,9 +30,7 @@ async function noException(req, env) {
   return (
     //env.instanceR &&
     getter(env.EXAMPLE_CLASS_DURABLE_OBJECT)
-      .fetch(req, {
-        require: getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env)
-      }) // Forward the current HTTP request to it
+      .fetch(req) // Forward the current HTTP request to it
       .then(async (res) => await res.json())
       .then((r) => {
         /*return new Response(`{
