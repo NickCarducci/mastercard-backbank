@@ -1,5 +1,9 @@
 export class DurableObjectExample {
   constructor(el, env) {
+    const path = new URL(el.url).pathname,
+      Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path),
+      instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
+    (this.instanceR = instanceR) &&
     console.log(JSON.stringify(el), "- From the example module") && //el.textContent
       (this.el = el) &&
       (this.env = env) &&
@@ -55,7 +59,7 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      const require = env.instanceR.fetch(req, env);
+      const require = this.instanceR.fetch(req, env);
       return new Promise((resolve) => require && resolve(require)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
