@@ -24,7 +24,7 @@ export class DurableObjectExample {
         })
         .catch((err) => console.log("rollup.rollup error", err.message));*/
         //this.el.storage.put("esm", product);
-      }) &&
+      }); /*&&
       (this.makeRequire = async (req) => {
         const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
           new URL(req.url).pathname
@@ -37,8 +37,8 @@ export class DurableObjectExample {
         const require = resp && (await resp.json());
         return new Promise(
           (resolve) => require && resolve(JSON.stringify(require))
-        );*/
-      });
+        );*
+      });*/
   }
   //Omit  for syncronous defer, -ish
   fetch(req, env) {
