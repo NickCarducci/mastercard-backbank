@@ -40,6 +40,11 @@ export class DurableObjectExample {
         .catch((err) => console.log("rollup.rollup error", err.message));*/
         //this.el.storage.put("esm", product);
       });
+    this.makeRequire = (req) => {
+      const path = new URL(req.url).pathname,
+        getter = (eo) => eo.get(eo.idFromName(path));
+      getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env);
+    };
   }
   //Omit  for syncronous defer, -ish
   fetch(req) {
@@ -56,10 +61,8 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      const getter = (eo) => eo.get(eo.idFromName(path));
-      getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env);
-
-      return new Promise((resolve) => env.require && resolve(env.require)) // this.makeRequire(req)
+      const requirer = this.makeRequire(req);
+      return new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
           console.log("requirer", JSON.stringify(requirer));
