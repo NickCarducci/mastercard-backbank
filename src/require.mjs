@@ -674,22 +674,26 @@ export class Require {
                     var handler =
                       e_(handlers).yes(depMap.id) && handlers[depMap.id];
                     if (handler) return (this.depExports[i] = handler(this));
-                    seratimNull(
-                      variables,
-                      "undefined",
-                      (this["depCount"] += 1)
-                    ) &&
+                    const go = () =>
+                      seratimNull(
+                        variables,
+                        "undefined",
+                        (this["depCount"] += 1)
+                      ) &&
                       on(depMap, _dd, (depExports) => {
                         if (this.undefed) return null;
-                        this.defineDep(i, depExports);
-                        this.check();
+                        seratimNull(
+                          variables,
+                          "undefined",
+                          this.defineDep(i, depExports)
+                        ) && this.check();
                       }) &&
-                      ((z) =>
-                        z.eb
-                          ? on(depMap, _e, z.eb) // propagate the error correctly - something else is listening for errors
-                          : z.events[_e]
-                          ? on(depMap, _e, (err) => z.emit(_e, err))
-                          : null)(this);
+                      (this.eb
+                        ? on(depMap, _e, this.eb) // propagate the error correctly - something else is listening for errors
+                        : this.events[_e]
+                        ? on(depMap, _e, (err) => this.emit(_e, err))
+                        : null);
+                    go();
                   } // (No direct eb on this this)
                   var id = depMap.id,
                     m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
@@ -985,8 +989,7 @@ export class Require {
         //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
         _K(c).forEach((prop = (op) => {
           const arr = ["paths", "bundles", "STATE.CONFIG", "map"];
-          !arr.includes(op) ? (STATE.CONFIG[op] = c[op]) : arr.forEach((op) => (STATE.CONFIG[op] = !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]));
-          return op; //args prop
+          return seratimNull(variables, "undefined", !arr.includes(op) ? (STATE.CONFIG[op] = c[op]) : arr.forEach((op) => (STATE.CONFIG[op] = !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]))) && op; //args prop
         }, i) => WINDOW.mixin(STATE.CONFIG[prop], c[prop], true, true));
 
         const { shims, shim } = apply(c);
@@ -1192,9 +1195,11 @@ export class Require {
           !m.require ? (m.require = STATE.makeRequire(m.map)) : m.require;
         this.exports = (m) => {
           m.usingExports = true;
-          if (!m.map.yesdef) return null;
-          if (!m[_x]) return (m[_x] = STATE.defined[m.map.id] = {});
-          return (STATE.defined[m.map.id] = m[_x]);
+          return !m.map.yesdef
+            ? null
+            : !m[_x]
+            ? (m[_x] = STATE.defined[m.map.id] = {})
+            : (STATE.defined[m.map.id] = m[_x]);
         };
         return (m) =>
           !m[_m] &&
@@ -1461,8 +1466,9 @@ export class Require {
                   ); //type, msg, err, requireModules
                 callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
               }
-              checkLoaded(); //tkn = moduleName
-              return true;
+              return (
+                checkLoaded() && true //tkn = moduleName
+              );
             }
           }) &&
           _K(STATE).forEach((key) => (this[key] = STATE[key]));
