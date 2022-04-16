@@ -1,6 +1,7 @@
 export class DurableObjectExample {
   constructor(el, env) {
-    console.log("Example headers :", JSON.stringify(el)) && //el.textContent
+    console.log("Example headers :", JSON.stringify(el)) &&
+    console.log("Example environment variables :", JSON.stringify(env)) && //el.textContent
       (this.el = el) &&
       (this.env = env) &&
       /*const locs = require("mastercard-locations");
@@ -41,7 +42,7 @@ export class DurableObjectExample {
       });
   }
   //Omit  for syncronous defer, -ish
-  fetch(req, env) {
+  fetch(req) {
     const dataHead = {
       "Content-Type": "application/json"
     };
@@ -55,7 +56,9 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      console.log("env", env);
+      const getter = (eo) => eo.get(eo.idFromName(path));
+      getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env);
+
       return new Promise((resolve) => env.require && resolve(env.require)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
