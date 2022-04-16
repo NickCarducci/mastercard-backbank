@@ -55,15 +55,11 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      const path = new URL(req.url).pathname,
-        Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path),
-        instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
-
-      const require = instanceR.fetch(req, env);
-      return new Promise((resolve) => require && resolve(require)) // this.makeRequire(req)
+      console.log("env", JSON.stringify(env));
+      return new Promise((resolve) => env.require && resolve(env.require)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
-          console.log(JSON.stringify(requirer));
+          console.log("requirer", JSON.stringify(requirer));
           const locs = requirer("mastercard-locations");
           const places = requirer("mastercard-places");
           const crs = requirer("cors");
@@ -241,4 +237,3 @@ export class DurableObjectExample {
         );*/
   }
 }
-
