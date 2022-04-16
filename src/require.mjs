@@ -914,9 +914,9 @@ export class Require {
     }
     const configure = (
         c = (c) => {
-          T(c[_a] === _t) &&
-            (c[_a] = (id, url) =>
-              (url.indexOf("?") === -1 ? "?" : "&") + c[_a]);
+          c[_a] = T(c[_a] === _t)
+            ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
+            : c[_a];
 
           return c[_u].charAt(c[_u].length - 1) === "/" // Convert old style urlArgs string to a function.
             ? c
@@ -1194,13 +1194,13 @@ export class Require {
         this.require = (m) =>
           !m.require ? (m.require = STATE.makeRequire(m.map)) : m.require;
         this.exports = (m) => {
-          m.usingExports = true;
-          return !m.map.yesdef
-            ? null
-            : !m[_x]
-            ? (m[_x] = STATE.defined[m.map.id] = {})
-            : (STATE.defined[m.map.id] = m[_x]);
+          const go = () =>
+            !m[_x]
+              ? (m[_x] = STATE.defined[m.map.id] = {})
+              : (STATE.defined[m.map.id] = m[_x]);
+          return (m.usingExports = true) && (!m.map.yesdef ? null : go());
         };
+
         return (m) =>
           !m[_m] &&
           (m[_m] = {
