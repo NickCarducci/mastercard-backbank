@@ -49,7 +49,7 @@ export class DurableObjectExample {
     };
   }
   //Omit  for syncronous defer, -ish
-  fetch(req) {
+  async fetch(req) {
     const dataHead = {
       "Content-Type": "application/json"
     };
@@ -66,7 +66,7 @@ export class DurableObjectExample {
       //console.log("this :", this);
       //const requirer = this.makeRequire(req);
       //console.log("requirer: ", requirer);
-      return this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
+      return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
           console.log("requirer", JSON.stringify(requirer));
