@@ -209,14 +209,18 @@ export class Require {
             e = (m) => (m ? name : NAME); //scriptNode
           return (
             isBrowser &&
-            e_()
-              .tag()
-              .forEach(
-                (sN) =>
-                  sN[ga](WINDOW.dr(true)) === e(true) &&
-                  sN[ga](WINDOW.dr()) === e() &&
-                  sN.parentNode.removeChild(sN)
-              )
+            seratimNull(
+              variables,
+              "undefined",
+              e_()
+                .tag()
+                .forEach(
+                  (sN) =>
+                    sN[ga](WINDOW.dr(true)) === e(true) &&
+                    sN[ga](WINDOW.dr()) === e() &&
+                    sN.parentNode.removeChild(sN)
+                )
+            )
           );
         },
         hasPathFallback: (id, cP) => {
@@ -905,28 +909,38 @@ export class Require {
         }
       ) => {
         const map = () =>
-            _K(STATE.dependencies).forEach(
-              (
-                id = (id) =>
-                  !STATE.dependencies[id].inited &&
-                  !STATE.dependencies[id].map.unnormalized &&
-                  id
-              ) => (STATE.dependencies[id].map = makeModuleMap(id, null, true))
+            seratimNull(
+              variables,
+              "undefined",
+              _K(STATE.dependencies).forEach(
+                (
+                  id = (id) =>
+                    !STATE.dependencies[id].inited &&
+                    !STATE.dependencies[id].map.unnormalized &&
+                    id
+                ) =>
+                  (STATE.dependencies[id].map = makeModuleMap(id, null, true))
+              )
             ), //if inited and transient, unnormalized modules.
           bundle = (packages = (c) => c[_p]) =>
-            packages &&
-            packages.forEach((pkgObj) => {
-              pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
-              var name = pkgObj.name,
-                location = pkgObj[_l]; //Adjust packages if necessary.
-              if (location) STATE.CONFIG.paths[name] = pkgObj[_l];
+            !packages
+              ? true
+              : seratimNull(
+                  variables,
+                  "undefined",
+                  packages.forEach((pkgObj) => {
+                    pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
+                    var name = pkgObj.name,
+                      location = pkgObj[_l]; //Adjust packages if necessary.
+                    if (location) STATE.CONFIG.paths[name] = pkgObj[_l];
 
-              STATE.CONFIG.pkgs[name] = `${pkgObj.name}/${(
-                pkgObj.main || "main"
-              )
-                .replace(/^\.\//, "")
-                .replace(/\.js$/, "")}`; //normalize pkg name main this ID pointer paths
-            }), //Update maps for "waiting to execute" modules in the STATE.dependencies.
+                    STATE.CONFIG.pkgs[name] = `${pkgObj.name}/${(
+                      pkgObj.main || "main"
+                    )
+                      .replace(/^\.\//, "")
+                      .replace(/\.js$/, "")}`; //normalize pkg name main this ID pointer paths
+                  })
+                ), //Update maps for "waiting to execute" modules in the STATE.dependencies.
           apply = (
             { bundles, shims } = (c) => {
               return { bundles: c[_b], shims: c[_s] };
@@ -939,14 +953,21 @@ export class Require {
                 )
               ); //Reverse map the bundles
             var shim = STATE.CONFIG.shim; //save paths for special "additive processing"
-            shims &&
-              _K(shims).forEach((id, i) => {
-                var v = shims[id];
-                if (e_(v).string() === Ar) v = { ds: v }; //Merge shim, Normalize the structure
-                if ((v[_x] || v[_i]) && !v[_xf])
-                  v[_xf] = STATE.makeShimExports(v);
-                shim[id] = v;
-              });
+            seratimNull(
+              variables,
+              "undefined",
+              shims &&
+                _K(shims).forEach((id, i) => {
+                  var v = shims[id];
+                  return (
+                    (e_(v).string() === Ar ? (v = { ds: v }) : true) && //Merge shim, Normalize the structure
+                    ((v[_x] || v[_i]) && !v[_xf]
+                      ? (v[_xf] = STATE.makeShimExports(v))
+                      : true) &&
+                    (shim[id] = v)
+                  );
+                })
+            );
             return { shim, shims };
           };
         //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
@@ -957,10 +978,13 @@ export class Require {
         }, i) => WINDOW.mixin(STATE.CONFIG[prop], c[prop], true, true));
 
         const { shims, shim } = apply(c);
-        STATE.CONFIG.shim = shims ? shim : STATE.CONFIG.shim;
-        bundle(c);
-        map(); //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
-        (c.ds || c.cb) && STATE.require(c.ds || [], c.cb);
+        return (
+          (STATE.CONFIG.shim = shims ? shim : STATE.CONFIG.shim) &&
+          bundle(c) &&
+          map() && //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
+          (c.ds || c.cb) &&
+          STATE.require(c.ds || [], c.cb)
+        );
       },
       //s eslint-disable-next-line
       isWebWorker = !isBrowser && false, // && T(importScripts !== _n),
@@ -1041,8 +1065,8 @@ export class Require {
         var paths = STATE.CONFIG.paths,
           syms = tkn.split("/"); //an extension, this method probably needs to be reworked. A this that needs to be converted to a path.
         for (let i = syms.length; i > 0; i -= 1) {
-          var pM = syms.slice(0, i).join("/"); //per this name segment if path registered, start name, and work up
-          var pP = e_(paths).yes(pM) && paths[pM]; //parentModule
+          var pM = syms.slice(0, i).join("/"), //per this name segment if path registered, start name, and work up
+            pP = e_(paths).yes(pM) && paths[pM]; //parentModule
 
           pP &&
             iifeapp(this)(
@@ -1052,8 +1076,9 @@ export class Require {
             );
           if (pP) break; //arr means a few choices; parentPath
         }
-        url = syms.join("/"); //Join the path parts together, then figure out if baseUrl is needed.
-        url += ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js"); ///^data\:|^blob\:|\?/
+        (url = syms.join("/")) && //Join the path parts together, then figure out if baseUrl is needed.
+          (url +=
+            ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js")); ///^data\:|^blob\:|\?/
 
         // prettier-ignore
         return (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : STATE.CONFIG.baseUrl) + url; ///^[\w\+\.\-]+:/
@@ -1094,10 +1119,8 @@ export class Require {
         v &&
         getScriptData(evt), //interactiveScript - browser event for script loaded status
       onScriptLoad = (data = evt) => STATE.completeLoad(data.id),
-      clrRegstr = (id) => {
-        delete STATE.dependencies[id];
-        delete STATE.enRgtry[id];
-      },
+      clrRegstr = (id) =>
+        delete STATE.dependencies[id] && delete STATE.enRgtry[id],
       iserror = (err) =>
         e_(STATE.dependencies).yes(err) && STATE.dependencies[err],
       onError = (err = WINDOW.mk, eb = (eb) => eb && eb(err)) => {
@@ -1145,11 +1168,12 @@ export class Require {
             n: evt.currentTarget || evt.srcElement //REQUIREJS event info, remove listener from node //target
           };
         }
-      ) => {
-        rm(n, onScriptLoad, "load", "onreadystatechange");
-        rm(n, onScriptError, _e);
-        return { node: n, id: n && n.getAttribute(WINDOW.dr(true)) };
-      };
+      ) =>
+        rm(n, onScriptLoad, "load", "onreadystatechange") &&
+        rm(n, onScriptError, _e) && {
+          node: n,
+          id: n && n.getAttribute(WINDOW.dr(true))
+        };
     class handlers {
       constructor() {
         this.require = (m) =>
@@ -1225,10 +1249,10 @@ export class Require {
                   ? handlers[ds](STATE.dependencies[relMap.id]) //when require|exports|this are requested && while this is being STATE.defined
                   : build.get
                   ? build.get(STATE, ds, relMap, tool.parser)
-                  : () => {
-                      map = makeModuleMap(ds, relMap, false, true);
-                      id = map.id; //Normalize this name from . or ..
-                      return !e_(STATE.defined).yes(id)
+                  : () =>
+                      (map = makeModuleMap(ds, relMap, false, true)) &&
+                      (id = map.id) && //Normalize this name from . or ..
+                      (!e_(STATE.defined).yes(id)
                         ? onError(
                             WINDOW.mk([
                               "notloaded",
@@ -1237,8 +1261,7 @@ export class Require {
                                 !relMap && "; (No relMap) Use require([])"
                             ])
                           )
-                        : STATE.defined[id];
-                    };
+                        : STATE.defined[id]);
               },
               parser: (...args) => {
                 if (tool.suspend(...args)) return null;
@@ -1313,20 +1336,23 @@ export class Require {
                 tkeGblQue(); //Only allow undef on top level require calls
                 var map = makeModuleMap(id, relMap, true), //Bind define() calls (fixes #408) to 'this' STATE
                   m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
-                m.undefed = true;
-                ((z) => {
-                  WINDOW.rmvScrpt(id, STATE.NAME);
-                  delete z.defined[id];
-                  delete z.urlFchd[map.url];
-                  delete z.unDE[id];
-                })(STATE);
-                defQueue
-                  .sort((a, b) => b - a)
-                  .map((args, i) => args[0] === id && defQueue.splice(i, 1)); //Clean queued defines, backwards, so splices don't destroy the iteration
-                delete STATE.defQueueMap[id];
-                STATE.unDE[id] =
-                  m && m.events.defined ? m.events : STATE.unDE[id]; //if different STATE.CONFIG, same listeners
-                m && clrRegstr(id);
+                return (
+                  (m.undefed = true) &&
+                  WINDOW.rmvScrpt(id, STATE.NAME) &&
+                  delete STATE.defined[id] &&
+                  delete STATE.urlFchd[map.url] &&
+                  delete STATE.unDE[id] &&
+                  defQueue
+                    .sort((a, b) => b - a)
+                    .map(
+                      (args, i) => args[0] === id && defQueue.splice(i, 1)
+                    ) && //Clean queued defines, backwards, so splices don't destroy the iteration
+                  delete STATE.defQueueMap[id] &&
+                  (STATE.unDE[id] =
+                    m && m.events.defined ? m.events : STATE.unDE[id]) && //if different STATE.CONFIG, same listeners
+                  m &&
+                  clrRegstr(id)
+                );
               })
             : true) &&
           tool(relMap, o, NAME).parser
