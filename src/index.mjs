@@ -9,7 +9,21 @@ export class DurableObjectExample {
       this.el.blockConcurrencyWhile(() => {
         let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
         // After initialization, future reads do not need to access storage.
-        this.value = stored || 0;
+        (this.value = stored || 0) &&
+          (this.require = async (req) => {
+            const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+              new URL(req.url).pathname
+            );
+            const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
+            const resp = instance.fetch(req, env);
+            return new Promise((resolve) => resp && resolve(resp));
+            /*const resp = instance && instance.fetch(req, env);
+
+        const require = resp && (await resp.json());
+        return new Promise(
+          (resolve) => require && resolve(JSON.stringify(require))
+        );*/
+          });
         //this.require = require;
 
         //fn.apply(this, [locs,places,crs])
@@ -24,21 +38,7 @@ export class DurableObjectExample {
         })
         .catch((err) => console.log("rollup.rollup error", err.message));*/
         //this.el.storage.put("esm", product);
-      }); /*&&
-      (this.makeRequire = async (req) => {
-        const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
-          new URL(req.url).pathname
-        );
-        const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-        const resp = instance.fetch(req, env);
-        return new Promise((resolve) => resp && resolve(resp));
-        /*const resp = instance && instance.fetch(req, env);
-
-        const require = resp && (await resp.json());
-        return new Promise(
-          (resolve) => require && resolve(JSON.stringify(require))
-        );*
-      });*/
+      });
   }
   //Omit  for syncronous defer, -ish
   fetch(req, env) {
@@ -55,12 +55,7 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      const backbank = this.env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
-        new URL(req.url).pathname
-      );
-      const instance = this.env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-      const resp = instance.fetch(req, this.env);
-      return new Promise((resolve) => resp && resolve(resp)) // this.makeRequire(req)
+      return new Promise((resolve) => this.require && resolve(this.require)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
           console.log(JSON.stringify(requirer));
