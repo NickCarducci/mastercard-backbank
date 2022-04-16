@@ -1,6 +1,6 @@
 export class DurableObjectExample {
   constructor(el, env) {
-    console.log(JSON.stringify(el), "- From the example module") && //el.textContent
+    console.log("Example headers :", JSON.stringify(el)) && //el.textContent
       (this.el = el) &&
       (this.env = env) &&
       /*const locs = require("mastercard-locations");
@@ -55,7 +55,7 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      console.log("env", JSON.stringify(env));
+      console.log("env", env);
       return new Promise((resolve) => env.require && resolve(env.require)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
