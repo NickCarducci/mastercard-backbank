@@ -29,7 +29,7 @@ export class Require {
 
   fetch(req, env) {
     //this.b("fetched require :");
-    console.log("fetched require :");
+    console.log("fetched require :" + req);
     var variables = {
       configuration: {},
       REQUIREJS: null
@@ -1687,15 +1687,15 @@ export class Require {
     };
     const str = JSON.stringify(state);
     console.log(str);
-    return new Promise((resolve) => str && resolve(str));
+    //return new Promise((resolve) => str && resolve(str));
 
-    /*return (
+    return (
       str &&
       new Response(str, {
         status: "200",
         message: "success: " + req.url,
         headers: dataHead
       })
-    );*/
+    );
   }
 }
