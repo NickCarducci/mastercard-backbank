@@ -34,7 +34,7 @@ async function noException(req, env) {
       .fetch(req, {
         env: env.REQUIRE_CLASS_DURABLE_OBJECT.get(
           env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path)
-        ).instanceR.fetch(req, env)
+        ).fetch(req, env)
       }) // Forward the current HTTP request to it
       .then(async (res) => await res.json())
       .then((r) => {
