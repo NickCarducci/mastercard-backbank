@@ -288,8 +288,9 @@ export class Require {
                       s = mV && e_(mV).yes(name) && mV[name],
                       loop = (z) => {
                         let f;
+                        var set = () => (i = g);
                         for (f = z.ph.length; f > 0; f--) {
-                          if (z.mV && e_(z.mV).yes(name) && z.mV[name]) i = g;
+                          if (z.mV && e_(z.mV).yes(name) && z.mV[name]) set();
                           if (s) break;
                         }
                         return true;
@@ -639,14 +640,11 @@ export class Require {
                     }))
               ); //construct
               const prt = (
-                normMod = (normMod) => {
-                  normMod && this.depMaps.push(nM);
-                  return (
-                    this.events[_e] &&
-                    normMod.on(_e, (err) => this.emit(_e, err)) &&
-                    normMod
-                  ); //Mark this as a dependency for this plugin, so it can be traced for cycles.
-                }
+                normMod = (normMod) =>
+                  (normMod ? this.depMaps.push(nM) : true) &&
+                  this.events[_e] &&
+                  normMod.on(_e, (err) => this.emit(_e, err)) &&
+                  normMod //Mark this as a dependency for this plugin, so it can be traced for cycles.
               ) => normMod && normMod.enable();
 
               //normalizedMod
@@ -914,13 +912,13 @@ export class Require {
     }
     const configure = (
         c = (c) => {
-          c[_a] = T(c[_a] === _t)
+          const r = T(c[_a] === _t)
             ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
             : c[_a];
 
           return c[_u].charAt(c[_u].length - 1) === "/" // Convert old style urlArgs string to a function.
-            ? c
-            : { ...c, [_u]: `${c[_u]}/` };
+            ? { ...c, [_a]: r }
+            : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
         }
       ) => {
         const map = () =>
