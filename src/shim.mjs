@@ -26,7 +26,7 @@ async function noException(req, env) {
     instance = env.EXAMPLE_CLASS_DURABLE_OBJECT.get(Backbank);
   //Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path);
   //env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
-
+  console.log("env", env);
   return (
     instance &&
     //env.instanceR &&
