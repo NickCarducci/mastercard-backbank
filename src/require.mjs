@@ -22,8 +22,7 @@ export class Require {
       (this.env = env) &&
       this.el.blockConcurrencyWhile(async () => {
         let stored = await this.el.storage.get("require"); //Read requests	100,000 / day, ($free)
-        this.state = stored || 0;
-        this.b = (b) => console.log(b);
+        (this.state = stored || 0) && (this.b = (b) => console.log(b));
       });
     // this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
   }
