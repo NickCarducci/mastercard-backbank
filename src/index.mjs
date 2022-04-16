@@ -40,11 +40,11 @@ export class DurableObjectExample {
         .catch((err) => console.log("rollup.rollup error", err.message));*/
         //this.el.storage.put("esm", product);
       });
-    this.makeRequire = (req) => {
+    this.makeRequire = async (req) => {
       const path = new URL(req.url).pathname,
-        getter = (eo) => eo.get(eo.idFromName(path));
+        getter = async (eo) => await eo.get(eo.idFromName(path));
       console.log(path, ": making require");
-      return getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env);
+      return await getter(env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req, env);
     };
   }
   //Omit  for syncronous defer, -ish
@@ -62,10 +62,10 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      console.log("this :", this);
-      const requirer = this.makeRequire(req);
-      console.log("requirer: ", requirer);
-      return new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
+      //console.log("this :", this);
+      //const requirer = this.makeRequire(req);
+      //console.log("requirer: ", requirer);
+      return this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
           console.log("requirer", JSON.stringify(requirer));
