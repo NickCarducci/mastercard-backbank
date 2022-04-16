@@ -1,21 +1,21 @@
 export class DurableObjectExample {
   constructor(el, env) {
-    console.log(JSON.stringify(el), "- From the example module"); //el.textContent
-    this.el = el;
-    this.env = env;
-    /*const locs = require("mastercard-locations");
+    console.log(JSON.stringify(el), "- From the example module") && //el.textContent
+      (this.el = el) &&
+      (this.env = env) &&
+      /*const locs = require("mastercard-locations");
       const places = require("mastercard-places");
       const crs = require("cors"); */
-    this.el.blockConcurrencyWhile(() => {
-      let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
-      // After initialization, future reads do not need to access storage.
-      this.value = stored || 0;
-      //this.require = require;
+      this.el.blockConcurrencyWhile(() => {
+        let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
+        // After initialization, future reads do not need to access storage.
+        this.value = stored || 0;
+        //this.require = require;
 
-      //fn.apply(this, [locs,places,crs])
-      //this.value = {locs,places,crs}//Window;
+        //fn.apply(this, [locs,places,crs])
+        //this.value = {locs,places,crs}//Window;
 
-      /* rollup(manifest)
+        /* rollup(manifest)
         .then( (bundle) => {
           console.log(Object.keys(bundle), " is bundle");
           pages.forEach( (output) =>  bundle.write(output));
@@ -23,22 +23,22 @@ export class DurableObjectExample {
          // return hydrate(bundle)
         })
         .catch((err) => console.log("rollup.rollup error", err.message));*/
-      //this.el.storage.put("esm", product);
-    });
-    this.makeRequire = async (req) => {
-      const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
-        new URL(req.url).pathname
-      );
-      const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
-      const resp = instance.fetch(req, env);
-      return new Promise((resolve) => resp && resolve(resp));
-      /*const resp = instance && instance.fetch(req, env);
+        //this.el.storage.put("esm", product);
+      }) &&
+      (this.makeRequire = async (req) => {
+        const backbank = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(
+          new URL(req.url).pathname
+        );
+        const instance = env.REQUIRE_CLASS_DURABLE_OBJECT.get(backbank);
+        const resp = instance.fetch(req, env);
+        return new Promise((resolve) => resp && resolve(resp));
+        /*const resp = instance && instance.fetch(req, env);
 
         const require = resp && (await resp.json());
         return new Promise(
           (resolve) => require && resolve(JSON.stringify(require))
         );*/
-    };
+      });
   }
   //Omit  for syncronous defer, -ish
   fetch(req, env) {
@@ -68,18 +68,18 @@ export class DurableObjectExample {
             mc = null;
           const initializeMCard = () => {
             if (!iMCard) {
-              console.log("initializing mastercard api");
-              mc = locs.MasterCardAPI;
-              iMCard = true;
-              mc.init({
-                sandbox: secrets.NODE_ENV !== "production",
-                authentication: new mc.OAuth(
-                  secrets.MASTERCARD_CONSUMER_KEY,
-                  Buffer.from(secrets.MASTERCARD_P12_BINARY, "base64"),
-                  "keyalias",
-                  "keystorepassword"
-                )
-              });
+              console.log("initializing mastercard api") &&
+                (mc = locs.MasterCardAPI) &&
+                (iMCard = true) &&
+                mc.init({
+                  sandbox: secrets.NODE_ENV !== "production",
+                  authentication: new mc.OAuth(
+                    secrets.MASTERCARD_CONSUMER_KEY,
+                    Buffer.from(secrets.MASTERCARD_P12_BINARY, "base64"),
+                    "keyalias",
+                    "keystorepassword"
+                  )
+                });
             }
           };
           const mastercardRoute = async (req, func) => {
@@ -220,8 +220,8 @@ export class DurableObjectExample {
             }
           }
         );*/
-        })
-        /*.catch(
+        });
+    /*.catch(
           (err) =>
             new Response(JSON.stringify(`{thenError:${err.message}}`), {
               status: "400",
