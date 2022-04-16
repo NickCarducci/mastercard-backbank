@@ -1252,144 +1252,140 @@ export class Require {
           ? value //dot-notation dependency
           : value
               .split(".")
-              .reduce((previous, key) => dependency[previous], {});
+              .reduce((previous, key) => dependency[previous], {}),
+      makeRequire = (relMap, o = (options) => options || {}, NAME) => {
+        const tool = (relMap, o, NAME) => {
+            return {
+              suspend: (ds, cb, eb) => {
+                var id, map;
+
+                if (o.enableBuildCallback && cb && e_(cb).string() === Fn)
+                  cb.__requireJsBuild = true;
+
+                return T(ds !== _t)
+                  ? null
+                  : e_(cb).string() === Fn
+                  ? onError(
+                      WINDOW.mk(["requireargs", "Invalid require call"]),
+                      eb
+                    ) //Invalid call; id, msg, err, requireModule
+                  : relMap && e_(handlers).yes(ds)
+                  ? handlers[ds](STATE.dependencies[relMap.id]) //when require|exports|this are requested && while this is being STATE.defined
+                  : build.get
+                  ? build.get(STATE, ds, relMap, tool.parser)
+                  : () =>
+                      (map = makeModuleMap(ds, relMap, false, true)) &&
+                      (id = map.id) && //Normalize this name from . or ..
+                      (!e_(STATE.defined).yes(id)
+                        ? onError(
+                            WINDOW.mk([
+                              "notloaded",
+                              `Module name ${id} has not been loaded yet for STATE: ` +
+                                NAME +
+                                !relMap && "; (No relMap) Use require([])"
+                            ])
+                          )
+                        : STATE.defined[id]);
+              },
+              parser: (...args) => {
+                if (tool.suspend(...args)) return null;
+                const ds = args[0],
+                  cb = args[1],
+                  eb = args[2];
+
+                var requireMod;
+                const intakeDefines = () => {
+                  for (tkeGblQue(); defQueue.length; ) {
+                    const args = defQueue.shift()[0];
+                    if (null === args)
+                      return onError(
+                        WINDOW.mk([
+                          "mismatch",
+                          `Mismatched anonymous define() this: ${
+                            args[args.length - 1]
+                          }`
+                        ])
+                      );
+
+                    callGetModule(args);
+                  }
+                  return (STATE.defQueueMap = {}) && true;
+                }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
+                intakeDefines(); //Grab defines waiting in the dependency queue.
+                STATE.nextTick(
+                  () =>
+                    intakeDefines() && //Mark all the STATE.dependencies as needing to be loaded.
+                    (requireMod = getModule(makeModuleMap(null, relMap))) && //collect defines that could have been added since the 'require call'
+                    (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to this 'require call' for STATE.dependencies
+                    requireMod[_i](ds, cb, eb, { enabled: true }) &&
+                    checkLoaded()
+                );
+                return tool.parser;
+              }
+            };
+          },
+          app = {
+            isBrowser,
+            defined: (id) =>
+              e_(STATE.defined).yes(makeModuleMap(id, relMap, false, true).id),
+            specified: (
+              id = (id) => makeModuleMap(id, relMap, false, true).id
+            ) => e_(STATE.defined).yes(id) || e_(STATE.dependencies).yes(id),
+            toUrl: (mNPE) => {
+              //moduleNamePlusExt
+              var i = mNPE.lastIndexOf("."),
+                seg = mNPE.split("/")[0],
+                isRelative = seg === "." || seg === ".."; //URL path = this name + .extension; requires 'this name,' not 'plain URLs' like nameToUrl
+
+              const isAlias = i !== -1 && (!isRelative || i > 1);
+              const ext = isAlias ? mNPE.substring(i, mNPE.length) : null;
+              mNPE = isAlias ? mNPE.substring(0, i) : mNPE;
+              //file extension alias, not 'relative path dots'
+
+              const ar = WINDOW.normalize([
+                mNPE,
+                relMap && relMap.id,
+                true,
+                STATE.CONFIG.nodeIdCompat,
+                STATE.CONFIG.system, //also, "map" for outward facing code...
+                STATE.CONFIG.bundle //also, "packages" ""
+              ]);
+              return nameToUrl(ar, ext, true);
+            }
+          };
+        return (
+          WINDOW.mixin(tool(relMap, o, NAME).parser, app) &&
+          (!relMap
+            ? (tool(relMap, o, NAME).parser.undef = (id) => {
+                tkeGblQue(); //Only allow undef on top level require calls
+                var map = makeModuleMap(id, relMap, true), //Bind define() calls (fixes #408) to 'this' STATE
+                  m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
+                return (
+                  (m.undefed = true) &&
+                  WINDOW.rmvScrpt(id, STATE.NAME) &&
+                  delete STATE.defined[id] &&
+                  delete STATE.urlFchd[map.url] &&
+                  delete STATE.unDE[id] &&
+                  defQueue
+                    .sort((a, b) => b - a)
+                    .map(
+                      (args, i) => args[0] === id && defQueue.splice(i, 1)
+                    ) && //Clean queued defines, backwards, so splices don't destroy the iteration
+                  delete STATE.defQueueMap[id] &&
+                  (STATE.unDE[id] =
+                    m && m.events.defined ? m.events : STATE.unDE[id]) && //if different STATE.CONFIG, same listeners
+                  m &&
+                  clrRegstr(id)
+                );
+              })
+            : true) &&
+          tool(relMap, o, NAME).parser
+        );
+      };
+
     class newRequireable {
       constructor() {
-        const NAME = arguments[0],
-          makeRequire = (relMap, o = (options) => options || {}, NAME) => {
-            const tool = (relMap, o, NAME) => {
-                return {
-                  suspend: (ds, cb, eb) => {
-                    var id, map;
-
-                    if (o.enableBuildCallback && cb && e_(cb).string() === Fn)
-                      cb.__requireJsBuild = true;
-
-                    return T(ds !== _t)
-                      ? null
-                      : e_(cb).string() === Fn
-                      ? onError(
-                          WINDOW.mk(["requireargs", "Invalid require call"]),
-                          eb
-                        ) //Invalid call; id, msg, err, requireModule
-                      : relMap && e_(handlers).yes(ds)
-                      ? handlers[ds](STATE.dependencies[relMap.id]) //when require|exports|this are requested && while this is being STATE.defined
-                      : build.get
-                      ? build.get(STATE, ds, relMap, tool.parser)
-                      : () =>
-                          (map = makeModuleMap(ds, relMap, false, true)) &&
-                          (id = map.id) && //Normalize this name from . or ..
-                          (!e_(STATE.defined).yes(id)
-                            ? onError(
-                                WINDOW.mk([
-                                  "notloaded",
-                                  `Module name ${id} has not been loaded yet for STATE: ` +
-                                    NAME +
-                                    !relMap && "; (No relMap) Use require([])"
-                                ])
-                              )
-                            : STATE.defined[id]);
-                  },
-                  parser: (...args) => {
-                    if (tool.suspend(...args)) return null;
-                    const ds = args[0],
-                      cb = args[1],
-                      eb = args[2];
-
-                    var requireMod;
-                    const intakeDefines = () => {
-                      for (tkeGblQue(); defQueue.length; ) {
-                        const args = defQueue.shift()[0];
-                        if (null === args)
-                          return onError(
-                            WINDOW.mk([
-                              "mismatch",
-                              `Mismatched anonymous define() this: ${
-                                args[args.length - 1]
-                              }`
-                            ])
-                          );
-
-                        callGetModule(args);
-                      }
-                      return (STATE.defQueueMap = {}) && true;
-                    }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
-                    intakeDefines(); //Grab defines waiting in the dependency queue.
-                    STATE.nextTick(
-                      () =>
-                        intakeDefines() && //Mark all the STATE.dependencies as needing to be loaded.
-                        (requireMod = getModule(makeModuleMap(null, relMap))) && //collect defines that could have been added since the 'require call'
-                        (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to this 'require call' for STATE.dependencies
-                        requireMod[_i](ds, cb, eb, { enabled: true }) &&
-                        checkLoaded()
-                    );
-                    return tool.parser;
-                  }
-                };
-              },
-              app = {
-                isBrowser,
-                defined: (id) =>
-                  e_(STATE.defined).yes(
-                    makeModuleMap(id, relMap, false, true).id
-                  ),
-                specified: (
-                  id = (id) => makeModuleMap(id, relMap, false, true).id
-                ) =>
-                  e_(STATE.defined).yes(id) || e_(STATE.dependencies).yes(id),
-                toUrl: (mNPE) => {
-                  //moduleNamePlusExt
-                  var i = mNPE.lastIndexOf("."),
-                    seg = mNPE.split("/")[0],
-                    isRelative = seg === "." || seg === ".."; //URL path = this name + .extension; requires 'this name,' not 'plain URLs' like nameToUrl
-
-                  const isAlias = i !== -1 && (!isRelative || i > 1);
-                  const ext = isAlias ? mNPE.substring(i, mNPE.length) : null;
-                  mNPE = isAlias ? mNPE.substring(0, i) : mNPE;
-                  //file extension alias, not 'relative path dots'
-
-                  const ar = WINDOW.normalize([
-                    mNPE,
-                    relMap && relMap.id,
-                    true,
-                    STATE.CONFIG.nodeIdCompat,
-                    STATE.CONFIG.system, //also, "map" for outward facing code...
-                    STATE.CONFIG.bundle //also, "packages" ""
-                  ]);
-                  return nameToUrl(ar, ext, true);
-                }
-              };
-            return (
-              WINDOW.mixin(tool(relMap, o, NAME).parser, app) &&
-              (!relMap
-                ? (tool(relMap, o, NAME).parser.undef = (id) => {
-                    tkeGblQue(); //Only allow undef on top level require calls
-                    var map = makeModuleMap(id, relMap, true), //Bind define() calls (fixes #408) to 'this' STATE
-                      m =
-                        e_(STATE.dependencies).yes(id) &&
-                        STATE.dependencies[id];
-                    return (
-                      (m.undefed = true) &&
-                      WINDOW.rmvScrpt(id, STATE.NAME) &&
-                      delete STATE.defined[id] &&
-                      delete STATE.urlFchd[map.url] &&
-                      delete STATE.unDE[id] &&
-                      defQueue
-                        .sort((a, b) => b - a)
-                        .map(
-                          (args, i) => args[0] === id && defQueue.splice(i, 1)
-                        ) && //Clean queued defines, backwards, so splices don't destroy the iteration
-                      delete STATE.defQueueMap[id] &&
-                      (STATE.unDE[id] =
-                        m && m.events.defined ? m.events : STATE.unDE[id]) && //if different STATE.CONFIG, same listeners
-                      m &&
-                      clrRegstr(id)
-                    );
-                  })
-                : true) &&
-              tool(relMap, o, NAME).parser
-            );
-          };
+        const NAME = arguments[0];
 
         [
           "dependencies",
@@ -1690,20 +1686,15 @@ export class Require {
     };
     const str = JSON.stringify(state);
     console.log(str);
-    /* return new Promise((resolve) => {
-      const re =
-        this &&
-        */
+    return new Promise((resolve) => str && resolve(str));
 
-    return (
+    /*return (
       str &&
       new Response(str, {
         status: "200",
         message: "success: " + req.url,
         headers: dataHead
       })
-    );
-    // re && resolve(re);
-    //});
+    );*/
   }
 }
