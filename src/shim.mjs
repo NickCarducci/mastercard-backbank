@@ -31,7 +31,7 @@ async function noException(req, env) {
     instance &&
     //env.instanceR &&
     instance
-      .fetch(req, env.clone().into()) // Forward the current HTTP request to it
+      .fetch(req, Object.assign(env)) // Forward the current HTTP request to it
       .then(async (res) => await res.json())
       .then((r) => {
         /*return new Response(`{
