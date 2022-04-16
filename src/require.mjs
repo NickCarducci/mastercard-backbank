@@ -23,9 +23,7 @@ export class Require {
       this.el.blockConcurrencyWhile(async () => {
         let stored = await this.el.storage.get("require"); //Read requests	100,000 / day, ($free)
         this.state = stored || 0;
-        var b = (b) => console.log(b);
-        b();
-        this.b = b;
+        this.b = (b) => console.log(b);
       });
     // this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
   }
@@ -302,8 +300,9 @@ export class Require {
                           if (bre) break;
                         }*/
 
-                        if (maybe) set();
-                        return more ? loo(add--, sum) : null;
+                        return (
+                          maybe && set() && (more ? loo(add--, sum) : null)
+                        );
                       };
                     seratimNull(
                       variables,
