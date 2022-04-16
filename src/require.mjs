@@ -1482,7 +1482,7 @@ export class Require {
 
     //this named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
     //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
-    console.log("build product (of Require) :", JSON.stringify(build));
+    console.log("build product (of Require) :", build);
     const state = {
       //This...
       //The 'rest parameter:' spread a fat arrow's args for function arguments
@@ -1682,11 +1682,11 @@ export class Require {
     const dataHead = {
       "Content-Type": "application/json" //"text/plain"
     };
-    const str = JSON.stringify(state);
-    console.log("Require product :", str);
+    //const str = JSON.stringify(state);
+    console.log("Require product :", state);
     //return new Promise((resolve) => str && resolve(str));
 
-    return new Response(str, {
+    return new Response(state, {
       status: "200",
       message: "success: " + req.url,
       headers: dataHead
