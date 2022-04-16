@@ -14,10 +14,7 @@
 export class Require {
   constructor(el, env) {
     //logical && https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND#short-circuit_evaluation
-    console.log(
-      JSON.stringify(el.textContent),
-      "- From the example (Require) module"
-    ) &&
+    console.log(JSON.stringify(el), "- From the example (Require) module") &&
       (this.el = el) &&
       (this.env = env) &&
       this.el.blockConcurrencyWhile(async () => {
@@ -1689,13 +1686,10 @@ export class Require {
     console.log(str);
     //return new Promise((resolve) => str && resolve(str));
 
-    return (
-      str &&
-      new Response(str, {
-        status: "200",
-        message: "success: " + req.url,
-        headers: dataHead
-      })
-    );
+    return new Response(str, {
+      status: "200",
+      message: "success: " + req.url,
+      headers: dataHead
+    });
   }
 }
