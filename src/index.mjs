@@ -110,7 +110,8 @@ export class DurableObjectExample {
       return (
         this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
           //.then(async (r) => await r.clone().json())
-          .then(async (requirer) => {
+          .then(async (Requirer) => {
+            const requirer = new Requirer();
             console.log(
               "piped REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
               requirer
