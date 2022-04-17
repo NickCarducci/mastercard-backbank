@@ -49,24 +49,17 @@ export class DurableObjectExample {
       console.log(path, ": making require");
       const gotten = await getter(env.REQUIRE_CLASS_DURABLE_OBJECT);
       console.log("Require:", gotten);
-      return await gotten.fetch(req, env).then(
-        (
-          fetched = (res) => {
-            // Create an identity TransformStream (a.k.a. a pipe).
-            // The readable side will become our new response body.
-            let { readable, writable } = new TransformStream();
+      return await gotten.fetch(req, env).then((res) => {
+        // Create an identity TransformStream (a.k.a. a pipe).
+        // The readable side will become our new response body.
+        let { readable, writable } = new TransformStream();
 
-            // Start pumping the body. NOTE: No await!
-            res.body.pipeTo(writable);
+        // Start pumping the body. NOTE: No await!
+        res.body.pipeTo(writable);
 
-            // ... and deliver our Response while that’s running.
-            return new Response(readable, res);
-          }
-        ) => {
-          console.log("fetched REQUIRE_CLASS_DURABLE_OBJECT : ", fetched);
-          return fetched;
-        }
-      );
+        // ... and deliver our Response while that’s running.
+        return new Response(readable, res);
+      });
     };
   }
   //Omit  for syncronous defer, -ish
@@ -90,7 +83,10 @@ export class DurableObjectExample {
       return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
         .then(async (r) => await r.json())
         .then(async (requirer) => {
-          console.log("requirer", JSON.stringify(requirer));
+          console.log(
+            "fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
+            requirer
+          );
           const locs = requirer("mastercard-locations");
           const places = requirer("mastercard-places");
           const crs = requirer("cors");
