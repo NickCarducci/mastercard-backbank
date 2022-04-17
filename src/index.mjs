@@ -73,7 +73,7 @@ export class DurableObjectExample {
       //const requirer = this.makeRequire(req);
       //console.log("requirer: ", requirer);
       return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
-        .then(async (r) => await r.json())
+        //.then(async (r) => await r.json())
         .then(async (requirer) => {
           console.log("requirer", JSON.stringify(requirer));
           const locs = requirer("mastercard-locations");
