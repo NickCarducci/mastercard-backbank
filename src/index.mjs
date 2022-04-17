@@ -49,7 +49,9 @@ export class DurableObjectExample {
       console.log(path, ": making require");
       const gotten = await getter(env.REQUIRE_CLASS_DURABLE_OBJECT);
       console.log(gotten);
-      return await gotten.fetch(req, env);
+      const e = await gotten.fetch(req, env);
+      console.log(e);
+      return e;
     };
   }
   //Omit  for syncronous defer, -ish
