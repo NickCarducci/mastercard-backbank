@@ -52,10 +52,7 @@ export class DurableObjectExample {
       return await gotten
         .fetch(req, env)
         .then((fetched = (res) => res.body) => {
-          console.log(
-            "fetched REQUIRE_CLASS_DURABLE_OBJECT : ",
-            fetched.body()
-          );
+          console.log("fetched REQUIRE_CLASS_DURABLE_OBJECT : ", fetched.body);
           return fetched.body;
         });
     };
@@ -79,7 +76,7 @@ export class DurableObjectExample {
       //const requirer = this.makeRequire(req);
       //console.log("requirer: ", requirer);
       return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
-        //.then(async (r) => await r.json())
+        .then(async (r) => await r.text())
         .then(async (requirer) => {
           console.log("requirer", JSON.stringify(requirer));
           const locs = requirer("mastercard-locations");
