@@ -196,7 +196,6 @@ export class DurableObjectExample {
             methods: ["POST", "OPTIONS"],
             credentials: true
           });
-          const res = null;
           return cors(req, res, async () => {
             //res.set("Access-Control-Allow-Headers", "Content-Type");
             //res.set("Content-Type", "Application/JSON");
