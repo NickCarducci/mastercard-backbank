@@ -73,7 +73,7 @@ export class DurableObjectExample {
           console.log(
             "Received " +
               charsReceived +
-              " characters so far. Current chunk = " +
+              " Uint8-characters-in-Array so far. Current chunk = " +
               chunk
           );
 
@@ -81,7 +81,7 @@ export class DurableObjectExample {
 
           // Read some more, and call this function again
           reader.read().then(processText);
-          return result;
+          return String.fromCharCode.apply(null, result /*Uint8Array*/);
         });
       });
     };
