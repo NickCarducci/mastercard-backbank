@@ -66,9 +66,14 @@ export class DurableObjectExample {
         return reader.read().then(function processText({ done, value }) {
           // done = true, if the stream has already given you all its data.
           // value = some_data. Always undefined when done is true.
-          if (done)
-            return String.fromCharCode.apply(null, result /*Uint8Array*/); // console.log("Stream complete");
-
+          if (done) {
+            const product = String.fromCharCode.apply(
+              null,
+              result /*Uint8Array*/
+            );
+            console.log("Stream complete : ", product);
+            return product;
+          }
           charsReceived += value.length; // 'value' for fetch streams is a Uint8Array
           const chunk = value;
           console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
