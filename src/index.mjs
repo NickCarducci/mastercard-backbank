@@ -49,12 +49,24 @@ export class DurableObjectExample {
       console.log(path, ": making require");
       const gotten = await getter(env.REQUIRE_CLASS_DURABLE_OBJECT);
       console.log("Require:", gotten);
-      return await gotten
-        .fetch(req, env)
-        .then((fetched = (res) => res.body) => {
-          console.log("fetched REQUIRE_CLASS_DURABLE_OBJECT : ", fetched.body);
-          return fetched.body;
-        });
+      return await gotten.fetch(req, env).then(
+        (
+          fetched = (res) => {
+            // Create an identity TransformStream (a.k.a. a pipe).
+            // The readable side will become our new response body.
+            let { readable, writable } = new TransformStream();
+
+            // Start pumping the body. NOTE: No await!
+            res.body.pipeTo(writable);
+
+            // ... and deliver our Response while that’s running.
+            return new Response(readable, res);
+          }
+        ) => {
+          console.log("fetched REQUIRE_CLASS_DURABLE_OBJECT : ", fetched);
+          return fetched;
+        }
+      );
     };
   }
   //Omit  for syncronous defer, -ish
