@@ -48,8 +48,11 @@ export class DurableObjectExample {
           return await eo.get(id);
         },
         gotten = await getter(env.REQUIRE_CLASS_DURABLE_OBJECT);
-      console.log("Require:", gotten);
-      return gotten.fetch(req, env).then((res) => {
+      console.log("Require:", gotten); //fetch require request, build product (of Require), Require product
+      return gotten.fetch(
+        req,
+        env
+      ); /*.then((res) => {
         //let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
         //The readable side will become our new response body.
         //res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
@@ -70,7 +73,7 @@ export class DurableObjectExample {
             console.log("Stream complete : ", result);
             const product = String.fromCharCode.apply(
               null,
-              Array(result) /*Uint8Array*/
+              Array(result) /*Uint8Array*
             );
             console.log("Stream complete : ", product);
             return product;
@@ -82,7 +85,7 @@ export class DurableObjectExample {
 
           return reader.read().then(processText); // Read some more, and call this function again
         });
-      });
+      });*/
     };
   }
   //Omit  for syncronous defer, -ish
