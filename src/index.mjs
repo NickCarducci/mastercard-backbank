@@ -49,47 +49,41 @@ export class DurableObjectExample {
         },
         gotten = await getter(env.REQUIRE_CLASS_DURABLE_OBJECT);
       console.log("Require:", gotten);
-      return gotten.fetch(req, env).then(
-        (
-          res = (res) => {
-            console.log(
-              "fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
-              res
-            );
-            return res;
-          }
-        ) => {
-          //let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
-          //The readable side will become our new response body.
-          //res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
-          //return new Response(readable, res); //deliver running ReadableStream Running & Transformed to writable pipe
+      return gotten.fetch(req, env).then((res) => {
+        //let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
+        //The readable side will become our new response body.
+        //res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
+        //return new Response(readable, res); //deliver running ReadableStream Running & Transformed to writable pipe
 
-          const reader = res.body.getReader();
-          let charsReceived = 0,
-            result = "";
+        console.log(
+          "fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer body) :",
+          res.body
+        );
+        const reader = res.body.getReader();
+        let charsReceived = 0,
+          result = "";
 
-          return reader.read().then(function processText({ done, value }) {
-            // done = true, if the stream has already given you all its data.
-            // value = some_data. Always undefined when done is true.
-            if (done) return console.log("Stream complete");
+        return reader.read().then(function processText({ done, value }) {
+          // done = true, if the stream has already given you all its data.
+          // value = some_data. Always undefined when done is true.
+          if (done) return console.log("Stream complete");
 
-            charsReceived += value.length; // 'value' for fetch streams is a Uint8Array
-            const chunk = value;
-            console.log(
-              "Received " +
-                charsReceived +
-                " characters so far. Current chunk = " +
-                chunk
-            );
+          charsReceived += value.length; // 'value' for fetch streams is a Uint8Array
+          const chunk = value;
+          console.log(
+            "Received " +
+              charsReceived +
+              " characters so far. Current chunk = " +
+              chunk
+          );
 
-            result += chunk;
+          result += chunk;
 
-            // Read some more, and call this function again
-            reader.read().then(processText);
-            return result;
-          });
-        }
-      );
+          // Read some more, and call this function again
+          reader.read().then(processText);
+          return result;
+        });
+      });
     };
   }
   //Omit  for syncronous defer, -ish
