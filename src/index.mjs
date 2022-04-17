@@ -42,7 +42,10 @@ export class DurableObjectExample {
       });
     this.makeRequire = async (req) => {
       const path = new URL(req.url).pathname,
-        getter = async (eo) => await eo.get(eo.idFromName(path));
+        getter = async (eo) => {
+          const id = eo.idFromName(path);
+          return await eo.get(id);
+        };
       console.log(path, ": making require");
       const gotten = await getter(env.REQUIRE_CLASS_DURABLE_OBJECT);
       console.log(gotten);
