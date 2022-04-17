@@ -59,14 +59,35 @@ export class DurableObjectExample {
             return res;
           }
         ) => {
-          // Create an identity TransformStream (a.k.a. a pipe).
-          // The readable side will become our new response body.
-          let { readable, writable } = new TransformStream();
+          //let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
+          //The readable side will become our new response body.
+          //res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
+          //return new Response(readable, res); //deliver running ReadableStream Running & Transformed to writable pipe
 
-          // Start pumping the body. NOTE: No await!
-          res.body.pipeTo(writable);
-          // ... and deliver our Response while that’s running.
-          return new Response(readable, res);
+          const reader = res.body.getReader();
+          let charsReceived = 0,
+            result = "";
+
+          reader.read().then(function processText({ done, value }) {
+            // done = true, if the stream has already given you all its data.
+            // value = some_data. Always undefined when done is true.
+            if (done) return console.log("Stream complete");
+
+            charsReceived += value.length; // 'value' for fetch streams is a Uint8Array
+            const chunk = value;
+            console.log(
+              "Received " +
+                charsReceived +
+                " characters so far. Current chunk = " +
+                chunk
+            );
+
+            result += chunk;
+
+            // Read some more, and call this function again
+            return reader.read().then(processText);
+          });
+          return result;
         }
       );
     };
@@ -97,6 +118,7 @@ export class DurableObjectExample {
               "piped REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
               requirer
             );
+
             const locs = requirer("mastercard-locations");
             const places = requirer("mastercard-places");
             const crs = requirer("cors");
