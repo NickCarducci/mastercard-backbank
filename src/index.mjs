@@ -109,7 +109,12 @@ export class DurableObjectExample {
       //console.log("requirer: ", requirer);
       return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
         //.then(async (r) => await r.clone().json())
-        .then(async (requirer) => {
+        .then(async (res) => {
+          let { readable: requirer, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
+          //The readable side will become our new response body.
+          res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
+          //return new Response(readable, res); //deliver running ReadableStream Running & Transformed to writable pipe
+
           console.log(
             "piped REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
             requirer
