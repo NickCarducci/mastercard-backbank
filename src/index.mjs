@@ -68,7 +68,7 @@ export class DurableObjectExample {
           let charsReceived = 0,
             result = "";
 
-          reader.read().then(function processText({ done, value }) {
+          return reader.read().then(function processText({ done, value }) {
             // done = true, if the stream has already given you all its data.
             // value = some_data. Always undefined when done is true.
             if (done) return console.log("Stream complete");
@@ -85,9 +85,9 @@ export class DurableObjectExample {
             result += chunk;
 
             // Read some more, and call this function again
-            return reader.read().then(processText);
+            reader.read().then(processText);
+            return result;
           });
-          return result;
         }
       );
     };
