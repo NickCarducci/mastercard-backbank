@@ -67,9 +67,10 @@ export class DurableObjectExample {
           // done = true, if the stream has already given you all its data.
           // value = some_data. Always undefined when done is true.
           if (done) {
+            console.log("Stream complete : ", result);
             const product = String.fromCharCode.apply(
               null,
-              new Uint8Array(result) /*Uint8Array*/
+              Array(result) /*Uint8Array*/
             );
             console.log("Stream complete : ", product);
             return product;
