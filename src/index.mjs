@@ -52,7 +52,10 @@ export class DurableObjectExample {
       return await gotten
         .fetch(req, env)
         .then((fetched = (res) => res.body) => {
-          console.log("fetched REQUIRE_CLASS_DURABLE_OBJECT : ", fetched);
+          console.log(
+            "fetched REQUIRE_CLASS_DURABLE_OBJECT : ",
+            fetched.body()
+          );
           return fetched.body;
         });
     };
