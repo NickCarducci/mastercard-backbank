@@ -69,7 +69,7 @@ export class DurableObjectExample {
           if (done) {
             const product = String.fromCharCode.apply(
               null,
-              result /*Uint8Array*/
+              new Uint8Array(result) /*Uint8Array*/
             );
             console.log("Stream complete : ", product);
             return product;
