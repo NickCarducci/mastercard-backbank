@@ -5,9 +5,9 @@ export class DurableObjectExample {
       JSON.stringify(el),
       JSON.stringify(env)
     ); //el.textContent
-    this.handle = async (requ, req) => {
+    this.handle = async (req) => {
       //new Int32Array(requ)
-      var readable = requ.getReader(/*{ mode: "byob" }*/), //new FileReader(),
+      var readable = req.body.getReader(/*{ mode: "byob" }*/), //new FileReader(),
         result = "",
         charsReceived = 0, // Create a blob containing the worker code
         //const blob = new Blob(requi, { type: "text/javascript" });
@@ -32,7 +32,7 @@ export class DurableObjectExample {
               console.log("Stream complete : ", result);
               const product = String.fromCharCode.apply(
                 null,
-                Array(result) /*Uint8Array*/
+                new Int32Array(result) /*Uint8Array*/
               );
               console.log("Stream complete : ", product);
               return product;
@@ -173,7 +173,7 @@ export class DurableObjectExample {
       //console.log("this :", this);
       //const requirer = this.makeRequire(req);
       //console.log("requirer: ", requirer);
-      return await this.handle(req.body, req);
+      return await this.handle(req);
       // await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
       //.then(async (r) => await r.body.blob())
       /*.then(
