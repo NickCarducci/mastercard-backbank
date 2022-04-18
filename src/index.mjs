@@ -207,7 +207,7 @@ return new Response(
       //const requirer = this.makeRequire(req);
       //console.log("requirer: ", requirer);
       return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
-        .then(async (r) => await r.blob())
+        .then(async (r) => await r.body.blob())
         .then(
           (requireAsBlob) => {
             var reader = new FileReader(),
