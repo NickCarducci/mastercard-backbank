@@ -1467,9 +1467,90 @@ class Require {
       }
     }
 
-    //this named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
-    //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
-    console.log("build product (of Require) :", build);
+    build({}) && //'dependency require' STATE-sensitive exported methods
+    seratimNull(
+      variables,
+      "undefined",
+      ctxReqProps.forEach(
+        (prop) =>
+          (build[prop] = function () {
+            return ctxs[us].require[prop].apply(ctxs[us], arguments);
+          })
+      )
+    ) &&
+    (build.start = {
+      contexts: ctxs,
+      newRequireable
+    }) && //apply arguments to requires on context
+    //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but ctxs during builds//ticketx to apology tour
+    (isBrowser
+      ? (head = build.start.head = e_("base").tag(0)
+          ? baseElement.parentNode
+          : e_("head").tag())
+      : true) &&
+    //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
+    (build[_o] = (err) => err) && // node for the load command in browser env
+      (build.createNode = (CONFIG, tkn, url) => {
+        return {
+          ...(CONFIG.xhtml ? e_().create("NS") : e_().create()),
+          type: CONFIG.scriptType || "text/javascript",
+          charset: "utf-8",
+          async: true
+        };
+      }) &&
+      (build.load = (STATE, tkn, url) => {
+        // normalize, hasPathFallback, rmvScrpt, Module Do not overwrite an existing variables.REQUIREJS instance/ amd loader.
+        const CONFIG = (STATE && STATE.CONFIG) || {};
+        //handle load request (in browser env); 'STATE' for state, 'tkn' for name, 'url' for point
+        if (isBrowser) {
+          var n = build.createNode(CONFIG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
+          n[_SA](WINDOW.dr(), STATE.NAME);
+          n[_SA](WINDOW.dr(true), tkn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
+
+          if (
+            //prettier-ignore
+            n[_AE] &&!(n[_AE].toString && n[_AE].toString().indexOf("[native code") < 0) &&!isOpera
+          ) {
+            useInteractive = true;
+            n[_AE]("onreadystatechange", onScriptLoad); //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
+            //yet for 'interactive'-script, 'readyState' triggers by 'define' call IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
+            //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
+            //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
+          } else
+            (() => {
+              n[_AEL]("load", onScriptLoad, false);
+              n[_AEL](_e, onScriptError, false);
+            })(); //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', STATE.onScriptError);
+          n.src = url; //Calling onNodeCreated after all properties on the node have been
+          if (CONFIG.onNodeCreated) CONFIG.onNodeCreated(n, CONFIG, tkn, url); //set, but before it is placed in the DOM.
+          //IE 6-8 cache, script executes before the end
+          scriptPends = n; //of the appendChild execution, so to tie an anonymous define
+          if (baseElement) {
+            head.insertBefore(n, baseElement);
+          } else head.appendChild(n); //call to the this name (which is stored on the node), hold on to a reference to this node, but clear after the DOM insertion.
+          scriptPends = null;
+          return n; // bug in WebKit where the worker gets garbage-collected after calling
+        } else if (isWebWorker) {
+          try {
+            setTimeout(() => {}, 0) &&
+              //s eslint-disable-next-line
+              //importScripts(url);
+              STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
+          } catch (e) {
+            STATE[_o](
+              WINDOW.mk([
+                "importscripts",
+                `importScripts failed for ${tkn} at ${url}`,
+                e,
+                [tkn]
+              ])
+            );
+          } //type, msg, err, requireModules
+        }
+      }) &&
+      //this named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
+      //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
+      console.log("build product (of Require) :", build);
     const state = {
       //This...
       //The 'rest parameter:' spread a fat arrow's args for function arguments
@@ -1521,92 +1602,7 @@ class Require {
                 //build.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
                 //merely to prepend with 'use strict', don't bother
 
-                build({}) && //'dependency require' STATE-sensitive exported methods
-                seratimNull(
-                  variables,
-                  "undefined",
-                  ctxReqProps.forEach(
-                    (prop) =>
-                      (build[prop] = function () {
-                        return ctxs[us].require[prop].apply(
-                          ctxs[us],
-                          arguments
-                        );
-                      })
-                  )
-                ) &&
-                (build.start = {
-                  contexts: ctxs,
-                  newRequireable
-                }) && //apply arguments to requires on context
-                //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but ctxs during builds//ticketx to apology tour
-                (isBrowser
-                  ? (head = build.start.head = e_("base").tag(0)
-                      ? baseElement.parentNode
-                      : e_("head").tag())
-                  : true) &&
-                //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
-                (build[_o] = (err) => err) && // node for the load command in browser env
-                (build.createNode = (CONFIG, tkn, url) => {
-                  return {
-                    ...(CONFIG.xhtml ? e_().create("NS") : e_().create()),
-                    type: CONFIG.scriptType || "text/javascript",
-                    charset: "utf-8",
-                    async: true
-                  };
-                }) &&
-                (build.load = (STATE, tkn, url) => {
-                  // normalize, hasPathFallback, rmvScrpt, Module Do not overwrite an existing variables.REQUIREJS instance/ amd loader.
-                  const CONFIG = (STATE && STATE.CONFIG) || {};
-                  //handle load request (in browser env); 'STATE' for state, 'tkn' for name, 'url' for point
-                  if (isBrowser) {
-                    var n = build.createNode(CONFIG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
-                    n[_SA](WINDOW.dr(), STATE.NAME);
-                    n[_SA](WINDOW.dr(true), tkn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
-
-                    if (
-                      //prettier-ignore
-                      n[_AE] &&!(n[_AE].toString && n[_AE].toString().indexOf("[native code") < 0) &&!isOpera
-                    ) {
-                      useInteractive = true;
-                      n[_AE]("onreadystatechange", onScriptLoad); //IE (6-8) doesn't script-'onload,' right after executing the script, cannot "tie" anonymous define call to a name,
-                      //yet for 'interactive'-script, 'readyState' triggers by 'define' call IE9 "addEventListener and script onload firings" issues should actually 'onload' event script, right after the script execution
-                      //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
-                      //Opera.attachEvent does not follow the execution mode. IE9+ 404s, and 'onreadystatechange' fires before the 'error' handlerunless 'addEventListener,'
-                    } else
-                      (() => {
-                        n[_AEL]("load", onScriptLoad, false);
-                        n[_AEL](_e, onScriptError, false);
-                      })(); //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', STATE.onScriptError);
-                    n.src = url; //Calling onNodeCreated after all properties on the node have been
-                    if (CONFIG.onNodeCreated)
-                      CONFIG.onNodeCreated(n, CONFIG, tkn, url); //set, but before it is placed in the DOM.
-                    //IE 6-8 cache, script executes before the end
-                    scriptPends = n; //of the appendChild execution, so to tie an anonymous define
-                    if (baseElement) {
-                      head.insertBefore(n, baseElement);
-                    } else head.appendChild(n); //call to the this name (which is stored on the node), hold on to a reference to this node, but clear after the DOM insertion.
-                    scriptPends = null;
-                    return n; // bug in WebKit where the worker gets garbage-collected after calling
-                  } else if (isWebWorker) {
-                    try {
-                      setTimeout(() => {}, 0) &&
-                        //s eslint-disable-next-line
-                        //importScripts(url);
-                        STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
-                    } catch (e) {
-                      STATE[_o](
-                        WINDOW.mk([
-                          "importscripts",
-                          `importScripts failed for ${tkn} at ${url}`,
-                          e,
-                          [tkn]
-                        ])
-                      );
-                    } //type, msg, err, requireModules
-                  }
-                }) &&
-                (isBrowser && !variables.configuration.skipDataMain
+                isBrowser && !variables.configuration.skipDataMain
                   ? seratimNull(
                       variables,
                       "undefined",
@@ -1657,7 +1653,7 @@ class Require {
                               : [mainScript]) //Put the data-main script in the files to load.
                         )
                     )
-                  : true) &&
+                  : true &&
                 //Set up with STATE.CONFIG info.
                 build(variables.configuration)
               );
