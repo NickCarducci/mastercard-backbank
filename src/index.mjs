@@ -6,20 +6,43 @@ export class DurableObjectExample {
       JSON.stringify(env)
     ); //el.textContent
     this.handle = async (requi, req) => {
-      var reader = requi.getReader({ mode: "byob" }), //new FileReader(),
-        requir; // Create a blob containing the worker code
+      var readable = requi.getReader({ mode: "byob" }), //new FileReader(),
+        result = "",
+        charsReceived = 0; // Create a blob containing the worker code
       //const blob = new Blob(requi, { type: "text/javascript" });
 
       // Create a URL to give to the Worker constructor
       //const url = URL.createObjectURL(blob);
-      reader.readAsArrayBuffer(requi);
-      reader.onloadend = () => (requir = reader.result);
+      //reader.readAsArrayBuffer(requi);
+      //reader.onloadend = () => (requir = reader.result);
       /*console.log(
         "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
         requir
       );*/
       //const requirer = await requir.fetch(req);
       //.then(async (res) => await res.text());
+
+      const requir = await readable
+        .read()
+        .then(async function processText({ done, value }) {
+          // done = true, if the stream has already given you all its data.
+          // value = some_data. Always undefined when done is true.
+          if (done) {
+            console.log("Stream complete : ", result);
+            const product = String.fromCharCode.apply(
+              null,
+              Array(result) /*Uint8Array*/
+            );
+            console.log("Stream complete : ", product);
+            return product;
+          }
+          charsReceived += value.length; // 'value' for fetch streams is a Uint8Array
+          const chunk = value;
+          console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
+          result += chunk;
+          return await readable.read().then(processText); // Read some more, and call this function again
+        })
+        .then((R) => this.handle(R, req));
       console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
 
       const locs = requir("mastercard-locations");
