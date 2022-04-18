@@ -7,24 +7,13 @@ export class DurableObjectExample {
     ); //el.textContent
     this.handle = async (req) => {
       //new Int32Array(requ)
-      var readable = req.body.getReader({ mode: "byob" }), //new FileReader(),
+      var readable = req.getReader({ mode: "byob" }), //new FileReader(),
         result = "",
         charsReceived = 0, // Create a blob containing the worker code
         //const blob = new Blob(requi, { type: "text/javascript" });
 
-        // Create a URL to give to the Worker constructor
-        //const url = URL.createObjectURL(blob);
-        //reader.readAsArrayBuffer(requi);
-        //reader.onloadend = () => (requir = reader.result);
-        /*console.log(
-        "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
-        requir
-      );*/
-        //const requirer = await requir.fetch(req);
-        //.then(async (res) => await res.text());
-
         requir = await readable
-          .read()
+          .read(req.body)
           .then(async function processText({ done, value }) {
             // done = true, if the stream has already given you all its data.
             // value = some_data. Always undefined when done is true.
@@ -44,6 +33,16 @@ export class DurableObjectExample {
             return await readable.read().then(processText); // Read some more, and call this function again
           });
       //.then((R) => this.handle(R, req));
+      // Create a URL to give to the Worker constructor
+      //const url = URL.createObjectURL(blob);
+      //reader.readAsArrayBuffer(requi);
+      //reader.onloadend = () => (requir = reader.result);
+      /*console.log(
+        "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
+        requir
+      );*/
+      //const requirer = await requir.fetch(req);
+      //.then(async (res) => await res.text());
       console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
 
       const locs = requir("mastercard-locations");
