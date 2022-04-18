@@ -1718,9 +1718,9 @@ export class DurableObjectExample {
       //const requirer = await requir.fetch(req);
       //.then(async (res) => await res.text());
       //console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
-
-      const locs = new Require("mastercard-locations");
-      const places = new Require("mastercard-places");
+      const { require: requir } = new Require();
+      const locs = requir("mastercard-locations");
+      const places = requir("mastercard-places");
       //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
