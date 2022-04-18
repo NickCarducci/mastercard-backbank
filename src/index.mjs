@@ -1,19 +1,21 @@
 export class DurableObjectExample {
   constructor(el, env) {
-    this.handle = async (requir, req) => {
-      console.log(
+    console.log(
+      "Example headers, ev's :",
+      JSON.stringify(el),
+      JSON.stringify(env)
+    ); //el.textContent
+    this.handle = async (requir = (r) => r.text(), req) => {
+      /*console.log(
         "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
         requir
-      );
-      const requirer = await requir.fetch(req);
+      );*/
+      //const requirer = await requir.fetch(req);
       //.then(async (res) => await res.text());
-      console.log(
-        "Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
-        JSON.stringify(requirer)
-      );
+      console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
 
-      const locs = requirer("mastercard-locations");
-      const places = requirer("mastercard-places");
+      const locs = requir("mastercard-locations");
+      const places = requir("mastercard-places");
       //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
@@ -101,9 +103,7 @@ export class DurableObjectExample {
         );
       }
     };
-    console.log("Example headers :", JSON.stringify(el)) &&
-    console.log("Example environment variables :", JSON.stringify(env)) && //el.textContent
-      (this.el = el) &&
+    (this.el = el) &&
       (this.env = env) &&
       this.el.blockConcurrencyWhile(() => {
         let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
