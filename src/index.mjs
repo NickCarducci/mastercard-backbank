@@ -8,26 +8,27 @@ export class DurableObjectExample {
     this.handle = async (req) => {
       //new Int32Array(requ)
       var readable = req.body.getReader(/*{ mode: "byob" }*/), //new FileReader(),
-        result = "",
-        charsReceived = 0, // Create a blob containing the worker code
+        // Create a blob containing the worker code
         //const blob = new Blob(requi, { type: "text/javascript" });
-
+        stream,
+        charsReceived = 0,
         requir = await readable.read().then(async function processText(r) {
           // done = true, if the stream has already given you all its data.
           // value = some_data. Always undefined when done is true.
           if (r.done) {
-            console.log("Stream complete : ", result);
+            console.log("Stream complete : ", stream);
             const product = String.fromCharCode.apply(
               null,
-              new Int32Array(r.value.buffer) /*Uint8Array*/
+              new Uint8Array(stream) /*Uint8Array,Int32Array*/
             );
             console.log("Stream complete : ", product);
             return product;
           }
           charsReceived += r.value.length; // 'value' for fetch streams is a Uint8Array
-          const chunk = r.value;
-          console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
-          result += chunk;
+          console.log(
+            `Total (${charsReceived}) Uint8Array ck = (${r.value})++`
+          );
+          stream += r.value;
           return await readable.read().then(processText); // Read some more, and call this function again
         }); //https://developers.cloudflare.com/workers/platform/compatibility-dates/
       //.then((R) => this.handle(R, req));
