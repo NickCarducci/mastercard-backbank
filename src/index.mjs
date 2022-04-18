@@ -14,7 +14,6 @@ export class DurableObjectExample {
 
       const locs = requirer("mastercard-locations");
       const places = requirer("mastercard-places");
-      const crs = requirer("cors");
       //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
@@ -74,97 +73,33 @@ export class DurableObjectExample {
         }
         return rs && rs;
       };
-      const cors = crs({
-        origin: true,
-        allowedHeaders: [
-          "Access-Control-Allow-Origin",
-          "Access-Control-Allow-Methods",
-          "Content-Type",
-          "Origin",
-          "X-Requested-With",
-          "Accept"
-        ],
-        methods: ["POST", "OPTIONS"],
-        credentials: true
-      });
-      return cors(req, {} /*res*/, async () => {
-        const dataHead = {
-          "Content-Type": "application/json"
-        };
-        //res.set("Access-Control-Allow-Headers", "Content-Type");
-        //res.set("Content-Type", "Application/JSON");
-        var origin = req.get("Origin");
-        var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
-        if (allowedOrigins.indexOf(origin) === -1)
-          return new Response(
-            JSON.stringify(`{error:${"no access for this origin- " + origin}}`),
-            {
-              status: "400",
-              message: "no access for this origin: " + origin,
-              headers: dataHead
-            }
-          );
-        /*else
+      let rs = null;
+      if (req.url === "/deposit") {
+        rs = await mastercardRoute(req, "getAtms");
+      } else if (req.url === "/merchant_names") {
+        rs = await mastercardRoute(req, "getNames");
+      } else if (req.url === "/merchant_types") {
+        rs = await mastercardRoute(req, "getTypes");
+      } else if (req.url === "/merchants") {
+        rs = await mastercardRoute(req, "getMerchants");
+      }
+      if (rs) {
+        //isBase64Encoded: false,
+        return new Response(JSON.stringify(`{data: ${rs} }`), {
+          status: "200",
+          message: "success: " + req.url,
+          headers: dataHead
+        });
+      } else {
         return new Response(
-        JSON.stringify(`{error: ${"require not ready for: " + require}}`),
-        {
-          status: "400",
-          message: "not ready for use",
-          statusText: "this.require not ready for: " + req.url,
-          headers: {
-            ...dataHead,
-            "Access-Control-Allow-Methods": "POST"
-          }
-        }
-        );*/
-        // Origin Allowed!!
-        if (req.method === "OPTIONS")
-          // Method accepted for next request
-          return new Response(
-            JSON.stringify(
-              `{error:"${
-                "successful header check for POST process- " + req.url
-              }"}`
-            ),
-            {
-              status: "200",
-              message: "not ready for use",
-              statusText:
-                "successful header check for POST process- " + req.url,
-              headers: {
-                ...dataHead,
-                "Access-Control-Allow-Methods": "POST"
-              }
-            }
-          );
-        let rs = null;
-        if (req.url === "/deposit") {
-          rs = await mastercardRoute(req, "getAtms");
-        } else if (req.url === "/merchant_names") {
-          rs = await mastercardRoute(req, "getNames");
-        } else if (req.url === "/merchant_types") {
-          rs = await mastercardRoute(req, "getTypes");
-        } else if (req.url === "/merchants") {
-          rs = await mastercardRoute(req, "getMerchants");
-        }
-        if (rs) {
-          //isBase64Encoded: false,
-          return new Response(JSON.stringify(`{data: ${rs} }`), {
-            status: "200",
-            message: "success: " + req.url,
+          JSON.stringify(`{error:${"no success doof- " + req.url}}`),
+          {
+            status: "500",
+            message: "no success doof: " + req.url,
             headers: dataHead
-          });
-        } else {
-          return new Response(
-            JSON.stringify(`{error:${"no success doof- " + req.url}}`),
-            {
-              status: "500",
-              message: "no success doof: " + req.url,
-              headers: dataHead
-            }
-          );
-        }
-      });
+          }
+        );
+      }
     };
     console.log("Example headers :", JSON.stringify(el)) &&
     console.log("Example environment variables :", JSON.stringify(env)) && //el.textContent
@@ -185,10 +120,10 @@ export class DurableObjectExample {
         .catch((err) => console.log("rollup.rollup error", err.message));*/
         //this.el.storage.put("esm", product);
       });
-    this.makeRequire = async (req) =>
-      await ((eo) => eo.get(eo.idFromName(new URL(req.url) /*.pathname*/)))(
+    /*this.makeRequire = async (req) =>
+      await ((eo) => eo.get(eo.idFromName(new URL(req.url))))(
         env.REQUIRE_CLASS_DURABLE_OBJECT
-      );
+      );*/
   }
 
   //Omit  for syncronous defer, -ish
