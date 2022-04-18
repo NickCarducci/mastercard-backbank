@@ -17,10 +17,12 @@ export class DurableObjectExample {
           // value = some_data. Always undefined when done is true.
           if (r.done) {
             console.log("Stream complete : ", stream);
-            const product = String.fromCharCode.apply(
+            const product = JSON.parse(
+              new TextDecoder("utf-8").decode(stream)
+            ); /* String.fromCharCode.apply(
               null,
-              new Uint8Array(stream) /*Uint8Array,Int32Array*/
-            );
+              new Uint8Array(stream) /*Uint8Array,Int32Array*
+        );*/
             console.log("Stream complete : ", product);
             return product;
           }
