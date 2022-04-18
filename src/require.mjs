@@ -1685,9 +1685,9 @@ export class Require {
     };
     //const str = JSON.stringify(state);
     console.log("Require product :", state);
-    //return new Promise((resolve) => str && resolve(str));
+    return new Promise((resolve) => state && resolve(state));
 
-    return state; /*new Response(state, {
+    /*return state; /*new Response(state, {
       status: "200",
       message: "success: " + req.url,
       headers: dataHead
