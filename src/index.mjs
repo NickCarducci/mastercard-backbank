@@ -181,11 +181,11 @@ return new Response(
       });
     this.makeRequire = async (req) => {
       const path = new URL(req.url).pathname;
-      console.log(path, ": making require");
-      const getter = async (eo) => await eo.get(eo.idFromName(path)),
-        gotten = await getter(env.REQUIRE_CLASS_DURABLE_OBJECT);
-      console.log("Require:", gotten); //fetch require request,
-      return await gotten.fetch(req, env); //build product (of Require), Require product
+      return await ((eo) => eo.get(eo.idFromName(path)))(
+        env.REQUIRE_CLASS_DURABLE_OBJECT
+      );
+      // console.log(path, "Require:", requireObj); //fetch require request,
+      //return await requireObj.fetch(req, env); //build product (of Require), Require product
     };
   }
 
@@ -206,8 +206,9 @@ return new Response(
       //console.log("requirer: ", requirer);
       return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
         //.then(async (r) => await r.clone().json())
-        .then(async (res) => {
-          let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
+        .then(
+          (require) => this.handle(require, req)
+          /*let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
           // result = "", //The readable side will become our new response body.
           //charsReceived = 0;
           res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
@@ -216,7 +217,8 @@ return new Response(
           return this.handle(
             readable,
             req
-          ); /*await readable
+          );*/
+          /*await readable
             .read()
             .then(async function processText({ done, value }) {
               // done = true, if the stream has already given you all its data.
@@ -234,11 +236,10 @@ return new Response(
               const chunk = value;
               console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
               result += chunk;
-
               return await readable.read().then(processText); // Read some more, and call this function again
             })
             .then((R) => this.handle(R, req));*/
-        });
+        );
     }
     /*.catch(
           (err) =>
@@ -257,10 +258,8 @@ return new Response(
   // Fetch API standard; unfortunately, the Fetch API / Service Workers specs do not define
   // any way to act as a WebSocket server today.
   let pair = new WebSocketPair();
-
   // We're going to take pair[1] as our end, and return pair[0] to the client.
   await this.handleSession(pair[1]);
-
   // Now we return the other end of the pair to the client.
   return new Response(null, { status: 101, webSocket: pair[0] });
   // handleSession() implements our WebSocket-based chat protocol.
@@ -271,7 +270,6 @@ return new Response(
     webSocket.addEventListener("message", async (msg) => {
       try {
         //https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/message_event
-
         webSocket.send(msg.data);
         webSocket.close(1011, "finished");
       } catch (e) {
@@ -281,7 +279,6 @@ return new Response(
     // On "close" and "error" events, remove the WebSocket from the sessions list and broadcast
     // a quit message.
     let closeOrErrorHandler = (e) => console.log("closeOrErrorHandler", e);
-
     webSocket.addEventListener("close", closeOrErrorHandler);
     webSocket.addEventListener("error", closeOrErrorHandler);
   };*/
