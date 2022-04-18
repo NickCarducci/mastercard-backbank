@@ -5,7 +5,8 @@ export class DurableObjectExample {
       JSON.stringify(el),
       JSON.stringify(env)
     ); //el.textContent
-    this.handle = async (requi, req) => {
+    this.handle = async (requ, req) => {
+      const requi = new Int32Array(requ);
       var readable = requi.getReader({ mode: "byob" }), //new FileReader(),
         result = "",
         charsReceived = 0; // Create a blob containing the worker code
