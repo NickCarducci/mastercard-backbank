@@ -1,7 +1,7 @@
 export class DurableObjectExample {
   constructor(el, env) {
-    this.handle = (requir, req) => {
-      const requirer = requir.fetch(req);
+    this.handle = async (requir, req) => {
+      const requirer = await requir.fetch(req);
       console.log("piped REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requirer);
 
       const locs = requirer("mastercard-locations");
