@@ -2,9 +2,9 @@ export class DurableObjectExample {
   constructor(el, env) {
     this.handle = (requirer, req) => {
       console.log("piped REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requirer);
-      const locs = requirer("mastercard-locations");
-      const places = requirer("mastercard-places");
-      const crs = requirer("cors");
+      const locs = requirer.fetch("mastercard-locations");
+      const places = requirer.fetch("mastercard-places");
+      const crs = requirer.fetch("cors");
       //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
 
       var iMCard = null,
