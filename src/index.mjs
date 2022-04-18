@@ -187,8 +187,8 @@ export class DurableObjectExample {
         .catch((err) => console.log("rollup.rollup error", err.message));*/
         //this.el.storage.put("esm", product);
       });
-    this.makeRequire = (req) =>
-      ((eo) => eo.get(eo.idFromName(new URL(req.url) /*.pathname*/)))(
+    this.makeRequire = async (req) =>
+      await ((eo) => eo.get(eo.idFromName(new URL(req.url) /*.pathname*/)))(
         env.REQUIRE_CLASS_DURABLE_OBJECT
       );
   }
