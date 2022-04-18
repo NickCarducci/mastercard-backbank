@@ -191,7 +191,7 @@ return new Response(
         //this.el.storage.put("esm", product);
       });
     this.makeRequire = async (req) => {
-      const path = new URL(req.url).pathname;
+      const path = new URL(req.url); //.pathname;
       return await ((eo) => eo.get(eo.idFromName(path)))(
         env.REQUIRE_CLASS_DURABLE_OBJECT
       );
