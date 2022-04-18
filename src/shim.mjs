@@ -46,23 +46,23 @@ async function noException(req, env) {
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   //https://linc.sh/blog/durable-objects-in-production
   //const clientId = request.headers.get("cf-connecting-ip");
-  const href = new URL(req.url); //.pathname;//path
-  var origin = href.origin; // request.headers.get("Origin");
+  const urlObject = new URL(req.url); //.pathname;//path
+  var origin = urlObject.origin; // request.headers.get("Origin");
   var allowedOrigins = [
     "https://vau.money",
     "https://jwi5k.csb.app",
     "https://mastercard-backbank.backbank.workers.dev"
   ];
   if (allowedOrigins.indexOf(origin) === -1) return noaccess(origin);
-  console.log("env", env, href, ": making example class durable object");
-  return await ((eo) => eo.get(eo.idFromName(href)))(
+  console.log("env", env, origin, ": making example class durable object");
+  return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
     env.REQUIRE_CLASS_DURABLE_OBJECT
   )
     .fetch(req)
     .then(
       async (requir) =>
         //env.instanceR &&
-        await ((eo) => eo.get(eo.idFromName(href)))(
+        await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
           env.EXAMPLE_CLASS_DURABLE_OBJECT
         )
           .fetch(req, {
