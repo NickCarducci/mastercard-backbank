@@ -7,13 +7,13 @@ export class DurableObjectExample {
     ); //el.textContent
     this.handle = async (req) => {
       //new Int32Array(requ)
-      var readable = req.body.getReader({ mode: "byob" }), //new FileReader(),
+      var readable = req.body.getReader(/*{ mode: "byob" }*/), //new FileReader(),
         result = "",
         charsReceived = 0, // Create a blob containing the worker code
         //const blob = new Blob(requi, { type: "text/javascript" });
 
         requir = await readable
-          .read(req.body)
+          .read()
           .then(async function processText({ done, value }) {
             // done = true, if the stream has already given you all its data.
             // value = some_data. Always undefined when done is true.
@@ -21,7 +21,7 @@ export class DurableObjectExample {
               console.log("Stream complete : ", result);
               const product = String.fromCharCode.apply(
                 null,
-                new Int32Array(result) /*Uint8Array*/
+                new Int32Array(result.value.buffer) /*Uint8Array*/
               );
               console.log("Stream complete : ", product);
               return product;
@@ -31,7 +31,7 @@ export class DurableObjectExample {
             console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
             result += chunk;
             return await readable.read().then(processText); // Read some more, and call this function again
-          });
+          }); //https://developers.cloudflare.com/workers/platform/compatibility-dates/
       //.then((R) => this.handle(R, req));
       // Create a URL to give to the Worker constructor
       //const url = URL.createObjectURL(blob);
