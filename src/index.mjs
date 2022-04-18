@@ -5,7 +5,29 @@ export class DurableObjectExample {
       JSON.stringify(el),
       JSON.stringify(env)
     ); //el.textContent
-    this.handle = async (requir = (r) => r.text(), req) => {
+    this.handle = async (requi, req) => {
+      const requir = requi
+        .read()
+        .then(async function processText({ done, value }) {
+          var result = "",
+            charsReceived = 0;
+          // done = true, if the stream has already given you all its data.
+          // value = some_data. Always undefined when done is true.
+          if (done) {
+            console.log("Stream complete : ", result);
+            const product = String.fromCharCode.apply(
+              null,
+              Array(result) /*Uint8Array*/
+            );
+            console.log("Stream complete : ", product);
+            return product;
+          }
+          charsReceived += value.length; // 'value' for fetch streams is a Uint8Array
+          const chunk = value;
+          console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
+          result += chunk;
+          return await requi.read().then(processText); // Read some more, and call this function again
+        });
       /*console.log(
         "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
         requir
@@ -88,17 +110,17 @@ export class DurableObjectExample {
       if (rs) {
         //isBase64Encoded: false,
         return new Response(JSON.stringify(`{data: ${rs} }`), {
-          status: "200",
+          status: 200,
           message: "success: " + req.url,
-          headers: dataHead
+          headers: { "Content-Type": "application/json" }
         });
       } else {
         return new Response(
           JSON.stringify(`{error:${"no success doof- " + req.url}}`),
           {
-            status: "500",
+            status: 500,
             message: "no success doof: " + req.url,
-            headers: dataHead
+            headers: { "Content-Type": "application/json" }
           }
         );
       }
@@ -134,7 +156,7 @@ export class DurableObjectExample {
         status: "400",
         message: "not ready for use",
         statusText: "still retrieving {Key: Value} storage: " + req.url,
-        headers: dataHead
+        headers: { "Content-Type": "application/json" }
       });
       //const require =  makeRequire(req, env);
     } else {
