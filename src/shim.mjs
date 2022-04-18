@@ -69,7 +69,7 @@ async function noException(req, env) {
             "Content-Type": "application/json"
           },
           method: "POST",
-          body: requir
+          body: requir.arrayBuffer()
         }) // Forward the current HTTP request to it
         .then(async (res) => await res.json())
         .then((r) => {
