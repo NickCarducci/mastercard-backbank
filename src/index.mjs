@@ -15,11 +15,6 @@ export class DurableObjectExample {
         requir = await readable.read().then(async function processText(r) {
           // done = true, if the stream has already given you all its data.
           // value = some_data. Always undefined when done is true.
-          charsReceived += r.value.length; // 'value' for fetch streams is a Uint8Array
-          console.log(
-            `Total (${charsReceived}) Uint8Array ck = (${r.value})++`
-          );
-          stream += r.value;
           if (r.done) {
             console.log("Stream complete : ", stream);
             const product = new TextDecoder("utf-8").decode(
@@ -32,6 +27,11 @@ export class DurableObjectExample {
             console.log("Stream complete : ", product);
             return product;
           }
+          charsReceived += r.value.length; // 'value' for fetch streams is a Uint8Array
+          console.log(
+            `Total (${charsReceived}) Uint8Array ck = (${r.value})++`
+          );
+          stream += r.value;
           return await readable.read().then(processText); // Read some more, and call this function again
         }); //https://developers.cloudflare.com/workers/platform/compatibility-dates/
       //.then((R) => this.handle(R, req));
