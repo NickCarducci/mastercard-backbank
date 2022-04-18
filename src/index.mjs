@@ -2,10 +2,12 @@ export class DurableObjectExample {
   constructor(el, env) {
     this.handle = async (requir, req) => {
       console.log(
-        "handled/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
+        "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
         requir
       );
-      const requirer = await requir.fetch(req);
+      const requirer = await requir
+        .fetch(req)
+        .then(async (res) => await res.json());
       console.log(
         "Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
         requirer
