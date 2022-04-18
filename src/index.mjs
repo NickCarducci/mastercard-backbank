@@ -141,9 +141,10 @@ export class DurableObjectExample {
       //console.log("this :", this);
       //const requirer = this.makeRequire(req);
       //console.log("requirer: ", requirer);
-      return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
-        //.then(async (r) => await r.body.blob())
-        .then(
+      return await this.handle(req.body, req);
+      // await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
+      //.then(async (r) => await r.body.blob())
+      /*.then(
           async (requireObj) =>
             /*{
             var reader = new FileReader(),
@@ -152,11 +153,11 @@ export class DurableObjectExample {
             reader.onloadend = async () =>
               (result = await this.handle(reader.result, req));
             return new Promise((resolve) => result && resolve(result));
-          }*/ await this.handle(
+          }* await this.handle(
               requireObj, //requireAsBlob,
               req
-            )
-          /*let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
+            )*/
+      /*let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
           // result = "", //The readable side will become our new response body.
           //charsReceived = 0;
           res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
@@ -166,7 +167,7 @@ export class DurableObjectExample {
             readable,
             req
           );*/
-          /*await readable
+      /*await readable
             .read()
             .then(async function processText({ done, value }) {
               // done = true, if the stream has already given you all its data.
@@ -187,7 +188,6 @@ export class DurableObjectExample {
               return await readable.read().then(processText); // Read some more, and call this function again
             })
             .then((R) => this.handle(R, req));*/
-        );
     }
     /*.catch(
           (err) =>
