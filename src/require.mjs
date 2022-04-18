@@ -1018,57 +1018,57 @@ export class Require {
       isOpera =
         //s eslint-disable-next-line
         false; //T(opera !== _n) && opera.toString() === "[object Opera]";
-    /*
-  e_
-  mixin
-  WINDOW.mk
-  concat
+    /*  
+      e_
+    mixin
+    WINDOW.mk
+    concat
 
-  require=(dep,to)=>{
-    define
-    configuration(config?!require,build)
-    convertName
-    rmvScript
-    hasPathFallback
-    parseName
-    normalize
-    this
-    Module
-    build
-    obj
+    require=(dep,to)=>{
+      define
+      configuration(config?!require,build)
+      convertName
+      rmvScript
+      hasPathFallback
+      parseName
+      normalize
+      this
+      Module
+      build
+      obj
 
-    require=build
-    newRequireable = {
-      STATE:{STATE.CONFIG}
-      STATE.dependencies
-      makeModuleMap
-      getModule
-      on
-      onError
-      handlers
-      clrRegstr
-      checkLoaded
-      init
-      normalizeMod
-      Module[_P]={init,defineDep,fetch,load,check,callPlugin,enable,on,emit}
-      callGetModule
-      getScriptData
-      tkeGblQue
-      evt
-      STATE:{…initial:{STATE.CONFIG}}
-      STATE.require = STATE.makeRequire()
-      return STATE
+      require=build
+      newRequireable = {
+        STATE:{STATE.CONFIG}
+        STATE.dependencies
+        makeModuleMap
+        getModule
+        on
+        onError
+        handlers
+        clrRegstr
+        checkLoaded
+        init
+        normalizeMod
+        Module[_P]={init,defineDep,fetch,load,check,callPlugin,enable,on,emit}
+        callGetModule
+        getScriptData
+        tkeGblQue
+        evt
+        STATE:{…initial:{STATE.CONFIG}}
+        STATE.require = STATE.makeRequire()
+        return STATE
+      }
+      
+      s = build.start
+      build({})
+      ctxReqProps
+      head
+      onError,createNode,load
+      exec 
+      build()
     }
-    
-    s = build.start
-    build({})
-    ctxReqProps
-    head
-    onError,createNode,load
-    exec 
-    build()
-  }
-  */
+    */
 
     function nameToUrl() {
       //token, ext, skipExt, pkgMain
@@ -1489,7 +1489,7 @@ export class Require {
       //The 'rest parameter:' spread a fat arrow's args for function arguments
       /*iifeapp: (ths) => {
     return (...args) => new iifeapp(ths)(args);
-  },*/ //(object/class/prototype-'this'-prop)
+    }, */ //(object/class/prototype-'this'-prop)
       build, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'build' function
       require:
         /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
@@ -1685,12 +1685,12 @@ export class Require {
     };
     //const str = JSON.stringify(state);
     console.log("Require product :", state);
-    return new Promise((resolve) => state && resolve(state));
-
-    /*return state; /*new Response(state, {
+    //return new Promise((resolve) => state && resolve(state));
+    //needs to be Promise and also Response  is Readable Stream (blob)
+    return new Response(state, {
       status: "200",
       message: "success: " + req.url,
       headers: dataHead
-    });*/
+    });
   }
 }
