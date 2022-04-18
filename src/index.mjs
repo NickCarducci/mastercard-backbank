@@ -6,10 +6,14 @@ export class DurableObjectExample {
       JSON.stringify(env)
     ); //el.textContent
     this.handle = async (requi, req) => {
-      var reader = new FileReader(),
-        requir;
-      reader.readAsDataURL(requi);
-      reader.onloadend = async () => (requir = reader.result);
+      var reader = requi.getReader({ mode: "byob" }), //new FileReader(),
+        requir; // Create a blob containing the worker code
+      //const blob = new Blob(requi, { type: "text/javascript" });
+
+      // Create a URL to give to the Worker constructor
+      //const url = URL.createObjectURL(blob);
+      reader.readAsArrayBuffer(requi);
+      reader.onloadend = () => (requir = reader.result);
       /*console.log(
         "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
         requir
