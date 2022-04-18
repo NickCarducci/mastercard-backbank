@@ -24,17 +24,6 @@ export default {
             "Access-Control-Allow-Methods": ["POST", "OPTIONS"]
           }
         });
-      var origin = request.headers.get("Origin");
-      var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
-      if (allowedOrigins.indexOf(origin) === -1)
-        return new Response(
-          JSON.stringify(`{error:${"no access for this origin- " + origin}}`),
-          {
-            status: "400",
-            message: "no access for this origin: " + origin,
-            headers: { "Content-Type": "application/json" }
-          }
-        );
       return await noException(request, env);
       // wrap the body of your callback in a try/catch block to ensure it cannot throw an exception.
       // is return, "the body?"
@@ -43,63 +32,78 @@ export default {
     }
   }
 };
+const noaccess = (origin) =>
+  new Response(
+    JSON.stringify(`{error:${"no access for this origin- " + origin}}`),
+    {
+      status: "400",
+      message: "no access for this origin: " + origin
+      //headers: { "Content-Type": "application/json" }
+    }
+  );
 async function noException(req, env) {
   // key => Object ID; return new Response(JSON.stringify(backbank));
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   //https://linc.sh/blog/durable-objects-in-production
   //const clientId = request.headers.get("cf-connecting-ip");
   const href = new URL(req.url); //.pathname;//path
-  //Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path);
-  //env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
-
-  const makeRequire = ((eo) => eo.get(eo.idFromName(href)))(
-    env.REQUIRE_CLASS_DURABLE_OBJECT
-  );
+  var origin = href.origin; // request.headers.get("Origin");
+  var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
+  if (allowedOrigins.indexOf(origin) === -1) return noaccess(origin);
   console.log("env", env, href, ": making example class durable object");
-  const makeExample = ((eo) => eo.get(eo.idFromName(href)))(
-    env.EXAMPLE_CLASS_DURABLE_OBJECT
-  );
-
-  return await makeRequire.fetch(req).then(
-    async (requir) =>
-      //env.instanceR &&
-      await makeExample
-        .fetch(req, {
-          /*headers:{
+  return await ((eo) => eo.get(eo.idFromName(href)))(
+    env.REQUIRE_CLASS_DURABLE_OBJECT
+  )
+    .fetch(req)
+    .then(
+      async (requir) =>
+        //env.instanceR &&
+        await ((eo) => eo.get(eo.idFromName(href)))(
+          env.EXAMPLE_CLASS_DURABLE_OBJECT
+        )
+          .fetch(req, {
+            /*headers:{
             "Content-Type": "application/json"},*/
-          body: JSON.stringify(requir)
-        }) // Forward the current HTTP request to it
-        .then(async (res) => await res.json())
-        .then((r) => {
-          console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
-          /*return new Response(`{
+            body: JSON.stringify(requir)
+          }) // Forward the current HTTP request to it
+          .then(async (res) => await res.json())
+          .then((r) => {
+            console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
+            /*return new Response(`{
         ok: true,
         data: ${r}
     }`);*/
-          const dataHead = {
-              "Content-Type": "application/json"
-            },
-            responseobject = (key, r, ok) => `{${key}: ${r}, ${ok}}`;
+            const dataHead = {
+                "Content-Type": "application/json"
+              },
+              responseobject = (keyValue, ok) =>
+                `{${keyValue[0]}: ${keyValue[1]}, ${ok}}`;
 
-          return !r
-            ? new Response(responseobject("data", {}), {
-                status: "no response from durable object chain",
-                message: "",
-                headers: dataHead
-              })
-            : !r.data
-            ? new Response(responseobject("response", JSON.stringify(r)), {
-                status: r.status,
-                message: r.statusText ? r.statusText : r.message,
-                headers: dataHead
-              })
-            : new Response(responseobject(true, JSON.stringify(r.data), true), {
-                status: "200",
-                message: "success: " + req.url,
-                headers: dataHead
-              });
-        })
-  );
+            return !r
+              ? new Response(responseobject(["data", {}], false), {
+                  status: "no response from durable object chain",
+                  message: "",
+                  headers: dataHead
+                })
+              : !r.data
+              ? new Response(
+                  responseobject(["response", JSON.stringify(r)], false),
+                  {
+                    status: r.status,
+                    message: r.statusText ? r.statusText : r.message,
+                    headers: dataHead
+                  }
+                )
+              : new Response(
+                  responseobject([true, JSON.stringify(r.data)], true),
+                  {
+                    status: "200",
+                    message: "success: " + req.url,
+                    headers: dataHead
+                  }
+                );
+          })
+    );
   //new Response({})
 }
 //new instance class fetch waits without await
