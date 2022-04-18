@@ -10,7 +10,7 @@ export class DurableObjectExample {
       var readable = req.body.getReader(/*{ mode: "byob" }*/), //new FileReader(),
         // Create a blob containing the worker code
         //const blob = new Blob(requi, { type: "text/javascript" });
-        stream,
+        stream = "",
         charsReceived = 0,
         requir = await readable.read().then(async function processText(r) {
           // done = true, if the stream has already given you all its data.
