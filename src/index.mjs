@@ -207,9 +207,16 @@ return new Response(
       //const requirer = this.makeRequire(req);
       //console.log("requirer: ", requirer);
       return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
-        //.then(async (r) => await r.clone().json())
+        .then(async (r) => await r.blob())
         .then(
-          (require) => this.handle(require, req)
+          (requireAsBlob) => {
+            var reader = new FileReader(),
+              result;
+            reader.readAsDataURL(requireAsBlob);
+            reader.onloadend = async () =>
+              (result = await this.handle(reader.result, req));
+            return new Promise((resolve) => result && resolve(result));
+          }
           /*let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
           // result = "", //The readable side will become our new response body.
           //charsReceived = 0;
