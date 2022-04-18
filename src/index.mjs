@@ -342,7 +342,7 @@ class Require {
         } // Determine if have STATE.CONFIG object in the call. ds is a STATE.CONFIG object Adjust args if there are STATE.dependencies
         NAME = cfg && cfg.context ? cfg.context : NAME;
         ctx = e_(ctxs).yes(NAME) && ctxs[NAME];
-        ctx = ctx ? ctx : (ctxs[NAME] = new build.start.newRequireable(NAME)); //dependency
+        ctx = ctx ? ctx : (ctxs[NAME] = build.start.newRequireable(NAME)); //dependency
         cfg && ctx.configure(cfg);
         return ctx.require(ds, cb, eb);
       }),
@@ -1368,103 +1368,99 @@ class Require {
         );
       };
 
-    class newRequireable {
-      constructor() {
-        const NAME = arguments[0];
+    function newRequireable() {
+      const NAME = arguments[0];
 
-        [
-          "dependencies",
-          "enRgtry",
-          "unDE",
-          "defined",
-          "urlFchd",
-          "bdlMap"
-        ].forEach((k) => (this[k] = {})) && //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
-          checkLoaded(this) &&
-          (STATE = {
-            NAME,
-            defQueue,
-            defQueueMap: {},
-            makeModuleMap,
-            nextTick: build.nextTick,
-            Module,
-            load: (id, url) => build.load(STATE, id, url),
-            execCb: (name, cb, args, exports) => cb.apply(exports, args),
-            onError,
-            CONFIG: STATE.CONFIG,
-            unDe: this.unDE ? this.unDE : {},
-            enRgtry: this.enRgtry ? this.enRgtry : {},
-            urlFchd: this.urlFchd ? this.urlFchd : {}, //this able's
-            defined: this.defined ? this.defined : {},
-            dependencies: this.dependencies ? this.dependencies : {},
-            configure,
-            makeShimExports: (value) =>
-              function () {
-                return (
-                  (value[_i] && value[_i].apply(dependency, arguments)) ||
-                  (value[_x] && getGlobal(value[_x]))
-                );
-              }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
-            /* makeShimExports: (value) =>
+      [
+        "dependencies",
+        "enRgtry",
+        "unDE",
+        "defined",
+        "urlFchd",
+        "bdlMap"
+      ].forEach((k) => (this[k] = {})) && //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
+        checkLoaded(this) &&
+        (STATE = {
+          NAME,
+          defQueue,
+          defQueueMap: {},
+          makeModuleMap,
+          nextTick: build.nextTick,
+          Module,
+          load: (id, url) => build.load(STATE, id, url),
+          execCb: (name, cb, args, exports) => cb.apply(exports, args),
+          onError,
+          CONFIG: STATE.CONFIG,
+          unDe: this.unDE ? this.unDE : {},
+          enRgtry: this.enRgtry ? this.enRgtry : {},
+          urlFchd: this.urlFchd ? this.urlFchd : {}, //this able's
+          defined: this.defined ? this.defined : {},
+          dependencies: this.dependencies ? this.dependencies : {},
+          configure,
+          makeShimExports: (value) =>
+            function () {
+              return (
+                (value[_i] && value[_i].apply(dependency, arguments)) ||
+                (value[_x] && getGlobal(value[_x]))
+              );
+            }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
+          /* makeShimExports: (value) =>
           function () {
             return (
               (value[_i] && value[_i].apply(dependency, arguments)) ||
               (value[_x] && getGlobal(value[_x]))
             );
           }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
-            makeRequire: (relMap, options) =>
-              makeRequire(relMap, options, NAME),
-            require: STATE.makeRequire(),
-            enable: (depMap) =>
-              e_(STATE.dependencies).yes(depMap.id) &&
-              STATE.dependencies[depMap.id] &&
-              getModule(depMap).enable(),
-            //if "m" this is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
-            completeLoad: (tkn) => {
-              var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
-              for (tkeGblQue(); defQueue.length; ) {
-                defQueue.shift();
-                if (found) break;
-                (found = true) && //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
-                  (args = args[0] =
-                    args[0] === null
-                      ? tkn
-                      : args[0] === tkn
-                      ? (found = true)
-                      : null) &&
-                  callGetModule(args);
-              } //matched a define call in this script
-              STATE.defQueueMap = {};
-              var m =
-                e_(STATE.dependencies).yes(tkn) && STATE.dependencies[tkn]; // in case-/init-calls change the STATE.dependencies
-              if (!found && !e_(STATE.defined).yes(tkn) && m && !m.inited) {
-                var shim = e_(STATE.CONFIG.shim).yes(tkn)
-                  ? STATE.CONFIG.shim[tkn]
-                  : {};
-                if (
-                  STATE.CONFIG.enforceDefine &&
-                  (!shim[_x] || !getGlobal(shim[_x]))
-                )
-                  return (
-                    !WINDOW.hasPathFallback(tkn, STATE.CONFIG.paths) &&
-                    onError(
-                      WINDOW.mk([
-                        "nodefine",
-                        "No define call for " + tkn,
-                        null,
-                        [tkn]
-                      ])
-                    )
-                  ); //type, msg, err, requireModules
-                callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
-              }
-              return (
-                checkLoaded() && true //tkn = moduleName
-              );
+          makeRequire: (relMap, options) => makeRequire(relMap, options, NAME),
+          require: STATE.makeRequire(),
+          enable: (depMap) =>
+            e_(STATE.dependencies).yes(depMap.id) &&
+            STATE.dependencies[depMap.id] &&
+            getModule(depMap).enable(),
+          //if "m" this is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
+          completeLoad: (tkn) => {
+            var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
+            for (tkeGblQue(); defQueue.length; ) {
+              defQueue.shift();
+              if (found) break;
+              (found = true) && //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
+                (args = args[0] =
+                  args[0] === null
+                    ? tkn
+                    : args[0] === tkn
+                    ? (found = true)
+                    : null) &&
+                callGetModule(args);
+            } //matched a define call in this script
+            STATE.defQueueMap = {};
+            var m = e_(STATE.dependencies).yes(tkn) && STATE.dependencies[tkn]; // in case-/init-calls change the STATE.dependencies
+            if (!found && !e_(STATE.defined).yes(tkn) && m && !m.inited) {
+              var shim = e_(STATE.CONFIG.shim).yes(tkn)
+                ? STATE.CONFIG.shim[tkn]
+                : {};
+              if (
+                STATE.CONFIG.enforceDefine &&
+                (!shim[_x] || !getGlobal(shim[_x]))
+              )
+                return (
+                  !WINDOW.hasPathFallback(tkn, STATE.CONFIG.paths) &&
+                  onError(
+                    WINDOW.mk([
+                      "nodefine",
+                      "No define call for " + tkn,
+                      null,
+                      [tkn]
+                    ])
+                  )
+                ); //type, msg, err, requireModules
+              callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
             }
-          }) &&
-          _K(STATE).forEach((key) => (this[key] = STATE[key]));
-      }
+            return (
+              checkLoaded() && true //tkn = moduleName
+            );
+          }
+        }) &&
+        _K(STATE).forEach((key) => (this[key] = STATE[key]));
     }
 
     build({}) && //'dependency require' STATE-sensitive exported methods
@@ -1584,12 +1580,11 @@ class Require {
                   T(setTimeout !== _n) ? setTimeout(fn, 4) : fn()
               }; // globally agreed names for other potential AMD loaders
 
-              return (
-                seratimNull(
-                  variables,
-                  "undefined",
-                  _K(obj).forEach((key) => (build[key] = obj[key]))
-                ) &&
+              return seratimNull(
+                variables,
+                "undefined",
+                _K(obj).forEach((key) => (build[key] = obj[key]))
+              ) &&
                 // if (!require) require = build; //Exportable require
                 seratimNull(
                   variables,
@@ -1602,61 +1597,61 @@ class Require {
                 //build.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
                 //merely to prepend with 'use strict', don't bother
 
-                isBrowser && !variables.configuration.skipDataMain
-                  ? seratimNull(
-                      variables,
-                      "undefined",
-                      e_()
-                        .tag()
-                        .sort((a, b) => b - a)
-                        .forEach(
-                          (
-                            { head, dataMain } = (script) => {
-                              const pro = head
-                                ? { head, dataMain }
-                                : {
-                                    head: script.parentNode,
-                                    dataMain: script.getAttribute("data-main")
-                                  };
-                              return (
-                                (head = pro.head) &&
-                                (dataMain = pro.dataMain) &&
-                                pro
-                              );
-                            }
-                          ) =>
-                            dataMain &&
-                            //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
+                isBrowser &&
+                !variables.configuration.skipDataMain
+                ? seratimNull(
+                    variables,
+                    "undefined",
+                    e_()
+                      .tag()
+                      .sort((a, b) => b - a)
+                      .forEach(
+                        (
+                          { head, dataMain } = (script) => {
+                            const pro = head
+                              ? { head, dataMain }
+                              : {
+                                  head: script.parentNode,
+                                  dataMain: script.getAttribute("data-main")
+                                };
+                            return (
+                              (head = pro.head) &&
+                              (dataMain = pro.dataMain) &&
+                              pro
+                            );
+                          }
+                        ) =>
+                          dataMain &&
+                          //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
 
-                            seratimNull(
-                              variables,
-                              "undefined",
-                              (mainScript = dataMain ? dataMain : mainScript)
-                            ) && //Preserve dataMain in case it is a path (i.e. contains '?')
-                            (!variables.configuration.baseUrl &&
-                            mainScript.indexOf("!") === -1
-                              ? (src = mainScript.split("/")) &&
-                                (mainScript = src.pop()) &&
-                                (subPath = src.length
-                                  ? src.join("/") + "/"
-                                  : "./") &&
-                                (variables.configuration.baseUrl = subPath)
-                              : true) &&
-                            //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
-                            (mainScript = mainScript.replace(/\.js$/, "")) && //If mainScript is still a mere path, fall back to dataMain
-                            (/^[/:?.]|(.js)$/.test(mainScript)
-                              ? (mainScript = dataMain)
-                              : true) && //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
-                            (variables.configuration.ds = variables
-                              .configuration.ds
-                              ? variables.configuration.ds.concat(mainScript)
-                              : [mainScript]) //Put the data-main script in the files to load.
-                        )
-                    )
-                  : true &&
-                //Set up with STATE.CONFIG info.
-                build(variables.configuration)
-              );
+                          seratimNull(
+                            variables,
+                            "undefined",
+                            (mainScript = dataMain ? dataMain : mainScript)
+                          ) && //Preserve dataMain in case it is a path (i.e. contains '?')
+                          (!variables.configuration.baseUrl &&
+                          mainScript.indexOf("!") === -1
+                            ? (src = mainScript.split("/")) &&
+                              (mainScript = src.pop()) &&
+                              (subPath = src.length
+                                ? src.join("/") + "/"
+                                : "./") &&
+                              (variables.configuration.baseUrl = subPath)
+                            : true) &&
+                          //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
+                          (mainScript = mainScript.replace(/\.js$/, "")) && //If mainScript is still a mere path, fall back to dataMain
+                          (/^[/:?.]|(.js)$/.test(mainScript)
+                            ? (mainScript = dataMain)
+                            : true) && //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
+                          (variables.configuration.ds = variables.configuration
+                            .ds
+                            ? variables.configuration.ds.concat(mainScript)
+                            : [mainScript]) //Put the data-main script in the files to load.
+                      )
+                  )
+                : true &&
+                    //Set up with STATE.CONFIG info.
+                    build(variables.configuration);
             },
       define
     };
