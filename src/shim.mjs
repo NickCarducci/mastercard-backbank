@@ -59,57 +59,53 @@ async function noException(req, env) {
     env.REQUIRE_CLASS_DURABLE_OBJECT
   )
     .fetch(req)
-    .then(
-      async (requir) =>
-        //env.instanceR &&
-        await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
-          env.EXAMPLE_CLASS_DURABLE_OBJECT
-        )
-          .fetch(req, {
-            headers: {
+    .then(async (requir) => {
+      console.log(requir);
+      return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
+        env.EXAMPLE_CLASS_DURABLE_OBJECT
+      )
+        .fetch(req, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          method: "POST",
+          body: requir
+        }) // Forward the current HTTP request to it
+        .then(async (res) => await res.json())
+        .then((r) => {
+          console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
+          /*return new Response(`{ok: true,data: ${r} }`);*/
+          const dataHead = {
               "Content-Type": "application/json"
             },
-            method: "POST",
-            body: requir
-          }) // Forward the current HTTP request to it
-          .then(async (res) => await res.json())
-          .then((r) => {
-            console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
-            /*return new Response(`{
-        ok: true,
-        data: ${r}
-    }`);*/
-            const dataHead = {
-                "Content-Type": "application/json"
-              },
-              responseobject = (keyValue, ok) =>
-                `{${keyValue[0]}: ${keyValue[1]}, ${ok}}`;
+            responseobject = (keyValue, ok) =>
+              `{${keyValue[0]}: ${keyValue[1]}, ${ok}}`;
 
-            return !r
-              ? new Response(responseobject(["data", {}], false), {
-                  status: "no response from durable object chain",
-                  message: "",
+          return !r
+            ? new Response(responseobject(["data", {}], false), {
+                status: "no response from durable object chain",
+                message: "",
+                headers: dataHead
+              })
+            : !r.data
+            ? new Response(
+                responseobject(["response", JSON.stringify(r)], false),
+                {
+                  status: r.status,
+                  message: r.statusText ? r.statusText : r.message,
                   headers: dataHead
-                })
-              : !r.data
-              ? new Response(
-                  responseobject(["response", JSON.stringify(r)], false),
-                  {
-                    status: r.status,
-                    message: r.statusText ? r.statusText : r.message,
-                    headers: dataHead
-                  }
-                )
-              : new Response(
-                  responseobject([true, JSON.stringify(r.data)], true),
-                  {
-                    status: "200",
-                    message: "success: " + req.url,
-                    headers: dataHead
-                  }
-                );
-          })
-    );
+                }
+              )
+            : new Response(
+                responseobject([true, JSON.stringify(r.data)], true),
+                {
+                  status: "200",
+                  message: "success: " + req.url,
+                  headers: dataHead
+                }
+              );
+        });
+    });
   //new Response({})
 }
 //new instance class fetch waits without await
