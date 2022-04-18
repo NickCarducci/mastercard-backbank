@@ -42,8 +42,8 @@ export class DurableObjectExample {
             console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
             result += chunk;
             return await readable.read().then(processText); // Read some more, and call this function again
-          })
-          .then((R) => this.handle(R, req));
+          });
+      //.then((R) => this.handle(R, req));
       console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
 
       const locs = requir("mastercard-locations");
