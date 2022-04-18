@@ -350,7 +350,7 @@ class Require {
         // !obj && console.log(obj + " error obj in ", this);
         const n = (NS) =>
           NS.constructor === "String" && NS.toUpperCase() === "NS";
-        const yes = (name) => obj /*[_P]*/[_H](name),
+        const yes = (name) => obj[_H](name) /*[_P]*/,
           string = () => _S(obj),
           tag = (ind) =>
             document.getElementsByTagName(obj ? obj : "script")[ind];
@@ -1534,13 +1534,14 @@ class Require {
                         );
                       })
                   )
-                ) && //apply arguments to requires on context
+                ) &&
+                (build.start = {
+                  contexts: ctxs,
+                  newRequireable
+                }) && //apply arguments to requires on context
                 //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but ctxs during builds//ticketx to apology tour
                 (isBrowser
-                  ? (head = (build.start = {
-                      contexts: ctxs,
-                      newRequireable
-                    }).head = e_("base").tag(0)
+                  ? (head = build.start.head = e_("base").tag(0)
                       ? baseElement.parentNode
                       : e_("head").tag())
                   : true) &&
