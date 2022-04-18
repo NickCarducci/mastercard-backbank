@@ -12,26 +12,24 @@ export class DurableObjectExample {
         charsReceived = 0, // Create a blob containing the worker code
         //const blob = new Blob(requi, { type: "text/javascript" });
 
-        requir = await readable
-          .read()
-          .then(async function processText({ done, value }) {
-            // done = true, if the stream has already given you all its data.
-            // value = some_data. Always undefined when done is true.
-            if (done) {
-              console.log("Stream complete : ", result);
-              const product = String.fromCharCode.apply(
-                null,
-                new Int32Array(result.value.buffer) /*Uint8Array*/
-              );
-              console.log("Stream complete : ", product);
-              return product;
-            }
-            charsReceived += value.length; // 'value' for fetch streams is a Uint8Array
-            const chunk = value;
-            console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
-            result += chunk;
-            return await readable.read().then(processText); // Read some more, and call this function again
-          }); //https://developers.cloudflare.com/workers/platform/compatibility-dates/
+        requir = await readable.read().then(async function processText(r) {
+          // done = true, if the stream has already given you all its data.
+          // value = some_data. Always undefined when done is true.
+          if (r.done) {
+            console.log("Stream complete : ", result);
+            const product = String.fromCharCode.apply(
+              null,
+              new Int32Array(r.value.buffer) /*Uint8Array*/
+            );
+            console.log("Stream complete : ", product);
+            return product;
+          }
+          charsReceived += r.value.length; // 'value' for fetch streams is a Uint8Array
+          const chunk = r.value;
+          console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
+          result += chunk;
+          return await readable.read().then(processText); // Read some more, and call this function again
+        }); //https://developers.cloudflare.com/workers/platform/compatibility-dates/
       //.then((R) => this.handle(R, req));
       // Create a URL to give to the Worker constructor
       //const url = URL.createObjectURL(blob);
