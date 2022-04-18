@@ -48,7 +48,11 @@ async function noException(req, env) {
   //const clientId = request.headers.get("cf-connecting-ip");
   const href = new URL(req.url); //.pathname;//path
   var origin = href.origin; // request.headers.get("Origin");
-  var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
+  var allowedOrigins = [
+    "https://vau.money",
+    "https://jwi5k.csb.app",
+    "https://mastercard-backbank.backbank.workers.dev"
+  ];
   if (allowedOrigins.indexOf(origin) === -1) return noaccess(origin);
   console.log("env", env, href, ": making example class durable object");
   return await ((eo) => eo.get(eo.idFromName(href)))(
