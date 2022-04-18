@@ -8,6 +8,33 @@ export default {
   async fetch(request, env /*, ctx*/) {
     //Response class must be a promise
     try {
+      if (request.method === "OPTIONS")
+        return new Response(`preflight response for POST`, {
+          status: 200,
+          message: `preflight response for POST`,
+          headers: {
+            "Access-Control-Allow-Headers": [
+              //"Access-Control-Allow-Origin",
+              "Access-Control-Allow-Methods",
+              "Content-Type"
+              //"Origin",
+              //"X-Requested-With",
+              //"Accept"
+            ],
+            "Access-Control-Allow-Methods": ["POST", "OPTIONS"]
+          }
+        });
+      var origin = request.get("Origin");
+      var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
+      if (allowedOrigins.indexOf(origin) === -1)
+        return new Response(
+          JSON.stringify(`{error:${"no access for this origin- " + origin}}`),
+          {
+            status: "400",
+            message: "no access for this origin: " + origin,
+            headers: { "Content-Type": "application/json" }
+          }
+        );
       return await noException(request, env);
       // wrap the body of your callback in a try/catch block to ensure it cannot throw an exception.
       // is return, "the body?"
@@ -21,47 +48,57 @@ async function noException(req, env) {
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   //https://linc.sh/blog/durable-objects-in-production
   //const clientId = request.headers.get("cf-connecting-ip");
-  const path = new URL(req.url).pathname;
+  const href = new URL(req.url); //.pathname;//path
   //Require = env.REQUIRE_CLASS_DURABLE_OBJECT.idFromName(path);
   //env.instanceR = env.REQUIRE_CLASS_DURABLE_OBJECT.get(Require);
 
-  console.log("env", env, path, ": making example class durable object");
-  const getter = (eo) => eo.get(eo.idFromName(path));
+  const makeRequire = ((eo) => eo.get(eo.idFromName(href)))(
+    env.REQUIRE_CLASS_DURABLE_OBJECT
+  );
+  console.log("env", env, href, ": making example class durable object");
+  const makeExample = ((eo) => eo.get(eo.idFromName(href)))(
+    env.EXAMPLE_CLASS_DURABLE_OBJECT
+  );
 
-  return (
-    //env.instanceR &&
-    getter(env.EXAMPLE_CLASS_DURABLE_OBJECT)
-      .fetch(req) // Forward the current HTTP request to it
-      .then(async (res) => await res.json())
-      .then((r) => {
-        console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
-        /*return new Response(`{
+  return await makeRequire.fetch(req).then(
+    async (requir) =>
+      //env.instanceR &&
+      await makeExample
+        .fetch(req, {
+          /*headers:{
+            "Content-Type": "application/json"},*/
+          body: JSON.stringify(requir)
+        }) // Forward the current HTTP request to it
+        .then(async (res) => await res.json())
+        .then((r) => {
+          console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
+          /*return new Response(`{
         ok: true,
         data: ${r}
     }`);*/
-        const dataHead = {
-            "Content-Type": "application/json"
-          },
-          responseobject = (key, r, ok) => `{${key}: ${r}, ${ok}}`;
+          const dataHead = {
+              "Content-Type": "application/json"
+            },
+            responseobject = (key, r, ok) => `{${key}: ${r}, ${ok}}`;
 
-        return !r
-          ? new Response(responseobject("data", {}), {
-              status: "no response from durable object chain",
-              message: "",
-              headers: dataHead
-            })
-          : !r.data
-          ? new Response(responseobject("response", JSON.stringify(r)), {
-              status: r.status,
-              message: r.statusText ? r.statusText : r.message,
-              headers: dataHead
-            })
-          : new Response(responseobject(true, JSON.stringify(r.data), true), {
-              status: "200",
-              message: "success: " + req.url,
-              headers: dataHead
-            });
-      })
+          return !r
+            ? new Response(responseobject("data", {}), {
+                status: "no response from durable object chain",
+                message: "",
+                headers: dataHead
+              })
+            : !r.data
+            ? new Response(responseobject("response", JSON.stringify(r)), {
+                status: r.status,
+                message: r.statusText ? r.statusText : r.message,
+                headers: dataHead
+              })
+            : new Response(responseobject(true, JSON.stringify(r.data), true), {
+                status: "200",
+                message: "success: " + req.url,
+                headers: dataHead
+              });
+        })
   );
   //new Response({})
 }
