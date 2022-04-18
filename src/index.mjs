@@ -5,12 +5,11 @@ export class DurableObjectExample {
         "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
         requir
       );
-      const requirer = await requir
-        .fetch(req)
-        .then(async (res) => await res.text());
+      const requirer = await requir.fetch(req);
+      //.then(async (res) => await res.text());
       console.log(
         "Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
-        requirer
+        JSON.stringify(requirer)
       );
 
       const locs = requirer("mastercard-locations");
@@ -20,22 +19,21 @@ export class DurableObjectExample {
 
       var iMCard = null,
         mc = null;
-      const initializeMCard = () => {
-        if (!iMCard) {
-          console.log("initializing mastercard api") &&
-            (mc = locs.MasterCardAPI) &&
-            (iMCard = true) &&
-            mc.init({
-              sandbox: secrets.NODE_ENV !== "production",
-              authentication: new mc.OAuth(
-                secrets.MASTERCARD_CONSUMER_KEY,
-                Buffer.from(secrets.MASTERCARD_P12_BINARY, "base64"),
-                "keyalias",
-                "keystorepassword"
-              )
-            });
-        }
-      };
+      const initializeMCard = () =>
+        !iMCard &&
+        console.log("initializing mastercard api") &&
+        (mc = locs.MasterCardAPI) &&
+        (iMCard = true) &&
+        mc.init({
+          sandbox: secrets.NODE_ENV !== "production",
+          authentication: new mc.OAuth(
+            secrets.MASTERCARD_CONSUMER_KEY,
+            Buffer.from(secrets.MASTERCARD_P12_BINARY, "base64"),
+            "keyalias",
+            "keystorepassword"
+          )
+        });
+
       const mastercardRoute = async (req, func) => {
         const cb = (error, data) => (error ? error : data);
         initializeMCard();
