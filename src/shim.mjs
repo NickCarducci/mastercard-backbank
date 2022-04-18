@@ -24,7 +24,7 @@ export default {
             "Access-Control-Allow-Methods": ["POST", "OPTIONS"]
           }
         });
-      var origin = request.get("Origin");
+      var origin = request.headers.get("Origin");
       var allowedOrigins = ["https://vau.money", "https://jwi5k.csb.app"];
       if (allowedOrigins.indexOf(origin) === -1)
         return new Response(
