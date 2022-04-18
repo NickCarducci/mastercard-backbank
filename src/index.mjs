@@ -7,7 +7,7 @@ export class DurableObjectExample {
     ); //el.textContent
     this.handle = async (req) => {
       //new Int32Array(requ)
-      var readable = req.getReader({ mode: "byob" }), //new FileReader(),
+      var readable = req.body.getReader({ mode: "byob" }), //new FileReader(),
         result = "",
         charsReceived = 0, // Create a blob containing the worker code
         //const blob = new Blob(requi, { type: "text/javascript" });
