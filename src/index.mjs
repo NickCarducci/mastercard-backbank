@@ -19,7 +19,7 @@ export class DurableObjectExample {
             console.log("Stream complete : ", stream);
             const product = new Uint8Array(
               stream
-            ); /*new TextDecoder("utf-8").decode(
+            ).buffer.json(); /*new TextDecoder("utf-8").decode(
               new Uint8Array(stream)
             );*/
             /* String.fromCharCode.apply(
