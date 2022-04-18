@@ -347,10 +347,10 @@ class Require {
         return ctx.require(ds, cb, eb);
       }),
       e_ = (obj /*,string*/) => {
-        !obj && console.log(obj + " error obj in ", this);
+        // !obj && console.log(obj + " error obj in ", this);
         const n = (NS) =>
           NS.constructor === "String" && NS.toUpperCase() === "NS";
-        const yes = (name) => obj[_P][_H](name),
+        const yes = (name) => obj /*[_P]*/[_H](name),
           string = () => _S(obj),
           tag = (ind) =>
             document.getElementsByTagName(obj ? obj : "script")[ind];
