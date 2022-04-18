@@ -188,6 +188,7 @@ return new Response(
       return await gotten.fetch(req, env); //build product (of Require), Require product
     };
   }
+
   //Omit  for syncronous defer, -ish
   async fetch(req) {
     if (false /*!this.value*/) {
@@ -206,13 +207,16 @@ return new Response(
       return await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
         //.then(async (r) => await r.clone().json())
         .then(async (res) => {
-          let { readable, writable } = new TransformStream(), // Create an identity TransformStream (a.k.a. a pipe).
-            result = "", //The readable side will become our new response body.
-            charsReceived = 0;
+          let { readable, writable } = new TransformStream(); // Create an identity TransformStream (a.k.a. a pipe).
+          // result = "", //The readable side will become our new response body.
+          //charsReceived = 0;
           res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
           //return new Response(readable, res); //deliver running ReadableStream Running & Transformed to writable pipe
 
-          return await readable
+          return this.handle(
+            readable,
+            req
+          ); /*await readable
             .read()
             .then(async function processText({ done, value }) {
               // done = true, if the stream has already given you all its data.
@@ -221,7 +225,7 @@ return new Response(
                 console.log("Stream complete : ", result);
                 const product = String.fromCharCode.apply(
                   null,
-                  Array(result) /*Uint8Array*/
+                  Array(result) /*Uint8Array*
                 );
                 console.log("Stream complete : ", product);
                 return product;
@@ -233,7 +237,7 @@ return new Response(
 
               return await readable.read().then(processText); // Read some more, and call this function again
             })
-            .then((R) => this.handle(R, req));
+            .then((R) => this.handle(R, req));*/
         });
     }
     /*.catch(
@@ -246,3 +250,38 @@ return new Response(
         );*/
   }
 }
+/*
+  // To accept the WebSocket request, we create a WebSocketPair (which is like a socketpair,
+  // i.e. two WebSockets that talk to each other), we return one end of the pair in the
+  // response, and we operate on the other end. Note that this API is not part of the
+  // Fetch API standard; unfortunately, the Fetch API / Service Workers specs do not define
+  // any way to act as a WebSocket server today.
+  let pair = new WebSocketPair();
+
+  // We're going to take pair[1] as our end, and return pair[0] to the client.
+  await this.handleSession(pair[1]);
+
+  // Now we return the other end of the pair to the client.
+  return new Response(null, { status: 101, webSocket: pair[0] });
+  // handleSession() implements our WebSocket-based chat protocol.
+  handleSession = async (webSocket) => {
+    // Accept our end of the WebSocket. This tells the runtime that we'll be terminating the
+    // WebSocket in JavaScript, not sending it elsewhere.
+    webSocket.accept();
+    webSocket.addEventListener("message", async (msg) => {
+      try {
+        //https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/message_event
+
+        webSocket.send(msg.data);
+        webSocket.close(1011, "finished");
+      } catch (e) {
+        console.log(e);
+      }
+    });
+    // On "close" and "error" events, remove the WebSocket from the sessions list and broadcast
+    // a quit message.
+    let closeOrErrorHandler = (e) => console.log("closeOrErrorHandler", e);
+
+    webSocket.addEventListener("close", closeOrErrorHandler);
+    webSocket.addEventListener("error", closeOrErrorHandler);
+  };*/
