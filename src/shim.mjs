@@ -66,7 +66,7 @@ async function noException(req, env) {
       )
         .fetch(req, {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/octet-stream" //"application/json"
           },
           method: "POST",
           body: requir.arrayBuffer()
