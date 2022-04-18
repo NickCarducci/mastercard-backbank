@@ -12,22 +12,7 @@
 //cannot this never get to the string regex?
 
 class Require {
-  constructor(el, env) {
-    //logical && https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND#short-circuit_evaluation
-    console.log("Require headers", JSON.stringify(el)) &&
-      (this.el = el) &&
-      (this.env = env) &&
-      this.el.blockConcurrencyWhile(async () => {
-        let stored = await this.el.storage.get("require"); //Read requests	100,000 / day, ($free)
-        this.state = stored || 0; //&& (this.b = (b) => console.log(b));
-      });
-    // this.fetch = async (req, env) => new Promise((resolve) => resolve(this)); //await ((z)=>z)(this));
-  }
-
-  fetch(req, env) {
-    //this.b("fetched require :");
-    console.log("fetch require request :", JSON.stringify(req)); //&&
-    //  console.log("fetch require environment variables :", JSON.stringify(env));
+  constructor() {
     var variables = {
       configuration: {},
       REQUIREJS: null
@@ -1677,21 +1662,9 @@ class Require {
             },
       define
     };
-
-    //_K(state).forEach((key) => (this[key] = state[key]));
-    //state !== this.stored && this.el.storage.put("require", state);
-    const dataHead = {
-      "Content-Type": "application/json" //"text/plain"
-    };
-    //const str = JSON.stringify(state);
-    console.log("Require product :", state);
-    //return new Promise((resolve) => state && resolve(state));
-    //needs to be Promise and also Response  is Readable Stream (blob)
-    return new Response(state, {
-      status: "200",
-      message: "success: " + req.url,
-      headers: dataHead
-    });
+    Object.keys(state).forEach(
+      (key, i) => (this[key] = Object.values(state)[i])
+    );
   }
 }
 export class DurableObjectExample {
