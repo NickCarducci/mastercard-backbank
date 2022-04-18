@@ -66,9 +66,11 @@ async function noException(req, env) {
           env.EXAMPLE_CLASS_DURABLE_OBJECT
         )
           .fetch(req, {
-            /*headers:{
-            "Content-Type": "application/json"},*/
-            body: JSON.stringify(requir)
+            headers: {
+              "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: requir
           }) // Forward the current HTTP request to it
           .then(async (res) => await res.json())
           .then((r) => {
