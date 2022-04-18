@@ -26,8 +26,8 @@ export class Require {
 
   fetch(req, env) {
     //this.b("fetched require :");
-    console.log("fetch require request :", JSON.stringify(req)) &&
-      console.log("fetch require environment variables :", JSON.stringify(env));
+    console.log("fetch require request :", JSON.stringify(req)); //&&
+    //  console.log("fetch require environment variables :", JSON.stringify(env));
     var variables = {
       configuration: {},
       REQUIREJS: null
@@ -1687,10 +1687,10 @@ export class Require {
     console.log("Require product :", state);
     //return new Promise((resolve) => str && resolve(str));
 
-    return new Response(state, {
+    return state; /*new Response(state, {
       status: "200",
       message: "success: " + req.url,
       headers: dataHead
-    });
+    });*/
   }
 }
