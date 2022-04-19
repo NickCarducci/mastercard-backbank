@@ -343,6 +343,7 @@ class Require {
         NAME = cfg && cfg.context ? cfg.context : NAME;
         ctx = e_(ctxs).yes(NAME) && ctxs[NAME];
         ctx = ctx ? ctx : (ctxs[NAME] = build.start.newRequireable(NAME)); //dependency
+        console.log(cfg, ctx);
         cfg && ctx.configure(cfg);
         return ctx.require(ds, cb, eb);
       }),
@@ -1461,6 +1462,7 @@ class Require {
           }
         }) &&
         _K(STATE).forEach((key) => (this[key] = STATE[key]));
+      return this;
     }
 
     (build.start = {
