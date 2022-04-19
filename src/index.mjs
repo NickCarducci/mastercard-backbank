@@ -259,7 +259,7 @@ Require = ((dependency, setTimeout) => {
   /**
    * Export require as a dependency, but only if it does not already exist.
    */
-  if (!require) Require = req;
+  //if (!require) require = req;
 
   req.version = version;
 
