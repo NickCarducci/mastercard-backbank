@@ -343,7 +343,7 @@ class Require {
         NAME = cfg && cfg.context ? cfg.context : NAME;
         ctx = e_(ctxs).yes(NAME) && ctxs[NAME];
         console.log(ctx, ctx.require);
-        ctx = ctx ? ctx : (ctxs[NAME] = () => build.start.newRequireable(NAME)); //dependency
+        ctx = ctx ? ctx : (ctxs[NAME] = build.start.newRequireable(NAME)); //dependency
         console.log(ctx, ctx.require);
         cfg && ctx.configure(cfg);
         return ctx.require(ds, cb, eb);
@@ -1378,23 +1378,8 @@ class Require {
       };
 
     function newRequireable() {
-      const NAME = arguments[0];
-
-      return (
-        seratimNull(
-          variables,
-          "undefined",
-          [
-            "dependencies",
-            "enRgtry",
-            "unDE",
-            "defined",
-            "urlFchd",
-            "bdlMap"
-          ].forEach((k) => (this[k] = {}))
-        ) && //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
-        //checkLoaded(this) &&
-        (STATE = {
+      const NAME = arguments[0],
+        state = {
           NAME,
           defQueue,
           defQueueMap: {},
@@ -1419,12 +1404,12 @@ class Require {
               );
             }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
           /* makeShimExports: (value) =>
-          function () {
-            return (
-              (value[_i] && value[_i].apply(dependency, arguments)) ||
-              (value[_x] && getGlobal(value[_x]))
-            );
-          }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
+      function () {
+        return (
+          (value[_i] && value[_i].apply(dependency, arguments)) ||
+          (value[_x] && getGlobal(value[_x]))
+        );
+      }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
           makeRequire: (relMap, options) => makeRequire(relMap, options, NAME),
           enable: (depMap) =>
             e_(STATE.dependencies).yes(depMap.id) &&
@@ -1472,10 +1457,26 @@ class Require {
               checkLoaded() && true //tkn = moduleName
             );
           }
-        }) &&
-        _K(STATE).forEach((key) => (this[key] = STATE[key])) &&
-        (this.require = STATE.makeRequire()) &&
-        this
+        };
+      return (
+        //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
+        //checkLoaded(this) &&
+
+        _K(state).forEach((key) => (STATE[key] = state[key])) &&
+        seratimNull(
+          variables,
+          "undefined",
+          [
+            "dependencies",
+            "enRgtry",
+            "unDE",
+            "defined",
+            "urlFchd",
+            "bdlMap"
+          ].forEach((k) => (STATE[k] = {}))
+        ) &&
+        (STATE.require = STATE.makeRequire()) &&
+        STATE
       );
     }
     console.log("In Require: ", "newRequireable", newRequireable);
