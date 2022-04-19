@@ -1381,7 +1381,7 @@ class Require {
         "urlFchd",
         "bdlMap"
       ].forEach((k) => (this[k] = {})) && //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
-        checkLoaded(this) &&
+        //checkLoaded(this) &&
         (STATE = {
           NAME,
           defQueue,
