@@ -377,7 +377,7 @@ class Require {
           interA: (x) => x.readyState === "interactive"
         };
       }; //obj.prototype["hasOwnProperty"][name]; const method =string?"toString":"hasOwnProperty"
-
+    console.log("In Require: ", "build", build);
     var clrsec, watch;
     function checkLoaded(parentThis = arguments[0]) {
       var err,
@@ -834,7 +834,7 @@ class Require {
       }
     } //this.exports; this.factory; this.depMaps = [], this[_ed], this.fetched //const defaultOnError = (err) => err;
     //const construct = (f, obj) => function () { f.apply(obj, arguments); //in original JQuery RequireJS, obj is this or this }; //Function.prototype.construct (bind), with 'this' //https://stackoverflow.com/a/46700616/11711280
-    console.log("Module", Module);
+    console.log("In Require: ", "Module", Module);
     function makeModuleMap(
       n = arguments[0],
       sourcemap = arguments[1],
@@ -1057,6 +1057,13 @@ class Require {
       build()
     }
     */
+    console.log(
+      "In Require: ",
+      "makeModuleMap",
+      "configure",
+      makeModuleMap,
+      configure
+    );
 
     function nameToUrl() {
       //token, ext, skipExt, pkgMain
@@ -1465,11 +1472,14 @@ class Require {
         (this.require = STATE.makeRequire());
       return this;
     }
+    console.log("In Require: ", "newRequireable", newRequireable);
 
-    (build.start = {
+    build.start = {
       contexts: ctxs,
       newRequireable
-    }) &&
+    };
+
+    console.log("In Require: ", "build(.start)", build);
     build({}) && //'dependency require' STATE-sensitive exported methods
     seratimNull(
       variables,
