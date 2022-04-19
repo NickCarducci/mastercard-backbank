@@ -154,7 +154,7 @@ class Require {
       _r = "require",
       Ar = "[object Array]",
       Fn = "[object Function]",
-      _K = Object.keys,
+      _K = (o) => (o.constructor === Object ? Object.keys(o) : []),
       _S = Object.prototype.toString,
       _H = "hasOwnProperty",
       _P = "prototype",
