@@ -2033,11 +2033,11 @@ Require = ((dependency, setTimeout) => {
    * @param {String} text the text to execute/evaluate.
    */
   /*jslint evil: true */
-  req.exec = (text) =>
+  /*req.exec = (text) =>
     new Promise(
       (resolve, reject) => resolve(text)
       //  new Function("resolve", `"use strict";return (${text})`)(resolve, text) //eval(text);
-    );
+    );*/
 
   //Set up with config info.
   req(configuration);
