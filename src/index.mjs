@@ -342,6 +342,7 @@ class Require {
         } // Determine if have STATE.CONFIG object in the call. ds is a STATE.CONFIG object Adjust args if there are STATE.dependencies
         NAME = cfg && cfg.context ? cfg.context : NAME;
         ctx = e_(ctxs).yes(NAME) && ctxs[NAME];
+        console.log(ctx, ctx.require);
         ctx = ctx ? ctx : (ctxs[NAME] = build.start.newRequireable(NAME)); //dependency
         console.log(ctx, ctx.require);
         cfg && ctx.configure(cfg);
