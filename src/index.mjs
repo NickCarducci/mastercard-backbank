@@ -60,13 +60,13 @@ class Require {
         seratimNull(
           variables,
           "undefined",
-          (ctx = useInteractive ? contexts[n()[ga](WINDOW.dr())] : ctx)
+          (STATE = useInteractive ? contexts[n()[ga](WINDOW.dr())] : STATE)
         ) &&
         //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
 
-        (!ctx ? defineables.push([nm, ds, c]) : true) &&
-        ctx.defQueue.push([nm, ds, c]) &&
-        (ctx.defQueueMap[nm] = true) && { amd: { jQuery: true } },
+        (!STATE ? defineables.push([nm, ds, c]) : true) &&
+        STATE.defQueue.push([nm, ds, c]) &&
+        (STATE.defQueueMap[nm] = true) && { amd: { jQuery: true } },
       contexts = {},
       us = "_",
       createElement = (ns) =>
@@ -119,13 +119,12 @@ class Require {
       scriptPends,
       defineables = [],
       useInteractive = false,
-      ctx,
       /**
-      ctx.require.undef(id);
-      ctx.makeRequire(null, { skipMap: true })([id]);
-      ctx = ctx ? ctx : (contexts[NAME] = new build.start.newRequireable(NAME)); //dependency
-      cfg && ctx.configure(cfg);
-      return ctx.require(ds, cb, eb);
+      STATE.require.undef(id);
+      STATE.makeRequire(null, { skipMap: true })([id]);
+      STATE = STATE ? STATE : (contexts[NAME] = new build.start.newRequireable(NAME)); //dependency
+      cfg && STATE.configure(cfg);
+      return STATE.require(ds, cb, eb);
     */
       _f = "*",
       _p = "packages",
@@ -216,8 +215,8 @@ class Require {
           var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
           if (pC && e_(pC).string() === Ar && pC.length > 1) {
             pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
-            ctx.require.undef(id);
-            ctx.makeRequire(null, { skipMap: true })([id]);
+            STATE.require.undef(id);
+            STATE.makeRequire(null, { skipMap: true })([id]);
             return true;
           }
         },
@@ -331,7 +330,7 @@ class Require {
           cb = arguments[1],
           eb = arguments[2],
           optional = arguments[3],
-          ctx,
+          STATE,
           cfg,
           NAME = us; //Caja compliant build for minified-scope name of dependency, cb for arr completion Find the right STATE, use default
         if (!e_(ds).string() === Ar && T(ds !== _t)) {
@@ -341,10 +340,10 @@ class Require {
             : iifeapp(this)(["ds", "cb", "eb"], cb, eb, optional);
         } // Determine if have STATE.CONFIG object in the call. ds is a STATE.CONFIG object Adjust args if there are STATE.dependencies
         NAME = cfg && cfg.context ? cfg.context : NAME;
-        ctx = e_(contexts).yes(NAME) && contexts[NAME];
-        console.log(ctx, ctx && ctx.require);
-        ctx = ctx
-          ? ctx
+        STATE = e_(contexts).yes(NAME) && contexts[NAME];
+        console.log(STATE, STATE && STATE.require);
+        STATE = STATE
+          ? STATE
           : (contexts[NAME] = class newRequireable {
               constructor() {
                 const NAME = arguments[0],
@@ -375,12 +374,12 @@ class Require {
                         );
                       }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
                     /* makeShimExports: (value) =>
-            function () {
-              return (
-                (value[_i] && value[_i].apply(dependency, arguments)) ||
-                (value[_x] && getGlobal(value[_x]))
-              );
-            }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
+                    function () {
+                      return (
+                        (value[_i] && value[_i].apply(dependency, arguments)) ||
+                        (value[_x] && getGlobal(value[_x]))
+                      );
+                    }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
                     makeRequire: (relMap, options) =>
                       makeRequire(relMap, options, NAME),
                     enable: (depMap) =>
@@ -462,9 +461,11 @@ class Require {
                 );
               }
             }); //dependency
-        console.log(ctx, ctx && ctx.require);
-        cfg && ctx.configure(cfg);
-        return ctx.require(ds, cb, eb);
+        console.log(STATE, STATE && STATE.require);
+        return (
+          seratimNull(variables, "undefined", cfg && STATE.configure(cfg)) &&
+          STATE.require(ds, cb, eb)
+        );
       }),
       e_ = (obj /*,string*/) => {
         // !obj && console.log(obj + " error obj in ", this);
@@ -1449,26 +1450,34 @@ class Require {
             specified: (
               id = (id) => makeModuleMap(id, relMap, false, true).id
             ) => e_(STATE.defined).yes(id) || e_(STATE.dependencies).yes(id),
-            toUrl: (mNPE) => {
+            toUrl: (
+              { i, isAlias, mNPE } = (mNPE) => {
+                const seg = mNPE.split("/")[0];
+                return {
+                  i: mNPE.lastIndexOf("."),
+                  isAlias: i !== -1 && (![".", ".."].includes(seg) || i > 1),
+                  mNPE
+                };
+              }
+            ) => {
               //moduleNamePlusExt
-              var i = mNPE.lastIndexOf("."),
-                seg = mNPE.split("/")[0],
-                isRelative = seg === "." || seg === ".."; //URL path = this name + .extension; requires 'this name,' not 'plain URLs' like nameToUrl
+              //URL path = this name + .extension; requires 'this name,' not 'plain URLs' like nameToUrl
 
-              const isAlias = i !== -1 && (!isRelative || i > 1);
               const ext = isAlias ? mNPE.substring(i, mNPE.length) : null;
               mNPE = isAlias ? mNPE.substring(0, i) : mNPE;
               //file extension alias, not 'relative path dots'
 
-              const ar = WINDOW.normalize([
+              const { nodeIdCompat, system, bundle } = STATE.CONFIG;
+              //also, "map" for outward facing code...//also, "packages" ""
+              const ar = [
                 mNPE,
                 relMap && relMap.id,
                 true,
-                STATE.CONFIG.nodeIdCompat,
-                STATE.CONFIG.system, //also, "map" for outward facing code...
-                STATE.CONFIG.bundle //also, "packages" ""
-              ]);
-              return nameToUrl(ar, ext, true);
+                nodeIdCompat,
+                system,
+                bundle
+              ];
+              return nameToUrl(WINDOW.normalize(ar), ext, true);
             }
           };
         return (
