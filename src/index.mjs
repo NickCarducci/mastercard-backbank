@@ -1463,6 +1463,10 @@ class Require {
         _K(STATE).forEach((key) => (this[key] = STATE[key]));
     }
 
+    (build.start = {
+      contexts: ctxs,
+      newRequireable
+    }) &&
     build({}) && //'dependency require' STATE-sensitive exported methods
     seratimNull(
       variables,
@@ -1473,11 +1477,7 @@ class Require {
             return ctxs[us].require[prop].apply(ctxs[us], arguments);
           })
       )
-    ) &&
-    (build.start = {
-      contexts: ctxs,
-      newRequireable
-    }) && //apply arguments to requires on context
+    ) && //apply arguments to requires on context
     //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but ctxs during builds//ticketx to apology tour
     (isBrowser
       ? (head = build.start.head = e_("base").tag(0)
