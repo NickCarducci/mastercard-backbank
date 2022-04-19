@@ -1383,6 +1383,9 @@ class Require {
         );
       };
 
+    //console.log("In Require: ", "newRequireable", build.start.newRequireable);
+    build({}); //'dependency require' STATE-sensitive exported methods
+    console.log("In Require: ", "build(.start)", build);
     build.start = {
       contexts: ctxs,
       //(NAME) =>
@@ -1497,9 +1500,6 @@ class Require {
       }
     };
 
-    //console.log("In Require: ", "newRequireable", build.start.newRequireable);
-    build({}); //'dependency require' STATE-sensitive exported methods
-    console.log("In Require: ", "build(.start)", build);
     seratimNull(
       variables,
       "undefined",
