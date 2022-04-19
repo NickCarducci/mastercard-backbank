@@ -7,7 +7,10 @@
 /*jslint regexp: true, nomen: true, sloppy: true */
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
-var requirejs, define, Require;
+var requirejs,
+  define,
+  Require,
+  this = {};
 Require = ((dependency, setTimeout) => {
   var globalDefQueue = [];
   var req,
