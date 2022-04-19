@@ -1339,7 +1339,7 @@ class Require {
           });
       }
     }
-    const depMap = (a0) => {
+    var depMap = (a0) => {
         return {
           dm: a0,
           m: e_(STATE.dependencies).yes(a0.id) && STATE.dependencies[a0.id]
