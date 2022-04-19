@@ -1380,14 +1380,19 @@ class Require {
     function newRequireable() {
       const NAME = arguments[0];
 
-      [
-        "dependencies",
-        "enRgtry",
-        "unDE",
-        "defined",
-        "urlFchd",
-        "bdlMap"
-      ].forEach((k) => (this[k] = {})) && //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
+      return (
+        seratimNull(
+          variables,
+          "undefined",
+          [
+            "dependencies",
+            "enRgtry",
+            "unDE",
+            "defined",
+            "urlFchd",
+            "bdlMap"
+          ].forEach((k) => (this[k] = {}))
+        ) && //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
         //checkLoaded(this) &&
         (STATE = {
           NAME,
@@ -1469,8 +1474,9 @@ class Require {
           }
         }) &&
         _K(STATE).forEach((key) => (this[key] = STATE[key])) &&
-        (this.require = STATE.makeRequire());
-      return this;
+        (this.require = STATE.makeRequire()) &&
+        this
+      );
     }
     console.log("In Require: ", "newRequireable", newRequireable);
 
