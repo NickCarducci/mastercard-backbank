@@ -343,7 +343,7 @@ class Require {
         NAME = cfg && cfg.context ? cfg.context : NAME;
         ctx = e_(ctxs).yes(NAME) && ctxs[NAME];
         ctx = ctx ? ctx : (ctxs[NAME] = build.start.newRequireable(NAME)); //dependency
-        console.log(cfg, ctx);
+        console.log(ctx, ctx.require);
         cfg && ctx.configure(cfg);
         return ctx.require(ds, cb, eb);
       }),
