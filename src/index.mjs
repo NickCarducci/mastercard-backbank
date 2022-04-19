@@ -419,46 +419,52 @@ class Require {
           prog(m, ss, tt, p).then(() => (p[i] = true)),
         brwr = isBrowser || isWebWorker;
       watch = true;
-      const er = _e,
-        mxx = (mod = (x) => STATE.enRgtry[x]) => {
-          const { yesdef, fetched, prefix, error, enabled, inited } = mod.map;
-          if (enabled && !yesdef) reqCalls.push(mod);
-          mod.noCyc = fetched && yesdef && !prefix;
-          return !inited && enabled && !error ? mod : {};
-        }; //no keys, -fails
-      _K(STATE.enRgtry).forEach(({ id, noCyc } = mxx, i) =>
-        id && halt && !WINDOW.hasPathFallback(id, STATE.CONFIG.paths)
-          ? WINDOW.rmvScrpt(id, STATE.NAME) && hs.push(id)
-          : id &&
-            iifeapp(parentThis)(
-              ["fb", "wait", "another"],
-              halt && true,
-              true,
-              !halt && noCyc ? false : another
-            )
+      const er = _e; //no keys, -fails
+      console.log("In Checkloaded", "STATE", STATE);
+      _K(STATE.enRgtry).forEach(
+        (
+          { id, noCyc } = (mod = (x) => STATE.enRgtry[x]) =>
+            ((
+              { yesdef, fetched, prefix, error, enabled, inited } = (map) => map
+            ) => {
+              if (enabled && !yesdef) reqCalls.push(mod);
+              mod.noCyc = fetched && yesdef && !prefix;
+              return !inited && enabled && !error ? mod : {};
+            })(mod.map),
+          i
+        ) =>
+          id && halt && !WINDOW.hasPathFallback(id, STATE.CONFIG.paths)
+            ? WINDOW.rmvScrpt(id, STATE.NAME) && hs.push(id)
+            : id &&
+              iifeapp(parentThis)(
+                ["fb", "wait", "another"],
+                halt && true,
+                true,
+                !halt && noCyc ? false : another
+              )
       ); //non-plugin-resource; Figure out the state of all the modules.//disabled or in error
       if (halt && hs.length) {
         // prettier-ignore
         err = WINDOW.mk(["setTimeout", "Load setTimeout for modules: " + hs, null, hs]); //type, msg, err, requireModules
         err.NAME = STATE.NAME;
         return onError(err); //If wait time expired, throw error of unloaded modules.
-      } else
-        return iifeapp(parentThis)(
-          () =>
-            another &&
-            reqCalls.forEach((m) =>
-              parentThis[m][er]
-                ? parentThis[m][_em](er, parentThis[m][er])
-                : progress(parentThis[m])
-            ), //construction
-          ["watch", "clrsec"], //keys,...values
-          false,
-          (!halt || fb) &&
-            wait &&
-            brwr &&
-            !clrsec &&
-            setTimeout(() => checkLoaded() && null, 50) /*plugin-resource*/
-        ); //args'-mutable iife=>"app"
+      }
+      return iifeapp(parentThis)(
+        () =>
+          another &&
+          reqCalls.forEach((m) =>
+            parentThis[m][er]
+              ? parentThis[m][_em](er, parentThis[m][er])
+              : progress(parentThis[m])
+          ), //construction
+        ["watch", "clrsec"], //keys,...values
+        false,
+        (!halt || fb) &&
+          wait &&
+          brwr &&
+          !clrsec &&
+          setTimeout(() => checkLoaded() && null, 50) /*plugin-resource*/
+      ); //args'-mutable iife=>"app"
     }
     //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
     const seratimNull = (z, _, value) =>
