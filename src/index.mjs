@@ -1413,7 +1413,6 @@ class Require {
             );
           }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
           makeRequire: (relMap, options) => makeRequire(relMap, options, NAME),
-          require: STATE.makeRequire(),
           enable: (depMap) =>
             e_(STATE.dependencies).yes(depMap.id) &&
             STATE.dependencies[depMap.id] &&
@@ -1461,7 +1460,8 @@ class Require {
             );
           }
         }) &&
-        _K(STATE).forEach((key) => (this[key] = STATE[key]));
+        _K(STATE).forEach((key) => (this[key] = STATE[key])) &&
+        (this.require = STATE.makeRequire());
       return this;
     }
 
