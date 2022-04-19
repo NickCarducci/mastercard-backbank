@@ -342,9 +342,9 @@ class Require {
         } // Determine if have STATE.CONFIG object in the call. ds is a STATE.CONFIG object Adjust args if there are STATE.dependencies
         NAME = cfg && cfg.context ? cfg.context : NAME;
         ctx = e_(ctxs).yes(NAME) && ctxs[NAME];
-        console.log(ctx, ctx.require);
+        console.log(ctx, ctx && ctx.require);
         ctx = ctx ? ctx : (ctxs[NAME] = build.start.newRequireable(NAME)); //dependency
-        console.log(ctx, ctx.require);
+        console.log(ctx, ctx && ctx.require);
         cfg && ctx.configure(cfg);
         return ctx.require(ds, cb, eb);
       }),
@@ -1377,87 +1377,86 @@ class Require {
         );
       };
 
-    function newRequireable() {
-      const NAME = arguments[0],
-        state = {
-          NAME,
-          defQueue,
-          defQueueMap: {},
-          makeModuleMap,
-          nextTick: build.nextTick,
-          Module,
-          load: (id, url) => build.load(STATE, id, url),
-          execCb: (name, cb, args, exports) => cb.apply(exports, args),
-          onError,
-          CONFIG: STATE.CONFIG,
-          unDe: this.unDE ? this.unDE : {},
-          enRgtry: this.enRgtry ? this.enRgtry : {},
-          urlFchd: this.urlFchd ? this.urlFchd : {}, //this able's
-          defined: this.defined ? this.defined : {},
-          dependencies: this.dependencies ? this.dependencies : {},
-          configure,
-          makeShimExports: (value) =>
-            function () {
-              return (
-                (value[_i] && value[_i].apply(dependency, arguments)) ||
-                (value[_x] && getGlobal(value[_x]))
-              );
-            }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
-          /* makeShimExports: (value) =>
+    const newRequireable = (NAME) => {
+      const state = {
+        NAME,
+        defQueue,
+        defQueueMap: {},
+        makeModuleMap,
+        nextTick: build.nextTick,
+        Module,
+        load: (id, url) => build.load(STATE, id, url),
+        execCb: (name, cb, args, exports) => cb.apply(exports, args),
+        onError,
+        CONFIG: STATE.CONFIG,
+        unDe: this.unDE ? this.unDE : {},
+        enRgtry: this.enRgtry ? this.enRgtry : {},
+        urlFchd: this.urlFchd ? this.urlFchd : {}, //this able's
+        defined: this.defined ? this.defined : {},
+        dependencies: this.dependencies ? this.dependencies : {},
+        configure,
+        makeShimExports: (value) =>
+          function () {
+            return (
+              (value[_i] && value[_i].apply(dependency, arguments)) ||
+              (value[_x] && getGlobal(value[_x]))
+            );
+          }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
+        /* makeShimExports: (value) =>
       function () {
         return (
           (value[_i] && value[_i].apply(dependency, arguments)) ||
           (value[_x] && getGlobal(value[_x]))
         );
       }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
-          makeRequire: (relMap, options) => makeRequire(relMap, options, NAME),
-          enable: (depMap) =>
-            e_(STATE.dependencies).yes(depMap.id) &&
-            STATE.dependencies[depMap.id] &&
-            getModule(depMap).enable(),
-          //if "m" this is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
-          completeLoad: (tkn) => {
-            var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
-            for (tkeGblQue(); defQueue.length; ) {
-              defQueue.shift();
-              if (found) break;
-              (found = true) && //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
-                (args = args[0] =
-                  args[0] === null
-                    ? tkn
-                    : args[0] === tkn
-                    ? (found = true)
-                    : null) &&
-                callGetModule(args);
-            } //matched a define call in this script
-            STATE.defQueueMap = {};
-            var m = e_(STATE.dependencies).yes(tkn) && STATE.dependencies[tkn]; // in case-/init-calls change the STATE.dependencies
-            if (!found && !e_(STATE.defined).yes(tkn) && m && !m.inited) {
-              var shim = e_(STATE.CONFIG.shim).yes(tkn)
-                ? STATE.CONFIG.shim[tkn]
-                : {};
-              if (
-                STATE.CONFIG.enforceDefine &&
-                (!shim[_x] || !getGlobal(shim[_x]))
-              )
-                return (
-                  !WINDOW.hasPathFallback(tkn, STATE.CONFIG.paths) &&
-                  onError(
-                    WINDOW.mk([
-                      "nodefine",
-                      "No define call for " + tkn,
-                      null,
-                      [tkn]
-                    ])
-                  )
-                ); //type, msg, err, requireModules
-              callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
-            }
-            return (
-              checkLoaded() && true //tkn = moduleName
-            );
+        makeRequire: (relMap, options) => makeRequire(relMap, options, NAME),
+        enable: (depMap) =>
+          e_(STATE.dependencies).yes(depMap.id) &&
+          STATE.dependencies[depMap.id] &&
+          getModule(depMap).enable(),
+        //if "m" this is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
+        completeLoad: (tkn) => {
+          var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
+          for (tkeGblQue(); defQueue.length; ) {
+            defQueue.shift();
+            if (found) break;
+            (found = true) && //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
+              (args = args[0] =
+                args[0] === null
+                  ? tkn
+                  : args[0] === tkn
+                  ? (found = true)
+                  : null) &&
+              callGetModule(args);
+          } //matched a define call in this script
+          STATE.defQueueMap = {};
+          var m = e_(STATE.dependencies).yes(tkn) && STATE.dependencies[tkn]; // in case-/init-calls change the STATE.dependencies
+          if (!found && !e_(STATE.defined).yes(tkn) && m && !m.inited) {
+            var shim = e_(STATE.CONFIG.shim).yes(tkn)
+              ? STATE.CONFIG.shim[tkn]
+              : {};
+            if (
+              STATE.CONFIG.enforceDefine &&
+              (!shim[_x] || !getGlobal(shim[_x]))
+            )
+              return (
+                !WINDOW.hasPathFallback(tkn, STATE.CONFIG.paths) &&
+                onError(
+                  WINDOW.mk([
+                    "nodefine",
+                    "No define call for " + tkn,
+                    null,
+                    [tkn]
+                  ])
+                )
+              ); //type, msg, err, requireModules
+            callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
           }
-        };
+          return (
+            checkLoaded() && true //tkn = moduleName
+          );
+        }
+      };
       return (
         //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
         //checkLoaded(this) &&
@@ -1478,7 +1477,7 @@ class Require {
         (STATE.require = STATE.makeRequire()) &&
         STATE
       );
-    }
+    };
     console.log("In Require: ", "newRequireable", newRequireable);
 
     build.start = {
