@@ -201,11 +201,11 @@ Require = ((dependency, setTimeout) => {
     configuration = requirejs;
     requirejs = undefined;
   }
-  if (typeof require !== "undefined" && !isFunction(require)) {
+  /*if (typeof require !== "undefined" && !isFunction(require)) {
     //require is a config object.
     configuration = require;
     require = undefined;
-  }
+  }*/
 
   //Caja compliant req for minified-scope
   //name of dependency, callback for array completion
@@ -259,7 +259,7 @@ Require = ((dependency, setTimeout) => {
   /**
    * Export require as a dependency, but only if it does not already exist.
    */
-  if (!require) require = req;
+  if (!require) Require = req;
 
   req.version = version;
 
@@ -2094,7 +2094,7 @@ export class DurableObjectExample {
       //const requirer = await requir.fetch(req);
       //.then(async (res) => await res.text());
       //console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
-      const { require: requir } = new Require();
+      const { require: requir } = Require();
       const locs = requir("mastercard-locations");
       const places = requir("mastercard-places");
       //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
