@@ -473,8 +473,10 @@ export class Require {
         ); //args'-mutable iife=>"app"
     }
     //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
-    const seratimNull = (z, _, value) =>
-        seratimNull(variables, "undefined", (z[_] = value)),
+     const seratimNull = (z, _, value) => {
+        z[_] = value;
+        return true;
+      }, //z is a this binding ...as args
       tryCatch = (z, key, value) => {
         var er = null;
         try {
