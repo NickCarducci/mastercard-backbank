@@ -24,13 +24,13 @@ class Require {
     var mainScript,
       src,
       define = (
-        { nm, ds, c, n } = (...copy) => {
+        { nm, REM, c, n } = (...copy) => {
           const notString = T(copy.nm !== _t),
-            notDeps = e_(copy.ds).string() !== Ar;
+            notDeps = e_(copy.REM).string() !== Ar;
           return {
-            nm: notString ? null : copy.nm, //copy = { nm, ds, c }; Allow for anonymous modules
-            ds: notString ? copy.nm : notDeps ? null : copy.ds,
-            c: notString ? copy.ds : notDeps ? copy.ds : copy.c,
+            nm: notString ? null : copy.nm, //copy = { nm, REM, c }; Allow for anonymous modules
+            REM: notString ? copy.nm : notDeps ? null : copy.REM,
+            c: notString ? copy.REM : notDeps ? copy.REM : copy.c,
             n:
               scriptPends ||
               (() => {
@@ -46,10 +46,10 @@ class Require {
         seratimNull(
           variables,
           "undefined",
-          (ds =
-            !ds && e_(c).string() === Fn && c.length
-              ? WINDOW.concat(ds, c)
-              : ds)
+          (REM =
+            !REM && e_(c).string() === Fn && c.length
+              ? WINDOW.concat(REM, c)
+              : REM)
         ) &&
         // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
         seratimNull(
@@ -64,11 +64,9 @@ class Require {
         ) &&
         //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
 
-        (!STATE ? defineables.push([nm, ds, c]) : true) &&
-        STATE.defQueue.push([nm, ds, c]) &&
+        (!STATE ? defineables.push([nm, REM, c]) : true) &&
+        STATE.defQueue.push([nm, REM, c]) &&
         (STATE.defQueueMap[nm] = true) && { amd: { jQuery: true } },
-      contexts = {},
-      us = "_",
       createElement = (ns) =>
         document[`createElementNS${ns ? "NS" : ""}`](
           ns ? ("http://www.w3.org/1999/xhtml", "html:script") : "script"
@@ -119,13 +117,15 @@ class Require {
       scriptPends,
       defineables = [],
       useInteractive = false,
+      contexts = {},
       /**
       STATE.require.undef(id);
       STATE.makeRequire(null, { skipMap: true })([id]);
-      STATE = STATE ? STATE : (contexts[NAME] = new build.start.newRequireable(NAME)); //dependency
+      STATE = STATE ? STATE : (contexts[NAME] = new BUILD.start.newRequireable(NAME)); //dependency
       cfg && STATE.configure(cfg);
-      return STATE.require(ds, cb, eb);
+      return STATE.require(REM, cb, eb);
     */
+      _ = "_",
       _f = "*",
       _p = "packages",
       _b = "bundles",
@@ -137,8 +137,8 @@ class Require {
       _xf = "exportsFn",
       _x = "exports",
       _m = "module",
-      _o = "onError",
-      _dd = "defined",
+      _oE = "onError",
+      _d = "defined",
       _dg = "defining",
       _ed = "enabled",
       _e = "error",
@@ -176,7 +176,7 @@ class Require {
               }, //t, m, e, ids
         dr: (m) => `data-require${m ? _m : "context"}`,
         concat: (
-          { ds, cb } = (ds, cb) => {
+          { REM, cb } = (REM, cb) => {
             return {
               cb: cb
                 .toString()
@@ -186,12 +186,12 @@ class Require {
                 )
                 .replace(
                   /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
-                  (match, dep) => ds.push(dep)
+                  (match, dep) => REM.push(dep)
                 ),
-              ds
+              REM
             };
           } /*like ')//comment'; keep prefix*/
-        ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(ds), //Potential-CommonJS use-case of exports and this, without 'require.';
+        ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(REM), //Potential-CommonJS use-case of exports and this, without 'require.';
         rmvScrpt: (name, NAME) => {
           const ga = "getAttribute",
             e = (m) => (m ? name : NAME); //scriptNode
@@ -325,22 +325,26 @@ class Require {
         }
       },
       //uses 'this' as 'z', but when called () the function is returned,
-      build = (variables.REQUIREJS = function () {
-        var ds = arguments[0],
+      BUILD = (variables.REQUIREJS = function () {
+        var REM = arguments[0], //String(require|export|module)
           cb = arguments[1],
           eb = arguments[2],
           optional = arguments[3],
           STATE,
           cfg,
-          NAME = us; //Caja compliant build for minified-scope name of dependency, cb for arr completion Find the right STATE, use default
-        if (!e_(ds).string() === Ar && T(ds !== _t)) {
-          cfg = ds;
+          NAME = _; //Caja compliant BUILD for minified-scope name of dependency, cb for arr completion Find the right STATE, use default
+        if (!e_(REM).string() === Ar && T(REM !== _t)) {
+          cfg = REM;
           return !e_(cb).a()
-            ? (ds = [])
-            : iifeapp(this)(["ds", "cb", "eb"], cb, eb, optional);
-        } // Determine if have STATE.CONFIG object in the call. ds is a STATE.CONFIG object Adjust args if there are STATE.dependencies
-        NAME = cfg && cfg.context ? cfg.context : NAME;
-        STATE = e_(contexts).yes(NAME) && contexts[NAME];
+            ? (REM = [])
+            : iifeapp(this)(["REM", "cb", "eb"], cb, eb, optional);
+        } // Determine if have STATE.CONFIG object in the call. REM is a STATE.CONFIG object Adjust args if there are STATE.dependencies
+        (NAME = cfg && cfg.context ? cfg.context : NAME) &&
+          seratimNull(
+            variables,
+            "undefined",
+            (STATE = e_(contexts).yes(NAME) && contexts[NAME])
+          );
         console.log(STATE, STATE && STATE.require);
         STATE = STATE
           ? STATE
@@ -352,9 +356,9 @@ class Require {
                     defQueue,
                     defQueueMap: {},
                     makeModuleMap,
-                    nextTick: build.nextTick,
+                    nextTick: BUILD.nextTick,
                     Module,
-                    load: (id, url) => build.load(STATE, id, url),
+                    load: (id, url) => BUILD.load(STATE, id, url),
                     execCb: (name, cb, args, exports) =>
                       cb.apply(exports, args),
                     onError,
@@ -380,8 +384,8 @@ class Require {
                         (value[_x] && getGlobal(value[_x]))
                       );
                     }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
-                    makeRequire: (relMap, options) =>
-                      makeRequire(relMap, options, NAME),
+                    makeRequire: (modMap, options) =>
+                      makeRequire(modMap, options, NAME),
                     enable: (depMap) =>
                       e_(STATE.dependencies).yes(depMap.id) &&
                       STATE.dependencies[depMap.id] &&
@@ -429,7 +433,7 @@ class Require {
                               ])
                             )
                           ); //type, msg, err, requireModules
-                        callGetModule([tkn, shim.ds || [], shim.exportsFn]); //does not call define(), but simulated
+                        callGetModule([tkn, shim.REM || [], shim.exportsFn]); //does not call define(), but simulated
                       }
                       return (
                         checkLoaded() && true //tkn = moduleName
@@ -464,7 +468,7 @@ class Require {
         console.log(STATE, STATE && STATE.require);
         return (
           seratimNull(variables, "undefined", cfg && STATE.configure(cfg)) &&
-          STATE.require(ds, cb, eb)
+          STATE.require(REM, cb, eb)
         );
       }),
       e_ = (obj /*,string*/) => {
@@ -496,7 +500,7 @@ class Require {
           interA: (x) => x.readyState === "interactive"
         };
       }; //obj.prototype["hasOwnProperty"][name]; const method =string?"toString":"hasOwnProperty"
-    console.log("In Require: ", "build", build);
+    console.log("In Require: ", "BUILD", BUILD);
     var clrsec, watch;
     function checkLoaded(parentThis = arguments[0]) {
       var err,
@@ -605,22 +609,23 @@ class Require {
         unDE = arguments[1],
         configShim = arguments[2]
       ) {
-        const on = ({ m, dm } = depMap, name, f) => {
+        var on = ({ m, dm } = depMap, name, f) => {
             if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
-              return name === _dd && f(STATE.defined[dm.id]);
+              return name === _d && f(STATE.defined[dm.id]);
             const s = (m = (dm) => getModule(dm)) =>
               m[_e] && name === _e ? f(m[_e]) : m.on(name, f);
             return s(dm);
           },
+          depMatched = [],
+          depMaps = [],
+          pluginMaps = {},
+          depExports = [],
+          events = (e_(unDE).yes(map.id) && unDE[map.id]) || {},
+          depCount = 0,
           state = {
-            events: (e_(unDE).yes(map.id) && unDE[map.id]) || {},
             map,
             shim: e_(configShim).yes(map.id) && configShim[map.id],
-            depExports: [],
-            depMaps: [],
-            depMatched: [],
-            pluginMaps: {},
-            depCount: 0,
+
             init: this.INITED
               ? () => null
               : (
@@ -629,9 +634,9 @@ class Require {
                   eb = (eb) =>
                     eb
                       ? this.on(_e, eb) //If no eb already, but there are error listeners
-                      : this.events[_e]
+                      : events[_e]
                       ? (eb = (err) => this.emit(_e, err))
-                      : null, //construct((err) => this.emit(_e, err), this); //on this this, set up an eb to pass to the ds.
+                      : null, //construct((err) => this.emit(_e, err), this); //on this this, set up an eb to pass to the REM.
                   o = (o) => o || {}
                 ) => {
                   const obj = {
@@ -639,15 +644,15 @@ class Require {
                     eb,
                     inited: true,
                     ignore: o.ignore
-                  }; //copy of 'source dependency arr inputs' (i.e. "shim" ds by depMaps arr)
+                  }; //copy of 'source dependency arr inputs' (i.e. "shim" REM by depMaps arr)
                   _K(obj).forEach((key) => (this[key] = obj[key]));
                   if (o[_ed] || this[_ed]) return this.enable();
                   this.check();
                 },
-            load: this.urlFchd[this.map.url]
+            load: STATE.urlFchd[this.map.url]
               ? () => null
               : ((z) =>
-                  (this.urlFchd[this.map.url] = true) &&
+                  (STATE.urlFchd[this.map.url] = true) &&
                   STATE.load(z.map.id, z.map.url))(this),
             check: (
               { id, v } = (...args) => {
@@ -659,7 +664,7 @@ class Require {
                 : this[_dg] //new Promise(r=>r(""))
                 ? this[_e] && this.emit(_e, this[_e]) // !defQueue.includes(this) this is ready to, and does, define itself
                 : (this[_dg] = true) && //no redundant require-define
-                  (this.depCount > 0 || STATE.defined
+                  (depCount > 0 || STATE.defined
                     ? () => {}
                     : () => {
                         (v.isDefine = this.map.yesdef) &&
@@ -667,7 +672,7 @@ class Require {
                             e_(this.factory).string() !== Fn
                               ? () => this.factory
                               : () => {
-                                  var depExpo = this.depExports, //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
+                                  var depExpo = depExports, //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
                                     cjs =
                                       v.isDefine &&
                                       this[_x] === undefined &&
@@ -684,8 +689,8 @@ class Require {
                                     )
                                   );
                                   if (er) {
-                                    ((this.events[_e] && v.isDefine) ||
-                                      build[_o] !== ((err) => err)) &&
+                                    ((events[_e] && v.isDefine) ||
+                                      BUILD[_oE] !== ((err) => err)) &&
                                       er &&
                                       // new iifeapp(this)(
                                       ((z, obj) => {
@@ -719,27 +724,27 @@ class Require {
                           (STATE.defined[id] = this[_x] && resolve(""))
                       ).then(
                         () =>
-                          build.onResourceLoad &&
-                          build.onResourceLoad(
+                          BUILD.onResourceLoad &&
+                          BUILD.onResourceLoad(
                             STATE,
                             this.map,
-                            this.depMaps.map(
+                            depMaps.map(
                               (depMap) => depMap.normalizedMap || depMap
                             )
                           )
                       )
                     : null) &&
                   clrRegstr(id) &&
-                  (this[_dd] = true) &&
+                  (this[_d] = true) &&
                   seratimNull(this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
-                  this[_dd] &&
+                  this[_d] &&
                   !this.defineEmitted &&
                   [
                     "defineEmitted",
                     "emit",
                     "defineEmitComplete"
                   ].forEach((de, n) =>
-                    n === 1 ? this.emit(_dd, this[_x]) : (this[de] = true)
+                    n === 1 ? this.emit(_d, this[_x]) : (this[de] = true)
                   ),
             normalizeMod: (plugin, mp) => {
               var { name, parentMap: pM } = this.map; //Normalize the ID if the plugin allows it.
@@ -754,7 +759,7 @@ class Require {
               var nM = makeModuleMap(mp.prefix + "!" + name, pM, true); //normalizedMap -for applying map STATE.CONFIG again either.
               on(
                 nM,
-                _dd,
+                _d,
                 (d) =>
                   (this.map.normalizedMap =
                     nM &&
@@ -765,8 +770,8 @@ class Require {
               ); //construct
               const prt = (
                 normMod = (normMod) =>
-                  (normMod ? this.depMaps.push(nM) : true) &&
-                  this.events[_e] &&
+                  (normMod ? depMaps.push(nM) : true) &&
+                  events[_e] &&
                   normMod.on(_e, (err) => this.emit(_e, err)) &&
                   normMod //Mark this as a dependency for this plugin, so it can be traced for cycles.
               ) => normMod && normMod.enable();
@@ -784,7 +789,7 @@ class Require {
               seratimNull(
                 variables,
                 "undefined",
-                this.depMaps.forEach((depMap, i) => {
+                depMaps.forEach((depMap, i) => {
                   if (T(depMap === _t)) {
                     const mp = this.map.yesdef ? this.map : this.map.parentMap;
                     (depMap = makeModuleMap(
@@ -792,17 +797,13 @@ class Require {
                       mp,
                       false,
                       !this.skipMap
-                    )) && (this.depMaps[i] = depMap); //Dependency needs to be converted to a depMap //and wired up to this this.
+                    )) && (depMaps[i] = depMap); //Dependency needs to be converted to a depMap //and wired up to this this.
                     var handler =
                       e_(handlers).yes(depMap.id) && handlers[depMap.id];
-                    if (handler) return (this.depExports[i] = handler(this));
+                    if (handler) return (depExports[i] = handler(this));
                     const go = () =>
-                      seratimNull(
-                        variables,
-                        "undefined",
-                        (this["depCount"] += 1)
-                      ) &&
-                      on(depMap, _dd, (depExports) => {
+                      seratimNull(variables, "undefined", (depCount += 1)) &&
+                      on(depMap, _d, (depExports) => {
                         if (this.undefed) return null;
                         seratimNull(
                           variables,
@@ -812,7 +813,7 @@ class Require {
                       }) &&
                       (this.eb
                         ? on(depMap, _e, this.eb) // propagate the error correctly - something else is listening for errors
-                        : this.events[_e]
+                        : events[_e]
                         ? on(depMap, _e, (err) => this.emit(_e, err))
                         : null);
                     go();
@@ -824,12 +825,12 @@ class Require {
                     !m[_ed] &&
                     STATE.enable(depMap, this);
                 })
-              ) && //don't call enable if it is already enabled (circular ds)
+              ) && //don't call enable if it is already enabled (circular REM)
               seratimNull(
                 variables,
                 "undefined",
-                _K(this.pluginMaps).forEach(
-                  (pM = (x) => this.pluginMaps[x], i) =>
+                _K(pluginMaps).forEach(
+                  (pM = (x) => pluginMaps[x], i) =>
                     e_(STATE.dependencies).yes(pM.id) &&
                     STATE.dependencies[pM.id] &&
                     !STATE.dependencies[pM.id][_ed] &&
@@ -839,30 +840,27 @@ class Require {
               seratimNull(variables, "undefined", (this.enabling = false)) &&
               this.check(),
             on: (name, cb) =>
-              (this.events[name]
-                ? this.events[name]
-                : (this.events[name] = [])
-              ).push(cb),
+              (events[name] ? events[name] : (events[name] = [])).push(cb),
             emit: (name, evt) =>
               seratimNull(
                 variables,
                 "undefined",
-                this.events[name].forEach((cb) => cb(evt))
+                events[name].forEach((cb) => cb(evt))
               ) &&
               name === _e &&
-              delete this.events[name],
+              delete events[name],
             defineDep: (i, depExports) =>
-              !this.depMatched[i] &&
-              (this.depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-              seratimNull(variables, "undefined", (this.depCount -= 1)) && //prototype is hydratable for async results, init only on this page by 'new' initialization
-              (this.depExports[i] = depExports), //multiple cb export cycles
+              !depMatched[i] &&
+              (depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
+              seratimNull(variables, "undefined", (depCount -= 1)) && //prototype is hydratable for async results, init only on this page by 'new' initialization
+              (depExports[i] = depExports), //multiple cb export cycles
 
             callPlugin: () => {
               var map = this.map, //Map already normalized the prefix.
                 id = map.id, //Mark this as a dependency for this plugin, so it
                 pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
-              this.depMaps.push(pluginMap) &&
-                on(pluginMap, _dd, (plugin) => {
+              depMaps.push(pluginMap) &&
+                on(pluginMap, _d, (plugin) => {
                   if (this.map.unnormalized)
                     return Module[_P].normalizeMod(plugin, map); //If current map is not normalized, wait for that
                   var bundleId =
@@ -919,7 +917,7 @@ class Require {
                     const er = tryCatch(
                       variables,
                       "undefined",
-                      build.exec(text)
+                      BUILD.exec(text)
                     );
                     if (er)
                       return onError(
@@ -933,14 +931,14 @@ class Require {
                     //type, msg, err, requireModules
                     return (
                       (hasInteractive ? (useInteractive = true) : true) && //Mark this as a dependency for the plugin resource
-                      this.depMaps.push(moduleMap) &&
+                      depMaps.push(moduleMap) &&
                       STATE.completeLoad(tkn) &&
                       parser([tkn], load)
                     ); //Support anonymous modules. Bind the value of that this to the value for this resource ID.
                   }) && plugin.load(map.name, parser, load, STATE.CONFIG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
                 }) &&
                 STATE.enable(pluginMap, this) &&
-                (this.pluginMaps[pluginMap.id] = pluginMap);
+                (pluginMaps[pluginMap.id] = pluginMap);
             },
             fetch: () => {
               if (this.fetched) return null;
@@ -950,7 +948,7 @@ class Require {
                 STATE.makeRequire(this.map, {
                   enableBuildCallback: true
                 })(
-                  this.shim.ds || [],
+                  this.shim.REM || [],
                   map.prefix ? this.callPlugin() : this.load()
                 ); //plugin-managed resource
               } else return map.prefix ? this.callPlugin() : this.load();
@@ -1097,7 +1095,7 @@ class Require {
                 _K(shims).forEach((id, i) => {
                   var v = shims[id];
                   return (
-                    (e_(v).string() === Ar ? (v = { ds: v }) : true) && //Merge shim, Normalize the structure
+                    (e_(v).string() === Ar ? (v = { REM: v }) : true) && //Merge shim, Normalize the structure
                     ((v[_x] || v[_i]) && !v[_xf]
                       ? (v[_xf] = STATE.makeShimExports(v))
                       : true) &&
@@ -1118,8 +1116,8 @@ class Require {
           (STATE.CONFIG.shim = shims ? shim : STATE.CONFIG.shim) &&
           bundle(c) &&
           map() && //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
-          (c.ds || c.cb) &&
-          STATE.require(c.ds || [], c.cb)
+          (c.REM || c.cb) &&
+          STATE.require(c.REM || [], c.cb)
         );
       },
       //s eslint-disable-next-line
@@ -1141,7 +1139,7 @@ class Require {
 
     require=(dep,to)=>{
       define
-      configuration(config?!require,build)
+      configuration(config?!require,BUILD)
       convertName
       rmvScript
       hasPathFallback
@@ -1149,10 +1147,10 @@ class Require {
       normalize
       this
       Module
-      build
+      BUILD
       obj
 
-      require=build
+      require=BUILD
       newRequireable = {
         STATE:{STATE.CONFIG}
         STATE.dependencies
@@ -1175,13 +1173,13 @@ class Require {
         return STATE
       }
       
-      s = build.start
-      build({})
+      s = BUILD.start
+      BUILD({})
       ctxReqProps
       head
       onError,createNode,load
       exec 
-      build()
+      BUILD()
     }
     */
     console.log(
@@ -1225,7 +1223,7 @@ class Require {
 
           // prettier-ignore
           return (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : STATE.CONFIG.baseUrl) + url; ///^[\w\+\.\-]+:/
-        }, //Delegates to build.load. Broken out as a separate function to
+        }, //Delegates to BUILD.load. Broken out as a separate function to
         u = geturl;
       return `${
         STATE.CONFIG.urlArgs && !/^blob:/.test(u)
@@ -1274,7 +1272,7 @@ class Require {
               return { ...es, err };
             } //event, event.error, emit
           ) => md[_ev] && md[_ev][_e] && md[_em](_e, err) && true
-        ) && build[_o](err);
+        ) && BUILD[_oE](err);
       },
       onScriptError = (evt) => {
         var data = getScriptData(evt);
@@ -1374,43 +1372,58 @@ class Require {
           : value
               .split(".")
               .reduce((previous, key) => dependency[previous], {}),
-      makeRequire = (relMap, o = (options) => options || {}, NAME) => {
-        const tool = (relMap, o, NAME) => {
+      makeRequire = (modMap, o = (options) => options || {}, NAME) => {
+        const tool = (modMap, o, NAME) => {
             return {
-              suspend: (ds, cb, eb) => {
-                var id, map;
-
-                if (o.enableBuildCallback && cb && e_(cb).string() === Fn)
-                  cb.__requireJsBuild = true;
-
-                return T(ds !== _t)
+              errr: (
+                //dependencies, callback, errorback
+                REM,
+                cb = (cb) =>
+                  seratimNull(
+                    variables,
+                    "undefined",
+                    o.enableBuildCallback &&
+                      cb &&
+                      e_(cb).string() === Fn &&
+                      (cb.__requireJsBuild = true)
+                  ) && cb,
+                eb
+              ) =>
+                T(REM !== _t)
                   ? null
                   : e_(cb).string() === Fn
                   ? onError(
-                      WINDOW.mk(["requireargs", "Invalid require call"]),
+                      WINDOW.mk([
+                        "requireargs",
+                        "Invalid ([object Function], -class?) require callback"
+                      ]),
                       eb
                     ) //Invalid call; id, msg, err, requireModule
-                  : relMap && e_(handlers).yes(ds)
-                  ? handlers[ds](STATE.dependencies[relMap.id]) //when require|exports|this are requested && while this is being STATE.defined
-                  : build.get
-                  ? build.get(STATE, ds, relMap, tool.parser)
-                  : () =>
-                      (map = makeModuleMap(ds, relMap, false, true)) &&
-                      (id = map.id) && //Normalize this name from . or ..
-                      (!e_(STATE.defined).yes(id)
-                        ? onError(
-                            WINDOW.mk([
-                              "notloaded",
-                              `Module name ${id} has not been loaded yet for STATE: ` +
-                                NAME +
-                                !relMap && "; (No relMap) Use require([])"
-                            ])
-                          )
-                        : STATE.defined[id]);
-              },
+                  : modMap && e_(handlers).yes(REM)
+                  ? handlers[REM](STATE.dependencies[modMap.id]) //when require|exports|module are requested && while this is being STATE.defined
+                  : BUILD.get
+                  ? BUILD.get(STATE, REM, modMap, tool.parser)
+                  : () => {
+                      var id, map;
+                      return (
+                        (map = makeModuleMap(REM, modMap, false, true)) &&
+                        (id = map.id) && //Normalize this name from . or ..
+                        (!e_(STATE.defined).yes(id)
+                          ? onError(
+                              WINDOW.mk([
+                                "notloaded",
+                                `Module name ${id} has not been loaded yet for commonjs Dependencies' build : ` +
+                                  NAME +
+                                  !modMap && "; (No modMap) Use require([])"
+                              ])
+                            )
+                          : STATE.defined[id])
+                      );
+                    },
               parser: (...args) => {
-                if (tool.suspend(...args)) return null;
-                const ds = args[0],
+                //function localRequire (dependencies, callback, errorback){}
+                if (tool.errr(...args)) return null;
+                const REM = args[0],
                   cb = args[1],
                   eb = args[2];
 
@@ -1431,26 +1444,26 @@ class Require {
                     callGetModule(args);
                   }
                   return (STATE.defQueueMap = {}) && true;
-                }; //"intake modules" //type, msg, err, requireModules //...id, ds, factory; "normalized by define()"
+                }; //"intake modules" //type, msg, err, requireModules //...id, REM, factory; "normalized by define()"
                 intakeDefines(); //Grab defines waiting in the dependency queue.
                 STATE.nextTick(
                   () =>
                     intakeDefines() && //Mark all the STATE.dependencies as needing to be loaded.
-                    (requireMod = getModule(makeModuleMap(null, relMap))) && //collect defines that could have been added since the 'require call'
+                    (requireMod = getModule(makeModuleMap(null, modMap))) && //collect defines that could have been added since the 'require call'
                     (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to this 'require call' for STATE.dependencies
-                    requireMod[_i](ds, cb, eb, { enabled: true }) &&
+                    requireMod[_i](REM, cb, eb, { enabled: true }) &&
                     checkLoaded()
                 );
                 return tool.parser;
               }
             };
           },
-          app = {
+          namer = {
             isBrowser,
             defined: (id) =>
-              e_(STATE.defined).yes(makeModuleMap(id, relMap, false, true).id),
+              e_(STATE.defined).yes(makeModuleMap(id, modMap, false, true).id),
             specified: (
-              id = (id) => makeModuleMap(id, relMap, false, true).id
+              id = (id) => makeModuleMap(id, modMap, false, true).id
             ) => e_(STATE.defined).yes(id) || e_(STATE.dependencies).yes(id),
             toUrl: (
               { i, isAlias, mNPE } = (mNPE) => {
@@ -1473,7 +1486,7 @@ class Require {
               //also, "map" for outward facing code...//also, "packages" ""
               const ar = [
                 mNPE,
-                relMap && relMap.id,
+                modMap && modMap.id,
                 true,
                 nodeIdCompat,
                 system,
@@ -1483,11 +1496,11 @@ class Require {
             }
           };
         return (
-          WINDOW.mixin(tool(relMap, o, NAME).parser, app) &&
-          (!relMap
-            ? (tool(relMap, o, NAME).parser.undef = (id) => {
+          WINDOW.mixin(tool(modMap, o, NAME).parser, namer) &&
+          (!modMap
+            ? (tool(modMap, o, NAME).parser.undef = (id) => {
                 tkeGblQue(); //Only allow undef on top level require calls
-                var map = makeModuleMap(id, relMap, true), //Bind define() calls (fixes #408) to 'this' STATE
+                var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'this' STATE
                   m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
                 return (
                   (m.undefed = true) &&
@@ -1508,14 +1521,14 @@ class Require {
                 );
               })
             : true) &&
-          tool(relMap, o, NAME).parser
+          tool(modMap, o, NAME).parser
         );
       };
 
-    //console.log("In Require: ", "newRequireable", build.start.newRequireable);
-    build({}); //'dependency require' STATE-sensitive exported methods
-    console.log("In Require: ", "build(.start)", build);
-    build.start = {
+    //console.log("In Require: ", "newRequireable", BUILD.start.newRequireable);
+    BUILD({}); //'dependency require' STATE-sensitive exported methods
+    console.log("In Require: ", "BUILD(.start)", BUILD);
+    BUILD.start = {
       contexts
       //(NAME) =>
     };
@@ -1525,20 +1538,21 @@ class Require {
       "undefined",
       ctxReqProps.forEach(
         (prop) =>
-          (build[prop] = function () {
-            return contexts[us].require[prop].apply(contexts[us], arguments);
+          (BUILD[prop] = function () {
+            //apply an initial state to a function
+            return contexts[_].require[prop].apply(contexts[_], arguments);
           })
       )
     ) && //apply arguments to requires on context
     //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but contexts during builds//ticketx to apology tour
     (isBrowser
-      ? (head = build.start.head = e_("base").tag(0)
+      ? (head = BUILD.start.head = e_("base").tag(0)
           ? baseElement.parentNode
           : e_("head").tag())
       : true) &&
     //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
-    (build[_o] = (err) => err) && // node for the load command in browser env
-      (build.createNode = (CONFIG, tkn, url) => {
+    (BUILD[_oE] = (err) => err) && // node for the load command in browser env
+      (BUILD.createNode = (CONFIG, tkn, url) => {
         return {
           ...(CONFIG.xhtml ? e_().create("NS") : e_().create()),
           type: CONFIG.scriptType || "text/javascript",
@@ -1546,12 +1560,12 @@ class Require {
           async: true
         };
       }) &&
-      (build.load = (STATE, tkn, url) => {
+      (BUILD.load = (STATE, tkn, url) => {
         // normalize, hasPathFallback, rmvScrpt, Module Do not overwrite an existing variables.REQUIREJS instance/ amd loader.
         const CONFIG = (STATE && STATE.CONFIG) || {};
         //handle load request (in browser env); 'STATE' for state, 'tkn' for name, 'url' for point
         if (isBrowser) {
-          var n = build.createNode(CONFIG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
+          var n = BUILD.createNode(CONFIG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
           n[_SA](WINDOW.dr(), STATE.NAME);
           n[_SA](WINDOW.dr(true), tkn); //artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()
 
@@ -1585,7 +1599,7 @@ class Require {
               //importScripts(url);
               STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
           } catch (e) {
-            STATE[_o](
+            STATE[_oE](
               WINDOW.mk([
                 "importscripts",
                 `importScripts failed for ${tkn} at ${url}`,
@@ -1598,18 +1612,18 @@ class Require {
       }) &&
       //this named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
       //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
-      console.log("build product (of Require) :", build);
+      console.log("BUILD product (of Require) :", BUILD);
     const state = {
       //This...
       //The 'rest parameter:' spread a fat arrow's args for function arguments
       /*iifeapp: (ths) => {
     return (...args) => new iifeapp(ths)(args);
     }, */ //(object/class/prototype-'this'-prop)
-      build, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'build' function
+      BUILD, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'BUILD' function
       require:
         /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
         e_(variables.REQUIREJS).string() !== Fn
-          ? build // package-names, cb, returns a value to define the this of argument index[0]
+          ? BUILD // package-names, cb, returns a value to define the this of argument index[0]
           : () => {
               //dependency = arguments[0],
               const notBaseUrl = T(variables.REQUIREJS !== _u),
@@ -1627,7 +1641,7 @@ class Require {
               //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
 
               const obj = {
-                CONFIG: (cfg) => build(cfg),
+                CONFIG: (cfg) => BUILD(cfg),
                 nextTick: (fn) =>
                   T(setTimeout !== _n) ? setTimeout(fn, 4) : fn()
               }; // globally agreed names for other potential AMD loaders
@@ -1635,18 +1649,18 @@ class Require {
               return seratimNull(
                 variables,
                 "undefined",
-                _K(obj).forEach((key) => (build[key] = obj[key]))
+                _K(obj).forEach((key) => (BUILD[key] = obj[key]))
               ) &&
-                // if (!require) require = build; //Exportable require
+                // if (!require) require = BUILD; //Exportable require
                 seratimNull(
                   variables,
                   "undefined",
-                  ["version", "isBrowser"].forEach((k) => (build[k] = sign[k]))
+                  ["version", "isBrowser"].forEach((k) => (BUILD[k] = sign[k]))
                 ) &&
                 //prettier-ignore
                 /*jslint evil: true */
-                //build.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
-                //build.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
+                //BUILD.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
+                //BUILD.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
                 //merely to prepend with 'use strict', don't bother
 
                 isBrowser &&
@@ -1695,15 +1709,15 @@ class Require {
                           (/^[/:?.]|(.js)$/.test(mainScript)
                             ? (mainScript = dataMain)
                             : true) && //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
-                          (variables.configuration.ds = variables.configuration
-                            .ds
-                            ? variables.configuration.ds.concat(mainScript)
+                          (variables.configuration.REM = variables.configuration
+                            .REM
+                            ? variables.configuration.REM.concat(mainScript)
                             : [mainScript]) //Put the data-main script in the files to load.
                       )
                   )
                 : true &&
                     //Set up with STATE.CONFIG info.
-                    build(variables.configuration);
+                    BUILD(variables.configuration);
             },
       define
     };
@@ -1712,6 +1726,14 @@ class Require {
     );
   }
 }
+/*
+
+BUILD[prop] = function() {contexts.require[prop].apply(contexts[_],arguments)}
+BUILD.onError
+BUILD.createNode
+BUILD.load
+function Require (){return{build,require}}
+*/
 export class DurableObjectExample {
   constructor(el, env) {
     console.log(
