@@ -598,10 +598,13 @@ class Require {
         unDE = arguments[1],
         configShim = arguments[2]
       ) {
-        var Bindexports = (value) => {
+        var defined,
+          defining,
+          enabled,
+          Bindexports = (exec, args) => {
             var erro = null;
             try {
-              module.exports = value;
+              module.exports = exec(...args);
             } catch (e) {
               erro = e;
             }
@@ -616,11 +619,11 @@ class Require {
           id = () => map.id,
           check = () =>
             //defineEmitComplete
-            this[_ed] && !enabling && !INITED
+            enabled && !enabling && !INITED
               ? !e_(STATE.defQueueMap).yes(id) && this.fetch()
-              : this[_dg] //new Promise(r=>r(""))
+              : defining //new Promise(r=>r(""))
               ? error && emit(_e, error) // !defQueue.includes(this) this is ready to, and does, define itself
-              : (this[_dg] = true) && //no redundant require-define
+              : (defining = true) && //no redundant require-define
                 depCount < 1 &&
                 !STATE.defined &&
                 map.yesdef &&
@@ -634,9 +637,12 @@ class Require {
                             module.exports === undefined &&
                             module; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
 
-                        const erro = Bindexports(
-                          STATE.execCb(id, factory, depExpo, module.exports)
-                        );
+                        const erro = Bindexports(STATE.execCb, [
+                          id,
+                          factory,
+                          depExpo,
+                          module.exports
+                        ]);
                         erro &&
                           (BUILD[_oE] !== ((err) => err) ||
                             ((erro.requireType = map.yesdef ? "define" : _r) !==
@@ -679,17 +685,17 @@ class Require {
                     )
                   : null) &&
                 clrRegstr(id) &&
-                (this[_d] = true) &&
+                (defined = true) &&
                 seratimNull(this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
-                this[_d] &&
+                defined &&
                 !defineEmitted &&
                 (defineEmitted = true) &&
                 emit(_d, module.exports),
-          on = ({ m, dm } = depMap, name, f) => {
+          when = ({ m, dm } = depMap, name, f) => {
             if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
               return name === _d && f(STATE.defined[dm.id]);
             const s = (m = (dm) => getModule(dm)) =>
-              m[_e] && name === _e ? f(m[_e]) : m.on(name, f);
+              m[_e] && name === _e ? f(m[_e]) : m.addEventListene(name, f);
             return s(dm);
           },
           depMatched = [],
@@ -702,9 +708,8 @@ class Require {
           errback,
           enable = () =>
             (STATE.enRgtry[map.id] = this) &&
-            (this[_ed] = true) && //no inadvertent load and 0 depCount by
-            (enabling = true) &&
-            //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
+            (enabled = true) && //no inadvertent load and 0 depCount by immediate calls to the STATE.defined callbacks
+            (enabling = true) && // for STATE.dependencies. Enable mapFunction 1,dependency
             seratimNull(
               variables,
               "undefined",
@@ -718,7 +723,7 @@ class Require {
                   if (handler) return (depExports[i] = handler(this));
                   const go = () =>
                     seratimNull(variables, "undefined", (depCount += 1)) &&
-                    on(depMap, _d, (depExports) => {
+                    when(depMap, "defined", (depExports) => {
                       if (this.undefed) return null;
                       seratimNull(
                         variables,
@@ -727,12 +732,12 @@ class Require {
                       ) && check();
                     }) &&
                     (errback
-                      ? on(depMap, _e, errback) // propagate the error correctly - something else is listening for errors
+                      ? when(depMap, _e, errback) // propagate the error correctly - something else is listening for errors
                       : events[_e]
-                      ? on(depMap, _e, (err) => emit(_e, err))
+                      ? when(depMap, _e, (err) => emit(_e, err))
                       : null);
                   go();
-                } // (No direct eb on this this)
+                } // (No direct eb when this this)
                 var id = depMap.id,
                   m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
                 !e_(handlers).yes(id) &&
@@ -765,34 +770,38 @@ class Require {
               "undefined",
               name === _e && delete events[name]
             ), //returns true
+          init = INITED
+            ? () => null
+            : (
+                depMaps,
+                updateInArgs = (f) => (factory = f), //Register for errors
+                eb = (eb) =>
+                  eb
+                    ? this.addEventListene(_e, eb) //If no eb already, but there are error listeners
+                    : events[_e]
+                    ? (eb = (err) => emit(_e, err))
+                    : null, //construct((err) => this.emit(_e, err), this); //when this this, set up an eb to pass to the REM.
+                o = (o) => (ignore = o || {})
+              ) => {
+                seratimNull(
+                  variables,
+                  "undefined",
+                  depMaps && depMaps.slice(0)
+                ) &&
+                  seratimNull(variables, "undefined", (errback = eb)) &&
+                  (INITED = true);
+                //copy of 'source dependency arr inputs' (i.e. "shim" REM by depMaps arr)
+                if (o[_ed] || enabled) return enable();
+                check();
+              },
+          fetched,
           state = {
+            error,
+            enabled,
+            inited: INITED,
             enable,
             map,
             shim: e_(configShim).yes(map.id) && configShim[map.id],
-            init: INITED
-              ? () => null
-              : (
-                  depMaps,
-                  updateInArgs = (f) => (factory = f), //Register for errors
-                  eb = (eb) =>
-                    eb
-                      ? this.on(_e, eb) //If no eb already, but there are error listeners
-                      : events[_e]
-                      ? (eb = (err) => emit(_e, err))
-                      : null, //construct((err) => this.emit(_e, err), this); //on this this, set up an eb to pass to the REM.
-                  o = (o) => (ignore = o || {})
-                ) => {
-                  seratimNull(
-                    variables,
-                    "undefined",
-                    depMaps && depMaps.slice(0)
-                  ) &&
-                    seratimNull(variables, "undefined", (errback = eb)) &&
-                    (INITED = true);
-                  //copy of 'source dependency arr inputs' (i.e. "shim" REM by depMaps arr)
-                  if (o[_ed] || this[_ed]) return enable();
-                  check();
-                },
             load: STATE.urlFchd[map.url]
               ? () => null
               : (STATE.urlFchd[map.url] = true) && STATE.load(map.id, map.url),
@@ -807,7 +816,7 @@ class Require {
                     )
                   : map.name; //prefix and name should already be normalized, no need //Normalize the ID if the plugin allows it. //normalizedMap -for applying map STATE.CONFIG again either.
               var nM;
-              on(
+              when(
                 (nM = makeModuleMap(
                   mp.prefix + "!" + name,
                   map.parentMap,
@@ -817,7 +826,7 @@ class Require {
                 (d) =>
                   (map.normalizedMap =
                     nM &&
-                    this[_i]([], () => d, null, {
+                    init([], () => d, null, {
                       enabled: true,
                       ignore: true
                     }))
@@ -827,19 +836,19 @@ class Require {
               ((normMod) =>
                 (normMod ? depMaps.push(nM) : true) &&
                 events[_e] &&
-                normMod.on(_e, (err) => emit(_e, err)) &&
+                normMod.addEventListene(_e, (err) => emit(_e, err)) &&
                 normMod
                   ? { enable }
                   : { enable: () => {} })(
                 e_(STATE.dependencies).yes(nM.id) && STATE.dependencies[nM.id]
               ).enable(); //Mark this as a dependency for this plugin, so it can be traced for cycles.
             },
-            on: (name, cb) =>
+            addEventListene: (name, cb) =>
               (events[name] ? events[name] : (events[name] = [])).push(cb),
             defineDep: (i, depExports) =>
               !depMatched[i] &&
               (depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-              seratimNull(variables, "undefined", (depCount -= 1)) && //prototype is hydratable for async results, init only on this page by 'new' initialization
+              seratimNull(variables, "undefined", (depCount -= 1)) && //prototype is hydratable for async results, init only when this page by 'new' initialization
               (depExports[i] = depExports), //multiple cb export cycles
 
             callPlugin: () => {
@@ -847,7 +856,7 @@ class Require {
                 id = map.id, //Mark this as a dependency for this plugin, so it
                 pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
               depMaps.push(pluginMap) &&
-                on(pluginMap, _d, (plugin) => {
+                when(pluginMap, _d, (plugin) => {
                   if (map.unnormalized)
                     return Module[_P].normalizeMod(plugin, map); //If current map is not normalized, wait for that
                   var bundleId =
@@ -858,7 +867,7 @@ class Require {
                     );
                   //If a paths STATE.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
                   const load = (factory) =>
-                    this[_i]([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
+                    init([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
                   load[_e] = (err) => {
                     (INITED = true) &&
                       (error = err) &&
@@ -892,17 +901,22 @@ class Require {
                             "undefined",
                             (useInteractive = false)
                           )
-                        : true) && //Turn off interactive script matching for IE for any define; calls in the text, then turn it back on at the end.
+                        : true) && //Turn off interactive script matching for IE for any define; calls in the text, then turn it back when at the end.
                       getModule(moduleMap) && //Prime the system by creating a this instance for
                       (e_(STATE.CONFIG.config).yes(id)
                         ? (STATE.CONFIG.config[tkn] = STATE.CONFIG.config[id])
                         : true); //Transfer any STATE.CONFIG to this other this.
                     go();
-                    const erro = tryCatch(
-                      variables,
-                      "undefined",
-                      BUILD.exec(text)
-                    );
+                    const tryCatch = (exec, args) => {
+                        var erro = null;
+                        try {
+                          exec(...args);
+                        } catch (e) {
+                          erro = e;
+                        }
+                        return erro; //z is a this binding ...as args
+                      },
+                      erro = tryCatch(BUILD.exec, [text]);
                     if (erro)
                       return onError(
                         WINDOW.mk([
@@ -923,24 +937,25 @@ class Require {
                 }) &&
                 STATE.enable(pluginMap, this) &&
                 (pluginMaps[pluginMap.id] = pluginMap);
-            },
-            fetch: () => {
-              if (this.fetched) return null;
-              (this.fetched = true) && (STATE.startTime = new Date().getTime());
-              if (this.shim) {
-                STATE.makeRequire(map, {
-                  enableBuildCallback: true
-                })(
-                  this.shim.REM || [],
-                  map.prefix ? this.callPlugin() : this.load()
-                ); //plugin-managed resource
-              } else return map.prefix ? this.callPlugin() : this.load();
             }
-          }; //remove broken Module instance from STATE.dependencies.//BS/BF 'bindingsFetch'
-
+          };
+        this.fetch = () => {
+          if (fetched) return null;
+          (fetched = true) && (STATE.startTime = new Date().getTime());
+          if (this.shim) {
+            STATE.makeRequire(map, {
+              enableBuildCallback: true
+            })(
+              this.shim.REM || [],
+              map.prefix ? this.callPlugin() : this.load()
+            ); //plugin-managed resource
+          } else return map.prefix ? this.callPlugin() : this.load();
+        };
+        //remove broken Module instance from STATE.dependencies.//BS/BF 'bindingsFetch'
+        this.fetched = fetched;
         _K(state).forEach((key) => (this[key] = state[key]));
       }
-    } //module.exports; factory; this.depMaps = [], this[_ed], this.fetched //const defaultOnError = (err) => err;
+    } //module.exports; factory; this.depMaps = [], enabled, this.fetched //const defaultOnError = (err) => err;
     //const construct = (f, obj) => function () { f.apply(obj, arguments); //in original JQuery RequireJS, obj is this or this }; //Function.prototype.construct (bind), with 'this' //https://stackoverflow.com/a/46700616/11711280
     console.log("In Require: ", "Module", Module);
     function makeModuleMap(
@@ -951,7 +966,7 @@ class Require {
     ) {
       //n, sourcemap, isNormed, applyMap
       var ptName = sourcemap ? sourcemap.name : null,
-        gvnName = n,
+        givenName = n,
         yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() this ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
       n =
         (!n ? seratimNull(variables, "undefined", (yesdef = false)) : true) &&
@@ -976,18 +991,14 @@ class Require {
       n = names[1];
       if (n)
         p
-          ? iifeapp(this)(
-              ["normed", "id"],
-              isNormed
-                ? n
-                : pM && pM.normalize
-                ? //prettier-ignore
-                  pM.normalize(n, (n) => WINDOW.normalize(n, ptName, applyMap, ...configGets))
-                : n.indexOf("!") === -1
-                ? WINDOW.normalize(n, ptName, applyMap, ...configGets)
-                : n,
-              p + "!" + normed + suffix
-            )
+          ? (normed = isNormed
+              ? n
+              : pM && pM.normalize
+              ? //prettier-ignore
+                pM.normalize(n, (n) => WINDOW.normalize(n, ptName, applyMap, ...configGets))
+              : n.indexOf("!") === -1
+              ? WINDOW.normalize(n, ptName, applyMap, ...configGets)
+              : n) && (id = p + "!" + normed + suffix)
           : iifeapp(this)(
               ["normed", "names", "p", "normed", "isNormed", "url", "id"],
               WINDOW.normalize(n, ptName, applyMap, ...configGets),
@@ -1009,7 +1020,7 @@ class Require {
         parentMap: sourcemap,
         unnormalized: !!suffix,
         url,
-        gvnName,
+        givenName,
         yesdef,
         id
       };
@@ -1135,14 +1146,14 @@ class Require {
         STATE.dependencies
         makeModuleMap
         getModule
-        on
+        when
         onError
         handlers
         clrRegstr
         checkLoaded
         init
         normalizeMod
-        Module[_P]={init,defineDep,fetch,load,check,callPlugin,enable,on,emit}
+        Module[_P]={init,defineDep,fetch,load,check,callPlugin,enable,when,emit}
         callGetModule
         getScriptData
         tkeGblQue
@@ -1478,7 +1489,7 @@ class Require {
           WINDOW.mixin(tool(modMap, o, NAME).parser, namer) &&
           (!modMap
             ? (tool(modMap, o, NAME).parser.undef = (id) => {
-                tkeGblQue(); //Only allow undef on top level require calls
+                tkeGblQue(); //Only allow undef when top level require calls
                 var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'this' STATE
                   m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
                 return (
@@ -1522,7 +1533,7 @@ class Require {
             return contexts[_].require[prop].apply(contexts[_], arguments);
           })
       )
-    ) && //apply arguments to requires on context
+    ) && //apply arguments to requires when context
     //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but contexts during builds//ticketx to apology tour
     (isBrowser
       ? (head = BUILD.start.head = e_("base").tag(0)
@@ -1562,13 +1573,13 @@ class Require {
               n[_AEL]("load", onScriptLoad, false);
               n[_AEL](_e, onScriptError, false);
             })(); //yet that pathway not doing the 'execute, fire load event listener before next script'//node.attachEvent('onerror', STATE.onScriptError);
-          n.src = url; //Calling onNodeCreated after all properties on the node have been
+          n.src = url; //Calling onNodeCreated after all properties when the node have been
           if (CONFIG.onNodeCreated) CONFIG.onNodeCreated(n, CONFIG, tkn, url); //set, but before it is placed in the DOM.
           //IE 6-8 cache, script executes before the end
           scriptPends = n; //of the appendChild execution, so to tie an anonymous define
           if (baseElement) {
             head.insertBefore(n, baseElement);
-          } else head.appendChild(n); //call to the this name (which is stored on the node), hold on to a reference to this node, but clear after the DOM insertion.
+          } else head.appendChild(n); //call to the this name (which is stored when the node), hold when to a reference to this node, but clear after the DOM insertion.
           scriptPends = null;
           return n; // bug in WebKit where the worker gets garbage-collected after calling
         } else if (isWebWorker) {
@@ -1953,7 +1964,7 @@ export class DurableObjectExample {
 /*
   // To accept the WebSocket request, we create a WebSocketPair (which is like a socketpair,
   // i.e. two WebSockets that talk to each other), we return one end of the pair in the
-  // response, and we operate on the other end. Note that this API is not part of the
+  // response, and we operate when the other end. Note that this API is not part of the
   // Fetch API standard; unfortunately, the Fetch API / Service Workers specs do not define
   // any way to act as a WebSocket server today.
   let pair = new WebSocketPair();
