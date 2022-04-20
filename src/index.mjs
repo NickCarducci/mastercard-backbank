@@ -613,7 +613,93 @@ class Require {
         unDE = arguments[1],
         configShim = arguments[2]
       ) {
-        var on = ({ m, dm } = depMap, name, f) => {
+        var id = () => map.id,
+          v = {},
+          check = () =>
+            this[_ed] && !this.enabling && !this.INITED
+              ? !e_(STATE.defQueueMap).yes(id) && this.fetch()
+              : this[_dg] //new Promise(r=>r(""))
+              ? this[_e] && emit(_e, this[_e]) // !defQueue.includes(this) this is ready to, and does, define itself
+              : (this[_dg] = true) && //no redundant require-define
+                (depCount > 0 || STATE.defined
+                  ? () => {}
+                  : () => {
+                      (v.isDefine = map.yesdef) &&
+                        (this[_x] =
+                          e_(this.factory).string() !== Fn
+                            ? () => this.factory
+                            : () => {
+                                var depExpo = depExports, //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
+                                  cjs =
+                                    v.isDefine &&
+                                    this[_x] === undefined &&
+                                    this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
+
+                                const er = tryCatch(
+                                  this,
+                                  _x,
+                                  STATE.execCb(
+                                    id,
+                                    this.factory,
+                                    depExpo,
+                                    this[_x]
+                                  )
+                                );
+                                if (er) {
+                                  ((events[_e] && v.isDefine) ||
+                                    BUILD[_oE] !== ((err) => err)) &&
+                                    er &&
+                                    // new iifeapp(this)(
+                                    ((z, obj) => {
+                                      _K(obj).forEach(
+                                        (key) => (z.err[key] = obj[key])
+                                      );
+                                      return onError((z[_e] = er)); //good example how 'err' prop read, no write, without iifeapp
+                                    })(this, {
+                                      requireMap: map,
+                                      requireModules: v.isDefine
+                                        ? [map.id]
+                                        : null,
+                                      requireType: v.isDefine ? "define" : _r
+                                    }); //if there were more solutions to be made, so is redundant here, actually
+                                } //factory.apply(exports, depExports),
+                                // this.exports assignment over exports object. exports already set the STATE.defined value.
+
+                                return !cjs
+                                  ? this[_x]
+                                  : cjs
+                                  ? cjs[_x]
+                                  : this.usingExports
+                                  ? this[_x]
+                                  : null;
+                                //);
+                              });
+                    }) &&
+                (v.isDefine && !this.ignore
+                  ? new Promise(
+                      (resolve) => (STATE.defined[id] = this[_x] && resolve(""))
+                    ).then(
+                      () =>
+                        BUILD.onResourceLoad &&
+                        BUILD.onResourceLoad(
+                          STATE,
+                          map,
+                          depMaps.map(
+                            (depMap) => depMap.normalizedMap || depMap
+                          )
+                        )
+                    )
+                  : null) &&
+                clrRegstr(id) &&
+                (this[_d] = true) &&
+                seratimNull(this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
+                this[_d] &&
+                !this.defineEmitted &&
+                emit(_d, this[_x]) &&
+                ["defineEmitted", "defineEmitComplete"].forEach(
+                  (de) => (this[de] = true)
+                ),
+          on = ({ m, dm } = depMap, name, f) => {
             if (!e_(STATE.defined).yes(dm.id) || (m && !m.defineEmitComplete))
               return name === _d && f(STATE.defined[dm.id]);
             const s = (m = (dm) => getModule(dm)) =>
@@ -626,10 +712,72 @@ class Require {
           depExports = [],
           events = (e_(unDE).yes(map.id) && unDE[map.id]) || {},
           depCount = 0,
+          enable = () =>
+            (STATE.enRgtry[map.id] = this) &&
+            (this[_ed] = true) && //no inadvertent load and 0 depCount by
+            (this.enabling = true) &&
+            //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
+            seratimNull(
+              variables,
+              "undefined",
+              depMaps.forEach((depMap, i) => {
+                if (T(depMap === _t)) {
+                  const mp = map.yesdef ? map : map.parentMap;
+                  (depMap = makeModuleMap(depMap, mp, false, !this.skipMap)) &&
+                    (depMaps[i] = depMap); //Dependency needs to be converted to a depMap //and wired up to this this.
+                  var handler =
+                    e_(handlers).yes(depMap.id) && handlers[depMap.id];
+                  if (handler) return (depExports[i] = handler(this));
+                  const go = () =>
+                    seratimNull(variables, "undefined", (depCount += 1)) &&
+                    on(depMap, _d, (depExports) => {
+                      if (this.undefed) return null;
+                      seratimNull(
+                        variables,
+                        "undefined",
+                        this.defineDep(i, depExports)
+                      ) && check();
+                    }) &&
+                    (this.eb
+                      ? on(depMap, _e, this.eb) // propagate the error correctly - something else is listening for errors
+                      : events[_e]
+                      ? on(depMap, _e, (err) => emit(_e, err))
+                      : null);
+                  go();
+                } // (No direct eb on this this)
+                var id = depMap.id,
+                  m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
+                !e_(handlers).yes(id) &&
+                  m &&
+                  !m[_ed] &&
+                  STATE.enable(depMap, this);
+              })
+            ) && //don't call enable if it is already enabled (circular REM)
+            seratimNull(
+              variables,
+              "undefined",
+              _K(pluginMaps).forEach(
+                (pM = (x) => pluginMaps[x], i) =>
+                  e_(STATE.dependencies).yes(pM.id) &&
+                  STATE.dependencies[pM.id] &&
+                  !STATE.dependencies[pM.id][_ed] &&
+                  STATE.enable(pM, this)
+              )
+            ) &&
+            seratimNull(variables, "undefined", (this.enabling = false)) &&
+            check(),
+          emit = (name, evt) =>
+            seratimNull(
+              variables,
+              "undefined",
+              events[name].forEach((cb) => cb(evt))
+            ) &&
+            name === _e &&
+            delete events[name],
           state = {
+            enable,
             map,
             shim: e_(configShim).yes(map.id) && configShim[map.id],
-
             init: this.INITED
               ? () => null
               : (
@@ -639,7 +787,7 @@ class Require {
                     eb
                       ? this.on(_e, eb) //If no eb already, but there are error listeners
                       : events[_e]
-                      ? (eb = (err) => this.emit(_e, err))
+                      ? (eb = (err) => emit(_e, err))
                       : null, //construct((err) => this.emit(_e, err), this); //on this this, set up an eb to pass to the REM.
                   o = (o) => o || {}
                 ) => {
@@ -650,209 +798,52 @@ class Require {
                     ignore: o.ignore
                   }; //copy of 'source dependency arr inputs' (i.e. "shim" REM by depMaps arr)
                   _K(obj).forEach((key) => (this[key] = obj[key]));
-                  if (o[_ed] || this[_ed]) return this.enable();
-                  this.check();
+                  if (o[_ed] || this[_ed]) return enable();
+                  check();
                 },
-            load: STATE.urlFchd[this.map.url]
+            load: STATE.urlFchd[map.url]
               ? () => null
-              : ((z) =>
-                  (STATE.urlFchd[this.map.url] = true) &&
-                  STATE.load(z.map.id, z.map.url))(this),
-            check: (
-              { id, v } = (...args) => {
-                return { id: (id) => this.map.id, v: {} };
-              }
-            ) =>
-              this[_ed] && !this.enabling && !this.INITED
-                ? !e_(STATE.defQueueMap).yes(id) && this.fetch()
-                : this[_dg] //new Promise(r=>r(""))
-                ? this[_e] && this.emit(_e, this[_e]) // !defQueue.includes(this) this is ready to, and does, define itself
-                : (this[_dg] = true) && //no redundant require-define
-                  (depCount > 0 || STATE.defined
-                    ? () => {}
-                    : () => {
-                        (v.isDefine = this.map.yesdef) &&
-                          (this[_x] =
-                            e_(this.factory).string() !== Fn
-                              ? () => this.factory
-                              : () => {
-                                  var depExpo = depExports, //for define()'d  modules, use error listener, require errbacks should not be called (#699). Yet, if dependency-'onError,' use that.
-                                    cjs =
-                                      v.isDefine &&
-                                      this[_x] === undefined &&
-                                      this[_m]; // Favor return value over exports. If node/cjs in play, then will not have a return value anyway. Favor
-
-                                  const er = tryCatch(
-                                    this,
-                                    _x,
-                                    STATE.execCb(
-                                      id,
-                                      this.factory,
-                                      depExpo,
-                                      this[_x]
-                                    )
-                                  );
-                                  if (er) {
-                                    ((events[_e] && v.isDefine) ||
-                                      BUILD[_oE] !== ((err) => err)) &&
-                                      er &&
-                                      // new iifeapp(this)(
-                                      ((z, obj) => {
-                                        _K(obj).forEach(
-                                          (key) => (z.err[key] = obj[key])
-                                        );
-                                        return onError((z[_e] = er)); //good example how 'err' prop read, no write, without iifeapp
-                                      })(this, {
-                                        requireMap: this.map,
-                                        requireModules: v.isDefine
-                                          ? [this.map.id]
-                                          : null,
-                                        requireType: v.isDefine ? "define" : _r
-                                      }); //if there were more solutions to be made, so is redundant here, actually
-                                  } //factory.apply(exports, depExports),
-                                  // this.exports assignment over exports object. exports already set the STATE.defined value.
-
-                                  return !cjs
-                                    ? this[_x]
-                                    : cjs
-                                    ? cjs[_x]
-                                    : this.usingExports
-                                    ? this[_x]
-                                    : null;
-                                  //);
-                                });
-                      }) &&
-                  (v.isDefine && !this.ignore
-                    ? new Promise(
-                        (resolve) =>
-                          (STATE.defined[id] = this[_x] && resolve(""))
-                      ).then(
-                        () =>
-                          BUILD.onResourceLoad &&
-                          BUILD.onResourceLoad(
-                            STATE,
-                            this.map,
-                            depMaps.map(
-                              (depMap) => depMap.normalizedMap || depMap
-                            )
-                          )
-                      )
-                    : null) &&
-                  clrRegstr(id) &&
-                  (this[_d] = true) &&
-                  seratimNull(this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
-                  this[_d] &&
-                  !this.defineEmitted &&
-                  [
-                    "defineEmitted",
-                    "emit",
-                    "defineEmitComplete"
-                  ].forEach((de, n) =>
-                    n === 1 ? this.emit(_d, this[_x]) : (this[de] = true)
-                  ),
+              : (STATE.urlFchd[map.url] = true) && STATE.load(map.id, map.url),
             normalizeMod: (plugin, mp) => {
-              var { name, parentMap: pM } = this.map; //Normalize the ID if the plugin allows it.
-              const { nodeIdCompat, map, bundle } = STATE.CONFIG;
-              // prettier-ignore
-              const namer = (name) => [name, pM ? pM.name : null, true, nodeIdCompat, map, bundle]; //ptName
-              if (plugin.normalize)
-                name =
-                  plugin.normalize(name, (args = namer) =>
-                    WINDOW.normalize(args)
-                  ) || ""; //prefix and name should already be normalized, no need
-              var nM = makeModuleMap(mp.prefix + "!" + name, pM, true); //normalizedMap -for applying map STATE.CONFIG again either.
+              const { nodeIdCompat, map, bundle } = STATE.CONFIG,
+                namer = (name) =>
+                  // prettier-ignore
+                  [name, map.parentMap ? map.parentMap.name : null, true, nodeIdCompat, map, bundle], //ptName
+                name = plugin.normalize
+                  ? plugin.normalize(map.name, (args = namer) =>
+                      WINDOW.normalize(args)
+                    )
+                  : map.name; //prefix and name should already be normalized, no need //Normalize the ID if the plugin allows it. //normalizedMap -for applying map STATE.CONFIG again either.
+              var nM;
               on(
-                nM,
+                (nM = makeModuleMap(
+                  mp.prefix + "!" + name,
+                  map.parentMap,
+                  true
+                )),
                 _d,
                 (d) =>
-                  (this.map.normalizedMap =
+                  (map.normalizedMap =
                     nM &&
                     this[_i]([], () => d, null, {
                       enabled: true,
                       ignore: true
                     }))
               ); //construct
-              const prt = (
-                normMod = (normMod) =>
-                  (normMod ? depMaps.push(nM) : true) &&
-                  events[_e] &&
-                  normMod.on(_e, (err) => this.emit(_e, err)) &&
-                  normMod //Mark this as a dependency for this plugin, so it can be traced for cycles.
-              ) => normMod && normMod.enable();
 
               //normalizedMod
-              prt(
+              ((normMod) =>
+                (normMod ? depMaps.push(nM) : true) &&
+                events[_e] &&
+                normMod.on(_e, (err) => emit(_e, err)) &&
+                normMod
+                  ? { enable }
+                  : { enable: () => {} })(
                 e_(STATE.dependencies).yes(nM.id) && STATE.dependencies[nM.id]
-              );
+              ).enable(); //Mark this as a dependency for this plugin, so it can be traced for cycles.
             },
-            enable: () =>
-              (STATE.enRgtry[this.map.id] = this) &&
-              (this[_ed] = true) && //no inadvertent load and 0 depCount by
-              (this.enabling = true) &&
-              //immediate calls to the STATE.defined callbacks for STATE.dependencies. Enable mapFunction 1,dependency
-              seratimNull(
-                variables,
-                "undefined",
-                depMaps.forEach((depMap, i) => {
-                  if (T(depMap === _t)) {
-                    const mp = this.map.yesdef ? this.map : this.map.parentMap;
-                    (depMap = makeModuleMap(
-                      depMap,
-                      mp,
-                      false,
-                      !this.skipMap
-                    )) && (depMaps[i] = depMap); //Dependency needs to be converted to a depMap //and wired up to this this.
-                    var handler =
-                      e_(handlers).yes(depMap.id) && handlers[depMap.id];
-                    if (handler) return (depExports[i] = handler(this));
-                    const go = () =>
-                      seratimNull(variables, "undefined", (depCount += 1)) &&
-                      on(depMap, _d, (depExports) => {
-                        if (this.undefed) return null;
-                        seratimNull(
-                          variables,
-                          "undefined",
-                          this.defineDep(i, depExports)
-                        ) && this.check();
-                      }) &&
-                      (this.eb
-                        ? on(depMap, _e, this.eb) // propagate the error correctly - something else is listening for errors
-                        : events[_e]
-                        ? on(depMap, _e, (err) => this.emit(_e, err))
-                        : null);
-                    go();
-                  } // (No direct eb on this this)
-                  var id = depMap.id,
-                    m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
-                  !e_(handlers).yes(id) &&
-                    m &&
-                    !m[_ed] &&
-                    STATE.enable(depMap, this);
-                })
-              ) && //don't call enable if it is already enabled (circular REM)
-              seratimNull(
-                variables,
-                "undefined",
-                _K(pluginMaps).forEach(
-                  (pM = (x) => pluginMaps[x], i) =>
-                    e_(STATE.dependencies).yes(pM.id) &&
-                    STATE.dependencies[pM.id] &&
-                    !STATE.dependencies[pM.id][_ed] &&
-                    STATE.enable(pM, this)
-                )
-              ) &&
-              seratimNull(variables, "undefined", (this.enabling = false)) &&
-              this.check(),
             on: (name, cb) =>
               (events[name] ? events[name] : (events[name] = [])).push(cb),
-            emit: (name, evt) =>
-              seratimNull(
-                variables,
-                "undefined",
-                events[name].forEach((cb) => cb(evt))
-              ) &&
-              name === _e &&
-              delete events[name],
             defineDep: (i, depExports) =>
               !depMatched[i] &&
               (depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
@@ -860,21 +851,18 @@ class Require {
               (depExports[i] = depExports), //multiple cb export cycles
 
             callPlugin: () => {
-              var map = this.map, //Map already normalized the prefix.
+              var //Map already normalized the prefix.
                 id = map.id, //Mark this as a dependency for this plugin, so it
                 pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
               depMaps.push(pluginMap) &&
                 on(pluginMap, _d, (plugin) => {
-                  if (this.map.unnormalized)
+                  if (map.unnormalized)
                     return Module[_P].normalizeMod(plugin, map); //If current map is not normalized, wait for that
                   var bundleId =
-                    e_(STATE.bdlMap).yes(this.map.id) &&
-                    STATE.bdlMap[this.map.id]; //normalized name to load instead of continuing.
+                    e_(STATE.bdlMap).yes(map.id) && STATE.bdlMap[map.id]; //normalized name to load instead of continuing.
                   if (bundleId)
                     return (
-                      (this.map.url = nameToUrl(bundleId)) &&
-                      this.load() &&
-                      null
+                      (map.url = nameToUrl(bundleId)) && this.load() && null
                     );
                   //If a paths STATE.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
                   const load = (factory) =>
@@ -947,9 +935,8 @@ class Require {
             fetch: () => {
               if (this.fetched) return null;
               (this.fetched = true) && (STATE.startTime = new Date().getTime());
-              var map = this.map;
               if (this.shim) {
-                STATE.makeRequire(this.map, {
+                STATE.makeRequire(map, {
                   enableBuildCallback: true
                 })(
                   this.shim.REM || [],
@@ -1046,77 +1033,43 @@ class Require {
             : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
         }
       ) => {
-        const map = () =>
-            seratimNull(
-              variables,
-              "undefined",
-              _K(STATE.dependencies).forEach(
-                (
-                  id = (id) =>
-                    !STATE.dependencies[id].inited &&
-                    !STATE.dependencies[id].map.unnormalized &&
-                    id
-                ) =>
-                  (STATE.dependencies[id].map = makeModuleMap(id, null, true))
+        const apply = (
+          { bundles, shims } = (c) => {
+            return { bundles: c[_b], shims: c[_s] };
+          }
+        ) => {
+          bundles &&
+            _K(bundles).forEach((prop, i) =>
+              bundles[prop].forEach(
+                (v) => (STATE.bdlMap[v] = v !== prop ? prop : STATE.bdlMap[v])
               )
-            ), //if inited and transient, unnormalized modules.
-          bundle = (packages = (c) => c[_p]) =>
-            !packages
-              ? true
-              : seratimNull(
-                  variables,
-                  "undefined",
-                  packages.forEach((pkgObj) => {
-                    pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
-                    var name = pkgObj.name,
-                      location = pkgObj[_l]; //Adjust packages if necessary.
-                    (location
-                      ? (STATE.CONFIG.paths[name] = pkgObj[_l])
-                      : true) &&
-                      (STATE.CONFIG.bundle[name] = `${pkgObj.name}/${(
-                        pkgObj.main || "main"
-                      )
-                        .replace(/^\.\//, "")
-                        .replace(/\.js$/, "")}`); //normalize pkg name main this ID pointer paths
-                  })
-                ), //Update maps for "waiting to execute" modules in the STATE.dependencies.
-          apply = (
-            { bundles, shims } = (c) => {
-              return { bundles: c[_b], shims: c[_s] };
-            }
-          ) => {
-            bundles &&
-              _K(bundles).forEach((prop, i) =>
-                bundles[prop].forEach(
-                  (v) => (STATE.bdlMap[v] = v !== prop ? prop : STATE.bdlMap[v])
-                )
-              ); //Reverse map the bundles
-            var shim = STATE.CONFIG.shim; //save paths for special "additive processing"
-            seratimNull(
-              variables,
-              "undefined",
-              shims &&
-                _K(shims).forEach((id, i) => {
-                  var temp = shims[id]; //'temp' = tobeshim
-                  return (
-                    seratimNull(
-                      variables,
-                      "undefined",
-                      e_(temp).string() === Ar && (temp = { REM: temp })
-                    ) && //Merge shim, Normalize the structure
-                    seratimNull(
-                      variables,
-                      "undefined",
-                      (temp[_x] || temp[_i]) &&
-                        !temp[_xf] &&
-                        (temp[_xf] = STATE.makeShimExports(temp))
-                    ) &&
-                    (shim[id] = temp)
-                  );
-                })
-            );
-            return { shim, shims };
-          };
+            ); //Reverse map the bundles
+          var shim = STATE.CONFIG.shim; //save paths for special "additive processing"
+          seratimNull(
+            variables,
+            "undefined",
+            shims &&
+              _K(shims).forEach((id, i) => {
+                var temp = shims[id]; //'temp' = tobeshim
+                return (
+                  seratimNull(
+                    variables,
+                    "undefined",
+                    e_(temp).string() === Ar && (temp = { REM: temp })
+                  ) && //Merge shim, Normalize the structure
+                  seratimNull(
+                    variables,
+                    "undefined",
+                    (temp[_x] || temp[_i]) &&
+                      !temp[_xf] &&
+                      (temp[_xf] = STATE.makeShimExports(temp))
+                  ) &&
+                  (shim[id] = temp)
+                );
+              })
+          );
+          return { shim, shims };
+        };
         //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
         _K(c).forEach((prop = (op) => {
           const arr = ["paths", "bundles", "STATE.CONFIG", "map"];
@@ -1126,8 +1079,30 @@ class Require {
         const { shims, shim } = apply(c);
         return (
           (STATE.CONFIG.shim = shims ? shim : STATE.CONFIG.shim) &&
-          bundle(c) &&
-          map() && //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
+          seratimNull(
+            variables,
+            "undefined",
+            (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
+              pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
+              var name = pkgObj.name,
+                location = pkgObj[_l]; //Adjust packages if necessary.
+              (location ? (STATE.CONFIG.paths[name] = pkgObj[_l]) : true) &&
+                (STATE.CONFIG.bundle[name] = `${pkgObj.name}/${(
+                  pkgObj.main || "main"
+                )
+                  .replace(/^\.\//, "")
+                  .replace(/\.js$/, "")}`); //normalize pkg name main this ID pointer paths
+            })
+          ) && //Update maps for "waiting to execute" modules in the STATE.dependencies.
+          ((z) =>
+            seratimNull(
+              variables,
+              "undefined",
+              _K(z).forEach(
+                (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
+                  (z[id].map = makeModuleMap(id, null, true))
+              )
+            ))(STATE.dependencies) && //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
           (c.REM || c.cb) &&
           STATE.require(c.REM || [], c.cb)
         );
