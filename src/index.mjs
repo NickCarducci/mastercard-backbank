@@ -228,34 +228,32 @@ class Require {
         normalize: (nm, bn, applyMap, conId, system, configPkgs) => {
           const tool = () => {
               return {
-                parseName: (nm, roots, suffjs) =>
-                  nm &&
-                  ((
-                    { nm, nml = (nm) => /\.js$/.test(nm[nm.length - 1]) } = (
-                      o
-                    ) => {
-                      return {
-                        nm:
-                          o.nm[0].charAt(0) === "." && roots
-                            ? roots.slice(0, roots.length - 1).concat(o.nm)
-                            : o.nm,
-                        nml: suffjs ? o.nml.replace(/\.js$/, "") : o.nml
-                      };
-                    }
-                  ) => {
-                    //Adjust any relative paths. node allows either .js or non .js, yet not in nameToUrl;baseName.push(nm), but new instead of length report
-                    for (let i = 0; i < nm.length; i++) {
-                      const solid = nm[i] === "." && nm.splice(i, 1);
-                      if (solid) continue;
-                      i = solid ? i - 1 : i;
-                      const more =
-                        i === 0 ||
-                        (i === 1 && nm[2] === "..") ||
-                        nm[i - 1] === "..";
-                      if (!more && i > 0 && nm.splice(i - 1, 2)) i -= 2;
-                    }
-                    return nm.join("/");
-                  })((nm = nm.split("/"))), //just enabled, but unactivated, modules
+                parseName: (...args) => {
+                  var name = args[0],
+                    roots = args[1],
+                    suffjs = args[2];
+
+                  if (!name) return null;
+                  if (name[0].charAt(0) === "." && roots)
+                    name = roots.slice(0, roots.length - 1).concat(name);
+
+                  /\.js$/.test(name[name.length - 1]) &&
+                    suffjs &&
+                    name[name.length - 1].replace(/\.js$/, "");
+
+                  //Adjust any relative paths. node allows either .js or non .js, yet not in nameToUrl;baseName.push(nm), but new instead of length report
+                  for (let i = 0; i < name.length; i++) {
+                    const solid = name[i] === "." && name.splice(i, 1);
+                    if (solid) continue;
+                    i = solid ? i - 1 : i;
+                    const more =
+                      i === 0 ||
+                      (i === 1 && name[2] === "..") ||
+                      name[i - 1] === "..";
+                    if (!more && i > 0 && name.splice(i - 1, 2)) i -= 2;
+                  }
+                  return name.join("/");
+                }, //just enabled, but unactivated, modules
                 convertName: function (
                   nm = arguments[0],
                   mp = arguments[1],
@@ -275,7 +273,7 @@ class Require {
                         e_(mp).yes(fP) && mp[fP],
                       loop = (z, sum = 0) => {
                         let add = (sum = z.ph.length);
-                        var maybe = z.mV && e_(z.mV).yes(name) && z.mV[name],
+                        var maybe = mV && e_(mV).yes(name) && mV[name],
                           set = () => (i = g),
                           more = mV && e_(mV).yes(name) && mV[name],
                           loo = (add, sum) => (sum = add);
