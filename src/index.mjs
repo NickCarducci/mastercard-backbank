@@ -350,6 +350,7 @@ class Require {
               constructor() {
                 const NAME = arguments[0],
                   state = {
+                    bdlMap: {},
                     NAME,
                     defQueue,
                     defQueueMap: {},
@@ -361,7 +362,7 @@ class Require {
                       cb.apply(exports, args),
                     onError,
                     CONFIG: STATE.CONFIG,
-                    unDe: STATE.unDE ? STATE.unDE : {},
+                    unDE: STATE.unDE ? STATE.unDE : {},
                     enRgtry: STATE.enRgtry ? STATE.enRgtry : {},
                     urlFchd: STATE.urlFchd ? STATE.urlFchd : {}, //this able's
                     defined: STATE.defined ? STATE.defined : {},
@@ -382,8 +383,6 @@ class Require {
                         (value.exports && getGlobal(value.exports))
                       );
                     }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
-                    makeRequire: (modMap, options) =>
-                      makeRequire(modMap, options, NAME),
                     enable: (depMap) =>
                       e_(STATE.dependencies).yes(depMap.id) &&
                       STATE.dependencies[depMap.id] &&
@@ -446,18 +445,8 @@ class Require {
                     "undefined",
                     _K(state).forEach((key) => (STATE[key] = state[key]))
                   ) &&
-                  seratimNull(
-                    variables,
-                    "undefined",
-                    [
-                      "dependencies",
-                      "enRgtry",
-                      "unDE",
-                      "defined",
-                      "urlFchd",
-                      "bdlMap"
-                    ].forEach((k) => (STATE[k] = {}))
-                  ) &&
+                  (STATE.makeRequire = (modMap, options) =>
+                    makeRequire(modMap, options, NAME)) &&
                   (STATE.require = STATE.makeRequire()) &&
                   STATE
                 );
@@ -479,18 +468,22 @@ class Require {
             document.getElementsByTagName(obj ? obj : "script")[ind];
         return {
           yes,
-          reducer: (prop, nextProp) =>
-            !obj[0]
+          reducer: (prop, nextProp) => {
+            const go =
+              obj[3] &&
+              T(obj[0][prop] === "object") &&
+              obj[0][prop] &&
+              !e_(obj[0][prop]).a() &&
+              !e_(obj[0][prop]).string() === Fn &&
+              !(obj[0][prop] instanceof RegExp);
+
+            return !obj[0]
               ? obj[1]
               : (obj[2] || !e_(obj[1]).yes(prop)) &&
-                ((
-                  v,
-                  //prettier-ignore
-                  go = obj[3] && T( v === "object") && v && !e_(v).a() && !e_(v).string() === Fn &&  !(v instanceof RegExp)
-                ) =>
-                  (obj[1][prop] = !go ? v : obj[1][prop] ? obj[1][prop] : {}) &&
-                  WINDOW.mixin(obj[1][prop], v, obj[2], obj[3]) &&
-                  obj[1])(obj[0][prop]), //s,tgt,frc,dSM
+                  (obj[1][prop] = !go ? obj[0][prop] : obj[1][prop] || {}) &&
+                  WINDOW.mixin(obj[1][prop], obj[0][prop], obj[2], obj[3]) &&
+                  obj[1];
+          }, //s,tgt,frc,dSM
           create: (ns = n) => createElement(ns),
           string,
           a: (x) => x.string() === Ar,
@@ -1487,8 +1480,11 @@ class Require {
           };
         return (
           WINDOW.mixin(tool(modMap, o, NAME).parser, namer) &&
-          (!modMap
-            ? (tool(modMap, o, NAME).parser.undef = (id) => {
+          seratimNull(
+            variables,
+            "undefined",
+            !modMap &&
+              (tool(modMap, o, NAME).parser.undef = (id) => {
                 tkeGblQue(); //Only allow undef when top level require calls
                 var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'this' STATE
                   m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
@@ -1510,7 +1506,7 @@ class Require {
                   clrRegstr(id)
                 );
               })
-            : true) &&
+          ) &&
           tool(modMap, o, NAME).parser
         );
       };
