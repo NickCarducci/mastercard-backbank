@@ -344,7 +344,7 @@ class Require {
                     execCb: (name, cb, args, exports) =>
                       cb.apply(exports, args),
                     onError,
-                    CONFIG: STATE.CONFIG,
+                    CONFIG: STATE.CONFIG ? STATE.CONFIG : {},
                     unDE: STATE.unDE ? STATE.unDE : {},
                     enRgtry: STATE.enRgtry ? STATE.enRgtry : {},
                     urlFchd: STATE.urlFchd ? STATE.urlFchd : {}, //this able's
@@ -967,7 +967,7 @@ class Require {
       ) => {
         //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
         _K(c).forEach((prop = (op) => {
-          const arr = ["paths", "bundles", "STATE.CONFIG", "map"];
+          const arr = ["paths", "bundles", "config", "map"];
           return Y(!arr.includes(op) ? (STATE.CONFIG[op] = c[op]) : arr.forEach((op) => (STATE.CONFIG[op] = !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]))) && op; //args prop
         }, i) => WINDOW.mixin(STATE.CONFIG[prop], c[prop], true, true));
 
@@ -1139,15 +1139,16 @@ class Require {
       subPath,
       head,
       dependency,
+      initialConfig = {
+        waitSeconds: 7,
+        baseUrl: "./",
+        ...["paths", "bundles", "bundle", "shim", "config"].map((x) => {
+          return { [x]: {} };
+        })
+      },
       STATE = {
         NAME: null,
-        CONFIG: {
-          waitSeconds: 7,
-          baseUrl: "./",
-          ...["paths", "bundles", "bundle", "shim", "config"].map((x) => {
-            return { [x]: {} };
-          })
-        }
+        CONFIG: initialConfig
       },
       defQueue = [],
       rqrCnt = 1,
@@ -1458,7 +1459,7 @@ class Require {
       }) &&
       (BUILD.load = (STATE, tkn, url) => {
         // normalize, hasPathFallback, rmvScrpt, Module Do not overwrite an existing variables.REQUIREJS instance/ amd loader.
-        const CONFIG = (STATE && STATE.CONFIG) || {};
+        const CONFIG = (STATE && STATE.CONFIG) || initialConfig;
         //handle load request (in browser env); 'STATE' for state, 'tkn' for name, 'url' for point
         if (isBrowser) {
           var n = BUILD.createNode(CONFIG, tkn, url); //browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
