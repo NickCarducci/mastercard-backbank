@@ -13,6 +13,11 @@
 
 class Require {
   constructor() {
+    //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
+    const Y = (value, z, _) => {
+      if (z && _) z[_] = value;
+      return true;
+    }; //seratimNull
     var variables = {
       configuration: {},
       REQUIREJS: null
@@ -47,25 +52,15 @@ class Require {
           };
         }
       ) =>
-        seratimNull(
-          variables,
-          "undefined",
+        Y(
           (rem =
             !rem && e_(c).string() === Fn && c.length
               ? WINDOW.concat(rem, c)
               : rem)
         ) &&
         // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
-        seratimNull(
-          variables,
-          "undefined",
-          (nm = useInteractive && !nm ? n()[ga](WINDOW.dr(true)) : nm)
-        ) &&
-        seratimNull(
-          variables,
-          "undefined",
-          (STATE = useInteractive ? contexts[n()[ga](WINDOW.dr())] : STATE)
-        ) &&
+        Y((nm = useInteractive && !nm ? n()[ga](WINDOW.dr(true)) : nm)) &&
+        Y((STATE = useInteractive ? contexts[n()[ga](WINDOW.dr())] : STATE)) &&
         //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
 
         (!STATE ? defineables.push([nm, rem, c]) : true) &&
@@ -86,12 +81,8 @@ class Require {
             (construction =
               construction.constructor === Array ? () => {} : construction) &&
               (keys = keys.constructor === Array ? keys : construction) &&
-              seratimNull(
-                variables,
-                "undefined",
-                construction.constructor === Function && construction()
-              ) &&
-              seratimNull(variables, "undefined", keys.constructor === Array) &&
+              Y(construction.constructor === Function && construction()) &&
+              Y(keys.constructor === Array) &&
               keys.forEach((x, i) =>
                 x.includes(".")
                   ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i + buff])
@@ -149,8 +140,7 @@ class Require {
       _em = "emit",
       _ev = "events",
       _i = "init",
-      _n = "undefined",
-      window = _n,
+      _n = (window = _n),
       navigator = _n,
       isBrowser = T(window !== _n) && T(navigator !== _n) && window.document,
       sign = { version, isBrowser },
@@ -201,9 +191,7 @@ class Require {
             e = (m) => (m ? name : NAME); //scriptNode
           return (
             isBrowser &&
-            seratimNull(
-              variables,
-              "undefined",
+            Y(
               e_()
                 .tag()
                 .forEach(
@@ -284,9 +272,7 @@ class Require {
                       };
 
                     var configMap = mp && mp[_f];
-                    seratimNull(
-                      variables,
-                      "undefined",
+                    Y(
                       mp &&
                         mp[_f] &&
                         e_(mp[_f]).yes(name) &&
@@ -338,11 +324,7 @@ class Require {
             : (REM = cb) && (cb = eb) && (eb = optional);
         } // Determine if have STATE.CONFIG object in the call. REM is a STATE.CONFIG object Adjust args if there are STATE.dependencies
         (NAME = cfg && cfg.context ? cfg.context : NAME) &&
-          seratimNull(
-            variables,
-            "undefined",
-            (STATE = e_(contexts).yes(NAME) && contexts[NAME])
-          );
+          Y((STATE = e_(contexts).yes(NAME) && contexts[NAME]));
         console.log(STATE, STATE && STATE.require);
         STATE = STATE
           ? STATE
@@ -440,11 +422,7 @@ class Require {
                 return (
                   //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
                   checkLoaded() && //this param?
-                  seratimNull(
-                    variables,
-                    "undefined",
-                    _K(state).forEach((key) => (STATE[key] = state[key]))
-                  ) &&
+                  Y(_K(state).forEach((key) => (STATE[key] = state[key]))) &&
                   (STATE.makeRequire = (modMap, options) =>
                     makeRequire(modMap, options, NAME)) &&
                   (STATE.require = STATE.makeRequire()) &&
@@ -453,10 +431,7 @@ class Require {
               }
             }); //dependency
         console.log(STATE, STATE && STATE.require);
-        return (
-          seratimNull(variables, "undefined", cfg && STATE.configure(cfg)) &&
-          STATE.require(REM, cb, eb)
-        );
+        return Y(cfg && STATE.configure(cfg)) && STATE.require(REM, cb, eb);
       }),
       e_ = (obj /*,string*/) => {
         // !obj && console.log(obj + " error obj in ", this);
@@ -580,18 +555,14 @@ class Require {
           setTimeout(() => checkLoaded() && null, 50) /*plugin-resource*/
       ); //args'-mutable iife=>"app"
     }
-    //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
-    const seratimNull = (z, _, value) => {
-      z[_] = value;
-      return true;
-    };
     class Module {
       constructor(
         map = arguments[0],
         unDE = arguments[1],
         configShim = arguments[2]
       ) {
-        var defined,
+        var undefed,
+          defined,
           defining,
           enabled,
           Bindexports = (exec, args) => {
@@ -642,11 +613,7 @@ class Require {
                               _r &&
                               events[_e])) &&
                           (erro.requireMap = map) &&
-                          seratimNull(
-                            variables,
-                            "undefined",
-                            (erro.requireModules = map.yesdef ? [map.id] : null)
-                          ) &&
+                          Y((erro.requireModules = map.yesdef && [map.id])) &&
                           onError((error = erro)); //if there were more solutions to be made, so is redundant here, actually
 
                         //factory.apply(exports, depExports),
@@ -679,7 +646,7 @@ class Require {
                   : null) &&
                 clrRegstr(id) &&
                 (defined = true) &&
-                seratimNull(this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
+                Y(null, this, _dg) && //Finished definition, so allow call-check again for 'define' notifications, by cycle.
                 defined &&
                 !defineEmitted &&
                 (defineEmitted = true) &&
@@ -703,9 +670,7 @@ class Require {
             (STATE.enRgtry[map.id] = this) &&
             (enabled = true) && //no inadvertent load and 0 depCount by immediate calls to the STATE.defined callbacks
             (enabling = true) && // for STATE.dependencies. Enable mapFunction 1,dependency
-            seratimNull(
-              variables,
-              "undefined",
+            Y(
               depMaps.forEach((depMap, i) => {
                 if (T(depMap === _t)) {
                   const mp = map.yesdef ? map : map.parentMap;
@@ -715,14 +680,10 @@ class Require {
                     e_(handlers).yes(depMap.id) && handlers[depMap.id];
                   if (handler) return (depExports[i] = handler(this));
                   const go = () =>
-                    seratimNull(variables, "undefined", (depCount += 1)) &&
+                    Y((depCount += 1)) &&
                     when(depMap, "defined", (depExports) => {
-                      if (this.undefed) return null;
-                      seratimNull(
-                        variables,
-                        "undefined",
-                        this.defineDep(i, depExports)
-                      ) && check();
+                      if (undefed) return null;
+                      Y(this.defineDep(i, depExports)) && check();
                     }) &&
                     (errback
                       ? when(depMap, _e, errback) // propagate the error correctly - something else is listening for errors
@@ -739,9 +700,7 @@ class Require {
                   STATE.enable(depMap, this);
               })
             ) && //don't call enable if it is already enabled (circular REM)
-            seratimNull(
-              variables,
-              "undefined",
+            Y(
               _K(pluginMaps).forEach(
                 (pM = (x) => pluginMaps[x], i) =>
                   e_(STATE.dependencies).yes(pM.id) &&
@@ -750,19 +709,11 @@ class Require {
                   STATE.enable(pM, this)
               )
             ) &&
-            seratimNull(variables, "undefined", (enabling = false)) &&
+            Y((enabling = false)) &&
             check(),
           emit = (name, evt) =>
-            seratimNull(
-              variables,
-              "undefined",
-              events[name].forEach((cb) => cb(evt))
-            ) &&
-            seratimNull(
-              variables,
-              "undefined",
-              name === _e && delete events[name]
-            ), //returns true
+            Y(events[name].forEach((cb) => cb(evt))) &&
+            Y(name === _e && delete events[name]), //returns true
           init = INITED
             ? () => null
             : (
@@ -776,25 +727,24 @@ class Require {
                     : null, //construct((err) => this.emit(_e, err), this); //when this this, set up an eb to pass to the REM.
                 o = (o) => (ignore = o || {})
               ) => {
-                seratimNull(
-                  variables,
-                  "undefined",
-                  depMaps && depMaps.slice(0)
-                ) &&
-                  seratimNull(variables, "undefined", (errback = eb)) &&
+                Y(depMaps && depMaps.slice(0)) &&
+                  Y((errback = eb)) &&
                   (INITED = true);
                 //copy of 'source dependency arr inputs' (i.e. "shim" REM by depMaps arr)
                 if (o[_ed] || enabled) return enable();
                 check();
               },
           fetched,
+          shim = e_(configShim).yes(map.id) && configShim[map.id],
           state = {
+            inited: INITED,
+            undefed,
+            defined,
             error,
             enabled,
-            inited: INITED,
             enable,
             map,
-            shim: e_(configShim).yes(map.id) && configShim[map.id],
+            shim,
             load: STATE.urlFchd[map.url]
               ? () => null
               : (STATE.urlFchd[map.url] = true) && STATE.load(map.id, map.url),
@@ -841,7 +791,7 @@ class Require {
             defineDep: (i, depExports) =>
               !depMatched[i] &&
               (depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-              seratimNull(variables, "undefined", (depCount -= 1)) && //prototype is hydratable for async results, init only when this page by 'new' initialization
+              Y((depCount -= 1)) && //prototype is hydratable for async results, init only when this page by 'new' initialization
               (depExports[i] = depExports), //multiple cb export cycles
 
             callPlugin: () => {
@@ -865,9 +815,7 @@ class Require {
                     (INITED = true) &&
                       (error = err) &&
                       (err.requireModules = [id]) &&
-                      seratimNull(
-                        variables,
-                        "undefined",
+                      Y(
                         _K(STATE.dependencies).forEach(
                           (x, i) =>
                             STATE.dependencies[x].map.id.indexOf(
@@ -888,13 +836,7 @@ class Require {
                       hasInteractive = useInteractive; //2.1.0 onwards, pass text to reinforce fromText 1call/resource. pass tkn, ok, but discard tkn for internal ref.
                     const go = () =>
                       (textAlt ? (text = textAlt) : true) &&
-                      (hasInteractive
-                        ? seratimNull(
-                            variables,
-                            "undefined",
-                            (useInteractive = false)
-                          )
-                        : true) && //Turn off interactive script matching for IE for any define; calls in the text, then turn it back when at the end.
+                      (hasInteractive ? Y((useInteractive = false)) : true) && //Turn off interactive script matching for IE for any define; calls in the text, then turn it back when at the end.
                       getModule(moduleMap) && //Prime the system by creating a this instance for
                       (e_(STATE.CONFIG.config).yes(id)
                         ? (STATE.CONFIG.config[tkn] = STATE.CONFIG.config[id])
@@ -935,13 +877,10 @@ class Require {
         this.fetch = () => {
           if (fetched) return null;
           (fetched = true) && (STATE.startTime = new Date().getTime());
-          if (this.shim) {
+          if (shim) {
             STATE.makeRequire(map, {
               enableBuildCallback: true
-            })(
-              this.shim.REM || [],
-              map.prefix ? this.callPlugin() : this.load()
-            ); //plugin-managed resource
+            })(shim.REM || [], map.prefix ? this.callPlugin() : this.load()); //plugin-managed resource
           } else return map.prefix ? this.callPlugin() : this.load();
         };
         //remove broken Module instance from STATE.dependencies.//BS/BF 'bindingsFetch'
@@ -961,9 +900,7 @@ class Require {
       var ptName = sourcemap ? sourcemap.name : null,
         givenName = n,
         yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() this ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
-      n =
-        (!n ? seratimNull(variables, "undefined", (yesdef = false)) : true) &&
-        (n ? n : "_@r" + (rqrCnt += 1)); //internally-name a 'require' call, given no name
+      n = (!n ? Y((yesdef = false)) : true) && (n ? n : "_@r" + (rqrCnt += 1)); //internally-name a 'require' call, given no name
 
       const configGets = [
           STATE.CONFIG.nodeIdCompat,
@@ -1041,21 +978,13 @@ class Require {
               )
             ); //Reverse map the bundles
           var shim = STATE.CONFIG.shim; //save paths for special "additive processing"
-          seratimNull(
-            variables,
-            "undefined",
+          Y(
             shims &&
               _K(shims).forEach((id, i) => {
                 var temp = shims[id]; //'temp' = tobeshim
                 return (
-                  seratimNull(
-                    variables,
-                    "undefined",
-                    e_(temp).string() === Ar && (temp = { REM: temp })
-                  ) && //Merge shim, Normalize the structure
-                  seratimNull(
-                    variables,
-                    "undefined",
+                  Y(e_(temp).string() === Ar && (temp = { REM: temp })) && //Merge shim, Normalize the structure
+                  Y(
                     (temp.exports || temp[_i]) &&
                       !temp[_xf] &&
                       (temp[_xf] = STATE.makeShimExports(temp))
@@ -1069,15 +998,13 @@ class Require {
         //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
         _K(c).forEach((prop = (op) => {
           const arr = ["paths", "bundles", "STATE.CONFIG", "map"];
-          return seratimNull(variables, "undefined", !arr.includes(op) ? (STATE.CONFIG[op] = c[op]) : arr.forEach((op) => (STATE.CONFIG[op] = !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]))) && op; //args prop
+          return Y(!arr.includes(op) ? (STATE.CONFIG[op] = c[op]) : arr.forEach((op) => (STATE.CONFIG[op] = !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]))) && op; //args prop
         }, i) => WINDOW.mixin(STATE.CONFIG[prop], c[prop], true, true));
 
         const { shims, shim } = apply(c);
         return (
-          (STATE.CONFIG.shim = shims ? shim : STATE.CONFIG.shim) &&
-          seratimNull(
-            variables,
-            "undefined",
+          Y((STATE.CONFIG.shim = shims ? shim : STATE.CONFIG.shim)) &&
+          Y(
             (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
               pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
               var name = pkgObj.name,
@@ -1091,9 +1018,7 @@ class Require {
             })
           ) && //Update maps for "waiting to execute" modules in the STATE.dependencies.
           ((z) =>
-            seratimNull(
-              variables,
-              "undefined",
+            Y(
               _K(z).forEach(
                 (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
                   (z[id].map = makeModuleMap(id, null, true))
@@ -1236,10 +1161,7 @@ class Require {
           evt.type === "load" ||
           readyRegExp.test((evt.currentTarget || evt.srcElement).readyState)
       ) =>
-        seratimNull(
-          variables,
-          "undefined"((interscrpt = v ? null : interscrpt))
-        ) &&
+        Y("undefined"((interscrpt = v ? null : interscrpt))) &&
         v &&
         getScriptData(evt), //interactiveScript - browser event for script loaded status
       onScriptLoad = (data = evt) => STATE.completeLoad(data.id),
@@ -1339,9 +1261,7 @@ class Require {
         getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]),
       tkeGblQue = () =>
         (defineables.length
-          ? seratimNull(
-              variables,
-              "undefined",
+          ? Y(
               defineables.forEach((queueItem) => {
                 var id = queueItem[0];
                 (T(id === _t) ? (STATE.defQueueMap[id] = true) : true) &&
@@ -1362,9 +1282,7 @@ class Require {
                 //dependencies, callback, errorback
                 rem,
                 cb = (cb) =>
-                  seratimNull(
-                    variables,
-                    "undefined",
+                  Y(
                     o.enableBuildCallback &&
                       cb &&
                       e_(cb).string() === Fn &&
@@ -1480,9 +1398,7 @@ class Require {
           };
         return (
           WINDOW.mixin(tool(modMap, o, NAME).parser, namer) &&
-          seratimNull(
-            variables,
-            "undefined",
+          Y(
             !modMap &&
               (tool(modMap, o, NAME).parser.undef = (id) => {
                 tkeGblQue(); //Only allow undef when top level require calls
@@ -1519,9 +1435,7 @@ class Require {
       //(NAME) =>
     };
 
-    seratimNull(
-      variables,
-      "undefined",
+    Y(
       ctxReqProps.forEach(
         (prop) =>
           (BUILD[prop] = function () {
@@ -1614,13 +1528,11 @@ class Require {
               //dependency = arguments[0],
               const notBaseUrl = T(variables.REQUIREJS !== _u),
                 notrequire = T(require !== _n) && !e_(require).string() === Fn;
-              seratimNull(
-                variables,
+              Y(
                 "configuration",
                 notBaseUrl ? (variables.REQUIREJS ? notrequire : require) : null
               ) &&
-                seratimNull(
-                  variables,
+                Y(
                   "REQUIREJS",
                   notBaseUrl ? (undefined ? notrequire : undefined) : null
                 );
@@ -1632,15 +1544,9 @@ class Require {
                   T(setTimeout !== _n) ? setTimeout(fn, 4) : fn()
               }; // globally agreed names for other potential AMD loaders
 
-              return seratimNull(
-                variables,
-                "undefined",
-                _K(obj).forEach((key) => (BUILD[key] = obj[key]))
-              ) &&
+              return Y(_K(obj).forEach((key) => (BUILD[key] = obj[key]))) &&
                 // if (!require) require = BUILD; //Exportable require
-                seratimNull(
-                  variables,
-                  "undefined",
+                Y(
                   ["version", "isBrowser"].forEach((k) => (BUILD[k] = sign[k]))
                 ) &&
                 //prettier-ignore
@@ -1651,9 +1557,7 @@ class Require {
 
                 isBrowser &&
                 !variables.configuration.skipDataMain
-                ? seratimNull(
-                    variables,
-                    "undefined",
+                ? Y(
                     e_()
                       .tag()
                       .sort((a, b) => b - a)
@@ -1676,11 +1580,7 @@ class Require {
                           dataMain &&
                           //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
 
-                          seratimNull(
-                            variables,
-                            "undefined",
-                            (mainScript = dataMain ? dataMain : mainScript)
-                          ) && //Preserve dataMain in case it is a path (i.e. contains '?')
+                          Y((mainScript = dataMain ? dataMain : mainScript)) && //Preserve dataMain in case it is a path (i.e. contains '?')
                           (!variables.configuration.baseUrl &&
                           mainScript.indexOf("!") === -1
                             ? (src = mainScript.split("/")) &&
