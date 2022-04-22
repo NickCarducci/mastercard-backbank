@@ -1,6 +1,6 @@
 import { handlers } from "./index.mjs";
 
-export class Module {
+export default class Module {
   constructor(
     map = arguments[0],
     unDE = arguments[1],
