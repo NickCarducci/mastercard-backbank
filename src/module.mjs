@@ -1,4 +1,4 @@
-import { handlers } from "./testdurable";
+import { handlers } from "./index.mjs";
 
 export class Module {
   constructor(
