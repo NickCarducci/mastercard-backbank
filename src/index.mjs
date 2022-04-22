@@ -9,11 +9,11 @@
 /*jslint regexp: true, nomen: true, sloppy: true */
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
-//cannot this never get to the string regex?
+//cannot thi never get to the string regex?
 
 class Require {
   constructor() {
-    //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same this
+    //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same thi
     const Y = (value, z, _) => {
       if (z && _) z[_] = value;
       return true;
@@ -73,7 +73,7 @@ class Require {
       version = "2.3.6.carducci",
       iifeapp = class iifeapp {
         constructor() {
-          const z = arguments[0]; //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'this'," else App() function
+          const z = arguments[0]; //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'thi'," else App() function
           return function () {
             var construction = arguments[0],
               keys = arguments[1];
@@ -90,19 +90,19 @@ class Require {
               );
           };
         }
-      }, //this(and arguments) should relate to wherever function runs (fat has no 'this', iife can to append this[key])
-      //const iifefunc = (construction, keys) => new iifeapp(construction, keys); //you can tell this is a [proper-]function[-invocation] with thiscontext here for iifeapp
+      }, //thi(and arguments) should relate to wherever function runs (fat has no 'thi', iife can to append thi[key])
+      //const iifefunc = (construction, keys) => new iifeapp(construction, keys); //you can tell thi is a [proper-]function[-invocation] with thiscontext here for iifeapp
       /**
         * 
               iifefunc(
                 ((z) => {
                   if (z.interscrpt && e_(z.interscrpt).interA())
-                    return this.interscrpt;
+                    return thi.interscrpt;
                   // prettier-ignore
                   e_().tag().sort((a, b) => b - a)
                 .map((script) => e_(script).interA() && (z.interscrpt = script));
                   return z.interscrpt;
-                })(this),
+                })(thi),
                 ["interscript"]
               );
         * 
@@ -186,7 +186,7 @@ class Require {
               rem
             };
           } /*like ')//comment'; keep prefix*/
-        ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(rem), //Potential-CommonJS use-case of exports and this, without 'require.';
+        ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(rem), //Potential-CommonJS use-case of exports and thi, without 'require.';
         rmvScrpt: (name, NAME) => {
           const ga = "getAttribute",
             e = (m) => (m ? name : NAME); //scriptNode
@@ -307,7 +307,7 @@ class Require {
           return e_(configPkgs).yes(nm) ? configPkgs[nm] : nm;
         }
       },
-      //uses 'this' as 'z', but when called () the function is returned,
+      //uses 'thi' as 'z', but when called () the function is returned,
       BUILD = (variables.REQUIREJS = (
         REM, //String(require|export|module)
         cb,
@@ -347,7 +347,7 @@ class Require {
                     CONFIG: STATE.CONFIG ? STATE.CONFIG : {},
                     unDE: STATE.unDE ? STATE.unDE : {},
                     enRgtry: STATE.enRgtry ? STATE.enRgtry : {},
-                    urlFchd: STATE.urlFchd ? STATE.urlFchd : {}, //this able's
+                    urlFchd: STATE.urlFchd ? STATE.urlFchd : {}, //thi able's
                     defined: STATE.defined ? STATE.defined : {},
                     dependencies: STATE.dependencies ? STATE.dependencies : {},
                     configure,
@@ -370,13 +370,13 @@ class Require {
                       e_(STATE.dependencies).yes(depMap.id) &&
                       STATE.dependencies[depMap.id] &&
                       getModule(depMap).enable(),
-                    //if "m" this is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
+                    //if "m" thi is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
                     completeLoad: (tkn) => {
                       var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
                       for (tkeGblQue(); defQueue.length; ) {
                         defQueue.shift();
                         if (found) break;
-                        (found = true) && //anonymous this bound to name already  this is another anon this waiting for its completeLoad to fire.
+                        (found = true) && //anonymous thi bound to name already  thi is another anon thi waiting for its completeLoad to fire.
                           (args = args[0] =
                             args[0] === null
                               ? tkn
@@ -384,7 +384,7 @@ class Require {
                               ? (found = true)
                               : null) &&
                           callGetModule(args);
-                      } //matched a define call in this script
+                      } //matched a define call in thi script
                       STATE.defQueueMap = {};
                       var m =
                         e_(STATE.dependencies).yes(tkn) &&
@@ -422,7 +422,7 @@ class Require {
                   };
                 return (
                   //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
-                  checkLoaded() && //this param?
+                  checkLoaded() && //thi param?
                   Y(_K(state).forEach((key) => (STATE[key] = state[key]))) &&
                   (STATE.makeRequire = (modMap, options) =>
                     makeRequire(modMap, options, NAME)) &&
@@ -435,7 +435,7 @@ class Require {
         return Y(cfg && STATE.configure(cfg)) && STATE.require(REM, cb, eb);
       }),
       e_ = (obj /*,string*/) => {
-        // !obj && console.log(obj + " error obj in ", this);
+        // !obj && console.log(obj + " error obj in ", thi);
         const n = (NS) =>
           NS.constructor === "String" && NS.toUpperCase() === "NS";
         const yes = (name) => obj[_H](name) /*[_P]*/,
@@ -479,34 +479,29 @@ class Require {
         sec = STATE.CONFIG.waitSeconds * 1000,
         halt = sec && STATE.startTime + sec < new Date().getTime(); //It is possible to disable the wait interval by using waitSeconds of 0.
 
-      // waitInterval - Do not bother if this call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
+      // waitInterval - Do not bother if thi call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
       if (watch) return true;
-      const prog = (m, ss, tt, p) =>
-          new Promise(
-            (resolve) =>
-              ss.forEach(
-                (
-                  { i, dep } = (d) => {
-                    return {
-                      i: d.id,
-                      dep:
-                        e_(STATE.dependencies).yes(i) && STATE.dependencies[i]
-                    };
-                  },
-                  ix
-                ) =>
-                  !m.depMatched[ix] &&
-                  !p[i] && // depMap force undefined (registered yet not matched in this)
-                  (!e_(tt).yes(i) || !tt[i]
+      var dep,
+        progress = (
+          { m, depMaps, id, tt, p } = (m) =>
+            (id = m.map.id) && { m, depMaps: m.depMaps, id, tt: { id }, p: {} }
+        ) =>
+          Y(
+            depMaps
+              .map((map) => map.id)
+              .forEach(
+                (id, i) =>
+                  (dep =
+                    e_(STATE.dependencies).yes(id) && STATE.dependencies[id]) &&
+                  !m.depMatched[i] &&
+                  !p[id] && // depMap force undefined (registered yet not matched in thi)
+                  (!e_(tt).yes(id) || !tt[id]
                     ? progress(dep, tt, p)
-                    : ["defineDep", "check"].forEach(
-                        (cd, n) => n === 0 && m[cd](ix, STATE.defined[i])
+                    : ["defineDep", "check"].forEach((cd, n) =>
+                        m[cd](n === 0 && (i, STATE.defined[id]))
                       )) //pass false?
-              ) && resolve("")
-          ),
-        mx = (m) => ({ m, s: m.depMaps, i: m.map.id }),
-        progress = ({ m, ss, i } = mx, tt = { [mx.i]: true }, p = {}) =>
-          prog(m, ss, tt, p).then(() => (p[i] = true)),
+              )
+          ) && (p[id] = true),
         brwr = isBrowser || isWebWorker;
       watch = true;
       const erro = _e; //no keys, -fails
@@ -542,11 +537,13 @@ class Require {
       return iifeapp(parentThis)(
         () =>
           another &&
-          reqCalls.forEach((m) =>
-            parentThis[m][erro]
-              ? parentThis[m][_em](erro, parentThis[m][erro])
-              : progress(parentThis[m])
-          ), //construction
+          reqCalls
+            .map((require) => parentThis[require])
+            .forEach((require) =>
+              require[erro]
+                ? require[_em](erro, require[erro])
+                : progress(require)
+            ), //construction
         ["watch", "clrsec"], //keys,...values
         false,
         (!halt || fb) &&
@@ -565,7 +562,7 @@ class Require {
         const id = () => map.id,
           callPlugin = () => {
             var //Map already normalized the prefix.
-              id = map.id, //Mark this as a dependency for this plugin, so it
+              id = map.id, //Mark thi as a dependency for thi plugin, so it
               pluginMap = makeModuleMap(map.prefix); //can be traced for cycles.
             depMaps.push(pluginMap) &&
               when(pluginMap, _d, (plugin) => {
@@ -591,7 +588,7 @@ class Require {
                       )
                     ) &&
                     onError(err);
-                }; //Remove temp unnormalized modules for this this, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
+                }; //Remove temp unnormalized modules for thi thi, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
                 const parser = STATE.makeRequire(map.parentMap, {
                   enableBuildCallback: true
                 }); //STATE or how to 'complete' the load.
@@ -604,21 +601,12 @@ class Require {
                   const go = () =>
                     (textAlt ? (text = textAlt) : true) &&
                     (hasInteractive ? Y((useInteractive = false)) : true) && //Turn off interactive script matching for IE for any define; calls in the text, then turn it back when at the end.
-                    getModule(moduleMap) && //Prime the system by creating a this instance for
+                    getModule(moduleMap) && //Prime the system by creating a thi instance for
                     (e_(STATE.CONFIG.config).yes(id)
                       ? (STATE.CONFIG.config[tkn] = STATE.CONFIG.config[id])
-                      : true); //Transfer any STATE.CONFIG to this other this.
+                      : true); //Transfer any STATE.CONFIG to thi other thi.
                   go();
-                  const tryCatch = (exec, args) => {
-                      var erro = null;
-                      try {
-                        exec(...args);
-                      } catch (e) {
-                        erro = e;
-                      }
-                      return erro; //z is a this binding ...as args
-                    },
-                    erro = tryCatch(BUILD.exec, [text]);
+                  const erro = tryCatch(BUILD.exec, [text]);
                   if (erro)
                     return onError(
                       WINDOW.mk([
@@ -630,11 +618,11 @@ class Require {
                     );
                   //type, msg, err, requireModules
                   return (
-                    (hasInteractive ? (useInteractive = true) : true) && //Mark this as a dependency for the plugin resource
+                    (hasInteractive ? (useInteractive = true) : true) && //Mark thi as a dependency for the plugin resource
                     depMaps.push(moduleMap) &&
                     STATE.completeLoad(tkn) &&
                     parser([tkn], load)
-                  ); //Support anonymous modules. Bind the value of that this to the value for this resource ID.
+                  ); //Support anonymous modules. Bind the value of that thi to the value for thi resource ID.
                 }) && plugin.load(map.name, parser, load, STATE.CONFIG); //Use ptName here since the plugin's name is not reliable, could be some weird string with no path that actually wants to reference the ptName's path.
               }) &&
               STATE.enable(pluginMap, this) &&
@@ -656,7 +644,7 @@ class Require {
             } catch (e) {
               erro = e;
             }
-            return erro; //z is a this binding ...as args
+            return erro; //z is a thi binding ...as args
           };
         var defineEmitted,
           ignore,
@@ -696,7 +684,7 @@ class Require {
               if (T(depMap === _t)) {
                 const mp = map.yesdef ? map : map.parentMap;
                 (depMap = makeModuleMap(depMap, mp, false, !this.skipMap)) &&
-                  (depMaps[i] = depMap); //Dependency needs to be converted to a depMap //and wired up to this this.
+                  (depMaps[i] = depMap); //Dependency needs to be converted to a depMap //and wired up to thi thi.
                 var handler =
                   e_(handlers).yes(depMap.id) && handlers[depMap.id];
                 if (handler) return (depExports[i] = handler(this));
@@ -712,9 +700,9 @@ class Require {
                     ? when(depMap, _e, (err) => emit(_e, err))
                     : null);
                 go();
-              } // (No direct eb when this this)
+              } // (No direct eb when thi thi)
               var id = depMap.id,
-                m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'this'
+                m = STATE.dependencies[id]; //Skip special modules like 'require', 'exports', 'thi'
               !e_(handlers).yes(id) &&
                 m &&
                 !m[_ed] &&
@@ -743,7 +731,7 @@ class Require {
                     ? this.addEventListene(_e, eb) //If no eb already, but there are error listeners
                     : events[_e]
                     ? (eb = (err) => emit(_e, err))
-                    : null, //construct((err) => this.emit(_e, err), this); //when this this, set up an eb to pass to the REM.
+                    : null, //construct((err) => thi.emit(_e, err), thi); //when thi thi, set up an eb to pass to the REM.
                 o = (o) => (ignore = o || {})
               ) => {
                 Y(depMaps && depMaps.slice(0)) &&
@@ -758,7 +746,7 @@ class Require {
             enabled && !enabling && !INITED
               ? !e_(STATE.defQueueMap).yes(id) && fetch()
               : defining //new Promise(r=>r(""))
-              ? error && emit(_e, error) // !defQueue.includes(this) this is ready to, and does, define itself
+              ? error && emit(_e, error) // !defQueue.includes(thi) thi is ready to, and does, define itself
               : (defining = true) && //no redundant require-define
                 depCount < 1 &&
                 !STATE.defined &&
@@ -871,23 +859,23 @@ class Require {
                 ? { enable }
                 : { enable: () => {} })(
               e_(STATE.dependencies).yes(nM.id) && STATE.dependencies[nM.id]
-            ).enable(); //Mark this as a dependency for this plugin, so it can be traced for cycles.
+            ).enable(); //Mark thi as a dependency for thi plugin, so it can be traced for cycles.
           },
           addEventListene: (name, cb) =>
             (events[name] ? events[name] : (events[name] = [])).push(cb),
           defineDep: (i, depExports) =>
             !depMatched[i] &&
             (depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-            Y((depCount -= 1)) && //prototype is hydratable for async results, init only when this page by 'new' initialization
+            Y((depCount -= 1)) && //prototype is hydratable for async results, init only when thi page by 'new' initialization
             (depExports[i] = depExports) //multiple cb export cycles
         };
-        //this.fetch = fetch;
+        //thi.fetch = fetch;
         //remove broken Module instance from STATE.dependencies.//BS/BF 'bindingsFetch'
         this.fetched = fetched;
         _K(state).forEach((key) => (this[key] = state[key]));
       }
-    } //module.exports; factory; this.depMaps = [], enabled, this.fetched //const defaultOnError = (err) => err;
-    //const construct = (f, obj) => function () { f.apply(obj, arguments); //in original JQuery RequireJS, obj is this or this }; //Function.prototype.construct (bind), with 'this' //https://stackoverflow.com/a/46700616/11711280
+    } //module.exports; factory; thi.depMaps = [], enabled, thi.fetched //const defaultOnError = (err) => err;
+    //const construct = (f, obj) => function () { f.apply(obj, arguments); //in original JQuery RequireJS, obj is thi or thi }; //Function.prototype.construct (bind), with 'thi' //https://stackoverflow.com/a/46700616/11711280
     console.log("In Require: ", "Module", Module);
     function makeModuleMap(
       n = arguments[0],
@@ -898,7 +886,7 @@ class Require {
       //n, sourcemap, isNormed, applyMap
       var ptName = sourcemap ? sourcemap.name : null,
         givenName = n,
-        yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() this ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
+        yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() thi ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
       n = (!n ? Y((yesdef = false)) : true) && (n ? n : "_@r" + (rqrCnt += 1)); //internally-name a 'require' call, given no name
 
       const configGets = [
@@ -939,9 +927,9 @@ class Require {
               normed + suffix
             );
 
-      //do not normalize if nested plugin references; albeit this deprecates resourceIds,
+      //do not normalize if nested plugin references; albeit thi deprecates resourceIds,
       //normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
-      //ok base name, relative path?.normalize's 'map STATE.CONFIG application' might make normalized 'name' a plugin ID.'map STATE.CONFIG values' are already normalized at this point.
+      //ok base name, relative path?.normalize's 'map STATE.CONFIG application' might make normalized 'name' a plugin ID.'map STATE.CONFIG values' are already normalized at thi point.
 
       return {
         prefix: p,
@@ -965,7 +953,7 @@ class Require {
             : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
         }
       ) => {
-        //const objs = function (){arguments.forEach(x=>this[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
+        //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
         _K(c).forEach((prop = (op) => {
           const arr = ["paths", "bundles", "config", "map"];
           return Y(!arr.includes(op) ? (STATE.CONFIG[op] = c[op]) : arr.forEach((op) => (STATE.CONFIG[op] = !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]))) && op; //args prop
@@ -1010,7 +998,7 @@ class Require {
                   pkgObj.main || "main"
                 )
                   .replace(/^\.\//, "")
-                  .replace(/\.js$/, "")}`); //normalize pkg name main this ID pointer paths
+                  .replace(/\.js$/, "")}`); //normalize pkg name main thi ID pointer paths
             })
           ) && //Update maps for "waiting to execute" modules in the STATE.dependencies.
           ((z) =>
@@ -1049,7 +1037,7 @@ class Require {
       hasPathFallback
       parseName
       normalize
-      this
+      thi
       Module
       BUILD
       obj
@@ -1102,23 +1090,17 @@ class Require {
           e_(STATE.CONFIG.bundle).yes(arguments[0]) &&
           STATE.CONFIG.bundle[arguments[0]], //already-normalized-tkn as URL. Use toUrl for the public API.
         tkn = pkgMain ? pkgMain : arguments[0], //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
-        id = e_(STATE.bdlMap).yes(tkn) && STATE.bdlMap[tkn]; //assume use of an url, not a this id.
+        id = e_(STATE.bdlMap).yes(tkn) && STATE.bdlMap[tkn]; //assume use of an url, not a thi id.
       id && nameToUrl(id, ext, skipExt); //filter out STATE.dependencies that are already paths.
       const geturl = (url = "") => {
-          //Just a plain path, not this name lookup, so just return it.
+          //Just a plain path, not thi name lookup, so just return it.
           if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
           var paths = STATE.CONFIG.paths,
-            syms = tkn.split("/"); //an extension, this method probably needs to be reworked. A this that needs to be converted to a path.
+            syms = tkn.split("/"); //an extension, thi method probably needs to be reworked. A thi that needs to be converted to a path.
           for (let i = syms.length; i > 0; i -= 1) {
-            var pM = syms.slice(0, i).join("/"), //per this name segment if path registered, start name, and work up
+            var pM = syms.slice(0, i).join("/"), //per thi name segment if path registered, start name, and work up
               pP = e_(paths).yes(pM) && paths[pM]; //parentModule
-
-            pP &&
-              iifeapp(this)(
-                ["pP", "syms"],
-                e_(pP).a() ? pP[0] : pP,
-                syms.splice(0, i, pP)
-              );
+            pP && (pP = e_(pP).a() ? pP[0] : pP) && syms.splice(0, i, pP);
             if (pP) break; //arr means a few choices; parentPath
           }
           (url = syms.join("/")) && //Join the path parts together, then figure out if baseUrl is needed.
@@ -1242,7 +1224,16 @@ class Require {
           });
       }
     }
-    var depMap = (a0) => {
+    var tryCatch = (exec, args = []) => {
+        var erro = null;
+        try {
+          exec(...args);
+        } catch (e) {
+          erro = e;
+        }
+        return erro; //z is a thi binding ...as args
+      },
+      depMap = (a0) => {
         return {
           dm: a0,
           m: e_(STATE.dependencies).yes(a0.id) && STATE.dependencies[a0.id]
@@ -1265,7 +1256,7 @@ class Require {
                   defQueue.push(queueItem);
               })
             )
-          : true) && (defineables = []), //globalQueue by internal method to this defQueue
+          : true) && (defineables = []), //globalQueue by internal method to thi defQueue
       getGlobal = (value) =>
         !value
           ? value //dot-notation dependency
@@ -1298,14 +1289,14 @@ class Require {
                       eb
                     ) //Invalid call; id, msg, err, requireModule
                   : modMap && e_(handlers).yes(rem)
-                  ? handlers[rem](STATE.dependencies[modMap.id]) //when require|exports|module are requested && while this is being STATE.defined
+                  ? handlers[rem](STATE.dependencies[modMap.id]) //when require|exports|module are requested && while thi is being STATE.defined
                   : BUILD.get
                   ? BUILD.get(STATE, rem, modMap, tool.parser)
                   : () => {
                       var id, map;
                       return (
                         (map = makeModuleMap(rem, modMap, false, true)) &&
-                        (id = map.id) && //Normalize this name from . or ..
+                        (id = map.id) && //Normalize thi name from . or ..
                         (!e_(STATE.defined).yes(id)
                           ? onError(
                               WINDOW.mk([
@@ -1333,7 +1324,7 @@ class Require {
                       return onError(
                         WINDOW.mk([
                           "mismatch",
-                          `Mismatched anonymous define() this: ${
+                          `Mismatched anonymous define() thi: ${
                             args[args.length - 1]
                           }`
                         ])
@@ -1348,7 +1339,7 @@ class Require {
                   () =>
                     intakeDefines() && //Mark all the STATE.dependencies as needing to be loaded.
                     (requireMod = getModule(makeModuleMap(null, modMap))) && //collect defines that could have been added since the 'require call'
-                    (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to this 'require call' for STATE.dependencies
+                    (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to thi 'require call' for STATE.dependencies
                     requireMod[_i](rem, cb, eb, { enabled: true }) &&
                     checkLoaded()
                 );
@@ -1374,7 +1365,7 @@ class Require {
               }
             ) => {
               //moduleNamePlusExt
-              //URL path = this name + .extension; requires 'this name,' not 'plain URLs' like nameToUrl
+              //URL path = thi name + .extension; requires 'thi name,' not 'plain URLs' like nameToUrl
 
               const ext = isAlias ? mNPE.substring(i, mNPE.length) : null;
               mNPE = isAlias ? mNPE.substring(0, i) : mNPE;
@@ -1399,7 +1390,7 @@ class Require {
             !modMap &&
               (tool(modMap, o, NAME).parser.undef = (id) => {
                 tkeGblQue(); //Only allow undef when top level require calls
-                var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'this' STATE
+                var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'thi' STATE
                   m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
                 return (
                   (m.undefed = true) &&
@@ -1442,11 +1433,10 @@ class Require {
       )
     ) && //apply arguments to requires when context
     //for the latest instance of the 'default STATE STATE.CONFIG'//not the 'early binding to default STATE,' but contexts during builds//ticketx to apology tour
-    (isBrowser
-      ? (head = BUILD.start.head = e_("base").tag(0)
-          ? baseElement.parentNode
-          : e_("head").tag())
-      : true) &&
+    isBrowser &&
+    (head = BUILD.start.head = e_("base").tag(0)
+      ? baseElement.parentNode
+      : e_("head").tag()) &&
     //(IE6) BASE appendChild (http://dev.jquery.com/ticket/2709)
     (BUILD[_oE] = (err) => err) && // node for the load command in browser env
       (BUILD.createNode = (CONFIG, tkn, url) => {
@@ -1486,16 +1476,18 @@ class Require {
           scriptPends = n; //of the appendChild execution, so to tie an anonymous define
           if (baseElement) {
             head.insertBefore(n, baseElement);
-          } else head.appendChild(n); //call to the this name (which is stored when the node), hold when to a reference to this node, but clear after the DOM insertion.
+          } else head.appendChild(n); //call to the thi name (which is stored when the node), hold when to a reference to thi node, but clear after the DOM insertion.
           scriptPends = null;
           return n; // bug in WebKit where the worker gets garbage-collected after calling
         } else if (isWebWorker) {
-          try {
+          /*(runs once to define or logical && 'Short-circuit evaluation')() */
+          const e = tryCatch(
             setTimeout(() => {}, 0) &&
               //s eslint-disable-next-line
               //importScripts(url);
-              STATE.completeLoad(tkn); // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
-          } catch (e) {
+              STATE.completeLoad(tkn) // importScripts(): https://webkit.org/b/153317, so, Post a task to the event loop //Account for anonymous modules
+          );
+          e &&
             STATE[_oE](
               WINDOW.mk([
                 "importscripts",
@@ -1504,10 +1496,10 @@ class Require {
                 [tkn]
               ])
             );
-          } //type, msg, err, requireModules
+          //type, msg, err, requireModules
         }
       }) &&
-      //this named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
+      //thi named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
       //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
       console.log("BUILD product (of Require) :", BUILD);
     const state = {
@@ -1515,12 +1507,12 @@ class Require {
       //The 'rest parameter:' spread a fat arrow's args for function arguments
       /*iifeapp: (ths) => {
     return (...args) => new iifeapp(ths)(args);
-    }, */ //(object/class/prototype-'this'-prop)
+    }, */ //(object/class/prototype-'thi'-prop)
       BUILD, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'BUILD' function
       require:
         /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
         e_(variables.REQUIREJS).string() !== Fn
-          ? BUILD // package-names, cb, returns a value to define the this of argument index[0]
+          ? BUILD // package-names, cb, returns a value to define the thi of argument index[0]
           : () => {
               //dependency = arguments[0],
               const notBaseUrl = T(variables.REQUIREJS !== _u),
@@ -1587,7 +1579,7 @@ class Require {
                                 : "./") &&
                               (variables.configuration.baseUrl = subPath)
                             : true) &&
-                          //baseUrl if data-main value is not a loader plugin this ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a this name.
+                          //baseUrl if data-main value is not a loader plugin thi ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a thi name.
                           (mainScript = mainScript.replace(/\.js$/, "")) && //If mainScript is still a mere path, fall back to dataMain
                           (/^[/:?.]|(.js)$/.test(mainScript)
                             ? (mainScript = dataMain)
@@ -1654,9 +1646,9 @@ export class DurableObjectExample {
             );
             stream += r.value;
           }
-          return await readable.read().then(processText); // Read some more, and call this function again
+          return await readable.read().then(processText); // Read some more, and call thi function again
         });*/ //https://developers.cloudflare.com/workers/platform/compatibility-dates/
-      //.then((R) => this.handle(R, req));
+      //.then((R) => thi.handle(R, req));
       // Create a URL to give to the Worker constructor
       //const url = URL.createObjectURL(blob);
       //reader.readAsArrayBuffer(requi);
@@ -1671,7 +1663,7 @@ export class DurableObjectExample {
       const { require: requir } = new Require();
       const locs = requir("mastercard-locations");
       const places = requir("mastercard-places");
-      //const { locs, places, crs } = this//.value//.default(); //Window() //this.modules; //Window.sourcesContent();
+      //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
 
       var iMCard = null,
         mc = null;
@@ -1769,13 +1761,13 @@ export class DurableObjectExample {
         .then( (bundle) => {
           console.log(Object.keys(bundle), " is bundle");
           pages.forEach( (output) =>  bundle.write(output));
-        this.value = bundle
+        thi.value = bundle
          // return hydrate(bundle)
         })
         .catch((err) => console.log("rollup.rollup error", err.message));*/
-        //this.el.storage.put("esm", product);
+        //thi.el.storage.put("esm", product);
       });
-    /*this.makeRequire = async (req) =>
+    /*thi.makeRequire = async (req) =>
       await ((eo) => eo.get(eo.idFromName(new URL(req.url))))(
         env.REQUIRE_CLASS_DURABLE_OBJECT
       );*/
@@ -1783,8 +1775,8 @@ export class DurableObjectExample {
 
   //Omit  for syncronous defer, -ish
   async fetch(req) {
-    if (false /*!this.value*/) {
-      //this.modules) {
+    if (false /*!thi.value*/) {
+      //thi.modules) {
       return new Response(`{}`, {
         status: "400",
         message: "not ready for use",
@@ -1793,11 +1785,11 @@ export class DurableObjectExample {
       });
       //const require =  makeRequire(req, env);
     } else {
-      //console.log("this :", this);
-      //const requirer = this.makeRequire(req);
+      //console.log("thi :", thi);
+      //const requirer = thi.makeRequire(req);
       //console.log("requirer: ", requirer);
       return await this.handle(req);
-      // await this.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // this.makeRequire(req)
+      // await thi.makeRequire(req) //new Promise((resolve) => requirer && resolve(requirer)) // thi.makeRequire(req)
       //.then(async (r) => await r.body.blob())
       /*.then(
           async (requireObj) =>
@@ -1806,9 +1798,9 @@ export class DurableObjectExample {
               result;
             reader.readAsDataURL(requireAsBlob);
             reader.onloadend = async () =>
-              (result = await this.handle(reader.result, req));
+              (result = await thi.handle(reader.result, req));
             return new Promise((resolve) => result && resolve(result));
-          }* await this.handle(
+          }* await thi.handle(
               requireObj, //requireAsBlob,
               req
             )*/
@@ -1818,7 +1810,7 @@ export class DurableObjectExample {
           res.body.pipeTo(writable); // Start pumping the body. NOTE: No await!
           //return new Response(readable, res); //deliver running ReadableStream Running & Transformed to writable pipe
 
-          return this.handle(
+          return thi.handle(
             readable,
             req
           );*/
@@ -1840,9 +1832,9 @@ export class DurableObjectExample {
               const chunk = value;
               console.log(`Total (${charsReceived}) Uint8Array = (${chunk})++`);
               result += chunk;
-              return await readable.read().then(processText); // Read some more, and call this function again
+              return await readable.read().then(processText); // Read some more, and call thi function again
             })
-            .then((R) => this.handle(R, req));*/
+            .then((R) => thi.handle(R, req));*/
     }
     /*.catch(
           (err) =>
@@ -1853,16 +1845,16 @@ export class DurableObjectExample {
             })
         );*/
   }
-}
+} //"smart fight, accross the board, we want improvement," - school is IN!
 /*
   // To accept the WebSocket request, we create a WebSocketPair (which is like a socketpair,
   // i.e. two WebSockets that talk to each other), we return one end of the pair in the
-  // response, and we operate when the other end. Note that this API is not part of the
+  // response, and we operate when the other end. Note that thi API is not part of the
   // Fetch API standard; unfortunately, the Fetch API / Service Workers specs do not define
   // any way to act as a WebSocket server today.
   let pair = new WebSocketPair();
   // We're going to take pair[1] as our end, and return pair[0] to the client.
-  await this.handleSession(pair[1]);
+  await thi.handleSession(pair[1]);
   // Now we return the other end of the pair to the client.
   return new Response(null, { status: 101, webSocket: pair[0] });
   // handleSession() implements our WebSocket-based chat protocol.
@@ -1885,3 +1877,4 @@ export class DurableObjectExample {
     webSocket.addEventListener("close", closeOrErrorHandler);
     webSocket.addEventListener("error", closeOrErrorHandler);
   };*/
+
