@@ -1,4 +1,4 @@
-import Module from "./module.mjs";
+import Module, { configure } from "./module.mjs";
 /**UNLICENSED BUT FOR PARTS OF OTHERS */
 
 /** vim: et:ts=4:sw=4:sts=4
@@ -187,14 +187,8 @@ class Require {
     */
       _ = "_",
       _f = "*",
-      _p = "packages",
-      _b = "bundles",
-      _s = "shim",
-      _l = "location",
       _u = "baseUrl",
-      _a = "urlArgs",
       _t = "string",
-      _xf = "exportsFn",
       _x = "exports",
       _oE = "onError",
       _e = "error",
@@ -485,7 +479,28 @@ class Require {
             }
           }; //dependency
         console.log(STATE, STATE && STATE.require);
-        return Y(cfg && STATE.configure(cfg)) && STATE.require(REM, cb, eb);
+        const set = [
+          "CONFIG",
+          "bdlMap",
+          "makeShimExports",
+          "dependencies",
+          "require"
+        ];
+        let newobject = {};
+        set.forEach((key) => (newobject[key] = STATE[key]));
+        return (
+          Y(
+            cfg &&
+              STATE.configure(
+                cfg,
+                (key, value) => (STATE[key] = value),
+                makeModuleMap,
+                newobject,
+                mixin,
+                e_
+              )
+          ) && STATE.require(REM, cb, eb)
+        );
       });
     console.log("In Require: ", "BUILD", BUILD);
     var clrsec, watch;
@@ -642,78 +657,8 @@ class Require {
         id
       };
     }
-    const configure = (
-        c = (c) => {
-          const r = T(c[_a] === _t)
-            ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
-            : c[_a];
-
-          return c[_u].charAt(c[_u].length - 1) === "/" // Convert old style urlArgs string to a function.
-            ? { ...c, [_a]: r }
-            : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
-        }
-      ) => {
-        //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
-        _K(c).forEach((prop = (op) => {
-          const arr = ["paths", "bundles", "config", "map"];
-          return Y(!arr.includes(op) ? (STATE.CONFIG[op] = c[op]) : arr.forEach((op) => (STATE.CONFIG[op] = !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]))) && op; //args prop
-        }, i) => mixin(STATE.CONFIG[prop], c[prop], true, true));
-
-        const mend = (bundles, shims) => {
-            var shim = STATE.CONFIG.shim; //save paths for special "additive processing"
-
-            bundles &&
-              _K(bundles).forEach((prop, i) =>
-                bundles[prop].forEach(
-                  (v) => (STATE.bdlMap[v] = v !== prop ? prop : STATE.bdlMap[v])
-                )
-              ); //Reverse map the bundles
-            Y(
-              shims &&
-                _K(shims).forEach((id, i) => {
-                  var temp = shims[id]; //'temp' = tobeshim
-                  return (
-                    Y(e_(temp).string() === Ar && (temp = { REM: temp })) && //Merge shim, Normalize the structure
-                    Y(
-                      (temp.exports || temp[_i]) &&
-                        !temp[_xf] &&
-                        (temp[_xf] = STATE.makeShimExports(temp))
-                    ) &&
-                    (shim[id] = temp)
-                  );
-                })
-            );
-            return { shim, shims };
-          },
-          { shims, shim } = mend(c[_b], c[_s]);
-        return (
-          Y((STATE.CONFIG.shim = shims ? shim : STATE.CONFIG.shim)) &&
-          Y(
-            (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
-              pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
-              var name = pkgObj.name,
-                location = pkgObj[_l]; //Adjust packages if necessary.
-              (location ? (STATE.CONFIG.paths[name] = pkgObj[_l]) : true) &&
-                (STATE.CONFIG.bundle[name] = `${pkgObj.name}/${(
-                  pkgObj.main || "main"
-                )
-                  .replace(/^\.\//, "")
-                  .replace(/\.js$/, "")}`); //normalize pkg name main thi ID pointer paths
-            })
-          ) && //Update maps for "waiting to execute" modules in the STATE.dependencies.
-          ((z) =>
-            Y(
-              _K(z).forEach(
-                (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
-                  (z[id].map = makeModuleMap(id, null, true))
-              )
-            ))(STATE.dependencies) && //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
-          (c.REM || c.cb) &&
-          STATE.require(c.REM || [], c.cb)
-        );
-      },
-      //s eslint-disable-next-line
-      isWebWorker = !isBrowser && false, // && T(importScripts !== _n),
+    //s eslint-disable-next-line
+    const isWebWorker = !isBrowser && false, // && T(importScripts !== _n),
       //'loading', 'loaded', execution, 'complete'
       readyRegExp =
         isBrowser && navigator.platform === "PLAYSTATION 3"
@@ -914,73 +859,88 @@ class Require {
           m: e_(STATE.dependencies).yes(a0.id) && STATE.dependencies[a0.id]
         };
       },
-      getModule = ({ m, dm } = depMap) =>
-        m
+      getModule = ({ m, dm } = depMap) => {
+        const {
+            dependencies,
+            defined,
+            CONFIG: config = (CONFIG) => CONFIG.config,
+            urlFchd,
+            load
+          } = STATE,
+          manage = (map, ignore, id, depMaps) =>
+            map.yesdef && !ignore
+              ? new Promise(
+                  (resolve) => (defined[id] = module.exports && resolve(""))
+                ).then(
+                  () =>
+                    BUILD.onResourceLoad &&
+                    BUILD.onResourceLoad(
+                      STATE,
+                      map,
+                      depMaps.map((depMap) => depMap.normalizedMap || depMap)
+                    )
+                )
+              : true,
+          mold = (id, tkn) =>
+            e_(config).yes(id) ? (STATE.CONFIG.config[tkn] = config[id]) : true,
+          loadd = () =>
+            !urlFchd[dm.url]
+              ? (STATE.urlFchd[dm.url] = true) && load(dm.id, dm.url)
+              : console.log(
+                  `redundant STATE.load(${dm.id}, ${dm.url}) call (?), STATE.urlFchd[${dm.url}] === true`
+                ),
+          execute = (text, id) => {
+            const erro = tryCatch(BUILD.exec, [text]);
+            if (erro)
+              return onError(
+                WINDOW.mk([
+                  "fromtexteval",
+                  `fromText eval for ${id} failed: ${erro}`,
+                  erro,
+                  [id]
+                ])
+              );
+          };
+        const matches = [
+          "unDE",
+          "CONFIG",
+          "dependencies",
+          "makeRequire",
+          "bdlMap",
+          "completeLoad",
+          "enable",
+          "execCb",
+          "defined",
+          "defQueueMap"
+        ];
+        let newObject = {};
+        Object.keys(STATE).forEach(
+          (newObject, key) =>
+            matches.includes(key) && (newObject[key] = STATE[key])
+        );
+        return m
           ? m
-          : (STATE.dependencies[dm.id] = new STATE.Module(
+          : (dependencies[dm.id] = new STATE.Module(
               dm,
-              STATE.unDE,
-              STATE.CONFIG,
-              STATE.dependencies,
-              STATE.makeRequire,
               makeModuleMap,
               useInteractive,
               _e,
               clrRegstr,
               nameToUrl,
               getModule,
-              STATE.bdlMap,
               onError,
-              STATE.completeLoad,
-              STATE.enable,
-              (map, ignore, id, depMaps) =>
-                map.yesdef && !ignore
-                  ? new Promise(
-                      (resolve) =>
-                        (STATE.defined[id] = module.exports && resolve(""))
-                    ).then(
-                      () =>
-                        BUILD.onResourceLoad &&
-                        BUILD.onResourceLoad(
-                          STATE,
-                          map,
-                          depMaps.map(
-                            (depMap) => depMap.normalizedMap || depMap
-                          )
-                        )
-                    )
-                  : true,
-              (id, tkn) =>
-                e_(STATE.CONFIG.config).yes(id)
-                  ? (STATE.CONFIG.config[tkn] = STATE.CONFIG.config[id])
-                  : true,
-              () =>
-                !STATE.urlFchd[dm.url]
-                  ? (STATE.urlFchd[dm.url] = true) && STATE.load(dm.id, dm.url)
-                  : console.log(
-                      `redundant STATE.load(${dm.id}, ${dm.url}) call (?), STATE.urlFchd[${dm.url}] === true`
-                    ),
+              ...newObject,
+              manage,
+              mold,
+              loadd,
               (STATE.startTime = new Date().getTime()),
-              STATE.execCb,
-              STATE.defined,
               (STATE.enabledRegistry[dm.id] = this),
-              STATE.defQueueMap,
               WINDOW.normalize,
               BUILD.onError !== ((err) => err),
-              (text, id) => {
-                const erro = tryCatch(BUILD.exec, [text]);
-                if (erro)
-                  return onError(
-                    WINDOW.mk([
-                      "fromtexteval",
-                      `fromText eval for ${id} failed: ${erro}`,
-                      erro,
-                      [id]
-                    ])
-                  );
-              },
+              execute,
               depMap
-            )),
+            ));
+      },
       callGetModule = (args) =>
         !e_(STATE.defined).yes(args[0]) &&
         getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]),
