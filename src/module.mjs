@@ -1,53 +1,54 @@
 import { handlers } from "./index.mjs";
 
+var _e = "error",
+  _d = "defined",
+  _dg = "defining",
+  _ed = "enabled",
+  _P = "prototype",
+  _r = "require",
+  _t = "string",
+  Fn = "[object Function]";
+
+const Y = (value, z, _) => {
+    if (z && _) z[_] = value;
+    return true;
+  }, //seratimNull
+  _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []),
+  T = (x) => typeof x;
 export default class Module {
   constructor(
     map = arguments[0],
-    unDE = arguments[1],
-    CONFIG = arguments[2],
+    makeModuleMap = arguments[1],
+    useInteractive = arguments[2],
+    e_ = arguments[3],
+    clrRegstr = arguments[4],
+    nameToUrl = arguments[5],
+    getModule = arguments[6],
+    onError = arguments[7],
+    unDE = arguments[8],
+    CONFIG = arguments[9],
     configShim = CONFIG.shim,
     config = CONFIG.config,
-    dependencies = arguments[3],
-    makeRequire = arguments[4],
-    makeModuleMap = arguments[5],
-    useInteractive = arguments[6],
-    e_ = arguments[7],
-    clrRegstr = arguments[8],
-    nameToUrl = arguments[9],
-    getModule = arguments[10],
-    bdlMap = arguments[11],
-    onError = arguments[12],
+    dependencies = arguments[10],
+    makeRequire = arguments[11],
+    bdlMap = arguments[12],
     completeLoad = arguments[13],
     enable = arguments[14],
-    manage = arguments[15],
-    mold = arguments[16],
-    load = arguments[17],
-    start = arguments[18],
-    execCb = arguments[19],
-    definedSet = arguments[20],
-    set = arguments[21],
-    defQueueMap = arguments[22],
+    execCb = arguments[15],
+    definedSet = arguments[16],
+    defQueueMap = arguments[17],
+    manage = arguments[18],
+    mold = arguments[19],
+    load = arguments[20],
+    start = arguments[21],
+    set = arguments[22],
     normalize = arguments[23],
     noErrorHandler = arguments[24],
     execute = arguments[25],
 
     depMap = arguments[26]
   ) {
-    var _e = "error",
-      _d = "defined",
-      _dg = "defining",
-      _ed = "enabled",
-      _P = "prototype",
-      _r = "require",
-      _t = "string",
-      Fn = "[object Function]";
     const id = () => map.id,
-      Y = (value, z, _) => {
-        if (z && _) z[_] = value;
-        return true;
-      }, //seratimNull
-      _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []),
-      T = (x) => typeof x,
       callPlugin = () => {
         var //Map already normalized the prefix.
           id = map.id, //Mark thi as a dependency for thi plugin, so it
@@ -339,3 +340,94 @@ export default class Module {
 } //module.exports; factory; thi.depMaps = [], enabled, thi.fetched //const defaultOnError = (err) => err;
 //const construct = (f, obj) => function () { f.apply(obj, arguments); //in original JQuery RequireJS, obj is thi or thi }; //Function.prototype.construct (bind), with 'thi' //https://stackoverflow.com/a/46700616/11711280
 console.log("In Require: ", "Module", Module);
+const _p = "packages",
+  _b = "bundles",
+  _s = "shim",
+  _l = "location",
+  _u = "baseUrl",
+  _a = "urlArgs",
+  _xf = "exportsFn",
+  _i = "init",
+  Ar = "[object Array]";
+export const configure = (
+  c = (c) => {
+    const r = T(c[_a] === _t)
+      ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
+      : c[_a];
+
+    return c[_u].charAt(c[_u].length - 1) === "/" // Convert old style urlArgs string to a function.
+      ? { ...c, [_a]: r }
+      : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
+  },
+  KeyValue,
+  makeModuleMap,
+  STATE,
+  mixin,
+  e_
+) => {
+  //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
+  _K(c).forEach((prop = (op) => {
+    const arr = ["paths", "bundles", "config", "map"];
+    return Y(!arr.includes(op) ? KeyValue(`CONFIG.${op}`, c[op]) : arr.forEach(
+              (op) =>
+                KeyValue(
+                  `CONFIG.${op}`,
+                  !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]
+                )
+            )) && op; //args prop
+  }, i) => mixin(STATE.CONFIG[prop], c[prop], true, true));
+
+  const mend = (bundles, shims) => {
+      var shim = STATE.CONFIG.shim; //save paths for special "additive processing"
+
+      bundles &&
+        _K(bundles).forEach((prop, i) =>
+          bundles[prop].forEach((v) =>
+            KeyValue(`bdlMap.${v}`, v !== prop ? prop : STATE.bdlMap[v])
+          )
+        ); //Reverse map the bundles
+      Y(
+        shims &&
+          _K(shims).forEach((id, i) => {
+            var temp = shims[id]; //'temp' = tobeshim
+            return (
+              Y(e_(temp).string() === Ar && (temp = { REM: temp })) && //Merge shim, Normalize the structure
+              Y(
+                (temp.exports || temp[_i]) &&
+                  !temp[_xf] &&
+                  (temp[_xf] = STATE.makeShimExports(temp))
+              ) &&
+              (shim[id] = temp)
+            );
+          })
+      );
+      return { shim, shims };
+    },
+    { shims, shim } = mend(c[_b], c[_s]);
+  return (
+    Y(KeyValue(`CONFIG.${shim}`, shims ? shim : STATE.CONFIG.shim)) &&
+    Y(
+      (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
+        pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
+        var name = pkgObj.name,
+          location = pkgObj[_l]; //Adjust packages if necessary.
+        (location ? KeyValue(`CONFIG.paths.${name}`, pkgObj[_l]) : true) &&
+          KeyValue(
+            `CONFIG.bundle.${name}`,
+            `${pkgObj.name}/${(pkgObj.main || "main")
+              .replace(/^\.\//, "")
+              .replace(/\.js$/, "")}`
+          ); //normalize pkg name main thi ID pointer paths
+      })
+    ) && //Update maps for "waiting to execute" modules in the STATE.dependencies.
+    ((z) =>
+      Y(
+        _K(z).forEach(
+          (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
+            (z[id].map = makeModuleMap(id, null, true))
+        )
+      ))(STATE.dependencies) && //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
+    (c.REM || c.cb) &&
+    STATE.require(c.REM || [], c.cb)
+  );
+};
