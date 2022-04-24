@@ -1,5 +1,5 @@
-import Dependency, { defineables, SETDEFINABLES } from "./dependency.mjs";
-import { configure, nameToUrl } from "./functions.mjs";
+import Dependency, { defineables, SETDEFINABLES } from "./dependency.js";
+import { configure, nameToUrl } from "./functions.js";
 var STATE,
   _f = "*",
   T = (x) => typeof x,
@@ -16,7 +16,69 @@ var STATE,
   _e = "error",
   _em = "emit",
   _ev = "events",
-  iserror = (err) => e_(STATE.dependencies).yes(err) && STATE.dependencies[err];
+  iserror = (err) => e_(STATE.dependencies).yes(err) && STATE.dependencies[err],
+  _r = "require",
+  _x = "exports",
+  scriptPends,
+  ga = "getAttribute",
+  _t = "string",
+  interscrpt,
+  useInteractive = false,
+  contexts = {},
+  define = (
+    //require|exports/module
+    { nm, rem, c, n } = (
+      nmREMc = (nm, rem, c) =>
+        T(nm !== _t)
+          ? { rem: nm, c: rem }
+          : e_(rem).string() !== Ar
+          ? { nm, rem, c }
+          : { nm, c: rem }
+    ) => {
+      return {
+        ...nmREMc,
+        n:
+          scriptPends ||
+          (() => {
+            if (interscrpt && e_(interscrpt).interA()) return interscrpt;
+            // prettier-ignore
+            e_().tag().sort((a, b) => b - a)
+                                .map((script) => e_(script).interA() && (interscrpt = script));
+            return interscrpt;
+          })()
+      };
+    }
+  ) =>
+    Y(
+      (rem =
+        !rem && e_(c).string() === Fn && c.length
+          ? ((
+              { rem, cb } = (rem, cb) => {
+                return {
+                  cb: cb
+                    .toString()
+                    .replace(
+                      /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm /*comment */,
+                      (match, singlePrefix) => singlePrefix || ""
+                    )
+                    .replace(
+                      /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
+                      (match, dep) => rem.push(dep)
+                    ),
+                  rem
+                };
+              } /*like ')//comment'; keep prefix*/
+            ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(rem))(rem, c)
+          : rem) //Potential-CommonJS use-case of exports and thi, without 'require.';
+    ) &&
+    // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
+    Y((nm = useInteractive && !nm ? n()[ga](dr(true)) : nm)) &&
+    Y((STATE = useInteractive ? contexts[n()[ga](dr())] : STATE)) &&
+    //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
+
+    (!STATE ? SETDEFINABLES([...defineables, [nm, rem, c]]) : true) &&
+    STATE.defQueue.push([nm, rem, c]) &&
+    (STATE.defQueueMap[nm] = true) && { amd: { jQuery: true } };
 
 export const KeyValue = (key, value, delet) =>
     delet === "delete" ? delete STATE[key] : (STATE[key] = value),
@@ -219,7 +281,6 @@ export const KeyValue = (key, value, delet) =>
     };
   }; //obj.prototype["hasOwnProperty"][name]; const method =string?"toString":"hasOwnProperty"
 
-const sign = { version, isBrowser };
 /**UNLICENSED BUT FOR PARTS OF OTHERS */
 
 /** vim: et:ts=4:sw=4:sts=4
@@ -232,7 +293,8 @@ const sign = { version, isBrowser };
 /*dependency window, navigator, document, importScripts, setTimeout, opera */
 
 //cannot thi never get to the string regex?
-const _m = "module",
+const sign = { version, isBrowser },
+  _m = "module",
   _S = Object.prototype.toString,
   _H = "hasOwnProperty",
   Ar = "[object Array]",
@@ -285,68 +347,6 @@ class Require {
     setTimeout = T(setTimeout === "undefined") ? undefined : setTimeout;
     var mainScript,
       src,
-      define = (
-        //require|exports/module
-        { nm, rem, c, n } = (
-          nmREMc = (nm, rem, c) =>
-            T(nm !== _t)
-              ? { rem: nm, c: rem }
-              : e_(rem).string() !== Ar
-              ? { nm, rem, c }
-              : { nm, c: rem }
-        ) => {
-          return {
-            ...nmREMc,
-            n:
-              scriptPends ||
-              (() => {
-                if (interscrpt && e_(interscrpt).interA()) return interscrpt;
-                // prettier-ignore
-                e_().tag().sort((a, b) => b - a)
-                                    .map((script) => e_(script).interA() && (interscrpt = script));
-                return interscrpt;
-              })()
-          };
-        }
-      ) =>
-        Y(
-          (rem =
-            !rem && e_(c).string() === Fn && c.length
-              ? ((
-                  { rem, cb } = (rem, cb) => {
-                    return {
-                      cb: cb
-                        .toString()
-                        .replace(
-                          /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm /*comment */,
-                          (match, singlePrefix) => singlePrefix || ""
-                        )
-                        .replace(
-                          /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
-                          (match, dep) => rem.push(dep)
-                        ),
-                      rem
-                    };
-                  } /*like ')//comment'; keep prefix*/
-                ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(rem))(
-                  rem,
-                  c
-                )
-              : rem) //Potential-CommonJS use-case of exports and thi, without 'require.';
-        ) &&
-        // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
-        Y((nm = useInteractive && !nm ? n()[ga](dr(true)) : nm)) &&
-        Y((STATE = useInteractive ? contexts[n()[ga](dr())] : STATE)) &&
-        //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
-
-        (!STATE ? SETDEFINABLES([...defineables, [nm, rem, c]]) : true) &&
-        STATE.defQueue.push([nm, rem, c]) &&
-        (STATE.defQueueMap[nm] = true) && { amd: { jQuery: true } },
-      ga = "getAttribute",
-      interscrpt,
-      scriptPends,
-      useInteractive = false,
-      contexts = {},
       /**
             STATE.require.undef(id);
             STATE.makeRequire(null, { skipMap: true })([id]);
@@ -356,11 +356,8 @@ class Require {
           */
       _ = "_",
       _u = "baseUrl",
-      _t = "string",
-      _x = "exports",
       _oE = "onError",
       _e = "error",
-      _r = "require",
       _SA = "setAttribute",
       _AE = "attachEvent",
       _AEL = "addEventListener",
@@ -397,7 +394,7 @@ class Require {
             NAME: name
           } = STATE;
           //context, newContext, bundlesMap
-          STATE = contexts[NAME] = new Dependency.call({
+          STATE = contexts[NAME] = Dependency.call({
             STATE,
             BUILD,
             makeModuleMap,
@@ -415,15 +412,15 @@ class Require {
           }); //call is like prototype
         }
         console.log(STATE, STATE && STATE.require);
-        const set = [
+
+        let newobject = {};
+        [
           "CONFIG",
           "bdlMap",
           "makeShimExports",
           "dependencies",
           "require"
-        ];
-        let newobject = {};
-        set.forEach((key) => (newobject[key] = STATE[key]));
+        ].forEach((key) => (newobject[key] = STATE[key]));
         return (
           Y(
             cfg && configure(cfg, KeyValue, makeModuleMap, newobject, mixin, e_)
