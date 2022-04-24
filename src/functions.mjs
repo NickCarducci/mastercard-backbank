@@ -11,7 +11,7 @@ import {
   iifeapp,
   isBrowser
 } from ".";
-export const reduceSTATE = (arr, STATE, where) => {
+export const reduceSTATE = (arr, where, STATE) => {
   console.log("reduceSTATE", arr, where, STATE);
   var newobject = {};
   Object.keys(STATE).forEach(
