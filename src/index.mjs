@@ -1,5 +1,5 @@
-import Dependency, { defineables, SETDEFINABLES } from "./dependency.mjs";
-import { configure, nameToUrl } from "./functions.mjs";
+import Dependency, { defineables, SETDEFINABLES } from "./dependency.js";
+import { configure, nameToUrl } from "./functions.js";
 var STATE,
   _f = "*",
   T = (x) => typeof x,
@@ -397,7 +397,7 @@ class Require {
             NAME: name
           } = STATE;
           //context, newContext, bundlesMap
-          STATE = contexts[NAME] = Dependency.call({
+          STATE = contexts[NAME] = new Dependency.call({
             STATE,
             BUILD,
             makeModuleMap,
