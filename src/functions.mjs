@@ -12,7 +12,7 @@ import {
   isBrowser
 } from ".";
 export const reduceSTATE = (arr, STATE) => {
-  console.log("reduceSTATE", arr);
+  console.log("reduceSTATE", arr, STATE);
   var newobject = {};
   Object.keys(STATE).forEach(
     (key) => arr.includes(key) && (newobject[key] = STATE[key])
