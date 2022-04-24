@@ -1,6 +1,6 @@
-import Dependency, { defineables, SETDEFINABLES } from "./dependency.mjs";
-import { configure, nameToUrl } from "./functions.mjs";
-var STATE,
+import Dependency, { defineables, SETDEFINABLES } from "./dependency.js";
+import { configure, nameToUrl } from "./functions.js";
+var STATE = {},
   _f = "*",
   T = (x) => typeof x,
   Y = (value, z, _) => {
