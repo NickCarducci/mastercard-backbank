@@ -174,8 +174,8 @@ export default function (
 
   const { getModule, clrRegstr } = modulehelp(
       e_,
-      reduceSTATE(["CONFIG", "urlFchd", "load"], STATE),
-      reduceSTATE(["onResourceLoad", "exec", "onError"], BUILD),
+      reduceSTATE(["CONFIG", "urlFchd", "load"], "STATE", STATE),
+      reduceSTATE(["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
       moduleProto,
       Dependency
     ),
