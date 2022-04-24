@@ -50,8 +50,8 @@ export default function () {
     ),
     { getModule } = modulehelp(
       e_,
-      reduceSTATE(["CONFIG", "urlFchd", "load"], STATE),
-      reduceSTATE(["onResourceLoad", "exec", "onError"], BUILD),
+      reduceSTATE(["CONFIG", "urlFchd", "load"], "STATE", STATE),
+      reduceSTATE(["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
       this.moduleProto,
       this
     ),
