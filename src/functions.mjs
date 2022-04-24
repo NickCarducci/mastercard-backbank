@@ -183,6 +183,9 @@ export default function (
       !e_(STATE.defined).yes(args[0]) &&
       getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]);
   return {
+    STATE,
+    BUILD,
+    makeModuleMap,
     callGetModule,
     getGlobal: (value) =>
       !value
