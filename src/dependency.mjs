@@ -52,7 +52,9 @@ export default class Dependency {
       { getModule } = modulehelp(
         e_,
         reduceSTATE(["CONFIG", "urlFchd", "load"], STATE),
-        reduceSTATE(["onResourceLoad", "exec", "onError"], BUILD)
+        reduceSTATE(["onResourceLoad", "exec", "onError"], BUILD),
+        this.moduleProto,
+        this
       ),
       NAME = arguments[0],
       state = {
