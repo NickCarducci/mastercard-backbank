@@ -55,7 +55,7 @@ const Y = (value, z, _) => {
   if (z && _) z[_] = value;
   return true;
 }; //seratimNull
-export const modulehelp = (e_, STATE, BUILD, moduleProto) => {
+export const modulehelp = (e_, STATE, BUILD, moduleProto, Dependency) => {
   const clrRegstr = (id) =>
       KeyValue(`dependencies.${id}`, null, "delete") &&
       KeyValue(`enabledRegistry.${id}`, null, "delete"),
@@ -132,14 +132,14 @@ export const modulehelp = (e_, STATE, BUILD, moduleProto) => {
               _e,
               clrRegstr,
               nameToUrl,
-              modulehelp(e_, STATE, BUILD, moduleProto).getModule,
+              modulehelp(e_, STATE, BUILD, moduleProto, Dependency).getModule,
               onError,
               ...reduceSTATE(matches, STATE),
               manage,
               mold,
               loadd,
               KeyValue(`startTime`, new Date().getTime()),
-              KeyValue(`enabledRegistry.${dm.id}`, this),
+              KeyValue(`enabledRegistry.${dm.id}`, Dependency),
               normalize,
               BUILD.onError !== ((err) => err),
               execute,
@@ -161,13 +161,22 @@ export default function (
   defQueue = arguments[3],
   tkeGblQue = arguments[4]
 ) {
-  const { STATE, BUILD, makeModuleMap, e_, checkProto, moduleProto } = this; //Called from Dependency
+  const {
+    STATE,
+    BUILD,
+    makeModuleMap,
+    e_,
+    checkProto,
+    moduleProto,
+    Dependency
+  } = this; //Called from Dependency
 
   const { getModule, clrRegstr } = modulehelp(
       e_,
       reduceSTATE(["CONFIG", "urlFchd", "load"], STATE),
       reduceSTATE(["onResourceLoad", "exec", "onError"], BUILD),
-      moduleProto
+      moduleProto,
+      Dependency
     ),
     callGetModule = (args) =>
       !e_(STATE.defined).yes(args[0]) &&
