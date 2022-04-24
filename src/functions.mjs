@@ -11,8 +11,8 @@ import {
   iifeapp,
   isBrowser
 } from ".";
-export const reduceSTATE = (arr, STATE) => {
-  console.log("reduceSTATE", arr, STATE);
+export const reduceSTATE = (arr, STATE, where) => {
+  console.log("reduceSTATE", arr, where, STATE);
   var newobject = {};
   Object.keys(STATE).forEach(
     (key) => arr.includes(key) && (newobject[key] = STATE[key])
@@ -135,7 +135,7 @@ export const modulehelp = (e_, STATE, BUILD, moduleProto, Dependency) => {
               nameToUrl,
               modulehelp(e_, STATE, BUILD, moduleProto, Dependency).getModule,
               onError,
-              ...reduceSTATE(matches, STATE),
+              ...reduceSTATE(matches, "STATE", STATE),
               manage,
               mold,
               loadd,
