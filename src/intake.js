@@ -11,10 +11,10 @@ const impor = (file) => {
   });
 };
 
-export const Intake = function (file, suffices, args) {
-  var Dependencies = impor(file, suffices);
-  args.forEach((arg) => {
-    Dependencies[arg] = Dependencies;
+export const Intake = (file) =>
+  impor(file).then((Dependencies) => {
+    Object.keys(Dependencies).forEach((arg) => {
+      Dependencies[arg] = Dependencies;
+    });
+    return { default: Dependencies, ...Dependencies };
   });
-  return { default: Dependencies, ...Dependencies };
-};
