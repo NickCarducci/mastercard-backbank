@@ -5,7 +5,6 @@ var _e = "error",
   _dg = "defining",
   _ed = "enabled",
   _P = "prototype",
-  _r = "require",
   _t = "string",
   Fn = "[object Function]";
 
@@ -254,7 +253,8 @@ export default function Module() {
                   ]);
                   erro &&
                     (noErrorHandler ||
-                      ((erro.requireType = map.yesdef ? "define" : _r) !== _r &&
+                      ((erro.requireType = map.yesdef ? "define" : "requir") !==
+                        "requir" &&
                         events[_e])) &&
                     (erro.requireMap = map) &&
                     Y((erro.requireModules = map.yesdef && [map.id])) &&
