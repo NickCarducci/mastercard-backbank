@@ -1,5 +1,5 @@
-import Dependency, { defineables, SETDEFINABLES } from "./dependency.mjs";
-import { configure, nameToUrl } from "./functions.mjs";
+import Dependency, { defineables, SETDEFINABLES } from "./dependency.js";
+import { configure, nameToUrl } from "./functions.js";
 var STATE = {},
   _f = "*",
   T = (x) => typeof x,
@@ -382,7 +382,7 @@ function Require() {
       } // Determine if have STATE.CONFIG object in the call. REM is a STATE.CONFIG object Adjust args if there are STATE.dependencies
       (NAME = cfg && cfg.context ? cfg.context : NAME) &&
         Y((STATE = e_(contexts).yes(NAME) && contexts[NAME]));
-      console.log(STATE, STATE && STATE.require);
+      //console.log("STATE, require", BUILD, STATE && STATE.require);
       if (!STATE) {
         const {
           CONFIG,
@@ -410,7 +410,6 @@ function Require() {
           moduleProto: { makeModuleMap, useInteractive, _e }
         }); //call is like prototype
       }
-      console.log(STATE, STATE && STATE.require);
 
       let newobject = {};
       [
