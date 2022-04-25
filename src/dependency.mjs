@@ -1,10 +1,9 @@
-import { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } from ".";
-import Module from "./module.mjs";
-import functions, {
-  checkLoaded,
-  modulehelp,
-  reduceSTATE
-} from "./functions.mjs";
+import { Intake } from "./intake";
+const { default: Module } = Intake("./module");
+const { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } = Intake(".");
+const { default: functions, checkLoaded, modulehelp, reduceSTATE } = Intake(
+  "./functions"
+);
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
@@ -136,7 +135,7 @@ export default function () {
     Y(_K(state).forEach((key) => (STATE[key] = state[key]))) &&
     (STATE.makeRequire = (modMap, options) =>
       makeRequire(modMap, options, NAME)) &&
-    KeyValue(require, STATE.makeRequire()) &&
+    KeyValue("requir", STATE.makeRequire()) &&
     SETSTATE(STATE) &&
     STATE
   );
