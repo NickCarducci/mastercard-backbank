@@ -212,7 +212,7 @@ export default function (
                 ? onError(
                     mk([
                       "requireargs",
-                      "Invalid ([object Function], -class?) require callback"
+                      "Invalid ([object Function], -class?) requir callback"
                     ]),
                     eb
                   ) //Invalid call; id, msg, err, requireModule
@@ -222,7 +222,7 @@ export default function (
                     STATE.CONFIG.config,
                     STATE.makeRequire,
                     STATE.defined
-                  ) //when require|exports|module are requested && while thi is being STATE.defined
+                  ) //when requir|exports|module are requested && while thi is being STATE.defined
                 : BUILD.get
                 ? BUILD.get(STATE, rem, modMap, tool.parser)
                 : () => {
@@ -236,7 +236,7 @@ export default function (
                               "notloaded",
                               `Module name ${id} has not been loaded yet for commonjs Dependencies' build : ` +
                                 NAME +
-                                !modMap && "; (No modMap) Use require([])"
+                                !modMap && "; (No modMap) Use requir([])"
                             ])
                           )
                         : STATE.defined[id])
@@ -271,8 +271,8 @@ export default function (
               STATE.nextTick(
                 () =>
                   intakeDefines() && //Mark all the STATE.dependencies as needing to be loaded.
-                  (requireMod = getModule(makeModuleMap(null, modMap))) && //collect defines that could have been added since the 'require call'
-                  (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to thi 'require call' for STATE.dependencies
+                  (requireMod = getModule(makeModuleMap(null, modMap))) && //collect defines that could have been added since the 'requir call'
+                  (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to thi 'requir call' for STATE.dependencies
                   requireMod[_i](rem, cb, eb, { enabled: true }) &&
                   checkLoaded.bind(checkProto)
               );
@@ -321,7 +321,7 @@ export default function (
         Y(
           !modMap &&
             (tool(modMap, o, NAME).parser.undef = (id) => {
-              tkeGblQue(); //Only allow undef when top level require calls
+              tkeGblQue(); //Only allow undef when top level requir calls
               var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'thi' STATE
                 m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
 
@@ -371,7 +371,7 @@ var clrsec,
     );
   };
 export function checkLoaded(/*parentThis = arguments[0]*/) {
-  console.log("checkLoaded: ", this);
+  // console.log("checkLoaded: ", this);
   const {
     CONFIG,
     startTime,
@@ -457,9 +457,9 @@ export function checkLoaded(/*parentThis = arguments[0]*/) {
   return (
     another &&
     reqCalls
-      //.map((require) => parentThis[require])
-      .forEach((require) =>
-        require[erro] ? require[_em](erro, require[erro]) : progress(require)
+      //.map((requir) => parentThis[requir])
+      .forEach((requir) =>
+        requir[erro] ? requir[_em](erro, requir[erro]) : progress(requir)
       )
   );
 }
@@ -549,8 +549,8 @@ export const configure = (
           (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
             (z[id].map = makeModuleMap(id, null, true))
         )
-      ))(STATE.dependencies) && //When require is STATE.defined, as a STATE.CONFIG object, before require.js is loaded,
+      ))(STATE.dependencies) && //When requir is STATE.defined, as a STATE.CONFIG object, before requir.js is loaded,
     (c.REM || c.cb) &&
-    STATE.require(c.REM || [], c.cb)
+    STATE.requir(c.REM || [], c.cb)
   );
 };
