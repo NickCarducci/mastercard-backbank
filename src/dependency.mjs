@@ -1,5 +1,9 @@
 import { Intake } from "./intake";
-const { default: Module } = Intake("./module");
+const place = { default: {} },
+  module = (async function () {
+    return await Intake("./module");
+  })();
+const { default: Module } = module ? module : place;
 const { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } = Intake(".");
 const { default: functions, checkLoaded, modulehelp, reduceSTATE } = Intake(
   "./functions"
