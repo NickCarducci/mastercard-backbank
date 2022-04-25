@@ -11,7 +11,7 @@ var STATE = {},
   _n = "undefined",
   window = _n,
   navigator = _n,
-  BUILD = {},
+  BUILD = (build) => function () {}.bind(build), //well-characterized safety profiles
   _oE = "onError",
   _e = "error",
   _em = "emit",
@@ -731,7 +731,7 @@ function Require() {
           return (...args) => new iifeapp(ths)(args);
           }, */ //(object/class/prototype-'thi'-prop)
     BUILD, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'BUILD' function
-    require:
+    requir:
       /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
       e_(variables.REQUIREJS).string() !== Fn
         ? BUILD // package-names, cb, returns a value to define the thi of argument index[0]
@@ -885,7 +885,7 @@ export class DurableObjectExample {
       //const requirer = await requir.fetch(req);
       //.then(async (res) => await res.text());
       //console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
-      const { require: requir } = Require();
+      const { requir } = Require();
       const locs = requir("mastercard-locations");
       const places = requir("mastercard-places");
       //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
