@@ -58,7 +58,14 @@ export default class Module {
             if (map.unnormalized) return Module[_P].normalizeMod(plugin, map); //If current map is not normalized, wait for that
             var bundleId = e_(bdlMap).yes(map.id) && bdlMap[map.id]; //normalized name to load instead of continuing.
             if (bundleId)
-              return (map.url = nameToUrl(bundleId)) && this.load() && null;
+              return (
+                (map.url = nameToUrl(bundleId).prototype = {
+                  CONFIG,
+                  bdlMap
+                }) &&
+                this.load() &&
+                null
+              );
             //If a paths STATE.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
             const load = (factory) =>
               init([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
@@ -339,4 +346,4 @@ export default class Module {
   }
 } //module.exports; factory; thi.depMaps = [], enabled, thi.fetched //const defaultOnError = (err) => err;
 //const construct = (f, obj) => function () { f.apply(obj, arguments); //in original JQuery RequireJS, obj is thi or thi }; //Function.prototype.construct (bind), with 'thi' //https://stackoverflow.com/a/46700616/11711280
-console.log("In Require: ", "Module", Module);
+//console.log("In Require: ", "Module", Module);
