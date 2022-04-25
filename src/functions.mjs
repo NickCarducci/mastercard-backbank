@@ -12,7 +12,7 @@ import {
   isBrowser
 } from ".";
 export const reduceSTATE = (arr, where, STATE) => {
-  console.log("reduceSTATE", arr, where, STATE);
+  //console.log("reduceSTATE", arr, where, STATE);
   var newobject = {};
   Object.keys(STATE).forEach(
     (key) => arr.includes(key) && (newobject[key] = STATE[key])
@@ -379,6 +379,7 @@ export function checkLoaded(/*parentThis = arguments[0]*/) {
     enabledRegistry,
     NAME
   } = this;
+  console.log("checkLoaded: ", this);
   var err,
     fb,
     hs = [],
@@ -553,4 +554,3 @@ export const configure = (
     STATE.require(c.REM || [], c.cb)
   );
 };
-
