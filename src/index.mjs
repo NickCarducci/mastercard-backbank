@@ -394,7 +394,7 @@ class Require {
             NAME: name
           } = STATE;
           //context, newContext, bundlesMap
-          STATE = contexts[NAME] = Dependency.call({
+          STATE = contexts[NAME] = Dependency.bind({
             STATE,
             BUILD,
             makeModuleMap,
