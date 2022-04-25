@@ -1,10 +1,10 @@
 import { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } from ".";
-import Module from "./module.js";
+import Module from "./module.mjs";
 import functions, {
   checkLoaded,
   modulehelp,
   reduceSTATE
-} from "./functions.js";
+} from "./functions.mjs";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
