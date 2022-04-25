@@ -1,4 +1,4 @@
-import { Intake } from "./intake";
+/*import { Intake } from "./intake";
 const place = { default: {} },
   fun = async (file) => {
     return await Intake(file);
@@ -10,7 +10,15 @@ var home = fun("."),
     ? home
     : place;
 var funcs = fun("./functions"),
-  { default: functions, checkLoaded, modulehelp, reduceSTATE } = funcs;
+  { default: functions, checkLoaded, modulehelp, reduceSTATE } = funcs;*/
+
+import { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } from ".";
+import Module from "./module.js";
+import functions, {
+  checkLoaded,
+  modulehelp,
+  reduceSTATE
+} from "./functions.js";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
