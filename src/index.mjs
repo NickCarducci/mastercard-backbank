@@ -17,7 +17,7 @@ var STATE = {},
   _em = "emit",
   _ev = "events",
   iserror = (err) => e_(STATE.dependencies).yes(err) && STATE.dependencies[err],
-  _r = "require",
+  _r = "requir",
   _x = "exports",
   scriptPends,
   ga = "getAttribute",
@@ -26,7 +26,7 @@ var STATE = {},
   useInteractive = false,
   contexts = {},
   define = (
-    //require|exports/module
+    //requir|exports/module
     { nm, rem, c, n } = (
       nmREMc = (nm, rem, c) =>
         T(nm !== _t)
@@ -62,19 +62,19 @@ var STATE = {},
                       (match, singlePrefix) => singlePrefix || ""
                     )
                     .replace(
-                      /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
+                      /[^.]\s*requir\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
                       (match, dep) => rem.push(dep)
                     ),
                   rem
                 };
               } /*like ')//comment'; keep prefix*/
             ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(rem))(rem, c)
-          : rem) //Potential-CommonJS use-case of exports and thi, without 'require.';
+          : rem) //Potential-CommonJS use-case of exports and thi, without 'requir.';
     ) &&
     // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
     Y((nm = useInteractive && !nm ? n()[ga](dr(true)) : nm)) &&
     Y((STATE = useInteractive ? contexts[n()[ga](dr())] : STATE)) &&
-    //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with require.js in it.
+    //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with requir.js in it.
 
     (!STATE ? SETDEFINABLES([...defineables, [nm, rem, c]]) : true) &&
     STATE.defQueue.push([nm, rem, c]) &&
@@ -149,12 +149,12 @@ export const KeyValue = (key, value, delet) =>
                         );
                   * 
                   */
-  dr = (m) => `data-require${m ? _m : "context"}`,
+  dr = (m) => `data-requir${m ? _m : "context"}`,
   hasPathFallback = (id, cP) => {
     var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
     if (pC && e_(pC).string() === Ar && pC.length > 1) {
       pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
-      STATE.require.undef(id);
+      STATE.requir.undef(id);
       STATE.makeRequire(null, { skipMap: true })([id]);
       return true;
     }
@@ -319,8 +319,8 @@ export class handlers {
       config = arguments[1],
       makeRequire = arguments[2],
       defined = arguments[3];
-    this.require = (m) =>
-      !m.require ? (m.require = makeRequire(m.map)) : m.require;
+    this.requir = (m) =>
+      !m.requir ? (m.requir = makeRequire(m.map)) : m.requir;
     this.exports = (m) =>
       (m.usingExports = true) &&
       m.map.yesdef &&
@@ -347,11 +347,11 @@ function Require() {
   var mainScript,
     src,
     /**
-            STATE.require.undef(id);
+            STATE.requir.undef(id);
             STATE.makeRequire(null, { skipMap: true })([id]);
             STATE = STATE ? STATE : (contexts[NAME] = new BUILD.start.Dependency(NAME)); //dependency
             cfg && STATE.configure(cfg);
-            return STATE.require(REM, cb, eb);
+            return STATE.requir(REM, cb, eb);
           */
     _ = "_",
     _u = "baseUrl",
@@ -365,12 +365,12 @@ function Require() {
 
     //uses 'thi' as 'z', but when called () the function is returned,
     BUILD = (variables.REQUIREJS = (
-      REM, //String(require|export|module)
+      REM, //String(requir|export|module)
       cb,
       eb,
       optional
     ) => {
-      //String(require|export|module)
+      //String(requir|export|module)
       var STATE,
         cfg,
         NAME = _; //Caja compliant BUILD for minified-scope name of dependency, cb for arr completion Find the right STATE, use default
@@ -382,7 +382,7 @@ function Require() {
       } // Determine if have STATE.CONFIG object in the call. REM is a STATE.CONFIG object Adjust args if there are STATE.dependencies
       (NAME = cfg && cfg.context ? cfg.context : NAME) &&
         Y((STATE = e_(contexts).yes(NAME) && contexts[NAME]));
-      //console.log("STATE, require", BUILD, STATE && STATE.require);
+      //console.log("STATE, requir", BUILD, STATE && STATE.requir);
       if (!STATE) {
         const {
           CONFIG,
@@ -412,17 +412,13 @@ function Require() {
       }
 
       let newobject = {};
-      [
-        "CONFIG",
-        "bdlMap",
-        "makeShimExports",
-        "dependencies",
-        "require"
-      ].forEach((key) => (newobject[key] = STATE[key]));
+      ["CONFIG", "bdlMap", "makeShimExports", "dependencies", "requir"].forEach(
+        (key) => (newobject[key] = STATE[key])
+      );
       return (
         Y(
           cfg && configure(cfg, KeyValue, makeModuleMap, newobject, mixin, e_)
-        ) && STATE.require(REM, cb, eb)
+        ) && STATE.requir(REM, cb, eb)
       );
     });
   console.log("In Require: ", "BUILD", BUILD);
@@ -435,10 +431,10 @@ function Require() {
     //n, sourcemap, isNormed, applyMap
     var ptName = sourcemap ? sourcemap.name : null,
       givenName = n,
-      yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() thi ID, '[sourcemap]' to resolve relative names (&& require.normalize()), 'name' the most relative
+      yesdef = true; //'applyMap' for dependency ID, 'isNormed' define() thi ID, '[sourcemap]' to resolve relative names (&& requir.normalize()), 'name' the most relative
     n =
       (!n ? Y((yesdef = false)) : true) &&
-      (n ? n : "_@r" + (requireCounter += 1)); //internally-name a 'require' call, given no name
+      (n ? n : "_@r" + (requireCounter += 1)); //internally-name a 'requir' call, given no name
 
     const configGets = [
         STATE.CONFIG.nodeIdCompat,
@@ -516,9 +512,9 @@ function Require() {
         mk
         concat
     
-        require=(dep,to)=>{
+        requir=(dep,to)=>{
           define
-          configuration(config?!require,BUILD)
+          configuration(config?!requir,BUILD)
           convertName
           rmvScript
           hasPathFallback
@@ -529,7 +525,7 @@ function Require() {
           BUILD
           obj
     
-          require=BUILD
+          requir=BUILD
           Dependency = {
             STATE:{STATE.CONFIG}
             STATE.dependencies
@@ -548,7 +544,7 @@ function Require() {
             tkeGblQue
             evt
             STATE:{…initial:{STATE.CONFIG}}
-            STATE.require = STATE.makeRequire()
+            STATE.requir = STATE.makeRequire()
             return STATE
           }
           
@@ -637,7 +633,7 @@ function Require() {
       };
 
   //console.log("In Require: ", "Dependency", BUILD.start.Dependency);
-  BUILD({}); //'dependency require' STATE-sensitive exported methods
+  BUILD({}); //'dependency requir' STATE-sensitive exported methods
   console.log("In Require: ", "BUILD(.start)", BUILD);
   BUILD.start = {
     contexts
@@ -649,7 +645,7 @@ function Require() {
       (prop) =>
         (BUILD[prop] = function () {
           //apply an initial state to a function
-          return contexts[_].require[prop].apply(contexts[_], arguments);
+          return contexts[_].requir[prop].apply(contexts[_], arguments);
         })
     )
   ) && //apply arguments to requires when context
@@ -737,10 +733,10 @@ function Require() {
         : () => {
             //dependency = arguments[0],
             const notBaseUrl = T(variables.REQUIREJS !== _u),
-              notrequire = T(require !== _n) && !e_(require).string() === Fn;
+              notrequire = T(requir !== _n) && !e_(requir).string() === Fn;
             Y(
               "configuration",
-              notBaseUrl ? (variables.REQUIREJS ? notrequire : require) : null
+              notBaseUrl ? (variables.REQUIREJS ? notrequire : requir) : null
             ) &&
               Y(
                 "REQUIREJS",
@@ -755,7 +751,7 @@ function Require() {
             }; // globally agreed names for other potential AMD loaders
 
             return Y(_K(obj).forEach((key) => (BUILD[key] = obj[key]))) &&
-              // if (!require) require = BUILD; //Exportable require
+              // if (!requir) requir = BUILD; //Exportable requir
               Y(
                 ["version", "isBrowser"].forEach((k) => (BUILD[k] = sign[k]))
               ) &&
@@ -827,11 +823,11 @@ function Require() {
 }
 /*
 
-BUILD[prop] = function() {contexts.require[prop].apply(contexts[_],arguments)}
+BUILD[prop] = function() {contexts.requir[prop].apply(contexts[_],arguments)}
 BUILD.onError
 BUILD.createNode
 BUILD.load
-function Require (){return{build,require}}
+function Require (){return{build,requir}}
 */
 export class DurableObjectExample {
   constructor(el, env) {
@@ -1007,7 +1003,7 @@ export class DurableObjectExample {
         statusText: "still retrieving {Key: Value} storage: " + req.url,
         headers: { "Content-Type": "application/json" }
       });
-      //const require =  makeRequire(req, env);
+      //const requir =  makeRequire(req, env);
     } else {
       //console.log("thi :", thi);
       //const requirer = thi.makeRequire(req);
