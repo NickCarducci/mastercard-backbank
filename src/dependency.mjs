@@ -1,10 +1,10 @@
 import { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } from ".";
-import Module from "./module.mjs";
+import Module from "./module.js";
 import functions, {
   checkLoaded,
   modulehelp,
   reduceSTATE
-} from "./functions.mjs";
+} from "./functions.js";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
@@ -23,7 +23,7 @@ export default function () {
     defQueue
       .sort((a, b) => b - a)
       .map((args, i) => args[0] === id && defQueue.splice(i, 1));
-  const { STATE, BUILD, makeModuleMap } = functions.call(
+  const { STATE, BUILD, makeModuleMap } = functions.bind(
       this,
       dependency,
       nextDef,
@@ -40,7 +40,7 @@ export default function () {
             })
           )
         : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
-    { makeRequire, callGetModule, getGlobal } = functions.call(
+    { makeRequire, callGetModule, getGlobal } = functions.bind(
       this,
       dependency,
       nextDef,
