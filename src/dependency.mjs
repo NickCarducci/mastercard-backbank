@@ -1,4 +1,4 @@
-import { Intake } from "./intake";
+import { Intake } from "./intake.js";
 const place = { default: {} },
   module = (async function () {
     return await Intake("./module");
