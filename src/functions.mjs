@@ -370,7 +370,7 @@ var clrsec,
       )
     );
   };
-export function checkLoaded(parentThis = arguments[0]) {
+export function checkLoaded(/*parentThis = arguments[0]*/) {
   const {
     CONFIG,
     startTime,
@@ -390,27 +390,7 @@ export function checkLoaded(parentThis = arguments[0]) {
 
   // waitInterval - Do not bother if thi call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
   if (watch) return true;
-  var dep,
-    progress = (
-      { m, depMaps, id, tt, p } = (m) =>
-        (id = m.map.id) && { m, depMaps: m.depMaps, id, tt: { id }, p: {} }
-    ) =>
-      Y(
-        depMaps
-          .map((map) => map.id)
-          .forEach(
-            (id, i) =>
-              (dep = e_(dependencies).yes(id) && dependencies[id]) &&
-              !m.depMatched[i] &&
-              !p[id] && // depMap force undefined (registered yet not matched in thi)
-              (!e_(tt).yes(id) || !tt[id]
-                ? progress(dep, tt, p)
-                : ["defineDep", "check"].forEach((cd, n) =>
-                    m[cd](n === 0 && (i, defined[id]))
-                  )) //pass false?
-          )
-      ) && (p[id] = true),
-    isWebWorker = !isBrowser && false, // && T(importScripts !== _n),
+  var isWebWorker = !isBrowser && false, // && T(importScripts !== _n),
     brwr = isBrowser || isWebWorker;
   watch = true;
 
@@ -424,7 +404,8 @@ export function checkLoaded(parentThis = arguments[0]) {
         ((
           { yesdef, fetched, prefix, error, enabled, inited } = (map) => map
         ) => {
-          if (enabled && !yesdef) reqCalls.push(mod);
+          if (!enabled) return null;
+          if (!yesdef) reqCalls.push(mod);
           mod.noCyc = fetched && yesdef && !prefix;
           return !inited && enabled && !error ? mod : {};
         })(mod.map)
@@ -445,22 +426,41 @@ export function checkLoaded(parentThis = arguments[0]) {
     err.NAME = NAME;
     return onError(err); //If wait time expired, throw error of unloaded modules.
   }
-  return iifeapp(this)(
-    () =>
-      another &&
-      reqCalls
-        .map((require) => parentThis[require])
-        .forEach((require) =>
-          require[erro] ? require[_em](erro, require[erro]) : progress(require)
-        ), //construction
-    ["watch", "clrsec"], //keys,...values
-    false,
+  watch = false;
+  clrsec =
     (!halt || fb) &&
     wait &&
     brwr &&
     !clrsec && //call uses this or prototype, really, with ...args to follow
-      setTimeout(() => checkLoaded(this) && null, 50) /*plugin-resource*/
-  ); //args'-mutable iife=>"app"
+    setTimeout(() => checkLoaded.call(this) && null, 50); /*plugin-resource*/
+  //args'-mutable iife=>"app"
+  var dep,
+    progress = (
+      { m, depMaps, id, tt, p } = (m) =>
+        (id = m.map.id) && { m, depMaps: m.depMaps, id, tt: { id }, p: {} }
+    ) =>
+      Y(
+        depMaps
+          .map((map) => map.id)
+          .forEach(
+            (id, i) =>
+              (dep = e_(dependencies).yes(id) && dependencies[id]) &&
+              !m.depMatched[i] &&
+              !p[id] && // depMap force undefined (registered yet not matched in thi)
+              (!e_(tt).yes(id) || !tt[id]
+                ? progress(dep, tt, p)
+                : Y(m.defineDep(i, defined[id])) && m.check())
+            //pass false?
+          )
+      ) && (p[id] = true);
+  return (
+    another &&
+    reqCalls
+      //.map((require) => parentThis[require])
+      .forEach((require) =>
+        require[erro] ? require[_em](erro, require[erro]) : progress(require)
+      )
+  );
 }
 
 const _p = "packages",
@@ -553,3 +553,4 @@ export const configure = (
     STATE.require(c.REM || [], c.cb)
   );
 };
+
