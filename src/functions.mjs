@@ -274,7 +274,7 @@ export default function (
                   (requireMod = getModule(makeModuleMap(null, modMap))) && //collect defines that could have been added since the 'require call'
                   (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to thi 'require call' for STATE.dependencies
                   requireMod[_i](rem, cb, eb, { enabled: true }) &&
-                  checkLoaded.call(checkProto)
+                  checkLoaded.bind(checkProto)
               );
               return tool.parser;
             }
@@ -371,6 +371,7 @@ var clrsec,
     );
   };
 export function checkLoaded(/*parentThis = arguments[0]*/) {
+  console.log("checkLoaded: ", this);
   const {
     CONFIG,
     startTime,
@@ -379,7 +380,6 @@ export function checkLoaded(/*parentThis = arguments[0]*/) {
     enabledRegistry,
     NAME
   } = this;
-  console.log("checkLoaded: ", this);
   var err,
     fb,
     hs = [],
@@ -433,7 +433,7 @@ export function checkLoaded(/*parentThis = arguments[0]*/) {
     wait &&
     brwr &&
     !clrsec && //call uses this or prototype, really, with ...args to follow
-    setTimeout(() => checkLoaded.call(this) && null, 50); /*plugin-resource*/
+    setTimeout(() => checkLoaded.bind(this) && null, 50); /*plugin-resource*/
   //args'-mutable iife=>"app"
   var dep,
     progress = (
