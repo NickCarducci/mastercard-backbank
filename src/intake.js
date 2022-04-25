@@ -11,10 +11,12 @@ const impor = (file) => {
   });
 };
 
-export const Intake = (file) =>
-  impor(file).then((Dependencies) => {
+export const Intake = async (file) =>
+  await impor(file).then((Dependencies) => {
     Object.keys(Dependencies).forEach((arg) => {
       Dependencies[arg] = Dependencies;
     });
-    return { default: Dependencies, ...Dependencies };
+    return new Promise((resolve) =>
+      resolve({ default: Dependencies, ...Dependencies })
+    );
   });
