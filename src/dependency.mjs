@@ -1,13 +1,16 @@
-import { Intake } from "./intake.js";
+import { Intake } from "./intake";
 const place = { default: {} },
-  module = (async function () {
-    return await Intake("./module");
-  })();
-const { default: Module } = module ? module : place;
-const { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } = Intake(".");
-const { default: functions, checkLoaded, modulehelp, reduceSTATE } = Intake(
-  "./functions"
-);
+  fun = async (file) => {
+    return await Intake(file);
+  };
+var module = fun("./module"),
+  { default: Module } = module ? module : place;
+var home = fun("."),
+  { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } = home
+    ? home
+    : place;
+var funcs = fun("./functions"),
+  { default: functions, checkLoaded, modulehelp, reduceSTATE } = funcs;
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
