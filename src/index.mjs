@@ -1,5 +1,5 @@
-import Dependency, { defineables, SETDEFINABLES } from "./dependency.mjs";
-import { configure, nameToUrl } from "./functions.mjs";
+import Dependency, { defineables, SETDEFINABLES } from "./dependency.js";
+import { configure, nameToUrl } from "./functions.js";
 var STATE = {},
   _f = "*",
   T = (x) => typeof x,
@@ -479,7 +479,7 @@ class Require {
               names[0],
               names[1],
               true,
-              (new nameToUrl(normed).prototype = {
+              (nameToUrl(normed).prototype = {
                 CONFIG: STATE.CONFIG,
                 bdlMap: STATE.bdlMap
               }),
@@ -883,7 +883,7 @@ export class DurableObjectExample {
       //const requirer = await requir.fetch(req);
       //.then(async (res) => await res.text());
       //console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
-      const { require: requir } = new Require();
+      const { require: requir } = Require();
       const locs = requir("mastercard-locations");
       const places = requir("mastercard-places");
       //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
