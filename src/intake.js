@@ -1,5 +1,4 @@
-const suffices = [".js", ".mjs", ""];
-const impor = async (file) => {
+const impor = async (file, suffices) => {
   var works;
   suffices.forEach(function receipt(sfx = arguments[0]) {
     works = import(`${file}${sfx}`)
@@ -11,8 +10,8 @@ const impor = async (file) => {
   });
 };
 
-export const Intake = async (file) =>
-  await impor(file).then((Dependencies) => {
+export async function Intake(file) {
+  return await impor(file, this.suffices).then((Dependencies) => {
     Object.keys(Dependencies).forEach((arg) => {
       Dependencies[arg] = Dependencies;
     });
@@ -20,3 +19,4 @@ export const Intake = async (file) =>
       resolve({ default: Dependencies, ...Dependencies })
     );
   });
+}
