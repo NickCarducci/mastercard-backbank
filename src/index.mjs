@@ -17,7 +17,6 @@ var STATE = {},
   _em = "emit",
   _ev = "events",
   iserror = (err) => e_(STATE.dependencies).yes(err) && STATE.dependencies[err],
-  _r = "requir",
   _x = "exports",
   scriptPends,
   ga = "getAttribute",
@@ -62,13 +61,16 @@ var STATE = {},
                       (match, singlePrefix) => singlePrefix || ""
                     )
                     .replace(
-                      /[^.]\s*requir\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
+                      /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
                       (match, dep) => rem.push(dep)
                     ),
                   rem
                 };
               } /*like ')//comment'; keep prefix*/
-            ) => (cb.length === 1 ? [_r] : [_r, _x, _m]).concat(rem))(rem, c)
+            ) =>
+              (cb.length === 1 ? ["require"] : ["require", _x, _m]).concat(
+                rem
+              ))(rem, c)
           : rem) //Potential-CommonJS use-case of exports and thi, without 'requir.';
     ) &&
     // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
@@ -149,7 +151,7 @@ export const KeyValue = (key, value, delet) =>
                         );
                   * 
                   */
-  dr = (m) => `data-requir${m ? _m : "context"}`,
+  dr = (m) => `data-require${m ? _m : "context"}`,
   hasPathFallback = (id, cP) => {
     var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
     if (pC && e_(pC).string() === Ar && pC.length > 1) {
@@ -719,28 +721,25 @@ function Require() {
     //thi named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires interactive document.getElementsByTagName("script")
     //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
     console.log("BUILD product (of Require) :", BUILD);
-  const state = {
-    //This...
-    //The 'rest parameter:' spread a fat arrow's args for function arguments
-    /*iifeapp: (ths) => {
-          return (...args) => new iifeapp(ths)(args);
-          }, */ //(object/class/prototype-'thi'-prop)
-    BUILD, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'BUILD' function
-    requir:
+  const requir =
       /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
       e_(variables.REQUIREJS).string() !== Fn
         ? BUILD // package-names, cb, returns a value to define the thi of argument index[0]
         : () => {
             //dependency = arguments[0],
             const notBaseUrl = T(variables.REQUIREJS !== _u),
-              notrequire = T(requir !== _n) && !e_(requir).string() === Fn;
+              notrequire = true; //T(requir === _n) || e_(requir).string() === Fn;
             Y(
-              "configuration",
-              notBaseUrl ? (variables.REQUIREJS ? notrequire : requir) : null
+              notBaseUrl ? (variables.REQUIREJS ? notrequire : requir) : null,
+              variables,
+              "configuration"
             ) &&
               Y(
-                "REQUIREJS",
-                notBaseUrl ? (undefined ? notrequire : undefined) : null
+                (variables.REQUIREJS = notBaseUrl
+                  ? undefined
+                    ? notrequire
+                    : undefined
+                  : null)
               );
             //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
 
@@ -811,8 +810,16 @@ function Require() {
                   //Set up with STATE.CONFIG info.
                   BUILD(variables.configuration);
           },
-    define
-  };
+    state = {
+      //This...
+      //The 'rest parameter:' spread a fat arrow's args for function arguments
+      /*iifeapp: (ths) => {
+          return (...args) => new iifeapp(ths)(args);
+          }, */ //(object/class/prototype-'thi'-prop)
+      BUILD, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'BUILD' function
+      requir,
+      define
+    };
   return (
     Y(
       Object.keys(state).forEach(
@@ -880,7 +887,7 @@ export class DurableObjectExample {
       //const requirer = await requir.fetch(req);
       //.then(async (res) => await res.text());
       //console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
-      const { requir } = Require();
+      const { requir } = Require.bind(this);
       const locs = requir("mastercard-locations");
       const places = requir("mastercard-places");
       //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
