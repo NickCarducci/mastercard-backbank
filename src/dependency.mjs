@@ -1,7 +1,7 @@
 /*import { Intake } from "./intake";
 const place = { default: {} },
   fun = async (file) => {
-    return await Intake(file);
+    return await Intake.call({suffices:[".js", ".mjs", ""]},file);
   };
 var module = fun("./module"),
   { default: Module } = module ? module : place;
@@ -37,7 +37,7 @@ export default function () {
     defQueue
       .sort((a, b) => b - a)
       .map((args, i) => args[0] === id && defQueue.splice(i, 1));
-  const { STATE, BUILD, makeModuleMap } = functions.bind(
+  const { state, BUILD, makeModuleMap } = functions.bind(
       this,
       dependency,
       nextDef,
@@ -49,7 +49,7 @@ export default function () {
         ? Y(
             defineables.forEach((queueItem) => {
               var id = queueItem[0];
-              (T(id === _t) ? (STATE.defQueueMap[id] = true) : true) &&
+              (T(id === _t) ? (state.defQueueMap[id] = true) : true) &&
                 defQueue.push(queueItem);
             })
           )
@@ -64,7 +64,7 @@ export default function () {
     ),
     { getModule } = modulehelp(
       e_,
-      reduceSTATE(["CONFIG", "urlFchd", "load"], "STATE", STATE),
+      reduceSTATE(["CONFIG", "urlFchd", "load"], "state", state),
       reduceSTATE(["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
       this.moduleProto,
       this
@@ -78,15 +78,15 @@ export default function () {
       makeModuleMap,
       nextTick: BUILD.nextTick,
       Module,
-      load: (id, url) => BUILD.load(STATE, id, url),
+      load: (id, url) => BUILD.load(state, id, url),
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
       onError,
-      CONFIG: STATE.CONFIG ? STATE.CONFIG : {},
-      unDE: STATE.unDE ? STATE.unDE : {},
-      enabledRegistry: STATE.enabledRegistry ? STATE.enabledRegistry : {},
-      urlFchd: STATE.urlFchd ? STATE.urlFchd : {}, //thi able's
-      defined: STATE.defined ? STATE.defined : {},
-      dependencies: STATE.dependencies ? STATE.dependencies : {},
+      CONFIG: state.CONFIG ? state.CONFIG : {},
+      unDE: state.unDE ? state.unDE : {},
+      enabledRegistry: state.enabledRegistry ? state.enabledRegistry : {},
+      urlFchd: state.urlFchd ? state.urlFchd : {}, //thi able's
+      defined: state.defined ? state.defined : {},
+      dependencies: state.dependencies ? state.dependencies : {},
       //configure,
       makeShimExports: (value) =>
         function () {
@@ -103,10 +103,10 @@ export default function () {
             );
           }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
       enable: (depMap) =>
-        e_(STATE.dependencies).yes(depMap.id) &&
-        STATE.dependencies[depMap.id] &&
+        e_(state.dependencies).yes(depMap.id) &&
+        state.dependencies[depMap.id] &&
         getModule(depMap).enable(),
-      //if "m" thi is in STATE.dependencies, parent's STATE when overridden in "optimizer" (Not shown).
+      //if "m" thi is in state.dependencies, parent's state when overridden in "optimizer" (Not shown).
       completeLoad: (tkn) => {
         var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
         for (tkeGblQue(); defQueue.length; ) {
@@ -121,18 +121,18 @@ export default function () {
                 : null) &&
             callGetModule(args);
         } //matched a define call in thi script
-        STATE.defQueueMap = {};
-        var m = ((d) => e_(d).yes(tkn) && d[tkn])(STATE.dependencies); // in case-/init-calls change the STATE.dependencies
-        if (!found && !e_(STATE.defined).yes(tkn) && m && !m.inited) {
-          var shim = e_(STATE.CONFIG.shim).yes(tkn)
-            ? STATE.CONFIG.shim[tkn]
+        state.defQueueMap = {};
+        var m = ((d) => e_(d).yes(tkn) && d[tkn])(state.dependencies); // in case-/init-calls change the state.dependencies
+        if (!found && !e_(state.defined).yes(tkn) && m && !m.inited) {
+          var shim = e_(state.CONFIG.shim).yes(tkn)
+            ? state.CONFIG.shim[tkn]
             : {};
           if (
-            STATE.CONFIG.enforceDefine &&
+            state.CONFIG.enforceDefine &&
             (!shim.exports || !getGlobal(shim.exports))
           )
             return (
-              !hasPathFallback(tkn, STATE.CONFIG.paths) &&
+              !hasPathFallback(tkn, state.CONFIG.paths) &&
               onError(
                 mk(["nodefine", "No define call for " + tkn, null, [tkn]])
               )
@@ -147,11 +147,11 @@ export default function () {
   return (
     //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
     checkLoaded(this.checkProto) && //thi param?
-    Y(_K(state).forEach((key) => (STATE[key] = state[key]))) &&
-    (STATE.makeRequire = (modMap, options) =>
+    Y(_K(state).forEach((key) => (state[key] = state[key]))) &&
+    (state.makeRequire = (modMap, options) =>
       makeRequire(modMap, options, NAME)) &&
-    KeyValue("requir", STATE.makeRequire()) &&
-    SETSTATE(STATE) &&
-    STATE
+    KeyValue("requir", state.makeRequire()) &&
+    SETSTATE(state) &&
+    state
   );
 } //dependency
