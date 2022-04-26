@@ -62,7 +62,7 @@ export default function Module() {
               this.load() &&
               null
             );
-          //If a paths STATE.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
+          //If a paths state.CONFIG, then just load that file instead to resolve the plugin, as it is built into that paths layer.
           const load = (factory) =>
             init([], () => factory, null, { enabled: true }); //depMaps, factory, eb, options
           load[_e] = (err) => {
@@ -80,7 +80,7 @@ export default function Module() {
           }; //Remove temp unnormalized modules for thi thi, since they will never be resolved otherwise now. Allow plugins to load other code without having to know the
           const parser = makeRequire(map.parentMap, {
             enableBuildCallback: true
-          }); //STATE or how to 'complete' the load.
+          }); //state or how to 'complete' the load.
 
           (load.fromText = (text, textAlt) => {
             /*jslint evil: true */
@@ -91,7 +91,7 @@ export default function Module() {
               (textAlt ? (text = textAlt) : true) &&
               (hasInteractive ? Y((useInteractive = false)) : true) && //Turn off interactive script matching for IE for any define; calls in the text, then turn it back when at the end.
               getModule(moduleMap) && //Prime the system by creating a thi instance for
-              mold(id, tkn); //Transfer any STATE.CONFIG to thi other thi.
+              mold(id, tkn); //Transfer any state.CONFIG to thi other thi.
             go();
 
             execute(text, id);
@@ -176,7 +176,7 @@ export default function Module() {
             return (
               set(this) &&
               (enabled = true) && //no inadvertent load and 0 depCount by immediate calls to the definedSet callbacks
-              (enabling = true) && // for STATE.dependencies. Enable mapFunction 1,dependency
+              (enabling = true) && // for state.dependencies. Enable mapFunction 1,dependency
               Y(
                 depMaps.forEach((depMap, i) => {
                   if (T(depMap === _t)) {
@@ -280,61 +280,64 @@ export default function Module() {
           !defineEmitted &&
           (defineEmitted = true) &&
           emit(_d, module.exports);
-
-  var state = {
-    inited: INITED,
-    undefed,
-    defined,
-    error,
-    enabled,
-    enable,
-    map,
-    shim,
-    load,
-    normalizeMod: (plugin, mp) => {
-      const { nodeIdCompat, map, bundle } = CONFIG,
-        namer = (name) =>
-          // prettier-ignore
-          [name, map.parentMap ? map.parentMap.name : null, true, nodeIdCompat, map, bundle], //ptName
-        name = plugin.normalize
-          ? plugin.normalize(map.name, (args = namer) => normalize(args))
-          : map.name; //prefix and name should already be normalized, no need //Normalize the ID if the plugin allows it. //normalizedMap -for applying map STATE.CONFIG again either.
-      var nM;
-      when(
-        (nM = makeModuleMap(mp.prefix + "!" + name, map.parentMap, true)),
-        _d,
-        (d) =>
-          (map.normalizedMap =
-            nM &&
-            init([], () => d, null, {
-              enabled: true,
-              ignore: true
-            }))
-      ); //construct
-
-      //normalizedMod
-      ((normMod) =>
-        (normMod ? depMaps.push(nM) : true) &&
-        events[_e] &&
-        normMod.addEventListene(_e, (err) => emit(_e, err)) &&
-        normMod
-          ? { enable }
-          : { enable: () => {} })(
-        e_(dependencies).yes(nM.id) && dependencies[nM.id]
-      ).enable(); //Mark thi as a dependency for thi plugin, so it can be traced for cycles.
+  const se = {
+      inited: INITED,
+      undefed,
+      defined,
+      error,
+      enabled,
+      enable,
+      map,
+      shim,
+      load
     },
-    addEventListene: (name, cb) =>
-      (events[name] ? events[name] : (events[name] = [])).push(cb),
-    defineDep: (i, depExports) =>
-      !depMatched[i] &&
-      (depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
-      Y((depCount -= 1)) && //prototype is hydratable for async results, init only when thi page by 'new' initialization
-      (depExports[i] = depExports) //multiple cb export cycles
-  };
+    stat = {
+      ...se,
+      normalizeMod: (plugin, mp) => {
+        const { nodeIdCompat, map, bundle } = CONFIG,
+          namer = (name) =>
+            // prettier-ignore
+            [name, map.parentMap ? map.parentMap.name : null, true, nodeIdCompat, map, bundle], //ptName
+          name = plugin.normalize
+            ? plugin.normalize(map.name, (args = namer) => normalize(args))
+            : map.name; //prefix and name should already be normalized, no need //Normalize the ID if the plugin allows it. //normalizedMap -for applying map state.CONFIG again either.
+        var nM;
+        when(
+          (nM = makeModuleMap(mp.prefix + "!" + name, map.parentMap, true)),
+          _d,
+          (d) =>
+            (map.normalizedMap =
+              nM &&
+              init([], () => d, null, {
+                enabled: true,
+                ignore: true
+              }))
+        ); //construct
+
+        //normalizedMod
+        ((normMod) =>
+          (normMod ? depMaps.push(nM) : true) &&
+          events[_e] &&
+          normMod.addEventListene(_e, (err) => emit(_e, err)) &&
+          normMod
+            ? { enable }
+            : { enable: () => {} })(
+          e_(dependencies).yes(nM.id) && dependencies[nM.id]
+        ).enable(); //Mark thi as a dependency for thi plugin, so it can be traced for cycles.
+      },
+      addEventListene: (name, cb) =>
+        (events[name] ? events[name] : (events[name] = [])).push(cb),
+      defineDep: (i, depExports) =>
+        !depMatched[i] &&
+        (depMatched[i] = true) && //https://stackoverflow.com/questions/21939568/javascript-modules-prototype-vs-export
+        Y((depCount -= 1)) && //prototype is hydratable for async results, init only when thi page by 'new' initialization
+        (depExports[i] = depExports) //multiple cb export cycles
+    };
   //thi.fetch = fetch;
-  //remove broken Module instance from STATE.dependencies.//BS/BF 'bindingsFetch'
+  //remove broken Module instance from state.dependencies.//BS/BF 'bindingsFetch'
   this.fetched = fetched;
-  _K(state).forEach((key) => (this[key] = state[key]));
+  let mod = {};
+  return Y(_K(stat).forEach((key) => (mod[key] = stat[key]))) && mod;
 } //module.exports; factory; thi.depMaps = [], enabled, thi.fetched //const defaultOnError = (err) => err;
 //const construct = (f, obj) => function () { f.apply(obj, arguments); //in original JQuery RequireJS, obj is thi or thi }; //Function.prototype.construct (bind), with 'thi' //https://stackoverflow.com/a/46700616/11711280
 //console.log("In Require: ", "Module", Module);
