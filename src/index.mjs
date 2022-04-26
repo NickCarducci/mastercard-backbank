@@ -722,111 +722,98 @@ function Require() {
     //...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),
     console.log("BUILD product (of Require) :", BUILD);
   const requir =
-      /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
-      e_(variables.REQUIREJS).string() !== Fn
-        ? BUILD // package-names, cb, returns a value to define the thi of argument index[0]
-        : () => {
-            //dependency = arguments[0],
-            const notBaseUrl = T(variables.REQUIREJS !== _u),
-              notrequire = true; //T(requir === _n) || e_(requir).string() === Fn;
+    /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
+    e_(variables.REQUIREJS).string() !== Fn
+      ? BUILD // package-names, cb, returns a value to define the thi of argument index[0]
+      : () => {
+          //dependency = arguments[0],
+          const notBaseUrl = T(variables.REQUIREJS !== _u),
+            notrequire = true; //T(requir === _n) || e_(requir).string() === Fn;
+          Y(
+            notBaseUrl ? (variables.REQUIREJS ? notrequire : requir) : null,
+            variables,
+            "configuration"
+          ) &&
             Y(
-              notBaseUrl ? (variables.REQUIREJS ? notrequire : requir) : null,
-              variables,
-              "configuration"
-            ) &&
-              Y(
-                (variables.REQUIREJS = notBaseUrl
-                  ? undefined
-                    ? notrequire
-                    : undefined
-                  : null)
-              );
-            //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
+              (variables.REQUIREJS = notBaseUrl
+                ? undefined
+                  ? notrequire
+                  : undefined
+                : null)
+            );
+          //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
 
-            const obj = {
-              CONFIG: (cfg) => BUILD(cfg),
-              nextTick: (fn) =>
-                T(setTimeout !== _n) ? setTimeout(fn, 4) : fn()
-            }; // globally agreed names for other potential AMD loaders
+          const obj = {
+            CONFIG: (cfg) => BUILD(cfg),
+            nextTick: (fn) => (T(setTimeout !== _n) ? setTimeout(fn, 4) : fn())
+          }; // globally agreed names for other potential AMD loaders
 
-            return Y(_K(obj).forEach((key) => (BUILD[key] = obj[key]))) &&
-              // if (!requir) requir = BUILD; //Exportable requir
-              Y(
-                ["version", "isBrowser"].forEach((k) => (BUILD[k] = sign[k]))
-              ) &&
-              //prettier-ignore
-              /*jslint evil: true */
-              //BUILD.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
-              //BUILD.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
-              //merely to prepend with 'use strict', don't bother
+          return Y(_K(obj).forEach((key) => (BUILD[key] = obj[key]))) &&
+            // if (!requir) requir = BUILD; //Exportable requir
+            Y(["version", "isBrowser"].forEach((k) => (BUILD[k] = sign[k]))) &&
+            //prettier-ignore
+            /*jslint evil: true */
+            //BUILD.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
+            //BUILD.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
+            //merely to prepend with 'use strict', don't bother
 
-              isBrowser &&
-              !variables.configuration.skipDataMain
-              ? Y(
-                  e_()
-                    .tag()
-                    .sort((a, b) => b - a)
-                    .forEach(
-                      (
-                        { head, dataMain } = (script) => {
-                          const pro = head
-                            ? { head, dataMain }
-                            : {
-                                head: script.parentNode,
-                                dataMain: script.getAttribute("data-main")
-                              };
-                          return (
-                            (head = pro.head) &&
-                            (dataMain = pro.dataMain) &&
-                            pro
-                          );
-                        }
-                      ) =>
-                        dataMain &&
-                        //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
+            isBrowser &&
+            !variables.configuration.skipDataMain
+            ? Y(
+                e_()
+                  .tag()
+                  .sort((a, b) => b - a)
+                  .forEach(
+                    (
+                      { head, dataMain } = (script) => {
+                        const pro = head
+                          ? { head, dataMain }
+                          : {
+                              head: script.parentNode,
+                              dataMain: script.getAttribute("data-main")
+                            };
+                        return (
+                          (head = pro.head) && (dataMain = pro.dataMain) && pro
+                        );
+                      }
+                    ) =>
+                      dataMain &&
+                      //Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
 
-                        Y((mainScript = dataMain ? dataMain : mainScript)) && //Preserve dataMain in case it is a path (i.e. contains '?')
-                        (!variables.configuration.baseUrl &&
-                        mainScript.indexOf("!") === -1
-                          ? (src = mainScript.split("/")) &&
-                            (mainScript = src.pop()) &&
-                            (subPath = src.length
-                              ? src.join("/") + "/"
-                              : "./") &&
-                            (variables.configuration.baseUrl = subPath)
-                          : true) &&
-                        //baseUrl if data-main value is not a loader plugin thi ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a thi name.
-                        (mainScript = mainScript.replace(/\.js$/, "")) && //If mainScript is still a mere path, fall back to dataMain
-                        (/^[/:?.]|(.js)$/.test(mainScript)
-                          ? (mainScript = dataMain)
-                          : true) && //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
-                        (variables.configuration.REM = variables.configuration
-                          .REM
-                          ? variables.configuration.REM.concat(mainScript)
-                          : [mainScript]) //Put the data-main script in the files to load.
-                    )
-                )
-              : true &&
-                  //Set up with STATE.CONFIG info.
-                  BUILD(variables.configuration);
-          },
-    state = {
-      //This...
-      //The 'rest parameter:' spread a fat arrow's args for function arguments
-      /*iifeapp: (ths) => {
+                      Y((mainScript = dataMain ? dataMain : mainScript)) && //Preserve dataMain in case it is a path (i.e. contains '?')
+                      (!variables.configuration.baseUrl &&
+                      mainScript.indexOf("!") === -1
+                        ? (src = mainScript.split("/")) &&
+                          (mainScript = src.pop()) &&
+                          (subPath = src.length ? src.join("/") + "/" : "./") &&
+                          (variables.configuration.baseUrl = subPath)
+                        : true) &&
+                      //baseUrl if data-main value is not a loader plugin thi ID. data-main-directory as baseUrl //Strip off trailing .js mainScript, as is now a thi name.
+                      (mainScript = mainScript.replace(/\.js$/, "")) && //If mainScript is still a mere path, fall back to dataMain
+                      (/^[/:?.]|(.js)$/.test(mainScript)
+                        ? (mainScript = dataMain)
+                        : true) && //filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
+                      (variables.configuration.REM = variables.configuration.REM
+                        ? variables.configuration.REM.concat(mainScript)
+                        : [mainScript]) //Put the data-main script in the files to load.
+                  )
+              )
+            : //true &&
+              //Set up with STATE.CONFIG info.
+              BUILD(variables.configuration);
+        };
+  return /* state =*/ {
+    //This...
+    //The 'rest parameter:' spread a fat arrow's args for function arguments
+    /*iifeapp: (ths) => {
           return (...args) => new iifeapp(ths)(args);
           }, */ //(object/class/prototype-'thi'-prop)
-      BUILD, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'BUILD' function
-      requir,
-      define
-    };
-  return (
-    Y(
-      Object.keys(state).forEach(
-        (key, i) => (this[key] = Object.values(state)[i])
-      )
-    ) && this
-  );
+    BUILD, //allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'BUILD' function
+    requir,
+    define
+  };
+  //return state;
+  // Y(Object.keys(state).forEach((key) => (this[key] = state[key]))) && this
 }
 /*
 
