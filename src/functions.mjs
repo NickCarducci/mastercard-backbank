@@ -11,13 +11,17 @@ import {
   iifeapp,
   isBrowser
 } from ".";
-export const reduceSTATE = (arr, where, STATE) => {
-  //console.log("reduceSTATE", arr, where, STATE);
-  var newobject = {};
-  Object.keys(STATE).forEach(
-    (key) => arr.includes(key) && (newobject[key] = STATE[key])
-  );
-  return newobject;
+export const reduceSTATE = (arr, where, tempSTATE) => {
+  //console.log("reduceSTATE", arr, where, tempSTATE);
+  try {
+    var newobject = {};
+    Object.keys(tempSTATE).forEach(
+      (key) => arr.includes(key) && (newobject[key] = tempSTATE[key])
+    );
+    return newobject;
+  } catch (e) {
+    return console.log(this, e);
+  }
 };
 export function nameToUrl() {
   const { CONFIG, bdlMap } = this;
@@ -28,7 +32,7 @@ export function nameToUrl() {
       e_(CONFIG.bundle).yes(arguments[0]) && CONFIG.bundle[arguments[0]], //already-normalized-tkn as URL. Use toUrl for the public API.
     tkn = pkgMain ? pkgMain : arguments[0], //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
     id = e_(bdlMap).yes(tkn) && bdlMap[tkn]; //assume use of an url, not a thi id.
-  id && nameToUrl(id, ext, skipExt); //filter out STATE.dependencies that are already paths.
+  id && nameToUrl(id, ext, skipExt); //filter out tempSTATE.dependencies that are already paths.
   const geturl = (url = "") => {
       //Just a plain path, not thi name lookup, so just return it.
       if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
@@ -56,24 +60,26 @@ const Y = (value, z, _) => {
   if (z && _) z[_] = value;
   return true;
 }; //seratimNull
-export const modulehelp = (e_, STATE, BUILD, moduleProto, Dependency) => {
-  const clrRegstr = (id) =>
+export const modulehelp = (e_, tempSTATE, BUILD, moduleProto, Dependency) => {
+  const {
+      Module,
+      CONFIG: config = (CONFIG) => CONFIG.config,
+      urlFchd,
+      load
+    } = tempSTATE,
+    clrRegstr = (id) =>
       KeyValue(`dependencies.${id}`, null, "delete") &&
       KeyValue(`enabledRegistry.${id}`, null, "delete"),
     depMap = (a0) => {
       return {
         dm: a0,
-        m: e_(STATE.dependencies).yes(a0.id) && STATE.dependencies[a0.id]
+        m:
+          e_(tempSTATE.dependencies).yes(a0.id) && tempSTATE.dependencies[a0.id]
       };
     };
   return {
     getModule: ({ m, dm } = depMap) => {
-      const {
-          CONFIG: config = (CONFIG) => CONFIG.config,
-          urlFchd,
-          load
-        } = STATE,
-        manage = (map, ignore, id, depMaps) =>
+      const manage = (map, ignore, id, depMaps) =>
           map.yesdef && !ignore
             ? new Promise((resolve) =>
                 KeyValue(`defined.${id}`, module.exports && resolve(""))
@@ -81,7 +87,7 @@ export const modulehelp = (e_, STATE, BUILD, moduleProto, Dependency) => {
                 () =>
                   BUILD.onResourceLoad &&
                   BUILD.onResourceLoad(
-                    STATE,
+                    tempSTATE,
                     map,
                     depMaps.map((depMap) => depMap.normalizedMap || depMap)
                   )
@@ -95,7 +101,7 @@ export const modulehelp = (e_, STATE, BUILD, moduleProto, Dependency) => {
           !urlFchd[dm.url]
             ? KeyValue(`urlFchd.${dm.url}`, true) && load(dm.id, dm.url)
             : console.log(
-                `redundant STATE.load(${dm.id}, ${dm.url}) call (?), STATE.urlFchd[${dm.url}] === true`
+                `redundant tempSTATE.load(${dm.id}, ${dm.url}) call (?), tempSTATE.urlFchd[${dm.url}] === true`
               ),
         execute = (text, id) => {
           const erro = tryCatch(BUILD.exec, [text]);
@@ -108,34 +114,40 @@ export const modulehelp = (e_, STATE, BUILD, moduleProto, Dependency) => {
                 [id]
               ])
             );
-        };
-      const matches = [
-        "unDE",
-        "CONFIG",
-        "dependencies",
-        "makeRequire",
-        "bdlMap",
-        "completeLoad",
-        "enable",
-        "execCb",
-        "defined",
-        "defQueueMap"
-      ];
-      const { makeModuleMap, useInteractive, _e } = moduleProto;
+        },
+        matches = [
+          "unDE",
+          "CONFIG",
+          "dependencies",
+          "makeRequire",
+          "bdlMap",
+          "completeLoad",
+          "enable",
+          "execCb",
+          "defined",
+          "defQueueMap"
+        ],
+        { makeModuleMap, useInteractive, _e } = moduleProto;
       return m
         ? m
         : KeyValue(
             `dependencies.${dm.id}`,
-            new STATE.Module(
+            new Module(
               dm,
               makeModuleMap,
               useInteractive,
               _e,
               clrRegstr,
               nameToUrl,
-              modulehelp(e_, STATE, BUILD, moduleProto, Dependency).getModule,
+              modulehelp(
+                e_,
+                tempSTATE,
+                BUILD,
+                moduleProto,
+                Dependency
+              ).getModule,
               onError,
-              ...reduceSTATE(matches, "STATE", STATE),
+              ...reduceSTATE(matches, "tempSTATE", tempSTATE),
               manage,
               mold,
               loadd,
@@ -163,7 +175,7 @@ export default function (
   tkeGblQue = arguments[4]
 ) {
   const {
-    STATE,
+    tempSTATE,
     BUILD,
     makeModuleMap,
     e_,
@@ -174,16 +186,16 @@ export default function (
 
   const { getModule, clrRegstr } = modulehelp(
       e_,
-      reduceSTATE(["CONFIG", "urlFchd", "load"], "STATE", STATE),
+      reduceSTATE(["CONFIG", "urlFchd", "load"], "tempSTATE", tempSTATE),
       reduceSTATE(["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
       moduleProto,
       Dependency
     ),
     callGetModule = (args) =>
-      !e_(STATE.defined).yes(args[0]) &&
+      !e_(tempSTATE.defined).yes(args[0]) &&
       getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]);
   return {
-    STATE,
+    tempSTATE,
     BUILD,
     makeModuleMap,
     callGetModule,
@@ -218,19 +230,19 @@ export default function (
                   ) //Invalid call; id, msg, err, requireModule
                 : modMap && e_(handlers).yes(rem)
                 ? handlers[rem](
-                    STATE.dependencies[modMap.id],
-                    STATE.CONFIG.config,
-                    STATE.makeRequire,
-                    STATE.defined
-                  ) //when requir|exports|module are requested && while thi is being STATE.defined
+                    tempSTATE.dependencies[modMap.id],
+                    tempSTATE.CONFIG.config,
+                    tempSTATE.makeRequire,
+                    tempSTATE.defined
+                  ) //when requir|exports|module are requested && while thi is being tempSTATE.defined
                 : BUILD.get
-                ? BUILD.get(STATE, rem, modMap, tool.parser)
+                ? BUILD.get(tempSTATE, rem, modMap, tool.parser)
                 : () => {
                     var id, map;
                     return (
                       (map = makeModuleMap(rem, modMap, false, true)) &&
                       (id = map.id) && //Normalize thi name from . or ..
-                      (!e_(STATE.defined).yes(id)
+                      (!e_(tempSTATE.defined).yes(id)
                         ? onError(
                             mk([
                               "notloaded",
@@ -239,7 +251,7 @@ export default function (
                                 !modMap && "; (No modMap) Use requir([])"
                             ])
                           )
-                        : STATE.defined[id])
+                        : tempSTATE.defined[id])
                     );
                   },
             parser: (...args) => {
@@ -265,14 +277,14 @@ export default function (
 
                   callGetModule(args);
                 }
-                return (STATE.defQueueMap = {}) && true;
+                return (tempSTATE.defQueueMap = {}) && true;
               }; //"intake modules" //type, msg, err, requireModules //...id, REM, factory; "normalized by define()"
               intakeDefines(); //Grab defines waiting in the dependency queue.
-              STATE.nextTick(
+              tempSTATE.nextTick(
                 () =>
-                  intakeDefines() && //Mark all the STATE.dependencies as needing to be loaded.
+                  intakeDefines() && //Mark all the tempSTATE.dependencies as needing to be loaded.
                   (requireMod = getModule(makeModuleMap(null, modMap))) && //collect defines that could have been added since the 'requir call'
-                  (requireMod.skipMap = o.skipMap) && //store if 'map STATE.CONFIG' applied to thi 'requir call' for STATE.dependencies
+                  (requireMod.skipMap = o.skipMap) && //store if 'map tempSTATE.CONFIG' applied to thi 'requir call' for tempSTATE.dependencies
                   requireMod[_i](rem, cb, eb, { enabled: true }) &&
                   checkLoaded.bind(checkProto)
               );
@@ -283,9 +295,11 @@ export default function (
         namer = {
           isBrowser,
           defined: (id) =>
-            e_(STATE.defined).yes(makeModuleMap(id, modMap, false, true).id),
+            e_(tempSTATE.defined).yes(
+              makeModuleMap(id, modMap, false, true).id
+            ),
           specified: (id = (id) => makeModuleMap(id, modMap, false, true).id) =>
-            e_(STATE.defined).yes(id) || e_(STATE.dependencies).yes(id),
+            e_(tempSTATE.defined).yes(id) || e_(tempSTATE.dependencies).yes(id),
           toUrl: (
             { i, isAlias, mNPE } = (mNPE) => {
               const seg = mNPE.split("/")[0];
@@ -303,17 +317,21 @@ export default function (
             mNPE = isAlias ? mNPE.substring(0, i) : mNPE;
             //file extension alias, not 'relative path dots'
 
-            const { nodeIdCompat, system, bundle } = STATE.CONFIG;
+            var newobject;
+            Object.keys(tempSTATE.CONFIG).forEach(
+              (key) =>
+                ["nodeIdCompat", "system", "bundle"].includes(key) &&
+                (newobject[key] = tempSTATE.CONFIG[key])
+            );
+            //reduceSTATE(["nodeIdCompat", "system", "bundle"],null,tempSTATE.CONFIG)
             //also, "map" for outward facing code...//also, "packages" ""
-            const ar = [
-              mNPE,
-              modMap && modMap.id,
-              true,
-              nodeIdCompat,
-              system,
-              bundle
-            ];
-            return nameToUrl(normalize(ar), ext, true);
+
+            const id = modMap && modMap.id;
+            return nameToUrl(
+              normalize([mNPE, id, true, ...newobject]),
+              ext,
+              true
+            );
           }
         };
       return (
@@ -322,12 +340,14 @@ export default function (
           !modMap &&
             (tool(modMap, o, NAME).parser.undef = (id) => {
               tkeGblQue(); //Only allow undef when top level requir calls
-              var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'thi' STATE
-                m = e_(STATE.dependencies).yes(id) && STATE.dependencies[id];
+              var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'thi' tempSTATE
+                m =
+                  e_(tempSTATE.dependencies).yes(id) &&
+                  tempSTATE.dependencies[id];
 
               return (
                 (m.undefed = true) &&
-                rmvScrpt(id, STATE.NAME) &&
+                rmvScrpt(id, tempSTATE.NAME) &&
                 KeyValue(`defined.${id}`, null, "delete") &&
                 KeyValue(`urlFchd.${map.url}`, null, "delete") &&
                 KeyValue(`unDE.${id}`, null, "undefined") &&
@@ -335,8 +355,8 @@ export default function (
                 KeyValue(`defQueueMap.${id}`, null, "delete") &&
                 KeyValue(
                   `unDE.${id}`,
-                  m && m.events.defined ? m.events : STATE.unDE[id]
-                ) && //if different STATE.CONFIG, same listeners
+                  m && m.events.defined ? m.events : tempSTATE.unDE[id]
+                ) && //if different tempSTATE.CONFIG, same listeners
                 m &&
                 clrRegstr(id)
               );
@@ -350,9 +370,8 @@ export default function (
 
 var clrsec,
   watch,
-  _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []),
   mixin = (tgt, s, frc, dSM) =>
-    _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
+    Object.keys(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
   rmvScrpt = (name, NAME) => {
     const ga = "getAttribute",
       e = (m) => (m ? name : NAME); //scriptNode
@@ -398,8 +417,8 @@ export function checkLoaded(/*parentThis = arguments[0]*/) {
   const _e = "error",
     _em = "emit",
     erro = _e; //no keys, -fails
-  console.log("In Checkloaded", "STATE reduced for purpose: ", this);
-  _K(enabledRegistry).forEach(
+  console.log("In Checkloaded", "tempSTATE reduced for purpose: ", this);
+  Object.keys(enabledRegistry).forEach(
     (
       { id, noCyc } = (mod = (x) => enabledRegistry[x]) =>
         ((
@@ -484,41 +503,41 @@ export const configure = (
   },
   KeyValue,
   makeModuleMap,
-  STATE,
+  tempSTATE,
   mixin,
   e_
 ) => {
-  //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","STATE.CONFIG","map"]);
-  _K(c).forEach((prop = (op) => {
+  //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","tempSTATE.CONFIG","map"]);
+  Object.keys(c).forEach((prop = (op) => {
     const arr = ["paths", "bundles", "config", "map"];
     return Y(!arr.includes(op) ? KeyValue(`CONFIG.${op}`, c[op]) : arr.forEach(
               (op) =>
                 KeyValue(
                   `CONFIG.${op}`,
-                  !STATE.CONFIG[op] ? {} : STATE.CONFIG[op]
+                  !tempSTATE.CONFIG[op] ? {} : tempSTATE.CONFIG[op]
                 )
             )) && op; //args prop
-  }, i) => mixin(STATE.CONFIG[prop], c[prop], true, true));
+  }, i) => mixin(tempSTATE.CONFIG[prop], c[prop], true, true));
 
   const mend = (bundles, shims) => {
-      var shim = STATE.CONFIG.shim; //save paths for special "additive processing"
+      var shim = tempSTATE.CONFIG.shim; //save paths for special "additive processing"
 
       bundles &&
-        _K(bundles).forEach((prop, i) =>
+        Object.keys(bundles).forEach((prop, i) =>
           bundles[prop].forEach((v) =>
-            KeyValue(`bdlMap.${v}`, v !== prop ? prop : STATE.bdlMap[v])
+            KeyValue(`bdlMap.${v}`, v !== prop ? prop : tempSTATE.bdlMap[v])
           )
         ); //Reverse map the bundles
       Y(
         shims &&
-          _K(shims).forEach((id, i) => {
+          Object.keys(shims).forEach((id, i) => {
             var temp = shims[id]; //'temp' = tobeshim
             return (
               Y(e_(temp).string() === Ar && (temp = { REM: temp })) && //Merge shim, Normalize the structure
               Y(
                 (temp.exports || temp[_i]) &&
                   !temp[_xf] &&
-                  (temp[_xf] = STATE.makeShimExports(temp))
+                  (temp[_xf] = tempSTATE.makeShimExports(temp))
               ) &&
               (shim[id] = temp)
             );
@@ -528,7 +547,7 @@ export const configure = (
     },
     { shims, shim } = mend(c[_b], c[_s]);
   return (
-    Y(KeyValue(`CONFIG.${shim}`, shims ? shim : STATE.CONFIG.shim)) &&
+    Y(KeyValue(`CONFIG.${shim}`, shims ? shim : tempSTATE.CONFIG.shim)) &&
     Y(
       (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
         pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
@@ -542,15 +561,15 @@ export const configure = (
               .replace(/\.js$/, "")}`
           ); //normalize pkg name main thi ID pointer paths
       })
-    ) && //Update maps for "waiting to execute" modules in the STATE.dependencies.
+    ) && //Update maps for "waiting to execute" modules in the tempSTATE.dependencies.
     ((z) =>
       Y(
-        _K(z).forEach(
+        Object.keys(z).forEach(
           (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
             (z[id].map = makeModuleMap(id, null, true))
         )
-      ))(STATE.dependencies) && //When requir is STATE.defined, as a STATE.CONFIG object, before requir.js is loaded,
+      ))(tempSTATE.dependencies) && //When requir is tempSTATE.defined, as a tempSTATE.CONFIG object, before requir.js is loaded,
     (c.REM || c.cb) &&
-    STATE.requir(c.REM || [], c.cb)
+    tempSTATE.requir(c.REM || [], c.cb)
   );
 };
