@@ -13,12 +13,12 @@ var funcs = fun("./functions"),
   { default: functions, checkLoaded, modulehelp, reduceSTATE } = funcs;*/
 
 import { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } from ".";
-import Module from "./module.mjs";
+import Module from "./module.js";
 import functions, {
   checkLoaded,
   modulehelp,
   reduceSTATE
-} from "./functions.mjs";
+} from "./functions.js";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
@@ -70,7 +70,7 @@ export default function () {
       this
     ),
     NAME = arguments[0],
-    state = {
+    stat = {
       bdlMap: {},
       NAME,
       defQueue,
@@ -147,7 +147,7 @@ export default function () {
   return (
     //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
     checkLoaded(this.checkProto) && //thi param?
-    Y(_K(state).forEach((key) => (state[key] = state[key]))) &&
+    Y(_K(state).forEach((key) => (state[key] = stat[key]))) &&
     (state.makeRequire = (modMap, options) =>
       makeRequire(modMap, options, NAME)) &&
     KeyValue("requir", state.makeRequire()) &&
