@@ -37,23 +37,50 @@ export default function () {
     defQueue
       .sort((a, b) => b - a)
       .map((args, i) => args[0] === id && defQueue.splice(i, 1));
-  const { state, BUILD, makeModuleMap } = functions.bind(
+  const { tempSTATE, BUILD, makeModuleMap } = functions.bind(
       this,
       dependency,
       nextDef,
       () => defQueue.shift(),
       defQueue
     ),
+    set = {
+      bdlMap: {},
+      NAME: arguments[0],
+      defQueue,
+      defQueueMap: {},
+      makeModuleMap,
+      nextTick: BUILD.nextTick,
+      Module,
+      load: (id, url) => BUILD.load(tempSTATE, id, url),
+      execCb: (name, cb, args, exports) => cb.apply(exports, args),
+      onError,
+      CONFIG: tempSTATE.CONFIG ? tempSTATE.CONFIG : {},
+      unDE: tempSTATE.unDE ? tempSTATE.unDE : {},
+      enabledRegistry: tempSTATE.enabledRegistry
+        ? tempSTATE.enabledRegistry
+        : {},
+      urlFchd: tempSTATE.urlFchd ? tempSTATE.urlFchd : {}, //thi able's
+      defined: tempSTATE.defined ? tempSTATE.defined : {},
+      dependencies: tempSTATE.dependencies ? tempSTATE.dependencies : {}
+    },
     tkeGblQue = () =>
       (defineables.length
         ? Y(
             defineables.forEach((queueItem) => {
               var id = queueItem[0];
-              (T(id === _t) ? (state.defQueueMap[id] = true) : true) &&
+              (T(id === _t) ? (tempSTATE.defQueueMap[id] = true) : true) &&
                 defQueue.push(queueItem);
             })
           )
         : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
+    { getModule } = modulehelp(
+      e_,
+      reduceSTATE(["CONFIG", "urlFchd", "load"], "tempSTATE", tempSTATE),
+      reduceSTATE(["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
+      this.moduleProto,
+      this
+    ),
     { makeRequire, callGetModule, getGlobal } = functions.bind(
       this,
       dependency,
@@ -62,31 +89,8 @@ export default function () {
       defQueue,
       tkeGblQue
     ),
-    { getModule } = modulehelp(
-      e_,
-      reduceSTATE(["CONFIG", "urlFchd", "load"], "state", state),
-      reduceSTATE(["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
-      this.moduleProto,
-      this
-    ),
-    NAME = arguments[0],
     stat = {
-      bdlMap: {},
-      NAME,
-      defQueue,
-      defQueueMap: {},
-      makeModuleMap,
-      nextTick: BUILD.nextTick,
-      Module,
-      load: (id, url) => BUILD.load(state, id, url),
-      execCb: (name, cb, args, exports) => cb.apply(exports, args),
-      onError,
-      CONFIG: state.CONFIG ? state.CONFIG : {},
-      unDE: state.unDE ? state.unDE : {},
-      enabledRegistry: state.enabledRegistry ? state.enabledRegistry : {},
-      urlFchd: state.urlFchd ? state.urlFchd : {}, //thi able's
-      defined: state.defined ? state.defined : {},
-      dependencies: state.dependencies ? state.dependencies : {},
+      ...set,
       //configure,
       makeShimExports: (value) =>
         function () {
@@ -103,10 +107,10 @@ export default function () {
             );
           }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
       enable: (depMap) =>
-        e_(state.dependencies).yes(depMap.id) &&
-        state.dependencies[depMap.id] &&
+        e_(tempSTATE.dependencies).yes(depMap.id) &&
+        tempSTATE.dependencies[depMap.id] &&
         getModule(depMap).enable(),
-      //if "m" thi is in state.dependencies, parent's state when overridden in "optimizer" (Not shown).
+      //if "m" thi is in tempSTATE.dependencies, parent's tempSTATE when overridden in "optimizer" (Not shown).
       completeLoad: (tkn) => {
         var found, args; //method used "internally" by environment adapters script-load or a synchronous load call.
         for (tkeGblQue(); defQueue.length; ) {
@@ -121,18 +125,18 @@ export default function () {
                 : null) &&
             callGetModule(args);
         } //matched a define call in thi script
-        state.defQueueMap = {};
-        var m = ((d) => e_(d).yes(tkn) && d[tkn])(state.dependencies); // in case-/init-calls change the state.dependencies
-        if (!found && !e_(state.defined).yes(tkn) && m && !m.inited) {
-          var shim = e_(state.CONFIG.shim).yes(tkn)
-            ? state.CONFIG.shim[tkn]
+        tempSTATE.defQueueMap = {};
+        var m = ((d) => e_(d).yes(tkn) && d[tkn])(tempSTATE.dependencies); // in case-/init-calls change the tempSTATE.dependencies
+        if (!found && !e_(tempSTATE.defined).yes(tkn) && m && !m.inited) {
+          var shim = e_(tempSTATE.CONFIG.shim).yes(tkn)
+            ? tempSTATE.CONFIG.shim[tkn]
             : {};
           if (
-            state.CONFIG.enforceDefine &&
+            tempSTATE.CONFIG.enforceDefine &&
             (!shim.exports || !getGlobal(shim.exports))
           )
             return (
-              !hasPathFallback(tkn, state.CONFIG.paths) &&
+              !hasPathFallback(tkn, tempSTATE.CONFIG.paths) &&
               onError(
                 mk(["nodefine", "No define call for " + tkn, null, [tkn]])
               )
@@ -147,11 +151,11 @@ export default function () {
   return (
     //abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"
     checkLoaded(this.checkProto) && //thi param?
-    Y(_K(state).forEach((key) => (state[key] = stat[key]))) &&
-    (state.makeRequire = (modMap, options) =>
-      makeRequire(modMap, options, NAME)) &&
-    KeyValue("requir", state.makeRequire()) &&
-    SETSTATE(state) &&
-    state
+    Y(_K(tempSTATE).forEach((key) => (tempSTATE[key] = stat[key]))) &&
+    (tempSTATE.makeRequire = (modMap, options) =>
+      makeRequire(modMap, options, arguments[0])) &&
+    KeyValue("requir", tempSTATE.makeRequire()) &&
+    SETSTATE(tempSTATE) &&
+    tempSTATE
   );
 } //dependency
