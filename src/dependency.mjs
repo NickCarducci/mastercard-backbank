@@ -17,16 +17,16 @@ import functions, {
   iifeapp,
   isBrowser,
   mk,
-  modulehelp,
-  onError
+  rmvScrpt,
+  modulehelp
 } from "./functions";
 import {
   e_,
   hasPathFallback,
   reduceSTATE,
   KeyValue,
-  rmvScrpt,
-  SETSTATE
+  SETSTATE,
+  onError
 } from ".";
 var clrsec, watch;
 
