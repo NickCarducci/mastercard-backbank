@@ -1,4 +1,4 @@
-import { handlers } from ".";
+import { handlers } from "./functions";
 
 var _e = "error",
   _d = "defined",
