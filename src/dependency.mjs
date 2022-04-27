@@ -10,7 +10,7 @@ var home = fun("."),
     ? home
     : place;
 var funcs = fun("./Functions"),
-  { default: Functions, checkLoaded, modulehelp, reduceSTATE } = funcs;*/
+  { default: Functions, checkLoaded, modulehelp, reduce } = funcs;*/
 
 import Module from "./module";
 import Functions, {
@@ -20,14 +20,7 @@ import Functions, {
   rmvScrpt,
   modulehelp
 } from "./functions";
-import {
-  e_,
-  hasPathFallback,
-  reduceSTATE,
-  KeyValue,
-  SETSTATE,
-  onError
-} from ".";
+import { e_, hasPathFallback, reduce, KeyValue, SETSTATE, onError } from ".";
 var clrsec, watch;
 
 export function checkLoaded(/*parentThis = arguments[0]*/) {
@@ -184,13 +177,13 @@ export default function () {
           )
         : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
     reduced = {
-      dependency: reduceSTATE.call(
+      dependency: reduce.call(
         this,
         ["CONFIG", "urlFchd", "load"],
         "dependency",
         dependency
       ),
-      build: reduceSTATE.call(
+      build: reduce.call(
         this,
         ["onResourceLoad", "exec", "onError"],
         "BUILD",
