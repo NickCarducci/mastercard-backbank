@@ -12,18 +12,20 @@ var home = fun("."),
 var funcs = fun("./functions"),
   { default: functions, checkLoaded, modulehelp, reduceSTATE } = funcs;*/
 
-import {
+import Module from "./module.mjs";
+import functions, {
   hasPathFallback,
+  iifeapp,
+  isBrowser,
   KeyValue,
   mk,
-  e_,
-  SETSTATE,
+  modulehelp,
   onError,
-  iifeapp,
-  isBrowser
-} from ".";
-import Module from "./module.mjs";
-import functions, { modulehelp, reduceSTATE, rmvScrpt } from "./functions.mjs";
+  reduceSTATE,
+  rmvScrpt,
+  SETSTATE
+} from "./functions.mjs";
+import { e_ } from "./index.mjs";
 var clrsec, watch;
 
 export function checkLoaded(/*parentThis = arguments[0]*/) {
