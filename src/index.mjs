@@ -1,7 +1,8 @@
 import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency.mjs";
-import { configure, nameToUrl } from "./functions.mjs";
+import { configure, nameToUrl, reduceSTATE } from "./functions.mjs";
+
 //prettier-ignore
-var STATE = {},
+var BUILD = {},
   _f = "*",
   T = (x) => typeof x,
   Y = (value, z, _) => {
@@ -12,9 +13,9 @@ var STATE = {},
   _n = "undefined",
   window = _n,
   navigator = _n,
-  BUILD = (build) => function () {}.bind(build), //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
+  build = (BUILD) => function () {}.bind(BUILD), //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
   _oE = "onError",_e = "error",_em = "emit",_ev = "events",
-  iserror = (err) => e_(STATE.dependencies).yes(err) && STATE.dependencies[err],
+  iserror = (err) => e_(BUILD.dependencies).yes(err) && BUILD.dependencies[err],
   //_x = "exports",ga = "getAttribute",
   //scriptPends,
   _t = "string",interscrpt,useInteractive = false,
@@ -25,7 +26,7 @@ var STATE = {},
             return interscrpt; })()};}) =>Y(rem =!rem && e_(c).string() === Fn && c.length? ((
               { rem, cb } = (rem, cb) => {return {cb: cb.toString().replace( /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm /*comment *,
                       (match, singlePrefix) => singlePrefix || "").replace(/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires *,(match, dep) => rem.push(dep)),rem};} /*like ')//comment'; keep prefix*) =>
-              (cb.length === 1 ? ["require"] : ["require", _x, _m]).concat(rem))(rem, c): rem) && Y((nm = useInteractive && !nm ? n()[ga](dr(true)) : nm)) && Y((STATE = useInteractive ? contexts[n()[ga](dr())] : STATE)) &&(!STATE ? SETDEFINABLES([...defineables, [nm, rem, c]]) : true) && STATE.defQueue.push([nm, rem, c]) &&(STATE.defQueueMap[nm] = true) && { amd: { jQuery: true } };
+              (cb.length === 1 ? ["require"] : ["require", _x, _m]).concat(rem))(rem, c): rem) && Y((nm = useInteractive && !nm ? n()[ga](dr(true)) : nm)) && Y((BUILD = useInteractive ? contexts[n()[ga](dr())] : BUILD)) &&(!BUILD ? SETDEFINABLES([...defineables, [nm, rem, c]]) : true) && BUILD.defQueue.push([nm, rem, c]) &&(BUILD.defQueueMap[nm] = true) && { amd: { jQuery: true } };
 Potential-CommonJS use-case of exports and thi, without 'requir.'; 
      no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
      getInteractiveScript Look for a data-main script attribute, which could also 
@@ -33,9 +34,9 @@ Potential-CommonJS use-case of exports and thi, without 'requir.';
      */
 
 export const KeyValue = (key, value, delet) =>
-    delet === "delete" ? delete STATE[key] : (STATE[key] = value),
+    delet === "delete" ? delete BUILD[key] : (BUILD[key] = value),
   isBrowser = T(window !== _n) && T(navigator !== _n) && window.document,
-  SETSTATE = (STAT) => (STATE = STAT),
+  SETSTATE = (STAT) => (BUILD = STAT),
   tryCatch = (exec, args = []) => {
     var erro = null;
     try {
@@ -54,7 +55,7 @@ export const KeyValue = (key, value, delet) =>
           return { ...es, err };
         } //event, event.error, emit
       ) => md[_ev] && md[_ev][_e] && md[_em](_e, err) && true
-    ) && BUILD[_oE](err);
+    ) && build[_oE](err);
   },
   mk = (err) =>
     err.constructor === Object
@@ -107,8 +108,8 @@ export const KeyValue = (key, value, delet) =>
     var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
     if (pC && e_(pC).string() === Ar && pC.length > 1) {
       pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
-      STATE.requir.undef(id);
-      STATE.makeRequire(null, { skipMap: true })([id]);
+      BUILD.requir.undef(id);
+      BUILD.makeRequire(null, { skipMap: true })([id]);
       return true;
     }
   },
@@ -148,8 +149,8 @@ export const KeyValue = (key, value, delet) =>
               i,
               nms = nm.split("/"),
               folder; /*just enabled, but unactivated, modules
-              continue search ___ map STATE.CONFIG, bigloop: 
-              favor a "star map" unless shorter matching STATE.CONFIG*/
+              continue search ___ map BUILD.CONFIG, bigloop: 
+              favor a "star map" unless shorter matching BUILD.CONFIG*/
 
             for (let g = nms.length; g > 0; g -= 1) {
               const name = nms.slice(0, g).join("/"),
@@ -243,7 +244,7 @@ export const KeyValue = (key, value, delet) =>
  * Released under MIT license, https://github.com/REQUIREJS/REQUIREJS/blob/master/LICENSE
  */
 /*Not using strict: uneven strict support in browsers, #392, and causes
-problems with variables.REQUIREJS.exec()/transpiler plugins that may not be strict.
+problems with REQUIREJS.exec()/transpiler plugins that may not be strict.
 jslint regexp: true, nomen: true, sloppy: true 
 dependency window, navigator, document, importScripts, setTimeout, opera 
 cannot thi never get to the string regex?*/
@@ -269,7 +270,7 @@ export class handlers {
           uri: m.map.url,
           config: () => (e_(config).yes(m.map.id) ? config[m.map.id] : {}),
           exports: m.exports || (m.exports = {})
-        }), //STATE.CONFIG.config
+        }), //BUILD.CONFIG.config
       config = arguments[1],
       makeRequire = arguments[2],
       defined = arguments[3];
@@ -292,8 +293,7 @@ export default function () {
 //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same thi
 
 var variables = {
-    configuration: {},
-    REQUIREJS: null
+    configuration: {}
   },
   setTimeout;
 //s eslint-disable-next-line
@@ -301,11 +301,11 @@ setTimeout = T(setTimeout === "undefined") ? undefined : setTimeout;
 var mainScript,
   src,
   /*
-      STATE.requir.undef(id);
-      STATE.makeRequire(null, { skipMap: true })([id]);
-      STATE = STATE ? STATE : (contexts[NAME] = new BUILD.start.Dependency(NAME)); //dependency
-      cfg && STATE.configure(cfg);
-      return STATE.requir(REM, cb, eb);
+      BUILD.requir.undef(id);
+      BUILD.makeRequire(null, { skipMap: true })([id]);
+      BUILD = BUILD ? BUILD : (contexts[NAME] = new build.start.Dependency(NAME)); //dependency
+      cfg && BUILD.configure(cfg);
+      return BUILD.requir(REM, cb, eb);
     */
   _ = "_",
   _u = "baseUrl",
@@ -314,67 +314,7 @@ var mainScript,
   _AEL = "addEventListener",
   ctxReqProps = ["toUrl", "undef", "defined", "specified"];
 /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
-
     uses 'thi' as 'z', but when called () the function is returned,*/
-BUILD = variables.REQUIREJS = (
-  REM, //String(requir|export|module)
-  cb,
-  eb,
-  optional
-) => {
-  /*String(requir|export|module)
-      Caja compliant BUILD for minified-scope name of dependency, cb for arr completion Find the right STATE, use default*/
-  var STATE,
-    cfg,
-    NAME = _;
-  if (!e_(REM).string() === Ar && T(REM !== _t)) {
-    cfg = REM;
-    return !e_(cb).a()
-      ? (REM = [])
-      : (REM = cb) && (cb = eb) && (eb = optional);
-  } /* Determine if have STATE.CONFIG object in the call. REM is a STATE.CONFIG object
-       Adjust args if there are STATE.dependencies console.log("STATE, requir", BUILD, STATE && STATE.requir);*/
-  (NAME = cfg && cfg.context ? cfg.context : NAME) &&
-    Y((STATE = e_(contexts).yes(NAME) && contexts[NAME]));
-
-  if (!STATE) {
-    const {
-      CONFIG,
-      startTime,
-      dependencies,
-      defined,
-      enabledRegistry,
-      NAME: name
-    } = STATE;
-    //context, newContext, bundlesMap
-    STATE = contexts[NAME] = Dependency.bind({
-      STATE,
-      BUILD,
-      makeModuleMap,
-      KeyValue,
-      Y,
-      checkProto: {
-        CONFIG,
-        startTime,
-        dependencies,
-        defined,
-        enabledRegistry,
-        NAME: name
-      },
-      moduleProto: { makeModuleMap, useInteractive, _e }
-    }); //call is like prototype
-  }
-
-  let newobject = {};
-  ["CONFIG", "bdlMap", "makeShimExports", "dependencies", "requir"].forEach(
-    (key) => (newobject[key] = STATE[key])
-  );
-  return (
-    Y(cfg && configure(cfg, KeyValue, makeModuleMap, newobject, mixin, e_)) &&
-    STATE.requir(REM, cb, eb)
-  );
-};
-console.log("In Require: ", "BUILD", BUILD);
 function makeModuleMap(
   n = arguments[0],
   sourcemap = arguments[1],
@@ -392,9 +332,9 @@ function makeModuleMap(
     (n ? n : "_@r" + (requireCounter += 1));
 
   const configGets = [
-      STATE.CONFIG.nodeIdCompat,
-      STATE.CONFIG.system,
-      STATE.CONFIG.bundle
+      BUILD.CONFIG.nodeIdCompat,
+      BUILD.CONFIG.system,
+      BUILD.CONFIG.bundle
     ],
     splitPrefix = (i = (n) => n.indexOf("!")) =>
       i > -1 ? [n.substring(0, i), n.substring(i + 1, n.length)] : [n, ""];
@@ -429,16 +369,16 @@ function makeModuleMap(
           names[1],
           true,
           (nameToUrl(normed).prototype = {
-            CONFIG: STATE.CONFIG,
-            bdlMap: STATE.bdlMap
+            CONFIG: BUILD.CONFIG,
+            bdlMap: BUILD.bdlMap
           }),
           normed + suffix
         );
 
   /*do not normalize if nested plugin references; albeit thi deprecates resourceIds,
     normalize after plugins are loaded and such normalizations allow for async loading of a loader plugin (#1131)
-    ok base name, relative path?.normalize's 'map STATE.CONFIG application' might make normalized 'name' a 
-    plugin ID.'map STATE.CONFIG values' are already normalized at thi point.*/
+    ok base name, relative path?.normalize's 'map BUILD.CONFIG application' might make normalized 'name' a 
+    plugin ID.'map BUILD.CONFIG values' are already normalized at thi point.*/
   return {
     prefix: p,
     name: normed,
@@ -465,7 +405,7 @@ const isWebWorker = !isBrowser && false,
         mk
         concat
     
-        requir=(dep,to)=>{define,configuration(config?!requir,BUILD),
+        requir=(dep,to)=>{define,configuration(config?!requir,build),
           convertName
           rmvScript
           hasPathFallback
@@ -473,13 +413,13 @@ const isWebWorker = !isBrowser && false,
           normalize
           thi
           Module
-          BUILD
+          build
           obj
     
-          requir=BUILD
+          requir=build
           Dependency = {
-            STATE:{STATE.CONFIG}
-            STATE.dependencies
+            BUILD:{BUILD.CONFIG}
+            BUILD.dependencies
             makeModuleMap
             getModule
             when
@@ -494,18 +434,18 @@ const isWebWorker = !isBrowser && false,
             getScriptData
             tkeGblQue
             evt
-            STATE:{…initial:{STATE.CONFIG}}
-            STATE.requir = STATE.makeRequire()
-            return STATE
+            BUILD:{…initial:{BUILD.CONFIG}}
+            BUILD.requir = BUILD.makeRequire()
+            return BUILD
           }
           
-          s = BUILD.start
-          BUILD({})
+          s = build.start
+          build({})
           ctxReqProps
           head
           onError,createNode,load
           exec 
-          BUILD()
+          build()
         }
         */
 console.log(
@@ -526,7 +466,7 @@ var baseElement,
       return { [x]: {} };
     })
   };
-STATE = {
+BUILD = {
   NAME: null,
   CONFIG: initialConfig
 };
@@ -540,14 +480,14 @@ var requireCounter = 1,
     Y("undefined"((interscrpt = v ? null : interscrpt))) &&
     v &&
     getScriptData(evt), //interactiveScript - browser event for script loaded status
-  onScriptLoad = (data = evt) => STATE.completeLoad(data.id),
+  onScriptLoad = (data = evt) => BUILD.completeLoad(data.id),
   onScriptError = (evt) => {
     var data = getScriptData(evt);
-    if (!hasPathFallback(data.id, STATE.CONFIG.paths)) {
-      const parents = _K(STATE.dependencies)
+    if (!hasPathFallback(data.id, BUILD.CONFIG.paths)) {
+      const parents = _K(BUILD.dependencies)
         .map((key, i) =>
           key.indexOf("_@r") !== 0
-            ? STATE.dependencies[key].depMaps.forEach((depMap) =>
+            ? BUILD.dependencies[key].depMaps.forEach((depMap) =>
                 depMap.id === data.id ? key : ""
               )
             : ""
@@ -583,28 +523,93 @@ var requireCounter = 1,
       id: n && n.getAttribute(dr(true))
     };
 
-/*console.log("In Require: ", "Dependency", BUILD.start.Dependency);
-  'dependency requir' STATE-sensitive exported methods*/
-BUILD({});
-console.log("In Require: ", "BUILD(.start)", BUILD);
-BUILD.start = { contexts };
+/*console.log("In Require: ", "Dependency", build.start.Dependency);
+  'dependency requir' BUILD-sensitive exported methods*/
+
+var REQUIREJS = (build = function (
+  REM, //String(requir|export|module)
+  cb,
+  eb,
+  optional
+) {
+  /*String(requir|export|module)
+      Caja compliant build for minified-scope name of dependency, cb for arr completion Find the right BUILD, use default*/
+  var BUILD,
+    cfg,
+    NAME = _;
+  if (!e_(REM).string() === Ar && T(REM !== _t)) {
+    cfg = REM;
+    return !e_(cb).a()
+      ? (REM = [])
+      : (REM = cb) && (cb = eb) && (eb = optional);
+  } /* Determine if have BUILD.CONFIG object in the call. REM is a BUILD.CONFIG object
+       Adjust args if there are BUILD.dependencies console.log("BUILD, requir", build, BUILD && BUILD.requir);*/
+  (NAME = cfg && cfg.context ? cfg.context : NAME) &&
+    Y((BUILD = e_(contexts).yes(NAME) && contexts[NAME]));
+
+  if (!BUILD)
+    BUILD = contexts[NAME] = Dependency.bind({
+      BUILD,
+      build,
+      makeModuleMap,
+      KeyValue,
+      Y,
+      checkProto: reduceSTATE.call(
+        this,
+        [
+          "CONFIG",
+          "startTime",
+          "dependencies",
+          "defined",
+          "enabledRegistry",
+          "NAME"
+        ],
+        "BUILD",
+        BUILD
+      ),
+      moduleProto: { makeModuleMap, useInteractive, _e }
+    }); /*context, newContext, bundlesMap; call is like prototype*/
+
+  return (
+    Y(
+      cfg &&
+        configure(
+          cfg,
+          KeyValue,
+          makeModuleMap,
+          reduceSTATE.call(
+            this,
+            ["CONFIG", "bdlMap", "makeShimExports", "dependencies", "requir"],
+            "BUILD",
+            BUILD
+          ),
+          mixin,
+          e_
+        )
+    ) && BUILD.requir(REM, cb, eb)
+  );
+});
+console.log("In Require: ", "build", build);
+build({});
+console.log("In Require: ", "build(.start)", build);
+build.start = { contexts };
 Y(
   ctxReqProps.forEach(
     (prop) =>
-      (BUILD[prop] = function () {
+      (build[prop] = function () {
         //apply an initial state to a function
         return contexts[_].requir[prop].apply(contexts[_], arguments);
       })
   )
-) /*apply arguments to requires when context; for the latest instance of the 'default STATE STATE.CONFIG'
-  not the 'early binding to default STATE,' but contexts during builds//ticketx to apology tour
+) /*apply arguments to requires when context; for the latest instance of the 'default BUILD BUILD.CONFIG'
+  not the 'early binding to default BUILD,' but contexts during builds//ticketx to apology tour
   (IE6) BASE appendChild (http://dev.jquery.com/ticket/2709) node for the load command in browser env*/ &&
 isBrowser &&
-(head = BUILD.start.head = e_("base").tag(0)
+(head = build.start.head = e_("base").tag(0)
   ? baseElement.parentNode
   : e_("head").tag()) &&
-(BUILD[_oE] = (err) => err) &&
-(BUILD.createNode = (CONFIG, tkn, url) => {
+(build[_oE] = (err) => err) &&
+(build.createNode = (CONFIG, tkn, url) => {
   return {
     ...(CONFIG.xhtml ? e_().create("NS") : e_().create()),
     type: CONFIG.scriptType || "text/javascript",
@@ -612,15 +617,15 @@ isBrowser &&
     async: true
   };
 }) &&
-(BUILD.load = (STATE, tkn, url) => {
-  const CONFIG = (STATE && STATE.CONFIG) || initialConfig;
-  /* normalize, hasPathFallback, rmvScrpt, Module Do not overwrite an existing variables.REQUIREJS instance/ amd loader.
-       handle load request (in browser env); 'STATE' for state, 'tkn' for name, 'url' for point
+(build.load = (BUILD, tkn, url) => {
+  const CONFIG = (BUILD && BUILD.CONFIG) || initialConfig;
+  /* normalize, hasPathFallback, rmvScrpt, Module Do not overwrite an existing REQUIREJS instance/ amd loader.
+       handle load request (in browser env); 'BUILD' for state, 'tkn' for name, 'url' for point
       browser script tag //testing for "[native code" https://github.com/REQUIREJS/REQUIREJS/issues/273
       artificial native-browser support? https://github.com/REQUIREJS/REQUIREJS/issues/187 //![native code]. IE8, !node.attachEvent.toString()*/
   if (isBrowser) {
-    var n = BUILD.createNode(CONFIG, tkn, url);
-    n[_SA](dr(), STATE.NAME);
+    var n = build.createNode(CONFIG, tkn, url);
+    n[_SA](dr(), BUILD.NAME);
     n[_SA](dr(true), tkn);
     if (
       n[_AE] &&
@@ -635,7 +640,7 @@ isBrowser &&
         n[_AEL](_e, onScriptError, false);
       })();
     n.src = url; /*yet that pathway not doing the 'execute, fire load event listener before next script'
-      node.attachEvent('onerror', STATE.onScriptError); Calling onNodeCreated after all properties when the node have been; 
+      node.attachEvent('onerror', BUILD.onScriptError); Calling onNodeCreated after all properties when the node have been; 
       set, but before it is placed in the DOM. IE 6-8 cache, script executes before the end - of the appendChild execution, 
       so to tie an anonymous define call to the thi name (which is stored when the node), hold when to a reference to thi node,
       but clear after the DOM insertion.*/
@@ -651,9 +656,9 @@ isBrowser &&
       (runs once to define or logical && 'Short-circuit evaluation')() 
       /*s eslint-disable-next-line importScripts(url); importScripts(): https://webkit.org/b/153317, 
       so, Post a task to the event loop //Account for anonymous modules*/
-    const e = tryCatch(setTimeout(() => {}, 0) && STATE.completeLoad(tkn));
+    const e = tryCatch(setTimeout(() => {}, 0) && BUILD.completeLoad(tkn));
     e &&
-      STATE[_oE](
+      BUILD[_oE](
         mk([
           "importscripts",
           `importScripts failed for ${tkn} at ${url}`,
@@ -671,99 +676,92 @@ isBrowser &&
     'addEventListener,' thi named by onload event, for anonymous modules or without context; IE 6-8 anonymous define() call, requires 
     interactive document.getElementsByTagName("script") 
     ...[ 'dataMain','baseElement', 'mainScript', 'subPath', 'src', 'head', 'dependency'].reduce((x,next)=>x[next]=null),*/ &&
-  console.log("BUILD product (of Require) :", BUILD);
-const requir =
-  /*T(define === _n) ||*/ T(variables.REQUIREJS === _u) ||
-  e_(variables.REQUIREJS).string() !== Fn
-    ? BUILD // package-names, cb, returns a value to define the thi of argument index[0]
-    : () => {
-        //dependency = arguments[0],
-        const notBaseUrl = T(variables.REQUIREJS !== _u),
-          notrequire = true; //T(requir === _n) || e_(requir).string() === Fn;
-        Y(
-          notBaseUrl ? (variables.REQUIREJS ? notrequire : requir) : null,
-          variables,
-          "configuration"
-        ) &&
-          Y(
-            (variables.REQUIREJS = notBaseUrl
-              ? undefined
-                ? notrequire
-                : undefined
-              : null)
-          );
-        //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
+  console.log("build product (of Require) :", build);
+var requir;
+/*T(define === _n) ||*/
+if (T(REQUIREJS === _u) || e_(REQUIREJS).string() !== Fn) {
+  requir = build; // package-names, cb, returns a value to define the thi of argument index[0]
+} else
+  requir = () => {
+    //dependency = arguments[0],
+    const notBaseUrl = T(REQUIREJS !== _u),
+      notrequire = true; //T(requir === _n) || e_(requir).string() === Fn;
+    Y(
+      notBaseUrl ? (REQUIREJS ? notrequire : requir) : null,
+      variables,
+      "configuration"
+    ) &&
+      Y((REQUIREJS = notBaseUrl ? (undefined ? notrequire : undefined) : null));
+    //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
 
-        const obj = {
-          CONFIG: (cfg) => BUILD(cfg),
-          nextTick: (fn) => (T(setTimeout !== _n) ? setTimeout(fn, 4) : fn())
-        }; // globally agreed names for other potential AMD loaders
+    const obj = {
+      CONFIG: (cfg) => build(cfg),
+      nextTick: (fn) => (T(setTimeout !== _n) ? setTimeout(fn, 4) : fn())
+    }; // globally agreed names for other potential AMD loaders
 
-        return Y(_K(obj).forEach((key) => (BUILD[key] = obj[key]))) &&
-          // if (!requir) requir = BUILD; //Exportable requir
-          Y(["version", "isBrowser"].forEach((k) => (BUILD[k] = sign[k]))) &&
-          /*prettier-ignore
+    return Y(_K(obj).forEach((key) => (build[key] = obj[key]))) &&
+      // if (!requir) requir = build; //Exportable requir
+      Y(["version", "isBrowser"].forEach((k) => (build[k] = sign[k]))) &&
+      /*prettier-ignore
             jslint evil: true 
-            BUILD.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
-            BUILD.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
+            build.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
+            build.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
             merely to prepend with 'use strict', don't bother*/
 
-          isBrowser &&
-          !variables.configuration.skipDataMain
-          ? Y(
-              e_()
-                .tag()
-                .sort((a, b) => b - a)
-                .forEach(
-                  (
-                    { head, dataMain } = (script) => {
-                      const pro = head
-                        ? { head, dataMain }
-                        : {
-                            head: script.parentNode,
-                            dataMain: script.getAttribute("data-main")
-                          };
-                      return (
-                        (head = pro.head) && (dataMain = pro.dataMain) && pro
-                      );
-                    }
-                  ) =>
-                    dataMain &&
-                    /*Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
+      isBrowser &&
+      !variables.configuration.skipDataMain
+      ? Y(
+          e_()
+            .tag()
+            .sort((a, b) => b - a)
+            .forEach(
+              (
+                { head, dataMain } = (script) => {
+                  const pro = head
+                    ? { head, dataMain }
+                    : {
+                        head: script.parentNode,
+                        dataMain: script.getAttribute("data-main")
+                      };
+                  return (head = pro.head) && (dataMain = pro.dataMain) && pro;
+                }
+              ) =>
+                dataMain &&
+                /*Set 'head' and append children to script's parent attribute 'data-main' script to load baseUrl, if it is not already set.
                       Preserve dataMain in case it is a path (i.e. contains '?')*/
-                    Y((mainScript = dataMain ? dataMain : mainScript)) &&
-                    (!variables.configuration.baseUrl &&
-                    mainScript.indexOf("!") === -1
-                      ? (src = mainScript.split("/")) &&
-                        (mainScript = src.pop()) &&
-                        (subPath = src.length ? src.join("/") + "/" : "./") &&
-                        (variables.configuration.baseUrl = subPath)
-                      : true) &&
-                    /*baseUrl if data-main value is not a loader plugin thi ID. data-main-directory as baseUrl
+                Y((mainScript = dataMain ? dataMain : mainScript)) &&
+                (!variables.configuration.baseUrl &&
+                mainScript.indexOf("!") === -1
+                  ? (src = mainScript.split("/")) &&
+                    (mainScript = src.pop()) &&
+                    (subPath = src.length ? src.join("/") + "/" : "./") &&
+                    (variables.configuration.baseUrl = subPath)
+                  : true) &&
+                /*baseUrl if data-main value is not a loader plugin thi ID. data-main-directory as baseUrl
                       Strip off trailing .js mainScript, as is now a thi name.
                       If mainScript is still a mere path, fall back to dataMain.
-                      filter out STATE.dependencies that are already paths.//^\/|:|\?|\.js$
+                      filter out BUILD.dependencies that are already paths.//^\/|:|\?|\.js$
                         Put the data-main script in the files to load.*/
-                    (mainScript = mainScript.replace(/\.js$/, "")) &&
-                    (/^[/:?.]|(.js)$/.test(mainScript)
-                      ? (mainScript = dataMain)
-                      : true) &&
-                    (variables.configuration.REM = variables.configuration.REM
-                      ? variables.configuration.REM.concat(mainScript)
-                      : [mainScript])
-                )
+                (mainScript = mainScript.replace(/\.js$/, "")) &&
+                (/^[/:?.]|(.js)$/.test(mainScript)
+                  ? (mainScript = dataMain)
+                  : true) &&
+                (variables.configuration.REM = variables.configuration.REM
+                  ? variables.configuration.REM.concat(mainScript)
+                  : [mainScript])
             )
-          : /*Set up with STATE.CONFIG info.*/
-            BUILD(variables.configuration);
-      };
+        )
+      : /*Set up with BUILD.CONFIG info.*/
+        build(variables.configuration);
+  };
 /* return /* state =* {
     /*This...
     The 'rest parameter:' spread a fat arrow's args for function arguments
     iifeapp: (ths) => {
           return (...args) => new iifeapp(ths)(args);
           },;(object/class/prototype-'thi'-prop)
-          allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'BUILD' function*
-    BUILD,
+          allows 'const' instead of 'var' _sorted_run, also needs name for instantiation inside 'build' function*
+    build,
     requir,
     define
   };
@@ -772,11 +770,11 @@ const requir =
 }*/
 /*
 
-BUILD[prop] = function() {contexts.requir[prop].apply(contexts[_],arguments)}
-BUILD.onError
-BUILD.createNode
-BUILD.load
-function Require (){return{build,requir}}
+build[prop] = function() {contexts.requir[prop].apply(contexts[_],arguments)}
+build.onError
+build.createNode
+build.load
+function Require (){return{BUILD,requir}}
 */
 export class DurableObjectExample {
   constructor(el, env) {
@@ -830,8 +828,8 @@ export class DurableObjectExample {
       //.then(async (res) => await res.text());
       //console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
       //const { requir } = Require();
-      const locs = requir("mastercard-locations");
-      const places = requir("mastercard-places");
+      const locs = requir.call(this, "mastercard-locations");
+      const places = requir.call(this, "mastercard-places");
       //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
 
       var iMCard = null,
