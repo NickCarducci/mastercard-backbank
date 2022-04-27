@@ -77,8 +77,13 @@ const Y = (value, z, _) => {
   if (z && _) z[_] = value;
   return true;
 }; /*seratimNull*/
-export const modulehelp = (e_, tempSTATE, BUILD, moduleProto, Dependency) => {
-  const {
+export function modulehelp(a = arguments) {
+  const e_ = a[0],
+    tempSTATE = a[1],
+    BUILD = a[2],
+    moduleProto = a[3],
+    Dependency = a[4],
+    {
       Module,
       CONFIG: config = (CONFIG) => CONFIG.config,
       urlFchd,
@@ -178,7 +183,7 @@ export const modulehelp = (e_, tempSTATE, BUILD, moduleProto, Dependency) => {
           );
     }
   };
-};
+}
 
 var clrsec,
   watch,
