@@ -179,8 +179,8 @@ export const mk = (err) =>
       )
     );
   };
-export function reduceSTATE(arr, where, tempSTATE) {
-  //console.log("reduceSTATE", arr, where, tempSTATE);
+export function reduce(arr, where, tempSTATE) {
+  //console.log("reduce", arr, where, tempSTATE);
   try {
     var newobject = {};
     Object.keys(tempSTATE).forEach(
@@ -246,7 +246,6 @@ export function modulehelp(a = arguments) {
     tempSTATE = a[1],
     BUILD = a[2],
     moduleProto = a[3],
-    Dependency = a[4],
     {
       Module,
       CONFIG: config = (CONFIG) => CONFIG.config,
@@ -314,6 +313,7 @@ export function modulehelp(a = arguments) {
           "defQueueMap"
         ],
         { makeModuleMap, useInteractive, _e } = moduleProto;
+      const Dependency = this;
       return m
         ? m
         : KeyValue(
@@ -333,7 +333,7 @@ export function modulehelp(a = arguments) {
                 Dependency
               ).getModule,
               onError,
-              ...reduceSTATE.call(this, matches, "tempSTATE", tempSTATE),
+              ...reduce.call(this, matches, "tempSTATE", tempSTATE),
               manage,
               mold,
               loadd,
@@ -395,33 +395,25 @@ export default function (
     e_,
     checkProto,
     moduleProto,
-    Dependency
-  } = this; /*mostly makerequire; Called from Dependency*/
+    Dependency: thisDep
+  } = this; /*mostly makerequire; Called from Dependency
+  when called, 'this' already is populated (same thing: 'prototype' if bind for new function)
+  */
 
-  const { getModule, clrRegstr } = modulehelp(
+  const { getModule, clrRegstr } = modulehelp.call(
+      thisDep,
       e_,
-      reduceSTATE.call(
-        this,
-        ["CONFIG", "urlFchd", "load"],
-        "tempSTATE",
-        tempSTATE
-      ),
-      reduceSTATE.call(
-        this,
-        ["onResourceLoad", "exec", "onError"],
-        "BUILD",
-        BUILD
-      ),
-      moduleProto,
-      Dependency
+      reduce.call(this, ["CONFIG", "urlFchd", "load"], "tempSTATE", tempSTATE),
+      reduce.call(this, ["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
+      moduleProto
     ),
     callGetModule = (args) =>
       !e_(tempSTATE.defined).yes(args[0]) &&
       getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]);
   return {
-    tempSTATE,
-    BUILD,
-    makeModuleMap,
+    //tempSTATE,
+    //BUILD,
+    //makeModuleMap,
     callGetModule,
     getGlobal: (value) =>
       !value
@@ -553,7 +545,7 @@ export default function (
                 ["nodeIdCompat", "system", "bundle"].includes(key) &&
                 (newobject[key] = tempSTATE.CONFIG[key])
             );
-            //reduceSTATE(["nodeIdCompat", "system", "bundle"],null,tempSTATE.CONFIG)
+            //reduce(["nodeIdCompat", "system", "bundle"],null,tempSTATE.CONFIG)
             //also, "map" for outward facing code...//also, "packages" ""
 
             const id = modMap && modMap.id;
