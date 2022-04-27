@@ -20,7 +20,7 @@ import Functions, {
   rmvScrpt,
   modulehelp
 } from "./functions";
-import { e_, hasPathFallback, reduce, KeyValue, SETSTATE, onError } from ".";
+import { e_, hasPathFallback, KeyValue, SETSTATE, onError } from ".";
 var clrsec, watch;
 
 export function checkLoaded(/*parentThis = arguments[0]*/) {
@@ -140,13 +140,26 @@ export default function () {
       defQueue
         .sort((a, b) => b - a)
         .map((args, i) => args[0] === id && defQueue.splice(i, 1)),
-    { dependency, BUILD, makeModuleMap } = Functions.bind(
-      this,
-      config,
-      nextDef,
-      () => defQueue.shift(),
-      defQueue
-    ),
+    tkeGblQue = () =>
+      (defineables.length
+        ? Y(
+            defineables.forEach((queueItem) => {
+              var id = queueItem[0];
+              (T(id === _t) ? (dependency.defQueueMap[id] = true) : true) &&
+                defQueue.push(queueItem);
+            })
+          )
+        : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
+    args = [this, config, nextDef, () => defQueue.shift(), defQueue, tkeGblQue],
+    {
+      dependency,
+      BUILD,
+      makeModuleMap,
+      //build args output
+      makeRequire,
+      callGetModule,
+      getGlobal
+    } = Functions.bind(...args),
     os = (o) => (o.constructor === Object ? dependency[o] : {}),
     set = {
       bdlMap: {},
@@ -166,44 +179,27 @@ export default function () {
       defined: os("defined"),
       dependencies: os("dependencies")
     },
-    tkeGblQue = () =>
-      (defineables.length
-        ? Y(
-            defineables.forEach((queueItem) => {
-              var id = queueItem[0];
-              (T(id === _t) ? (dependency.defQueueMap[id] = true) : true) &&
-                defQueue.push(queueItem);
-            })
-          )
-        : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
-    reduced = {
-      dependency: reduce.call(
-        this,
-        ["CONFIG", "urlFchd", "load"],
-        "dependency",
-        dependency
-      ),
-      build: reduce.call(
-        this,
-        ["onResourceLoad", "exec", "onError"],
-        "BUILD",
-        BUILD
-      )
-    },
-    { getModule } = modulehelp(
-      e_,
-      reduced.dependency,
-      reduced.build,
-      this.moduleProto,
-      this
-    ),
-    { makeRequire, callGetModule, getGlobal } = Functions.bind(
+    { getModule } = modulehelp.call(
       this,
-      config,
-      nextDef,
-      () => defQueue.shift(),
-      defQueue,
-      tkeGblQue
+      e_,
+      ...[
+        //...args spread (naming for documentation-comment sugar field-value)
+        ...{
+          //...as independent objects copy spread
+          dependency: reduce.call(
+            this,
+            ["CONFIG", "urlFchd", "load"],
+            "dependency",
+            dependency
+          ),
+          build: reduce.call(
+            this,
+            ["onResourceLoad", "exec", "onError"],
+            "BUILD",
+            BUILD
+          )
+        }
+      ]
     ),
     stat = {
       ...set,
@@ -229,7 +225,7 @@ export default function () {
       /*if "m" thi is in dependency.dependencies, parent's dependency when overridden in "optimizer" (Not shown).
       method used "internally" by environment adapters script-load or a synchronous load call.
       anonymous thi bound to name already  thi is another anon thi waiting for its completeLoad to fire.*/
-      completeLoad: (tkn) => {
+      completeLoad: (scriptId) => {
         var found, args;
         for (tkeGblQue(); defQueue.length; ) {
           defQueue.shift();
@@ -237,31 +233,38 @@ export default function () {
           (found = true) &&
             (args = args[0] =
               args[0] === null
-                ? tkn
-                : args[0] === tkn
+                ? scriptId
+                : args[0] === scriptId
                 ? (found = true)
                 : null) &&
             callGetModule(args);
         } /*matched a define call in thi script
         in case-/init-calls change the dependency.dependencies*/
         dependency.defQueueMap = {};
-        var m = ((d) => e_(d).yes(tkn) && d[tkn])(dependency.dependencies);
-        if (!found && !e_(dependency.defined).yes(tkn) && m && !m.inited) {
-          var shim = e_(dependency.CONFIG.shim).yes(tkn)
-            ? dependency.CONFIG.shim[tkn]
+        var m = ((d) => e_(d).yes(scriptId) && d[scriptId])(
+          dependency.dependencies
+        );
+        if (!found && !e_(dependency.defined).yes(scriptId) && m && !m.inited) {
+          var exportable = e_(dependency.CONFIG.exportable).yes(scriptId)
+            ? dependency.CONFIG.exportable[scriptId]
             : {};
           if (
             dependency.CONFIG.enforceDefine &&
-            (!shim.exports || !getGlobal(shim.exports))
+            (!exportable.exports || !getGlobal(exportable.exports))
           )
             return (
-              !hasPathFallback(tkn, dependency.CONFIG.paths) &&
+              !hasPathFallback(scriptId, dependency.CONFIG.paths) &&
               onError(
-                mk(["nodefine", "No define call for " + tkn, null, [tkn]])
+                mk([
+                  "nodefine",
+                  "No define call for " + scriptId,
+                  null,
+                  [scriptId]
+                ])
               )
-            ); /*type, msg, err, requireModules; does not call define(), but simulated tkn = moduleName; 
+            ); /*type, msg, err, requireModules; does not call define(), but simulated scriptId = moduleName; 
             abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"; thi param?*/
-          callGetModule([tkn, shim.REM || [], shim.exportsFn]);
+          callGetModule([scriptId, exportable.REM || [], exportable.exportsFn]);
         }
         return checkLoaded(this.checkProto) && true;
       }
