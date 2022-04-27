@@ -14,18 +14,20 @@ var funcs = fun("./functions"),
 
 import Module from "./module";
 import functions, {
-  hasPathFallback,
   iifeapp,
   isBrowser,
-  KeyValue,
   mk,
   modulehelp,
-  onError,
+  onError
+} from "./functions";
+import {
+  e_,
+  hasPathFallback,
   reduceSTATE,
+  KeyValue,
   rmvScrpt,
   SETSTATE
-} from "./functions";
-import { e_ } from "./index";
+} from ".";
 var clrsec, watch;
 
 export function checkLoaded(/*parentThis = arguments[0]*/) {
