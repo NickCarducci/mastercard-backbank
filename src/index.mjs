@@ -1,4 +1,4 @@
-import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency.js";
+import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency";
 import { dr, iifeapp, mk, nameToUrl, normalize, reduce } from "./functions";
 
 const _S = Object.prototype.toString,
@@ -12,7 +12,11 @@ const _S = Object.prototype.toString,
   _em = "emit",
   _ev = "events";
 export const KeyValue = (key, value, delet) =>
-    delet === "delete" ? delete buildable[key] : (buildable[key] = value),
+    delet === "delete"
+      ? delete buildable[key]
+      : !key.includes(".")
+      ? (buildable[key] = value)
+      : (buildable[key.split(".")[0]][key.split(".")[1]] = value),
   SETSTATE = (STAT) => (buildable = STAT),
   e_ = (obj /*,string*/) => {
     /* !obj && console.log(obj + " error obj in ", thi);*/
@@ -273,11 +277,11 @@ function makeModuleMap(
     givenName,
     yesdef,
     id
-  };
+  }; //depMaps
 }
 const _p = "packages",
   _b = "bundles",
-  _s = "shim",
+  _s = "exportable",
   _l = "location",
   _a = "urlArgs",
   _xf = "exportsFn",
@@ -310,9 +314,9 @@ const configure = (
                 )
             )) && op;
   }, i) => mixin(Building.CONFIG[prop], c[prop], true, true));
-  /*args prop; save paths for special "additive processing;" Reverse map the bundles; 'temp' = tobeshim*/
-  const mend = (bundles, shims) => {
-      var shim = Building.CONFIG.shim;
+  /*args prop; save paths for special "additive processing;" Reverse map the bundles; 'exportable' = tobeshim*/
+  const mend = (bundles, exportables) => {
+      var exportable = Building.CONFIG.exportable;
       bundles &&
         Object.keys(bundles).forEach((prop, i) =>
           bundles[prop].forEach((v) =>
@@ -320,25 +324,33 @@ const configure = (
           )
         );
       Y(
-        shims &&
-          Object.keys(shims).forEach((id, i) => {
-            var temp = shims[id];
+        exportables &&
+          Object.keys(exportables).forEach((id, i) => {
+            var exportable = exportables[id];
             return (
-              Y(e_(temp).string() === Ar && (temp = { REM: temp })) && //Merge shim, Normalize the structure
               Y(
-                (temp.exports || temp[_i]) &&
-                  !temp[_xf] &&
-                  (temp[_xf] = Building.makeShimExports(temp))
+                e_(exportable).string() === Ar &&
+                  (exportable = { REM: exportable })
+              ) && //Merge exportable, Normalize the structure
+              Y(
+                (exportable.exports || exportable[_i]) &&
+                  !exportable[_xf] &&
+                  (exportable[_xf] = Building.makeShimExports(exportable))
               ) &&
-              (shim[id] = temp)
+              (exportable[id] = exportable)
             );
           })
       );
-      return { shim, shims };
+      return { exportable, exportables };
     },
-    { shims, shim } = mend(c[_b], c[_s]);
+    { exportables, exportable } = mend(c[_b], c[_s]);
   return (
-    Y(KeyValue(`CONFIG.${shim}`, shims ? shim : Building.CONFIG.shim)) &&
+    Y(
+      KeyValue(
+        `CONFIG.${exportable}`,
+        exportables ? exportable : Building.CONFIG.exportable
+      )
+    ) &&
     Y(
       (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
         pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
@@ -493,7 +505,7 @@ buildable.NAME = null;
 buildable.CONFIG = {
   waitSeconds: 7,
   baseUrl: "./", //bundle used to be packages
-  ...["paths", "bundles", "bundle", "shim", "config"].map((x) => {
+  ...["paths", "bundles", "bundle", "exportable", "config"].map((x) => {
     return { [x]: {} };
   })
 };
