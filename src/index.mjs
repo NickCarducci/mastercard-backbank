@@ -1,12 +1,5 @@
-import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency.mjs";
-import {
-  dr,
-  iifeapp,
-  mk,
-  nameToUrl,
-  normalize,
-  reduceSTATE
-} from "./functions.mjs";
+import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency.js";
+import { dr, iifeapp, mk, nameToUrl, normalize, reduce } from "./functions";
 
 const _S = Object.prototype.toString,
   _H = "hasOwnProperty",
@@ -148,7 +141,7 @@ function applyREQUIREJS(
       makeModuleMap,
       KeyValue,
       Y,
-      checkProto: reduceSTATE.call(
+      checkProto: reduce.call(
         this,
         [
           "CONFIG",
@@ -171,7 +164,7 @@ function applyREQUIREJS(
           cfg,
           KeyValue,
           makeModuleMap,
-          reduceSTATE.call(
+          reduce.call(
             this,
             ["CONFIG", "bdlMap", "makeShimExports", "dependencies", "requir"],
             "Build",
