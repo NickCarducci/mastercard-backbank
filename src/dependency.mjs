@@ -12,7 +12,7 @@ var home = fun("."),
 var funcs = fun("./functions"),
   { default: functions, checkLoaded, modulehelp, reduceSTATE } = funcs;*/
 
-import Module from "./module.mjs";
+import Module from "./module";
 import functions, {
   hasPathFallback,
   iifeapp,
@@ -24,8 +24,8 @@ import functions, {
   reduceSTATE,
   rmvScrpt,
   SETSTATE
-} from "./functions.mjs";
-import { e_ } from "./index.mjs";
+} from "./functions";
+import { e_ } from "./index";
 var clrsec, watch;
 
 export function checkLoaded(/*parentThis = arguments[0]*/) {
