@@ -1,5 +1,5 @@
 import { e_, KeyValue, onError } from ".";
-import { checkLoaded } from "./dependency";
+import { checkLoaded } from "./dependencyy";
 
 const T = (x) => typeof x,
   Y = (value, z, _) => {
@@ -179,12 +179,12 @@ export const mk = (err) =>
       )
     );
   };
-export function reduce(arr, where, tempSTATE) {
-  //console.log("reduce", arr, where, tempSTATE);
+export function reduce(arr, where, dependency) {
+  //console.log("reduce", arr, where, dependency);
   try {
     var newobject = {};
-    Object.keys(tempSTATE).forEach(
-      (key) => arr.includes(key) && (newobject[key] = tempSTATE[key])
+    Object.keys(dependency).forEach(
+      (key) => arr.includes(key) && (newobject[key] = dependency[key])
     );
     return newobject;
   } catch (e) {
@@ -204,7 +204,7 @@ export function nameToUrl() {
       already-normalized-tkn as URL. Use toUrl for the public API.
     If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
     assume use of an url, not a thi id. 
-    filter out tempSTATE.dependencies that are already paths.*/,
+    filter out dependency.dependencies that are already paths.*/,
     id = e_(bdlMap).yes(tkn) && bdlMap[tkn];
   id && nameToUrl(id, ext, skipExt);
   const geturl = (url = "") => {
@@ -243,7 +243,7 @@ export function nameToUrl() {
 
 export function modulehelp(a = arguments) {
   const e_ = a[0],
-    tempSTATE = a[1],
+    dependency = a[1],
     BUILD = a[2],
     moduleProto = a[3],
     {
@@ -251,7 +251,7 @@ export function modulehelp(a = arguments) {
       CONFIG: config = (CONFIG) => CONFIG.config,
       urlFchd,
       load
-    } = tempSTATE,
+    } = dependency,
     clrRegstr = (id) =>
       KeyValue(`dependencies.${id}`, null, "delete") &&
       KeyValue(`enabledRegistry.${id}`, null, "delete"),
@@ -259,7 +259,8 @@ export function modulehelp(a = arguments) {
       return {
         dm,
         m:
-          e_(tempSTATE.dependencies).yes(dm.id) && tempSTATE.dependencies[dm.id]
+          e_(dependency.dependencies).yes(dm.id) &&
+          dependency.dependencies[dm.id]
       };
     };
   return {
@@ -272,7 +273,7 @@ export function modulehelp(a = arguments) {
                 () =>
                   BUILD.onResourceLoad &&
                   BUILD.onResourceLoad(
-                    tempSTATE,
+                    dependency,
                     map,
                     depMaps.map((depMap) => depMap.normalizedMap || depMap)
                   )
@@ -286,7 +287,7 @@ export function modulehelp(a = arguments) {
           !urlFchd[dm.url]
             ? KeyValue(`urlFchd.${dm.url}`, true) && load(dm.id, dm.url)
             : console.log(
-                `redundant tempSTATE.load(${dm.id}, ${dm.url}) call (?), tempSTATE.urlFchd[${dm.url}] === true`
+                `redundant dependency.load(${dm.id}, ${dm.url}) call (?), dependency.urlFchd[${dm.url}] === true`
               ),
         execute = (text, id) => {
           const erro = tryCatch(BUILD.exec, [text]);
@@ -327,13 +328,13 @@ export function modulehelp(a = arguments) {
               nameToUrl,
               modulehelp(
                 e_,
-                tempSTATE,
+                dependency,
                 BUILD,
                 moduleProto,
                 Dependency
               ).getModule,
               onError,
-              ...reduce.call(this, matches, "tempSTATE", tempSTATE),
+              ...reduce.call(this, matches, "dependency", dependency),
               manage,
               mold,
               loadd,
@@ -348,30 +349,26 @@ export function modulehelp(a = arguments) {
     }
   };
 }
-const _m = "module";
 export class handlers {
   constructor() {
-    const module = (m = arguments[0]) =>
-        !m[_m] &&
-        (m[_m] = {
-          id: m.map.id,
-          uri: m.map.url,
-          config: () => (e_(config).yes(m.map.id) ? config[m.map.id] : {}),
-          exports: m.exports || (m.exports = {})
-        }), //BUILD.CONFIG.config
-      config = arguments[1],
-      makeRequire = arguments[2],
-      defined = arguments[3];
-    this.requir = (m) =>
-      !m.requir ? (m.requir = makeRequire(m.map)) : m.requir;
-    this.exports = (m) =>
-      (m.usingExports = true) &&
-      m.map.yesdef &&
-      (!m.exports
-        ? (m.exports = defined[m.map.id] = {})
-        : (defined[m.map.id] = m.exports));
-
-    return module;
+    //module BUILD.CONFIG.config
+    const config = arguments[0],
+      makeRequire = arguments[1],
+      defined = arguments[2];
+    this.requir = (module) =>
+      !this.requir ? (module.requir = makeRequire(module.map)) : module.requir;
+    this.exports = (module) =>
+      (this.usingExports = true) &&
+      this.map.yesdef &&
+      (!this.exports
+        ? (this.exports = defined[module.map.id] = {})
+        : (defined[module.map.id] = module.exports));
+    return (this.module = {
+      id: this.map.id,
+      uri: this.map.url,
+      config: () => (e_(config).yes(this.map.id) ? config[this.map.id] : {}),
+      exports: this.exports || (this.exports = {})
+    });
   }
 }
 
@@ -382,14 +379,14 @@ const _i = "init",
   _t = "string",
   Fn = "[object Function]";
 export default function (
-  dependency = arguments[0],
+  dependencyy = arguments[0],
   nextDef = arguments[1],
   shiftDef = arguments[2],
   defQueue = arguments[3],
   tkeGblQue = arguments[4]
 ) {
   const {
-    tempSTATE,
+    dependency,
     BUILD,
     makeModuleMap,
     e_,
@@ -403,27 +400,32 @@ export default function (
   const { getModule, clrRegstr } = modulehelp.call(
       thisDep,
       e_,
-      reduce.call(this, ["CONFIG", "urlFchd", "load"], "tempSTATE", tempSTATE),
+      reduce.call(
+        this,
+        ["CONFIG", "urlFchd", "load"],
+        "dependency",
+        dependency
+      ),
       reduce.call(this, ["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
       moduleProto
     ),
     callGetModule = (args) =>
-      !e_(tempSTATE.defined).yes(args[0]) &&
+      !e_(dependency.defined).yes(args[0]) &&
       getModule(makeModuleMap(args[0], null, true))[_i](args[1], args[2]);
   return {
-    //tempSTATE,
+    //dependency,
     //BUILD,
     //makeModuleMap,
     callGetModule,
     getGlobal: (value) =>
       !value
         ? value
-        : value.split(".").reduce((previous, key) => dependency[previous], {}),
+        : value.split(".").reduce((previous, key) => dependencyy[previous], {}),
     makeRequire: (modMap, o = (options) => options || {}, NAME) => {
       const tool = (modMap, o, NAME) => {
           return {
             errr: (
-              /*dot-notation dependency; dependencies, callback, errorback*/
+              /*dot-notation dependencyy; dependencies, callback, errorback*/
               rem,
               cb = (cb) =>
                 Y(
@@ -446,21 +448,21 @@ export default function (
                   )
                 : modMap && e_(handlers).yes(rem)
                 ? handlers[rem](
-                    tempSTATE.dependencies[modMap.id],
-                    tempSTATE.CONFIG.config,
-                    tempSTATE.makeRequire,
-                    tempSTATE.defined
+                    dependency.dependencies[modMap.id],
+                    dependency.CONFIG.config,
+                    dependency.makeRequire,
+                    dependency.defined
                   ) /*Invalid call; id, msg, err, requireModule; when requir|exports|module are requested 
-                && while thi is being tempSTATE.defined
+                && while thi is being dependency.defined
                 Normalize thi name from . or ..*/
                 : BUILD.get
-                ? BUILD.get(tempSTATE, rem, modMap, tool.parser)
+                ? BUILD.get(dependency, rem, modMap, tool.requir)
                 : () => {
                     var id, map;
                     return (
                       (map = makeModuleMap(rem, modMap, false, true)) &&
                       (id = map.id) &&
-                      (!e_(tempSTATE.defined).yes(id)
+                      (!e_(dependency.defined).yes(id)
                         ? onError(
                             mk([
                               "notloaded",
@@ -469,10 +471,10 @@ export default function (
                                 !modMap && "; (No modMap) Use requir([])"
                             ])
                           )
-                        : tempSTATE.defined[id])
+                        : dependency.defined[id])
                     );
                   },
-            parser: (...args) => {
+            requir: (...args) => {
               /*function localRequire (dependencies, callback, errorback){}*/
               if (tool.errr(...args)) return null;
               const rem = args[0],
@@ -495,14 +497,14 @@ export default function (
 
                   callGetModule(args);
                 }
-                return (tempSTATE.defQueueMap = {}) && true;
+                return (dependency.defQueueMap = {}) && true;
               };
               intakeDefines(); /*"intake modules"; type, msg, err, requireModules; ...id, REM, factory; "normalized by define()"
-                Grab defines waiting in the dependency queue.
-                Mark all the tempSTATE.dependencies as needing to be loaded.
+                Grab defines waiting in the dependencyy queue.
+                Mark all the dependency.dependencies as needing to be loaded.
                 collect defines that could have been added since the 'requir call'
-                store if 'map tempSTATE.CONFIG' applied to thi 'requir call' for tempSTATE.dependencies*/
-              tempSTATE.nextTick(
+                store if 'map dependency.CONFIG' applied to thi 'requir call' for dependency.dependencies*/
+              dependency.nextTick(
                 () =>
                   intakeDefines() &&
                   (requireMod = getModule(makeModuleMap(null, modMap))) &&
@@ -510,18 +512,19 @@ export default function (
                   requireMod[_i](rem, cb, eb, { enabled: true }) &&
                   checkLoaded.bind(checkProto)
               );
-              return tool.parser;
+              return tool.requir;
             }
           };
         },
         namer = {
           isBrowser,
           defined: (id) =>
-            e_(tempSTATE.defined).yes(
+            e_(dependency.defined).yes(
               makeModuleMap(id, modMap, false, true).id
             ),
           specified: (id = (id) => makeModuleMap(id, modMap, false, true).id) =>
-            e_(tempSTATE.defined).yes(id) || e_(tempSTATE.dependencies).yes(id),
+            e_(dependency.defined).yes(id) ||
+            e_(dependency.dependencies).yes(id),
           toUrl: (
             { i, isAlias, mNPE } = (mNPE) => {
               const seg = mNPE.split("/")[0];
@@ -540,12 +543,12 @@ export default function (
             //file extension alias, not 'relative path dots'
 
             var newobject;
-            Object.keys(tempSTATE.CONFIG).forEach(
+            Object.keys(dependency.CONFIG).forEach(
               (key) =>
                 ["nodeIdCompat", "system", "bundle"].includes(key) &&
-                (newobject[key] = tempSTATE.CONFIG[key])
+                (newobject[key] = dependency.CONFIG[key])
             );
-            //reduce(["nodeIdCompat", "system", "bundle"],null,tempSTATE.CONFIG)
+            //reduce(["nodeIdCompat", "system", "bundle"],null,dependency.CONFIG)
             //also, "map" for outward facing code...//also, "packages" ""
 
             const id = modMap && modMap.id;
@@ -557,19 +560,19 @@ export default function (
           }
         };
       return (
-        mixin(tool(modMap, o, NAME).parser, namer) &&
+        mixin(tool(modMap, o, NAME).requir, namer) &&
         Y(
           !modMap &&
-            (tool(modMap, o, NAME).parser.undef = (id) => {
+            (tool(modMap, o, NAME).requir.undef = (id) => {
               tkeGblQue(); //Only allow undef when top level requir calls
-              var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'thi' tempSTATE
+              var map = makeModuleMap(id, modMap, true), //Bind define() calls (fixes #408) to 'thi' dependency
                 m =
-                  e_(tempSTATE.dependencies).yes(id) &&
-                  tempSTATE.dependencies[id];
+                  e_(dependency.dependencies).yes(id) &&
+                  dependency.dependencies[id];
 
               return (
                 (m.undefed = true) &&
-                rmvScrpt(id, tempSTATE.NAME) &&
+                rmvScrpt(id, dependency.NAME) &&
                 KeyValue(`defined.${id}`, null, "delete") &&
                 KeyValue(`urlFchd.${map.url}`, null, "delete") &&
                 KeyValue(`unDE.${id}`, null, "undefined") &&
@@ -577,14 +580,14 @@ export default function (
                 KeyValue(`defQueueMap.${id}`, null, "delete") &&
                 KeyValue(
                   `unDE.${id}`,
-                  m && m.events.defined ? m.events : tempSTATE.unDE[id]
-                ) && //if different tempSTATE.CONFIG, same listeners
+                  m && m.events.defined ? m.events : dependency.unDE[id]
+                ) && //if different dependency.CONFIG, same listeners
                 m &&
                 clrRegstr(id)
               );
             })
         ) &&
-        tool(modMap, o, NAME).parser
+        tool(modMap, o, NAME).requir
       );
     }
   };
