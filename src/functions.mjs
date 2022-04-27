@@ -1,32 +1,184 @@
-import {
-  KeyValue,
-  mk,
-  e_,
-  dr,
-  tryCatch,
-  handlers,
-  normalize,
-  onError,
-  isBrowser
-} from ".";
+import { e_, KeyValue, onError } from ".";
 import { checkLoaded } from "./dependency";
-export const rmvScrpt = (name, NAME) => {
-  const ga = "getAttribute",
-    e = (m) => (m ? name : NAME);
-  return (
-    isBrowser &&
-    Y(
-      e_()
-        .tag()
-        .forEach(
-          (scriptNode) =>
-            scriptNode[ga](dr(true)) === e(true) &&
-            scriptNode[ga](dr()) === e() &&
-            scriptNode.parentNode.removeChild(scriptNode)
-        )
-    )
-  );
-};
+
+const T = (x) => typeof x,
+  Y = (value, z, _) => {
+    if (z && _) z[_] = value;
+    return true;
+  }, //seratimNull
+  _n = "undefined",
+  window = _n,
+  navigator = _n;
+export const isBrowser =
+    T(window !== _n) && T(navigator !== _n) && window.document,
+  tryCatch = (exec, args = []) => {
+    var erro = null;
+    try {
+      exec(...args);
+    } catch (e) {
+      erro = e;
+    }
+    return erro; //z is a thi binding ...as args
+  };
+
+const _f = "*";
+export const mk = (err) =>
+    err.constructor === Object
+      ? err
+      : {
+          ...new Error(
+            `${err[1]}\nhttps://REQUIREJS.org/docs/errors.html#${err[0]}`
+          ),
+          requireType: err[0],
+          ids: err[3],
+          originalError:
+            err[2] /*t, m, e, ids
+       allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'thi'," else App() function*/
+        },
+  iifeapp = class iifeapp {
+    constructor() {
+      const z = arguments[0];
+      return function () {
+        var construction = arguments[0],
+          keys = arguments[1];
+        const buff = construction.constructor === Array ? 0 : 1;
+        (construction =
+          construction.constructor === Array ? () => {} : construction) &&
+          (keys = keys.constructor === Array ? keys : construction) &&
+          Y(construction.constructor === Function && construction()) &&
+          Y(keys.constructor === Array) &&
+          keys.forEach((x, i) =>
+            x.includes(".")
+              ? (z[x.split(".")[0]][x.split(".")[1]] = arguments[i + buff])
+              : (z[x] = arguments[i + buff])
+          );
+      };
+    }
+  } /*thi(and arguments) should relate to wherever function runs (fat has no 'thi', iife can to append thi[key])
+  const iifefunc = (construction, keys) => new iifeapp(construction, keys); 
+  you can tell thi is a [proper-]function[-invocation] with thiscontext here for iifeapp
+  iifefunc(
+      ((z) => {
+        if (z.interscrpt && e_(z.interscrpt).interA())
+          return thi.interscrpt;
+        // prettier-ignore
+        e_().tag().sort((a, b) => b - a)
+      .map((script) => e_(script).interA() && (z.interscrpt = script));
+        return z.interscrpt;
+      })(thi),
+      ["interscript"]
+    );
+    */,
+  dr = (m) => `data-require${m ? "module" : "context"}`,
+  normalize = (nm, bn, applyMap, conId, system, configPkgs) => {
+    const tool = () => {
+        return {
+          parseName: (...args) => {
+            var name = args[0],
+              roots = args[1],
+              suffjs = args[2];
+
+            if (!name) return null;
+            if (name[0].charAt(0) === "." && roots)
+              name = roots.slice(0, roots.length - 1).concat(name);
+
+            /\.js$/.test(name[name.length - 1]) &&
+              suffjs &&
+              name[name.length - 1].replace(/\.js$/, "");
+
+            /*Adjust any relative paths. node allows either .js or non .js, 
+            yet not in nameToUrl;baseName.push(nm), but new instead of length report*/
+            for (let i = 0; i < name.length; i++) {
+              const solid = name[i] === "." && name.splice(i, 1);
+              if (solid) continue;
+              i = solid ? i - 1 : i;
+              const more =
+                i === 0 ||
+                (i === 1 && name[2] === "..") ||
+                name[i - 1] === "..";
+              if (!more && i > 0 && name.splice(i - 1, 2)) i -= 2;
+            }
+            return name.join("/");
+          },
+          convertName: (nm, mp, applyMap, ph) => {
+            if (!applyMap || !mp || (!ph && !mp[_f])) return nm;
+            var n,
+              i,
+              nms = nm.split("/"),
+              folder; /*just enabled, but unactivated, modules
+              continue search ___ map BUILD.CONFIG, bigloop: 
+              favor a "star map" unless shorter matching BUILD.CONFIG*/
+
+            for (let g = nms.length; g > 0; g -= 1) {
+              const name = nms.slice(0, g).join("/"),
+                mV = (fP = (f) => ph.slice(0, f).join("/")) =>
+                  e_(mp).yes(fP) && mp[fP],
+                loop = (sum = 0) => {
+                  let add = (sum = ph.length);
+                  var maybe = mV && e_(mV).yes(name) && mV[name],
+                    set = () => (i = g),
+                    more = mV && e_(mV).yes(name) && mV[name],
+                    loo = (add, sum) => (sum = add);
+                  /*for (f = z.ph.length; f > 0; f--) {
+                    var bre = null;
+                    if (s) bre = true;
+                    if (z.mV && e_(z.mV).yes(name) && z.mV[name]) set();
+                    if (bre) break;
+                  }*/
+
+                  return maybe && set() && (more ? loo(add--, sum) : null);
+                };
+
+              var configMap = mp && mp[_f];
+              Y(
+                mp &&
+                  mp[_f] &&
+                  e_(mp[_f]).yes(name) &&
+                  (folder = configMap[name]) &&
+                  ph &&
+                  loop() &&
+                  !folder &&
+                  configMap &&
+                  e_(configMap).yes(name) &&
+                  (folder = configMap[name]) &&
+                  (n = g)
+              ) &&
+                ph &&
+                loop();
+            } /* bigloop; ;Match, update name to the new value.*/
+
+            if (system) return (nm = nms.splice(0, i, system).join("/"));
+            if (folder) {
+              system = folder;
+              i = n;
+            }
+            return nm;
+          }
+        };
+      },
+      rs = bn && bn.split("/");
+    nm =
+      tool().parseName(nm, rs, conId) &&
+      tool().convertName(nm, system, applyMap, rs);
+    return e_(configPkgs).yes(nm) ? configPkgs[nm] : nm;
+  }, //obj.prototype["hasOwnProperty"][name]; const method =string?"toString":"hasOwnProperty"
+  rmvScrpt = (name, NAME) => {
+    const ga = "getAttribute",
+      e = (m) => (m ? name : NAME);
+    return (
+      isBrowser &&
+      Y(
+        e_()
+          .tag()
+          .forEach(
+            (scriptNode) =>
+              scriptNode[ga](dr(true)) === e(true) &&
+              scriptNode[ga](dr()) === e() &&
+              scriptNode.parentNode.removeChild(scriptNode)
+          )
+      )
+    );
+  };
 export function reduceSTATE(arr, where, tempSTATE) {
   //console.log("reduceSTATE", arr, where, tempSTATE);
   try {
@@ -89,10 +241,6 @@ export function nameToUrl() {
   }`;
 }
 
-const Y = (value, z, _) => {
-  if (z && _) z[_] = value;
-  return true;
-}; /*seratimNull*/
 export function modulehelp(a = arguments) {
   const e_ = a[0],
     tempSTATE = a[1],
@@ -108,11 +256,11 @@ export function modulehelp(a = arguments) {
     clrRegstr = (id) =>
       KeyValue(`dependencies.${id}`, null, "delete") &&
       KeyValue(`enabledRegistry.${id}`, null, "delete"),
-    depMap = (a0) => {
+    depMap = (dm) => {
       return {
-        dm: a0,
+        dm,
         m:
-          e_(tempSTATE.dependencies).yes(a0.id) && tempSTATE.dependencies[a0.id]
+          e_(tempSTATE.dependencies).yes(dm.id) && tempSTATE.dependencies[dm.id]
       };
     };
   return {
@@ -200,106 +348,39 @@ export function modulehelp(a = arguments) {
     }
   };
 }
+const _m = "module";
+export class handlers {
+  constructor() {
+    const module = (m = arguments[0]) =>
+        !m[_m] &&
+        (m[_m] = {
+          id: m.map.id,
+          uri: m.map.url,
+          config: () => (e_(config).yes(m.map.id) ? config[m.map.id] : {}),
+          exports: m.exports || (m.exports = {})
+        }), //BUILD.CONFIG.config
+      config = arguments[1],
+      makeRequire = arguments[2],
+      defined = arguments[3];
+    this.requir = (m) =>
+      !m.requir ? (m.requir = makeRequire(m.map)) : m.requir;
+    this.exports = (m) =>
+      (m.usingExports = true) &&
+      m.map.yesdef &&
+      (!m.exports
+        ? (m.exports = defined[m.map.id] = {})
+        : (defined[m.map.id] = m.exports));
+
+    return module;
+  }
+}
 
 var mixin = (tgt, s, frc, dSM) =>
   Object.keys(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt);
-const _p = "packages",
-  _b = "bundles",
-  _s = "shim",
-  _l = "location",
-  _u = "baseUrl",
-  _a = "urlArgs",
-  _xf = "exportsFn",
-  Ar = "[object Array]";
-export const configure = (
-  c = (c) => {
-    const r = T(c[_a] === _t)
-      ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
-      : c[_a];
-
-    return c[_u].charAt(c[_u].length - 1) ===
-      "/" /* Convert old style urlArgs string to a function.*/
-      ? { ...c, [_a]: r }
-      : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
-  },
-  KeyValue,
-  makeModuleMap,
-  tempSTATE,
-  mixin,
-  e_
-) => {
-  //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","tempSTATE.CONFIG","map"]);
-  Object.keys(c).forEach((prop = (op) => {
-    const arr = ["paths", "bundles", "config", "map"];
-    return Y(!arr.includes(op) ? KeyValue(`CONFIG.${op}`, c[op]) : arr.forEach(
-              (op) =>
-                KeyValue(
-                  `CONFIG.${op}`,
-                  !tempSTATE.CONFIG[op] ? {} : tempSTATE.CONFIG[op]
-                )
-            )) && op;
-  }, i) => mixin(tempSTATE.CONFIG[prop], c[prop], true, true));
-  /*args prop; save paths for special "additive processing;" Reverse map the bundles; 'temp' = tobeshim*/
-  const mend = (bundles, shims) => {
-      var shim = tempSTATE.CONFIG.shim;
-      bundles &&
-        Object.keys(bundles).forEach((prop, i) =>
-          bundles[prop].forEach((v) =>
-            KeyValue(`bdlMap.${v}`, v !== prop ? prop : tempSTATE.bdlMap[v])
-          )
-        );
-      Y(
-        shims &&
-          Object.keys(shims).forEach((id, i) => {
-            var temp = shims[id];
-            return (
-              Y(e_(temp).string() === Ar && (temp = { REM: temp })) && //Merge shim, Normalize the structure
-              Y(
-                (temp.exports || temp[_i]) &&
-                  !temp[_xf] &&
-                  (temp[_xf] = tempSTATE.makeShimExports(temp))
-              ) &&
-              (shim[id] = temp)
-            );
-          })
-      );
-      return { shim, shims };
-    },
-    { shims, shim } = mend(c[_b], c[_s]);
-  return (
-    Y(KeyValue(`CONFIG.${shim}`, shims ? shim : tempSTATE.CONFIG.shim)) &&
-    Y(
-      (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
-        pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
-        var name = pkgObj.name,
-          location = pkgObj[_l]; //Adjust packages if necessary.
-        (location ? KeyValue(`CONFIG.paths.${name}`, pkgObj[_l]) : true) &&
-          KeyValue(
-            `CONFIG.bundle.${name}`,
-            `${pkgObj.name}/${(pkgObj.main || "main")
-              .replace(/^\.\//, "")
-              .replace(/\.js$/, "")}`
-          ); /*normalize pkg name main thi ID pointer paths; Update maps for
-          "waiting to execute" modules in the tempSTATE.dependencies.
-          When requir is tempSTATE.defined, as a tempSTATE.CONFIG object, before requir.js is loaded,*/
-      })
-    ) &&
-    ((z) =>
-      Y(
-        Object.keys(z).forEach(
-          (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
-            (z[id].map = makeModuleMap(id, null, true))
-        )
-      ))(tempSTATE.dependencies) &&
-    (c.REM || c.cb) &&
-    tempSTATE.requir(c.REM || [], c.cb)
-  );
-};
 
 const _i = "init",
   _t = "string",
-  Fn = "[object Function]",
-  T = (x) => typeof x;
+  Fn = "[object Function]";
 export default function (
   dependency = arguments[0],
   nextDef = arguments[1],
