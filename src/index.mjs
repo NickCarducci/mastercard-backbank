@@ -1,5 +1,6 @@
-import Dependency, { defineables, SETDEFINABLES } from "./dependency.mjs";
+import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency.mjs";
 import { configure, nameToUrl } from "./functions.mjs";
+//prettier-ignore
 var STATE = {},
   _f = "*",
   T = (x) => typeof x,
@@ -12,75 +13,24 @@ var STATE = {},
   window = _n,
   navigator = _n,
   BUILD = (build) => function () {}.bind(build), //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
-  _oE = "onError",
-  _e = "error",
-  _em = "emit",
-  _ev = "events",
+  _oE = "onError",_e = "error",_em = "emit",_ev = "events",
   iserror = (err) => e_(STATE.dependencies).yes(err) && STATE.dependencies[err],
-  _x = "exports",
-  scriptPends,
-  ga = "getAttribute",
-  _t = "string",
-  interscrpt,
-  useInteractive = false,
-  contexts = {},
-  define = (
-    //requir|exports/module
-    { nm, rem, c, n } = (
-      nmREMc = (nm, rem, c) =>
-        T(nm !== _t)
-          ? { rem: nm, c: rem }
-          : e_(rem).string() !== Ar
-          ? { nm, rem, c }
-          : { nm, c: rem }
-    ) => {
-      return {
-        ...nmREMc,
-        n:
-          scriptPends ||
-          (() => {
-            if (interscrpt && e_(interscrpt).interA()) return interscrpt;
-            // prettier-ignore
-            e_().tag().sort((a, b) => b - a)
-                                .map((script) => e_(script).interA() && (interscrpt = script));
-            return interscrpt;
-          })()
-      };
-    }
-  ) =>
-    Y(
-      (rem =
-        !rem && e_(c).string() === Fn && c.length
-          ? ((
-              { rem, cb } = (rem, cb) => {
-                return {
-                  cb: cb
-                    .toString()
-                    .replace(
-                      /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm /*comment */,
-                      (match, singlePrefix) => singlePrefix || ""
-                    )
-                    .replace(
-                      /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires */,
-                      (match, dep) => rem.push(dep)
-                    ),
-                  rem
-                };
-              } /*like ')//comment'; keep prefix*/
-            ) =>
-              (cb.length === 1 ? ["require"] : ["require", _x, _m]).concat(
-                rem
-              ))(rem, c)
-          : rem) //Potential-CommonJS use-case of exports and thi, without 'requir.';
-    ) &&
-    // no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
-    Y((nm = useInteractive && !nm ? n()[ga](dr(true)) : nm)) &&
-    Y((STATE = useInteractive ? contexts[n()[ga](dr())] : STATE)) &&
-    //getInteractiveScript Look for a data-main script attribute, which could also adjust the baseUrl. baseUrl from script tag with requir.js in it.
-
-    (!STATE ? SETDEFINABLES([...defineables, [nm, rem, c]]) : true) &&
-    STATE.defQueue.push([nm, rem, c]) &&
-    (STATE.defQueueMap[nm] = true) && { amd: { jQuery: true } };
+  //_x = "exports",ga = "getAttribute",
+  //scriptPends,
+  _t = "string",interscrpt,useInteractive = false,
+  contexts = {};
+//prettier-ignore
+/*const define = (/*requir|exports/module*{ nm, rem, c, n } = ( nmREMc = (nm, rem, c) => T(nm !== _t)? { rem: nm, c: rem }: e_(rem).string() !== Ar? { nm, rem, c }: { nm, c: rem }
+    ) => {  return { ...nmREMc, n: scriptPends ||(() => { if (interscrpt && e_(interscrpt).interA()) return interscrpt; e_().tag().sort((a, b) => b - a).map((script) => e_(script).interA() && (interscrpt = script));
+            return interscrpt; })()};}) =>Y(rem =!rem && e_(c).string() === Fn && c.length? ((
+              { rem, cb } = (rem, cb) => {return {cb: cb.toString().replace( /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm /*comment *,
+                      (match, singlePrefix) => singlePrefix || "").replace(/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires *,(match, dep) => rem.push(dep)),rem};} /*like ')//comment'; keep prefix*) =>
+              (cb.length === 1 ? ["require"] : ["require", _x, _m]).concat(rem))(rem, c): rem) && Y((nm = useInteractive && !nm ? n()[ga](dr(true)) : nm)) && Y((STATE = useInteractive ? contexts[n()[ga](dr())] : STATE)) &&(!STATE ? SETDEFINABLES([...defineables, [nm, rem, c]]) : true) && STATE.defQueue.push([nm, rem, c]) &&(STATE.defQueueMap[nm] = true) && { amd: { jQuery: true } };
+Potential-CommonJS use-case of exports and thi, without 'requir.'; 
+     no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
+     getInteractiveScript Look for a data-main script attribute, which could also 
+     adjust the baseUrl. baseUrl from script tag with requir.js in it.
+     */
 
 export const KeyValue = (key, value, delet) =>
     delet === "delete" ? delete STATE[key] : (STATE[key] = value),
@@ -96,7 +46,8 @@ export const KeyValue = (key, value, delet) =>
     return erro; //z is a thi binding ...as args
   },
   onError = (err = mk, eb = (eb) => eb && eb(err)) => {
-    //reduce when finishes with mutable object, "all" errors - shallow? (like filter but with for - or mixin?)
+    /*reduce when finishes with mutable object, "all" errors -
+     shallow? (like filter but with for - or mixin?)*/
     !err.ids.reduce(
       (
         md = (es = iserror) => {
@@ -109,15 +60,17 @@ export const KeyValue = (key, value, delet) =>
     err.constructor === Object
       ? err
       : {
-          //prettier-ignore
-          ...new Error(`${err[1]}\nhttps://REQUIREJS.org/docs/errors.html#${err[0]}`),
+          ...new Error(
+            `${err[1]}\nhttps://REQUIREJS.org/docs/errors.html#${err[0]}`
+          ),
           requireType: err[0],
           ids: err[3],
           originalError: err[2]
-        }, //t, m, e, ids
+        } /*t, m, e, ids
+         allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'thi'," else App() function*/,
   iifeapp = class iifeapp {
     constructor() {
-      const z = arguments[0]; //allows mutable context, 'new' instantiatable 'iifeapp' for the "enclosing 'thi'," else App() function
+      const z = arguments[0];
       return function () {
         var construction = arguments[0],
           keys = arguments[1];
@@ -134,23 +87,21 @@ export const KeyValue = (key, value, delet) =>
           );
       };
     }
-  }, //thi(and arguments) should relate to wherever function runs (fat has no 'thi', iife can to append thi[key])
-  //const iifefunc = (construction, keys) => new iifeapp(construction, keys); //you can tell thi is a [proper-]function[-invocation] with thiscontext here for iifeapp
-  /**
-                  * 
-                        iifefunc(
-                          ((z) => {
-                            if (z.interscrpt && e_(z.interscrpt).interA())
-                              return thi.interscrpt;
-                            // prettier-ignore
-                            e_().tag().sort((a, b) => b - a)
-                          .map((script) => e_(script).interA() && (z.interscrpt = script));
-                            return z.interscrpt;
-                          })(thi),
-                          ["interscript"]
-                        );
-                  * 
-                  */
+  } /*thi(and arguments) should relate to wherever function runs (fat has no 'thi', iife can to append thi[key])
+  const iifefunc = (construction, keys) => new iifeapp(construction, keys); 
+  you can tell thi is a [proper-]function[-invocation] with thiscontext here for iifeapp
+  iifefunc(
+      ((z) => {
+        if (z.interscrpt && e_(z.interscrpt).interA())
+          return thi.interscrpt;
+        // prettier-ignore
+        e_().tag().sort((a, b) => b - a)
+      .map((script) => e_(script).interA() && (z.interscrpt = script));
+        return z.interscrpt;
+      })(thi),
+      ["interscript"]
+    );
+    */,
   dr = (m) => `data-require${m ? _m : "context"}`,
   hasPathFallback = (id, cP) => {
     var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
@@ -689,11 +640,11 @@ isBrowser &&
       so to tie an anonymous define call to the thi name (which is stored when the node), hold when to a reference to thi node,
       but clear after the DOM insertion.*/
     if (CONFIG.onNodeCreated) CONFIG.onNodeCreated(n, CONFIG, tkn, url);
-    scriptPends = n;
+    //scriptPends = n;
     if (baseElement) {
       head.insertBefore(n, baseElement);
     } else head.appendChild(n);
-    scriptPends = null;
+    //scriptPends = null;
     return n;
   } else if (isWebWorker) {
     /* bug in WebKit where the worker gets garbage-collected after calling
