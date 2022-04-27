@@ -76,8 +76,18 @@ export default function () {
         : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
     { getModule } = modulehelp(
       e_,
-      reduceSTATE(["CONFIG", "urlFchd", "load"], "tempSTATE", tempSTATE),
-      reduceSTATE(["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
+      reduceSTATE.call(
+        this,
+        ["CONFIG", "urlFchd", "load"],
+        "tempSTATE",
+        tempSTATE
+      ),
+      reduceSTATE.call(
+        this,
+        ["onResourceLoad", "exec", "onError"],
+        "BUILD",
+        BUILD
+      ),
       this.moduleProto,
       this
     ),
