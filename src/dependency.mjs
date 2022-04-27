@@ -22,8 +22,8 @@ import {
   iifeapp,
   isBrowser
 } from ".";
-import Module from "./module.js";
-import functions, { modulehelp, reduceSTATE, rmvScrpt } from "./functions.js";
+import Module from "./module.mjs";
+import functions, { modulehelp, reduceSTATE, rmvScrpt } from "./functions.mjs";
 var clrsec, watch;
 
 export function checkLoaded(/*parentThis = arguments[0]*/) {
