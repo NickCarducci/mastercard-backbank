@@ -1,5 +1,5 @@
 import { e_, KeyValue, onError } from ".";
-import { checkLoaded } from "./dependencyy";
+import { checkLoaded } from "./dependency";
 
 const T = (x) => typeof x,
   Y = (value, z, _) => {
@@ -241,11 +241,13 @@ export function nameToUrl() {
   }`;
 }
 
-export function modulehelp(a = arguments) {
-  const e_ = a[0],
-    dependency = a[1],
-    BUILD = a[2],
-    moduleProto = a[3],
+export function modulehelp(
+  e_ = arguments[0],
+  dependency = arguments[1],
+  BUILD = arguments[2],
+  s
+) {
+  const { moduleProto } = this,
     {
       Module,
       CONFIG: config = (CONFIG) => CONFIG.config,
@@ -354,21 +356,20 @@ export class handlers {
     //module BUILD.CONFIG.config
     const config = arguments[0],
       makeRequire = arguments[1],
-      defined = arguments[2];
-    this.requir = (module) =>
-      !this.requir ? (module.requir = makeRequire(module.map)) : module.requir;
+      defined = arguments[2],
+      os = (o) => (o.constructor === Object ? o : {});
+    this.requir = (module) => (module.requir = makeRequire(module.map));
     this.exports = (module) =>
       (this.usingExports = true) &&
       this.map.yesdef &&
-      (!this.exports
-        ? (this.exports = defined[module.map.id] = {})
-        : (defined[module.map.id] = module.exports));
-    return (this.module = {
+      (defined[module.map.id] = os(module.exports));
+
+    this.module = {
       id: this.map.id,
       uri: this.map.url,
       config: () => (e_(config).yes(this.map.id) ? config[this.map.id] : {}),
       exports: this.exports || (this.exports = {})
-    });
+    };
   }
 }
 
@@ -423,6 +424,7 @@ export default function (
         : value.split(".").reduce((previous, key) => dependencyy[previous], {}),
     makeRequire: (modMap, o = (options) => options || {}, NAME) => {
       const tool = (modMap, o, NAME) => {
+          const { dependencies, CONFIG, makeRequire, defined } = dependency;
           return {
             errr: (
               /*dot-notation dependencyy; dependencies, callback, errorback*/
@@ -448,10 +450,10 @@ export default function (
                   )
                 : modMap && e_(handlers).yes(rem)
                 ? handlers[rem](
-                    dependency.dependencies[modMap.id],
-                    dependency.CONFIG.config,
-                    dependency.makeRequire,
-                    dependency.defined
+                    dependencies[modMap.id],
+                    CONFIG.config,
+                    makeRequire,
+                    defined
                   ) /*Invalid call; id, msg, err, requireModule; when requir|exports|module are requested 
                 && while thi is being dependency.defined
                 Normalize thi name from . or ..*/
@@ -462,7 +464,7 @@ export default function (
                     return (
                       (map = makeModuleMap(rem, modMap, false, true)) &&
                       (id = map.id) &&
-                      (!e_(dependency.defined).yes(id)
+                      (!e_(defined).yes(id)
                         ? onError(
                             mk([
                               "notloaded",
@@ -471,7 +473,7 @@ export default function (
                                 !modMap && "; (No modMap) Use requir([])"
                             ])
                           )
-                        : dependency.defined[id])
+                        : defined[id])
                     );
                   },
             requir: (...args) => {
