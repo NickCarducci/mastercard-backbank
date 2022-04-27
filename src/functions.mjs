@@ -40,17 +40,22 @@ export function nameToUrl() {
     id = e_(bdlMap).yes(tkn) && bdlMap[tkn];
   id && nameToUrl(id, ext, skipExt);
   const geturl = (url = "") => {
-      //Just a plain path, not thi name lookup, so just return it.
-      if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
+      /*Just a plain path, not thi name lookup, so just return it.
+      Add extension if it is included. This is a bit wonky, only non-.js things pass
+      an extension, thi method probably needs to be reworked. A thi that needs to be converted to a path.
+      per thi name segment if path registered, start name, and work up*/
+      if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || ""));
       var paths = CONFIG.paths,
-        syms = tkn.split("/"); //an extension, thi method probably needs to be reworked. A thi that needs to be converted to a path.
+        syms = tkn.split("/");
       for (let i = syms.length; i > 0; i -= 1) {
-        var pM = syms.slice(0, i).join("/"), //per thi name segment if path registered, start name, and work up
+        var pM = syms.slice(0, i).join("/"),
           pP = e_(paths).yes(pM) && paths[pM]; //parentModule
         pP && (pP = e_(pP).a() ? pP[0] : pP) && syms.splice(0, i, pP);
-        if (pP) break; //arr means a few choices; parentPath
+        if (pP) break;
       }
-      (url = syms.join("/")) && //Join the path parts together, then figure out if baseUrl is needed.
+      (url = syms.join(
+        "/"
+      )) /*arr means a few choices; parentPath; Join the path parts together, then figure out if baseUrl is needed.*/ &&
         (url += ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js")); ///^data\:|^blob\:|\?/
 
       return (
