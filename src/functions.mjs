@@ -11,7 +11,7 @@ import {
   iifeapp,
   isBrowser
 } from ".";
-export const reduceSTATE = (arr, where, tempSTATE) => {
+export function reduceSTATE(arr, where, tempSTATE) {
   //console.log("reduceSTATE", arr, where, tempSTATE);
   try {
     var newobject = {};
@@ -22,7 +22,7 @@ export const reduceSTATE = (arr, where, tempSTATE) => {
   } catch (e) {
     return console.log(this, e);
   }
-};
+}
 export function nameToUrl() {
   const { CONFIG, bdlMap } = this;
 
