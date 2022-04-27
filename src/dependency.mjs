@@ -9,11 +9,11 @@ var home = fun("."),
   { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } = home
     ? home
     : place;
-var funcs = fun("./functions"),
-  { default: functions, checkLoaded, modulehelp, reduceSTATE } = funcs;*/
+var funcs = fun("./Functions"),
+  { default: Functions, checkLoaded, modulehelp, reduceSTATE } = funcs;*/
 
 import Module from "./module";
-import functions, {
+import Functions, {
   iifeapp,
   isBrowser,
   mk,
@@ -61,7 +61,7 @@ export function checkLoaded(/*parentThis = arguments[0]*/) {
   const _e = "error",
     _em = "emit",
     erro = _e;
-  console.log("In Checkloaded", "tempSTATE reduced for purpose: ", this);
+  console.log("In Checkloaded", "dependency reduced for purpose: ", this);
   Object.keys(enabledRegistry).forEach(
     (
       { id, noCyc } = (mod = (x) => enabledRegistry[x]) =>
@@ -141,69 +141,72 @@ const _i = "init",
   T = (x) => typeof x,
   _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
 export default function () {
-  var dependency,
+  var config,
     defQueue = [];
   const nextDef = (id) =>
       defQueue
         .sort((a, b) => b - a)
         .map((args, i) => args[0] === id && defQueue.splice(i, 1)),
-    { tempSTATE, BUILD, makeModuleMap } = functions.bind(
+    { dependency, BUILD, makeModuleMap } = Functions.bind(
       this,
-      dependency,
+      config,
       nextDef,
       () => defQueue.shift(),
       defQueue
     ),
+    os = (o) => (o.constructor === Object ? dependency[o] : {}),
     set = {
       bdlMap: {},
       NAME: arguments[0],
       defQueue,
-      defQueueMap: {},
+      defQueueMap: os("defQueueMap"),
       makeModuleMap,
       nextTick: BUILD.nextTick,
       Module,
-      load: (id, url) => BUILD.load(tempSTATE, id, url),
+      load: (id, url) => BUILD.load(dependency, id, url),
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
       onError,
-      CONFIG: tempSTATE.CONFIG ? tempSTATE.CONFIG : {},
-      unDE: tempSTATE.unDE ? tempSTATE.unDE : {},
-      enabledRegistry: tempSTATE.enabledRegistry
-        ? tempSTATE.enabledRegistry
-        : {},
-      urlFchd: tempSTATE.urlFchd ? tempSTATE.urlFchd : {}, //thi able's
-      defined: tempSTATE.defined ? tempSTATE.defined : {},
-      dependencies: tempSTATE.dependencies ? tempSTATE.dependencies : {}
+      CONFIG: os("CONFIG"),
+      unDE: os("unDE"),
+      enabledRegistry: os("enabledRegistry"),
+      urlFchd: os("urlFchd"), //thi able's
+      defined: os("defined"),
+      dependencies: os("dependencies")
     },
     tkeGblQue = () =>
       (defineables.length
         ? Y(
             defineables.forEach((queueItem) => {
               var id = queueItem[0];
-              (T(id === _t) ? (tempSTATE.defQueueMap[id] = true) : true) &&
+              (T(id === _t) ? (dependency.defQueueMap[id] = true) : true) &&
                 defQueue.push(queueItem);
             })
           )
         : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
-    { getModule } = modulehelp(
-      e_,
-      reduceSTATE.call(
+    reduced = {
+      dependency: reduceSTATE.call(
         this,
         ["CONFIG", "urlFchd", "load"],
-        "tempSTATE",
-        tempSTATE
+        "dependency",
+        dependency
       ),
-      reduceSTATE.call(
+      build: reduceSTATE.call(
         this,
         ["onResourceLoad", "exec", "onError"],
         "BUILD",
         BUILD
-      ),
+      )
+    },
+    { getModule } = modulehelp(
+      e_,
+      reduced.dependency,
+      reduced.build,
       this.moduleProto,
       this
     ),
-    { makeRequire, callGetModule, getGlobal } = functions.bind(
+    { makeRequire, callGetModule, getGlobal } = Functions.bind(
       this,
-      dependency,
+      config,
       nextDef,
       () => defQueue.shift(),
       defQueue,
@@ -215,22 +218,22 @@ export default function () {
       makeShimExports: (value) =>
         function () {
           return (
-            (value[_i] && value[_i].apply(dependency, arguments)) ||
+            (value[_i] && value[_i].apply(config, arguments)) ||
             (value.exports && getGlobal(value.exports))
           );
         }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
       /* makeShimExports: (value) =>
           function () {
             return (
-              (value[_i] && value[_i].apply(dependency, arguments)) ||
+              (value[_i] && value[_i].apply(dependencyy, arguments)) ||
               (value.exports && getGlobal(value.exports))
             );
           }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
       enable: (depMap) =>
-        e_(tempSTATE.dependencies).yes(depMap.id) &&
-        tempSTATE.dependencies[depMap.id] &&
+        e_(dependency.dependencies).yes(depMap.id) &&
+        dependency.dependencies[depMap.id] &&
         getModule(depMap).enable(),
-      /*if "m" thi is in tempSTATE.dependencies, parent's tempSTATE when overridden in "optimizer" (Not shown).
+      /*if "m" thi is in dependency.dependencies, parent's dependency when overridden in "optimizer" (Not shown).
       method used "internally" by environment adapters script-load or a synchronous load call.
       anonymous thi bound to name already  thi is another anon thi waiting for its completeLoad to fire.*/
       completeLoad: (tkn) => {
@@ -247,19 +250,19 @@ export default function () {
                 : null) &&
             callGetModule(args);
         } /*matched a define call in thi script
-        in case-/init-calls change the tempSTATE.dependencies*/
-        tempSTATE.defQueueMap = {};
-        var m = ((d) => e_(d).yes(tkn) && d[tkn])(tempSTATE.dependencies);
-        if (!found && !e_(tempSTATE.defined).yes(tkn) && m && !m.inited) {
-          var shim = e_(tempSTATE.CONFIG.shim).yes(tkn)
-            ? tempSTATE.CONFIG.shim[tkn]
+        in case-/init-calls change the dependency.dependencies*/
+        dependency.defQueueMap = {};
+        var m = ((d) => e_(d).yes(tkn) && d[tkn])(dependency.dependencies);
+        if (!found && !e_(dependency.defined).yes(tkn) && m && !m.inited) {
+          var shim = e_(dependency.CONFIG.shim).yes(tkn)
+            ? dependency.CONFIG.shim[tkn]
             : {};
           if (
-            tempSTATE.CONFIG.enforceDefine &&
+            dependency.CONFIG.enforceDefine &&
             (!shim.exports || !getGlobal(shim.exports))
           )
             return (
-              !hasPathFallback(tkn, tempSTATE.CONFIG.paths) &&
+              !hasPathFallback(tkn, dependency.CONFIG.paths) &&
               onError(
                 mk(["nodefine", "No define call for " + tkn, null, [tkn]])
               )
@@ -272,11 +275,11 @@ export default function () {
     };
   return (
     checkLoaded(this.checkProto) &&
-    Y(_K(tempSTATE).forEach((key) => (tempSTATE[key] = stat[key]))) &&
-    (tempSTATE.makeRequire = (modMap, options) =>
+    Y(_K(dependency).forEach((key) => (dependency[key] = stat[key]))) &&
+    (dependency.makeRequire = (modMap, options) =>
       makeRequire(modMap, options, arguments[0])) &&
-    KeyValue("requir", tempSTATE.makeRequire()) &&
-    SETSTATE(tempSTATE) &&
-    tempSTATE
+    KeyValue("requir", dependency.makeRequire()) &&
+    SETSTATE(dependency) &&
+    dependency
   );
-} //dependency
+} //dependencyy
