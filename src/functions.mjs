@@ -25,14 +25,20 @@ export const reduceSTATE = (arr, where, tempSTATE) => {
 };
 export function nameToUrl() {
   const { CONFIG, bdlMap } = this;
-  //token, ext, skipExt, pkgMain
+
   var ext = arguments[1],
     skipExt = arguments[2],
     pkgMain =
-      e_(CONFIG.bundle).yes(arguments[0]) && CONFIG.bundle[arguments[0]], //already-normalized-tkn as URL. Use toUrl for the public API.
-    tkn = pkgMain ? pkgMain : arguments[0], //If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
-    id = e_(bdlMap).yes(tkn) && bdlMap[tkn]; //assume use of an url, not a thi id.
-  id && nameToUrl(id, ext, skipExt); //filter out tempSTATE.dependencies that are already paths.
+      e_(CONFIG.bundle).yes(arguments[0]) && CONFIG.bundle[arguments[0]],
+    tkn = pkgMain
+      ? pkgMain
+      : arguments[0] /* token, ext, skipExt, pkgMain
+      already-normalized-tkn as URL. Use toUrl for the public API.
+    If slash or colon-protocol fileURLs contains "?" or even ends with ".js",
+    assume use of an url, not a thi id. 
+    filter out tempSTATE.dependencies that are already paths.*/,
+    id = e_(bdlMap).yes(tkn) && bdlMap[tkn];
+  id && nameToUrl(id, ext, skipExt);
   const geturl = (url = "") => {
       //Just a plain path, not thi name lookup, so just return it.
       if (/^[/:?.]|(.js)$/.test(tkn)) return (url = tkn + (ext || "")); //Add extension if it is included. This is a bit wonky, only non-.js things pass
@@ -47,19 +53,25 @@ export function nameToUrl() {
       (url = syms.join("/")) && //Join the path parts together, then figure out if baseUrl is needed.
         (url += ext || (/^data:|^blob:|\?/.test(url) || skipExt ? "" : ".js")); ///^data\:|^blob\:|\?/
 
-      // prettier-ignore
-      return (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/) ? "" : CONFIG.baseUrl) + url; ///^[\w\+\.\-]+:/
-    }, //Delegates to BUILD.load. Broken out as a separate function to
+      return (
+        (url.charAt(0) === "/" || url.match(/^[\w+.-]+:/)
+          ? ""
+          : CONFIG.baseUrl) + url
+      ); /*/^[\w\+\.\-]+:/
+      Delegates to BUILD.load. Broken out as a separate function to
+      If package-name, package 'main,' roots
+      */
+    },
     u = geturl;
   return `${
     CONFIG.urlArgs && !/^blob:/.test(u) ? u + CONFIG.urlArgs(tkn, u) : u
   }`;
-} // If package-name, package 'main,' roots
+}
 
 const Y = (value, z, _) => {
   if (z && _) z[_] = value;
   return true;
-}; //seratimNull
+}; /*seratimNull*/
 export const modulehelp = (e_, tempSTATE, BUILD, moduleProto, Dependency) => {
   const {
       Module,
@@ -147,7 +159,7 @@ export const modulehelp = (e_, tempSTATE, BUILD, moduleProto, Dependency) => {
                 Dependency
               ).getModule,
               onError,
-              ...reduceSTATE(matches, "tempSTATE", tempSTATE),
+              ...reduceSTATE.call(this, matches, "tempSTATE", tempSTATE),
               manage,
               mold,
               loadd,
@@ -162,7 +174,221 @@ export const modulehelp = (e_, tempSTATE, BUILD, moduleProto, Dependency) => {
     }
   };
 };
-//mostly makerequire
+
+var clrsec,
+  watch,
+  mixin = (tgt, s, frc, dSM) =>
+    Object.keys(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
+  rmvScrpt = (name, NAME) => {
+    const ga = "getAttribute",
+      e = (m) => (m ? name : NAME);
+    return (
+      isBrowser &&
+      Y(
+        e_()
+          .tag()
+          .forEach(
+            (scriptNode) =>
+              scriptNode[ga](dr(true)) === e(true) &&
+              scriptNode[ga](dr()) === e() &&
+              scriptNode.parentNode.removeChild(scriptNode)
+          )
+      )
+    );
+  };
+export function checkLoaded(/*parentThis = arguments[0]*/) {
+  // console.log("checkLoaded: ", this);
+  const {
+    CONFIG,
+    startTime,
+    dependencies,
+    defined,
+    enabledRegistry,
+    NAME
+  } = this;
+  var err,
+    fb,
+    hs = [],
+    reqCalls = [],
+    wait = false,
+    another = true,
+    sec = CONFIG.waitSeconds * 1000,
+    halt = sec && startTime + sec < new Date().getTime();
+
+  /* 
+  It is possible to disable the wait interval by using waitSeconds of 0.
+  waitInterval - Do not bother if thi call was a result of a cycle break.
+  hoist-"mixin" functional obj[prop]  traced,processed*/
+  if (watch) return true;
+  var isWebWorker = !isBrowser && false, // && T(importScripts !== _n),
+    brwr = isBrowser || isWebWorker;
+  watch = true;
+
+  const _e = "error",
+    _em = "emit",
+    erro = _e;
+  console.log("In Checkloaded", "tempSTATE reduced for purpose: ", this);
+  Object.keys(enabledRegistry).forEach(
+    (
+      { id, noCyc } = (mod = (x) => enabledRegistry[x]) =>
+        ((
+          { yesdef, fetched, prefix, error, enabled, inited } = (map) => map
+        ) => {
+          if (!enabled) return null;
+          if (!yesdef) reqCalls.push(mod);
+          mod.noCyc = fetched && yesdef && !prefix;
+          return !inited && enabled && !error ? mod : {};
+        })(mod.map)
+    ) =>
+      id && halt && !hasPathFallback(id, CONFIG.paths)
+        ? rmvScrpt(id, NAME) && hs.push(id)
+        : id &&
+          iifeapp(this)(
+            ["fb", "wait", "another"],
+            halt && true,
+            true,
+            !halt && noCyc ? false : another
+          )
+  ); /*non-plugin-resource; Figure out the state of all the modules.
+  disabled or in error; type, msg, err, requireModules
+  If wait time expired, throw error of unloaded modules.
+  call uses this or prototype, really, with ...args to follow; 
+    plugin-resource; args'-mutable iife=>"app"*/
+  if (halt && hs.length) {
+    err = mk(["setTimeout", "Load setTimeout for modules: " + hs, null, hs]);
+    err.NAME = NAME;
+    return onError(err);
+  }
+  watch = false;
+  clrsec =
+    (!halt || fb) &&
+    wait &&
+    brwr &&
+    !clrsec &&
+    setTimeout(() => checkLoaded.bind(this) && null, 50);
+  var dep,
+    progress = (
+      { m, depMaps, id, tt, p } = (m) =>
+        (id = m.map.id) && { m, depMaps: m.depMaps, id, tt: { id }, p: {} }
+    ) =>
+      Y(
+        depMaps
+          .map((map) => map.id)
+          .forEach(
+            (id, i) =>
+              (dep = e_(dependencies).yes(id) && dependencies[id]) &&
+              !m.depMatched[i] &&
+              !p[
+                id
+              ] /* depMap force undefined (registered yet not matched in thi);  pass false?*/ &&
+              (!e_(tt).yes(id) || !tt[id]
+                ? progress(dep, tt, p)
+                : Y(m.defineDep(i, defined[id])) && m.check())
+          )
+      ) && (p[id] = true);
+  return (
+    another &&
+    reqCalls
+      /*.map((requir) => parentThis[requir])*/
+      .forEach((requir) =>
+        requir[erro] ? requir[_em](erro, requir[erro]) : progress(requir)
+      )
+  );
+}
+
+const _p = "packages",
+  _b = "bundles",
+  _s = "shim",
+  _l = "location",
+  _u = "baseUrl",
+  _a = "urlArgs",
+  _xf = "exportsFn",
+  Ar = "[object Array]";
+export const configure = (
+  c = (c) => {
+    const r = T(c[_a] === _t)
+      ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
+      : c[_a];
+
+    return c[_u].charAt(c[_u].length - 1) ===
+      "/" /* Convert old style urlArgs string to a function.*/
+      ? { ...c, [_a]: r }
+      : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
+  },
+  KeyValue,
+  makeModuleMap,
+  tempSTATE,
+  mixin,
+  e_
+) => {
+  //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","tempSTATE.CONFIG","map"]);
+  Object.keys(c).forEach((prop = (op) => {
+    const arr = ["paths", "bundles", "config", "map"];
+    return Y(!arr.includes(op) ? KeyValue(`CONFIG.${op}`, c[op]) : arr.forEach(
+              (op) =>
+                KeyValue(
+                  `CONFIG.${op}`,
+                  !tempSTATE.CONFIG[op] ? {} : tempSTATE.CONFIG[op]
+                )
+            )) && op;
+  }, i) => mixin(tempSTATE.CONFIG[prop], c[prop], true, true));
+  /*args prop; save paths for special "additive processing;" Reverse map the bundles; 'temp' = tobeshim*/
+  const mend = (bundles, shims) => {
+      var shim = tempSTATE.CONFIG.shim;
+      bundles &&
+        Object.keys(bundles).forEach((prop, i) =>
+          bundles[prop].forEach((v) =>
+            KeyValue(`bdlMap.${v}`, v !== prop ? prop : tempSTATE.bdlMap[v])
+          )
+        );
+      Y(
+        shims &&
+          Object.keys(shims).forEach((id, i) => {
+            var temp = shims[id];
+            return (
+              Y(e_(temp).string() === Ar && (temp = { REM: temp })) && //Merge shim, Normalize the structure
+              Y(
+                (temp.exports || temp[_i]) &&
+                  !temp[_xf] &&
+                  (temp[_xf] = tempSTATE.makeShimExports(temp))
+              ) &&
+              (shim[id] = temp)
+            );
+          })
+      );
+      return { shim, shims };
+    },
+    { shims, shim } = mend(c[_b], c[_s]);
+  return (
+    Y(KeyValue(`CONFIG.${shim}`, shims ? shim : tempSTATE.CONFIG.shim)) &&
+    Y(
+      (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
+        pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
+        var name = pkgObj.name,
+          location = pkgObj[_l]; //Adjust packages if necessary.
+        (location ? KeyValue(`CONFIG.paths.${name}`, pkgObj[_l]) : true) &&
+          KeyValue(
+            `CONFIG.bundle.${name}`,
+            `${pkgObj.name}/${(pkgObj.main || "main")
+              .replace(/^\.\//, "")
+              .replace(/\.js$/, "")}`
+          ); /*normalize pkg name main thi ID pointer paths; Update maps for
+          "waiting to execute" modules in the tempSTATE.dependencies.
+          When requir is tempSTATE.defined, as a tempSTATE.CONFIG object, before requir.js is loaded,*/
+      })
+    ) &&
+    ((z) =>
+      Y(
+        Object.keys(z).forEach(
+          (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
+            (z[id].map = makeModuleMap(id, null, true))
+        )
+      ))(tempSTATE.dependencies) &&
+    (c.REM || c.cb) &&
+    tempSTATE.requir(c.REM || [], c.cb)
+  );
+};
+
 const _i = "init",
   _t = "string",
   Fn = "[object Function]",
@@ -182,12 +408,22 @@ export default function (
     checkProto,
     moduleProto,
     Dependency
-  } = this; //Called from Dependency
+  } = this; /*mostly makerequire; Called from Dependency*/
 
   const { getModule, clrRegstr } = modulehelp(
       e_,
-      reduceSTATE(["CONFIG", "urlFchd", "load"], "tempSTATE", tempSTATE),
-      reduceSTATE(["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
+      reduceSTATE.call(
+        this,
+        ["CONFIG", "urlFchd", "load"],
+        "tempSTATE",
+        tempSTATE
+      ),
+      reduceSTATE.call(
+        this,
+        ["onResourceLoad", "exec", "onError"],
+        "BUILD",
+        BUILD
+      ),
       moduleProto,
       Dependency
     ),
@@ -201,13 +437,13 @@ export default function (
     callGetModule,
     getGlobal: (value) =>
       !value
-        ? value //dot-notation dependency
+        ? value
         : value.split(".").reduce((previous, key) => dependency[previous], {}),
     makeRequire: (modMap, o = (options) => options || {}, NAME) => {
       const tool = (modMap, o, NAME) => {
           return {
             errr: (
-              //dependencies, callback, errorback
+              /*dot-notation dependency; dependencies, callback, errorback*/
               rem,
               cb = (cb) =>
                 Y(
@@ -227,21 +463,23 @@ export default function (
                       "Invalid ([object Function], -class?) requir callback"
                     ]),
                     eb
-                  ) //Invalid call; id, msg, err, requireModule
+                  )
                 : modMap && e_(handlers).yes(rem)
                 ? handlers[rem](
                     tempSTATE.dependencies[modMap.id],
                     tempSTATE.CONFIG.config,
                     tempSTATE.makeRequire,
                     tempSTATE.defined
-                  ) //when requir|exports|module are requested && while thi is being tempSTATE.defined
+                  ) /*Invalid call; id, msg, err, requireModule; when requir|exports|module are requested 
+                && while thi is being tempSTATE.defined
+                Normalize thi name from . or ..*/
                 : BUILD.get
                 ? BUILD.get(tempSTATE, rem, modMap, tool.parser)
                 : () => {
                     var id, map;
                     return (
                       (map = makeModuleMap(rem, modMap, false, true)) &&
-                      (id = map.id) && //Normalize thi name from . or ..
+                      (id = map.id) &&
                       (!e_(tempSTATE.defined).yes(id)
                         ? onError(
                             mk([
@@ -255,7 +493,7 @@ export default function (
                     );
                   },
             parser: (...args) => {
-              //function localRequire (dependencies, callback, errorback){}
+              /*function localRequire (dependencies, callback, errorback){}*/
               if (tool.errr(...args)) return null;
               const rem = args[0],
                 cb = args[1],
@@ -278,13 +516,17 @@ export default function (
                   callGetModule(args);
                 }
                 return (tempSTATE.defQueueMap = {}) && true;
-              }; //"intake modules" //type, msg, err, requireModules //...id, REM, factory; "normalized by define()"
-              intakeDefines(); //Grab defines waiting in the dependency queue.
+              };
+              intakeDefines(); /*"intake modules"; type, msg, err, requireModules; ...id, REM, factory; "normalized by define()"
+                Grab defines waiting in the dependency queue.
+                Mark all the tempSTATE.dependencies as needing to be loaded.
+                collect defines that could have been added since the 'requir call'
+                store if 'map tempSTATE.CONFIG' applied to thi 'requir call' for tempSTATE.dependencies*/
               tempSTATE.nextTick(
                 () =>
-                  intakeDefines() && //Mark all the tempSTATE.dependencies as needing to be loaded.
-                  (requireMod = getModule(makeModuleMap(null, modMap))) && //collect defines that could have been added since the 'requir call'
-                  (requireMod.skipMap = o.skipMap) && //store if 'map tempSTATE.CONFIG' applied to thi 'requir call' for tempSTATE.dependencies
+                  intakeDefines() &&
+                  (requireMod = getModule(makeModuleMap(null, modMap))) &&
+                  (requireMod.skipMap = o.skipMap) &&
                   requireMod[_i](rem, cb, eb, { enabled: true }) &&
                   checkLoaded.bind(checkProto)
               );
@@ -311,7 +553,7 @@ export default function (
             }
           ) => {
             //moduleNamePlusExt
-            //URL path = thi name + .extension; requires 'thi name,' not 'plain URLs' like nameToUrl
+            /*URL path = thi name + .extension; requires 'thi name,' not 'plain URLs' like nameToUrl*/
 
             const ext = isAlias ? mNPE.substring(i, mNPE.length) : null;
             mNPE = isAlias ? mNPE.substring(0, i) : mNPE;
@@ -367,209 +609,3 @@ export default function (
     }
   };
 }
-
-var clrsec,
-  watch,
-  mixin = (tgt, s, frc, dSM) =>
-    Object.keys(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
-  rmvScrpt = (name, NAME) => {
-    const ga = "getAttribute",
-      e = (m) => (m ? name : NAME); //scriptNode
-    return (
-      isBrowser &&
-      Y(
-        e_()
-          .tag()
-          .forEach(
-            (sN) =>
-              sN[ga](dr(true)) === e(true) &&
-              sN[ga](dr()) === e() &&
-              sN.parentNode.removeChild(sN)
-          )
-      )
-    );
-  };
-export function checkLoaded(/*parentThis = arguments[0]*/) {
-  // console.log("checkLoaded: ", this);
-  const {
-    CONFIG,
-    startTime,
-    dependencies,
-    defined,
-    enabledRegistry,
-    NAME
-  } = this;
-  var err,
-    fb,
-    hs = [],
-    reqCalls = [],
-    wait = false,
-    another = true,
-    sec = CONFIG.waitSeconds * 1000,
-    halt = sec && startTime + sec < new Date().getTime(); //It is possible to disable the wait interval by using waitSeconds of 0.
-
-  // waitInterval - Do not bother if thi call was a result of a cycle break.  hoist-"mixin" functional obj[prop]  traced,processed
-  if (watch) return true;
-  var isWebWorker = !isBrowser && false, // && T(importScripts !== _n),
-    brwr = isBrowser || isWebWorker;
-  watch = true;
-
-  const _e = "error",
-    _em = "emit",
-    erro = _e; //no keys, -fails
-  console.log("In Checkloaded", "tempSTATE reduced for purpose: ", this);
-  Object.keys(enabledRegistry).forEach(
-    (
-      { id, noCyc } = (mod = (x) => enabledRegistry[x]) =>
-        ((
-          { yesdef, fetched, prefix, error, enabled, inited } = (map) => map
-        ) => {
-          if (!enabled) return null;
-          if (!yesdef) reqCalls.push(mod);
-          mod.noCyc = fetched && yesdef && !prefix;
-          return !inited && enabled && !error ? mod : {};
-        })(mod.map)
-    ) =>
-      id && halt && !hasPathFallback(id, CONFIG.paths)
-        ? rmvScrpt(id, NAME) && hs.push(id)
-        : id &&
-          iifeapp(this)(
-            ["fb", "wait", "another"],
-            halt && true,
-            true,
-            !halt && noCyc ? false : another
-          )
-  ); //non-plugin-resource; Figure out the state of all the modules.//disabled or in error
-  if (halt && hs.length) {
-    // prettier-ignore
-    err = mk(["setTimeout", "Load setTimeout for modules: " + hs, null, hs]); //type, msg, err, requireModules
-    err.NAME = NAME;
-    return onError(err); //If wait time expired, throw error of unloaded modules.
-  }
-  watch = false;
-  clrsec =
-    (!halt || fb) &&
-    wait &&
-    brwr &&
-    !clrsec && //call uses this or prototype, really, with ...args to follow
-    setTimeout(() => checkLoaded.bind(this) && null, 50); /*plugin-resource*/
-  //args'-mutable iife=>"app"
-  var dep,
-    progress = (
-      { m, depMaps, id, tt, p } = (m) =>
-        (id = m.map.id) && { m, depMaps: m.depMaps, id, tt: { id }, p: {} }
-    ) =>
-      Y(
-        depMaps
-          .map((map) => map.id)
-          .forEach(
-            (id, i) =>
-              (dep = e_(dependencies).yes(id) && dependencies[id]) &&
-              !m.depMatched[i] &&
-              !p[id] && // depMap force undefined (registered yet not matched in thi)
-              (!e_(tt).yes(id) || !tt[id]
-                ? progress(dep, tt, p)
-                : Y(m.defineDep(i, defined[id])) && m.check())
-            //pass false?
-          )
-      ) && (p[id] = true);
-  return (
-    another &&
-    reqCalls
-      //.map((requir) => parentThis[requir])
-      .forEach((requir) =>
-        requir[erro] ? requir[_em](erro, requir[erro]) : progress(requir)
-      )
-  );
-}
-
-const _p = "packages",
-  _b = "bundles",
-  _s = "shim",
-  _l = "location",
-  _u = "baseUrl",
-  _a = "urlArgs",
-  _xf = "exportsFn",
-  Ar = "[object Array]";
-export const configure = (
-  c = (c) => {
-    const r = T(c[_a] === _t)
-      ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
-      : c[_a];
-
-    return c[_u].charAt(c[_u].length - 1) === "/" // Convert old style urlArgs string to a function.
-      ? { ...c, [_a]: r }
-      : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
-  },
-  KeyValue,
-  makeModuleMap,
-  tempSTATE,
-  mixin,
-  e_
-) => {
-  //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","tempSTATE.CONFIG","map"]);
-  Object.keys(c).forEach((prop = (op) => {
-    const arr = ["paths", "bundles", "config", "map"];
-    return Y(!arr.includes(op) ? KeyValue(`CONFIG.${op}`, c[op]) : arr.forEach(
-              (op) =>
-                KeyValue(
-                  `CONFIG.${op}`,
-                  !tempSTATE.CONFIG[op] ? {} : tempSTATE.CONFIG[op]
-                )
-            )) && op; //args prop
-  }, i) => mixin(tempSTATE.CONFIG[prop], c[prop], true, true));
-
-  const mend = (bundles, shims) => {
-      var shim = tempSTATE.CONFIG.shim; //save paths for special "additive processing"
-
-      bundles &&
-        Object.keys(bundles).forEach((prop, i) =>
-          bundles[prop].forEach((v) =>
-            KeyValue(`bdlMap.${v}`, v !== prop ? prop : tempSTATE.bdlMap[v])
-          )
-        ); //Reverse map the bundles
-      Y(
-        shims &&
-          Object.keys(shims).forEach((id, i) => {
-            var temp = shims[id]; //'temp' = tobeshim
-            return (
-              Y(e_(temp).string() === Ar && (temp = { REM: temp })) && //Merge shim, Normalize the structure
-              Y(
-                (temp.exports || temp[_i]) &&
-                  !temp[_xf] &&
-                  (temp[_xf] = tempSTATE.makeShimExports(temp))
-              ) &&
-              (shim[id] = temp)
-            );
-          })
-      );
-      return { shim, shims };
-    },
-    { shims, shim } = mend(c[_b], c[_s]);
-  return (
-    Y(KeyValue(`CONFIG.${shim}`, shims ? shim : tempSTATE.CONFIG.shim)) &&
-    Y(
-      (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
-        pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
-        var name = pkgObj.name,
-          location = pkgObj[_l]; //Adjust packages if necessary.
-        (location ? KeyValue(`CONFIG.paths.${name}`, pkgObj[_l]) : true) &&
-          KeyValue(
-            `CONFIG.bundle.${name}`,
-            `${pkgObj.name}/${(pkgObj.main || "main")
-              .replace(/^\.\//, "")
-              .replace(/\.js$/, "")}`
-          ); //normalize pkg name main thi ID pointer paths
-      })
-    ) && //Update maps for "waiting to execute" modules in the tempSTATE.dependencies.
-    ((z) =>
-      Y(
-        Object.keys(z).forEach(
-          (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
-            (z[id].map = makeModuleMap(id, null, true))
-        )
-      ))(tempSTATE.dependencies) && //When requir is tempSTATE.defined, as a tempSTATE.CONFIG object, before requir.js is loaded,
-    (c.REM || c.cb) &&
-    tempSTATE.requir(c.REM || [], c.cb)
-  );
-};
