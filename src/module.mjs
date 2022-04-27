@@ -190,7 +190,7 @@ export default function Module() {
                     var handler =
                       e_(handlers).yes(depMap.id) && handlers[depMap.id];
                     if (handler)
-                      return (depExports[i] = handler(
+                      return (depExports[i] = handler.call(
                         this,
                         config,
                         makeRequire,
