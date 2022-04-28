@@ -1,5 +1,12 @@
 import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency";
-import { dr, iifeapp, mk, nameToUrl, normalize, reduce } from "./dependency/functions";
+import {
+  dr,
+  iifeapp,
+  mk,
+  nameToUrl,
+  normalize,
+  reduce
+} from "./dependency/module/functions";
 
 const _S = Object.prototype.toString,
   _H = "hasOwnProperty",
