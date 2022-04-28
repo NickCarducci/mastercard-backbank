@@ -1,10 +1,9 @@
-import { applyREQUIREJS, buildable, contexts, e_ } from "./builder";
+import { REQUIREJS, contexts, e_ } from "./builder";
 
 /*console.log("In Require: ", "Dependency", buildable.start.Dependency);
   'dependency requir' buildable-sensitive exported methods*/
 
-var sign = { version: "2.3.6.carducci", isBrowser: false },
-  REQUIREJS = (buildable = applyREQUIREJS.bind(sign)),
+var buildable = REQUIREJS,
   T = (x) => typeof x,
   Y = (value, z, _) => {
     if (z && _) z[_] = value;
@@ -62,16 +61,13 @@ if (T(REQUIREJS === _u) || e_(REQUIREJS).string() !== Fn) {
     // globally agreed names for other potential AMD loaders
 
     // if (!requir) requir = buildable; //Exportable requir
-    return Y(
-      ["version", "isBrowser"].forEach((k) => (buildable[k] = sign[k]))
-    ) &&
+    return buildable.isBrowser &&
       /*prettier-ignore
             jslint evil: true 
             buildable.exec = (text) =>new Promise((resolve, reject) =>new Function("resolve", `"use strict";return (${text})`)(resolve, text)); //eval(text);
             buildable.exec = (text) =>new Promise((resolve, reject) => resolve(function resolve(){"use strict";return text})); //eval(text);
             merely to prepend with 'use strict', don't bother*/
 
-      sign.isBrowser &&
       !configuration.skipDataMain
       ? Y(
           e_()
