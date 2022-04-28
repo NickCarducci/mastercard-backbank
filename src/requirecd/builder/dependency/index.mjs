@@ -133,7 +133,7 @@ const _i = "init",
   }, //seratimNull
   T = (x) => typeof x,
   _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
-export default function () {
+export default function Dependency () {
   var config,
     defQueue = [];
   const nextDef = (id) =>
