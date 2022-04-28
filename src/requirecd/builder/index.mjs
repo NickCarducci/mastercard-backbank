@@ -499,4 +499,6 @@ var requireCounter = 1,
       node: n,
       id: n && n.getAttribute(dr(true))
     };
-export { buildable, contexts };
+const sign = { version: "2.3.6.carducci", isBrowser: false },
+  REQUIREJS = applyREQUIREJS.bind(sign);
+export { REQUIREJS, contexts };
