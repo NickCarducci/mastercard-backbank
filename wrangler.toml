@@ -19,13 +19,14 @@ name = "mastercard-backbank"
 name = "mastercard-backbank-staging"
 
 [durable_objects]
-bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" },{ name = "REQUIRE_CLASS_DURABLE_OBJECT", class_name = "Require" }]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
+# ,{ name = "REQUIRE_CLASS_DURABLE_OBJECT", class_name = "Require" }
 
 [env.staging.durable_objects]
-bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" },{ name = "REQUIRE_CLASS_DURABLE_OBJECT", class_name = "Require" }]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
 
 [env.production.durable_objects]
-bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" },{ name = "REQUIRE_CLASS_DURABLE_OBJECT", class_name = "Require" }]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
 
 [[migrations]]
 tag = "v1" # Should be unique for each entry
@@ -34,6 +35,10 @@ new_classes = ["DurableObjectExample"]
 [[migrations]]
 tag = "v2"
 new_classes = ["Require"]
+
+[[migrations]]
+tag = "v3"
+deleted_classes = ["Require"]
 
 # [build.upload.rules]
 # type = "CommonJS"
