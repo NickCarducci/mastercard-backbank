@@ -111,7 +111,7 @@ export class DurableObjectExample {
         } else if (func === "getTypes") {
           rs = await places.MerchantIndustries.query({}, cb);
         }
-        return rs && rs;
+        return rs ? rs : func;
       };
       let rs = null;
       if (req.url === "/deposit") {
@@ -125,11 +125,18 @@ export class DurableObjectExample {
       }
       if (rs) {
         //isBase64Encoded: false,
-        return new Response(JSON.stringify(`{data: ${rs} }`), {
-          status: 200,
-          message: "success: " + req.url,
-          headers: { "Content-Type": "application/json" }
-        });
+        if (rs.constructor === Object) {
+          return new Response(JSON.stringify(`{data: ${rs} }`), {
+            status: 200,
+            message: "success: " + req.url,
+            headers: { "Content-Type": "application/json" }
+          });
+        } else
+          return new Response(JSON.stringify(`{response: ${rs} }`), {
+            status: 200,
+            message: "string success...: " + req.url,
+            headers: { "Content-Type": "application/json" }
+          });
       } else {
         return new Response(
           JSON.stringify(`{error:${"no success doof- " + req.url}}`),
@@ -144,10 +151,9 @@ export class DurableObjectExample {
     (this.el = el) &&
       (this.env = env) &&
       this.el.blockConcurrencyWhile(() => {
-        //let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
+        // let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
         // After initialization, future reads do not need to access storage.
         //this.value = stored || 0;
-
         /* rollup(manifest)
                 .then( (bundle) => {
                   console.log(Object.keys(bundle), " is bundle");
