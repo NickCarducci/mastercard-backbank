@@ -144,9 +144,9 @@ export class DurableObjectExample {
     (this.el = el) &&
       (this.env = env) &&
       this.el.blockConcurrencyWhile(() => {
-        let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
+        //let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
         // After initialization, future reads do not need to access storage.
-        this.value = stored || 0;
+        //this.value = stored || 0;
 
         /* rollup(manifest)
                 .then( (bundle) => {
