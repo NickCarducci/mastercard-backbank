@@ -9,6 +9,9 @@ zone_id = "" #if not using default subdomain, here: api not needed
 # [site]
 # bucket = "./dist"
 # entry-point = "workers-site"
+kv_namespaces = [
+  {binding="backbank",id="e4609a2b6fa943aab9e44185293dae3a"}
+]
 
 [env.production]
 # exclude = ["node_modules","*"]
