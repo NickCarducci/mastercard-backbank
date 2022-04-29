@@ -55,7 +55,7 @@ export class DurableObjectExample {
       const locs = requir.call(this, "mastercard-locations");
       const places = requir.call(this, "mastercard-places");
       //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
-
+      console.log("locs", locs);
       var iMCard = null,
         mc = null;
       const initializeMCard = () =>
