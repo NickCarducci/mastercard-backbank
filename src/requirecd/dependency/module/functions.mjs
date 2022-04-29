@@ -456,7 +456,7 @@ export default function (
                   ) /*Invalid call; id, msg, err, requireModule; when requir|exports|module are requested 
                 && while thi is being dependency.defined
                 Normalize thi name from . or ..*/
-                : BUILD.get
+                : BUILD && BUILD.get
                 ? BUILD.get(dependency, rem, modMap, tool.requir)
                 : () => {
                     var id, map;
