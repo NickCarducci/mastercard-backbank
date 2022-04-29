@@ -354,13 +354,6 @@ const configure = (
     Building.requir(c.REM || [], c.cb)
   );
 };
-console.log(
-  "In Require: ",
-  "makeModuleMap",
-  "configure",
-  makeModuleMap,
-  configure
-);
 
 const sign = { version: "2.3.6.carducci", isBrowser: false };
 var REQUIREJS = applyREQUIREJS.bind(sign);
@@ -373,9 +366,7 @@ buildable.CONFIG = {
     return { [x]: {} };
   })
 };
-console.log("In Require: ", "buildable", buildable);
 buildable({});
-console.log("In Require: ", "buildable(.start)", buildable.start);
 buildable.start = { contexts };
 Y(
   ["toUrl", "undef", "defined", "specified"].forEach(
