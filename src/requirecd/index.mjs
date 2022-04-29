@@ -1,6 +1,5 @@
 import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency";
 import {
-  dr,
   iifeapp,
   mk,
   nameToUrl,
@@ -85,39 +84,12 @@ var T = (x) => typeof x,
     return true;
   }, //seratimNull
   _n = "undefined",
-  navigator = _n,
   buildable = (Build) => function () {}.bind(Build), //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
-  //_x = "exports",ga = "getAttribute",
-  //scriptPends,
   _t = "string",
-  interscrpt,
   useInteractive = false,
   contexts = {};
-//prettier-ignore
-/*const define = (/*requir|exports/module*{ nm, rem, c, n } = ( nmREMc = (nm, rem, c) => T(nm !== _t)? { rem: nm, c: rem }: e_(rem).string() !== Ar? { nm, rem, c }: { nm, c: rem }
-    ) => {  return { ...nmREMc, n: scriptPends ||(() => { if (interscrpt && e_(interscrpt).interA()) return interscrpt; e_().tag().sort((a, b) => b - a).map((script) => e_(script).interA() && (interscrpt = script));
-            return interscrpt; })()};}) =>Y(rem =!rem && e_(c).string() === Fn && c.length? ((
-              { rem, cb } = (rem, cb) => {return {cb: cb.toString().replace( /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm /*comment *,
-                      (match, singlePrefix) => singlePrefix || "").replace(/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g /*requires *,(match, dep) => rem.push(dep)),rem};} /*like ')//comment'; keep prefix*) =>
-              (cb.length === 1 ? ["require"] : ["require", _x, _m]).concat(rem))(rem, c): rem) && Y((nm = useInteractive && !nm ? n()[ga](dr(true)) : nm)) && Y((buildable = useInteractive ? contexts[n()[ga](dr())] : buildable)) &&(!buildable ? SETDEFINABLES([...defineables, [nm, rem, c]]) : true) && buildable.defQueue.push([nm, rem, c]) &&(buildable.defQueueMap[nm] = true) && { amd: { jQuery: true } };
-Potential-CommonJS use-case of exports and thi, without 'requir.'; 
-     no deps nor name + cb is func => then CommonJS, iifeapp(["interscrpt"], "value");
-     getInteractiveScript Look for a data-main script attribute, which could also 
-     adjust the baseUrl. baseUrl from script tag with requir.js in it.
-     */
 
-/**UNLICENSED BUT FOR PARTS OF OTHERS */
-
-/** vim: et:ts=4:sw=4:sts=4
- * @license RequireJS 2.3.6.carducci Copyright jQuery Foundation and other contributors.
- * Released under MIT license, https://github.com/REQUIREJS/REQUIREJS/blob/master/LICENSE
- */
-/*Not using strict: uneven strict support in browsers, #392, and causes
-problems with REQUIREJS.exec()/transpiler plugins that may not be strict.
-jslint regexp: true, nomen: true, sloppy: true 
-dependency window, navigator, document, importScripts, setTimeout, opera 
-cannot thi never get to the string regex?*/
-const  Ar = "[object Array]",
+const Ar = "[object Array]",
   Fn = "[object Function]",
   _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []),
   mixin = (tgt, s, frc, dSM) =>
@@ -196,13 +168,14 @@ export default function () {
 
 //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same thi
 
-var /*
+var requireCounter = 1,
+  unnormalizedCounter = 1 /*
       buildable.requir.undef(id);
       buildable.makeRequire(null, { skipMap: true })([id]);
       buildable = buildable ? buildable : (contexts[NAME] = new buildable.start.Dependency(NAME)); //dependency
       config && buildable.configure(config);
       return buildable.requir(REM, cb, eb);
-    */
+    */,
   _ = "_",
   _u = "baseUrl";
 /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
@@ -381,64 +354,6 @@ const configure = (
     Building.requir(c.REM || [], c.cb)
   );
 };
-/* T(importScripts !== _n),
-  'loading', 'loaded', execution, 'complete'
-  Oh the tragedy, detecting opera. See the usage of isOpera for reason.*/
-const isBrowser = false,
-  readyRegExp =
-    isBrowser && navigator.platform === "PLAYSTATION 3"
-      ? /^complete$/
-      : /^(complete|loaded)$/,
-  isOpera = false; //T(opera !== _n) && opera.toString() === "[object Opera]";
-/*  
-          e_
-        mixin
-        mk
-        concat
-    
-        requir=(dep,to)=>{define,configuration(config?!requir,buildable),
-          convertName
-          rmvScript
-          hasPathFallback
-          parseName
-          normalize
-          thi
-          Module
-          buildable
-          obj
-    
-          requir=buildable
-          Dependency = {
-            buildable:{buildable.CONFIG}
-            buildable.dependencies
-            makeModuleMap
-            getModule
-            when
-            onError
-            handlers
-            clrRegstr
-            checkLoaded
-            init
-            normalizeMod
-            Module[_P]={init,defineDep,fetch,load,check,callPlugin,enable,when,emit}
-            callGetModule
-            getScriptData
-            tkeGblQue
-            evt
-            buildable:{…initial:{buildable.CONFIG}}
-            buildable.requir = buildable.makeRequire()
-            return buildable
-          }
-          
-          s = buildable.start
-          buildable({})
-          urlUnDeSpec
-          head
-          onError,createNode,load
-          exec 
-          buildable()
-        }
-        */
 console.log(
   "In Require: ",
   "makeModuleMap",
@@ -447,58 +362,6 @@ console.log(
   configure
 );
 
-var requireCounter = 1,
-  unnormalizedCounter = 1,
-  evt = (
-    v = (evt) =>
-      evt.type === "load" ||
-      readyRegExp.test((evt.currentTarget || evt.srcElement).readyState)
-  ) =>
-    Y("undefined"((interscrpt = v ? null : interscrpt))) &&
-    v &&
-    getScriptData(evt), //interactiveScript - browser event for script loaded status
-  onScriptLoad = (data = evt) => buildable.completeLoad(data.id),
-  onScriptError = (evt) => {
-    var data = getScriptData(evt);
-    if (!hasPathFallback(data.id, buildable.CONFIG.paths)) {
-      const parents = _K(buildable.dependencies)
-        .map((key, i) =>
-          key.indexOf("_@r") !== 0
-            ? buildable.dependencies[key].depMaps.forEach((depMap) =>
-                depMap.id === data.id ? key : ""
-              )
-            : ""
-        )
-        .filter((x) => x !== "");
-      return onError(
-        mk([
-          "scripterror",
-          `Script error for ${
-            // prettier-ignore
-            data.id + (parents.length ? `" needed by: ${parents.join(", ")}` : '"')
-          }`,
-          evt,
-          [data.id]
-        ])
-      );
-    }
-  },
-  getScriptData = (
-    { rm, n } = (evt) => {
-      return {
-        rm: (node, func, name, ieName) =>
-          !node.detachEvent || isOpera
-            ? node.removeEventListener(name, func, false)
-            : ieName && node.detachEvent(ieName, func),
-        n: evt.currentTarget || evt.srcElement //REQUIREJS event info, remove listener from node //target
-      };
-    }
-  ) =>
-    rm(n, onScriptLoad, "load", "onreadystatechange") &&
-    rm(n, onScriptError, _e) && {
-      node: n,
-      id: n && n.getAttribute(dr(true))
-    };
 const sign = { version: "2.3.6.carducci", isBrowser: false };
 var REQUIREJS = applyREQUIREJS.bind(sign);
 
