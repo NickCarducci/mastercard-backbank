@@ -1,7 +1,8 @@
 //exports, and imports, at the same time!
 //import * as Read from "./index.mjs";
 //const Require = { ...Read };
-export { DurableObjectExample } from "./index.mjs";
+export { DurableObjectExample } from "./index";
+//export { Require } from "./require";
 
 export default {
   async fetch(request, env /*, ctx*/) {
@@ -54,57 +55,57 @@ async function noException(req, env) {
   ];
   if (allowedOrigins.indexOf(origin) === -1) return noaccess(origin);
   console.log("env", env, origin, ": making example class durable object");
-  return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
+  /*  return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
     env.REQUIRE_CLASS_DURABLE_OBJECT
   )
     .fetch(req)
     .then(async (requir) => {
-      console.log(requir);
-      return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
-        env.EXAMPLE_CLASS_DURABLE_OBJECT
-      )
-        .fetch(req, {
-          headers: {
-            "Content-Type": "application/octet-stream" //"application/json"
-          },
-          method: "POST",
-          body: requir.arrayBuffer()
-        }) // Forward the current HTTP request to it
-        .then(async (res) => await res.json())
-        .then((r) => {
-          console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
-          /*return new Response(`{ok: true,data: ${r} }`);*/
-          const dataHead = {
-              "Content-Type": "application/json"
-            },
-            responseobject = (keyValue, ok) =>
-              `{${keyValue[0]}: ${keyValue[1]}, ${ok}}`;
+      console.log(requir);*/
+  return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
+    env.EXAMPLE_CLASS_DURABLE_OBJECT
+  )
+    .fetch(
+      req /*, {
+      headers: {
+        "Content-Type": "application/octet-stream" //"application/json"
+      },
+      method: "POST",
+      body: requir.arrayBuffer()
+    }*/
+    ) // Forward the current HTTP request to it
+    .then(async (res) => await res.json())
+    .then((r) => {
+      console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
+      /*return new Response(`{ok: true,data: ${r} }`);*/
+      const dataHead = {
+          "Content-Type": "application/json"
+        },
+        R = (keyValue, ok, obj) =>
+          new Response(`{${keyValue[0]}: ${keyValue[1]}, ${ok}}`, {
+            status: obj[0],
+            message: obj[1],
+            headers: obj[2]
+          });
 
-          return !r
-            ? new Response(responseobject(["data", {}], false), {
-                status: "no response from durable object chain",
-                message: "",
-                headers: dataHead
-              })
-            : !r.data
-            ? new Response(
-                responseobject(["response", JSON.stringify(r)], false),
-                {
-                  status: r.status,
-                  message: r.statusText ? r.statusText : r.message,
-                  headers: dataHead
-                }
-              )
-            : new Response(
-                responseobject([true, JSON.stringify(r.data)], true),
-                {
-                  status: "200",
-                  message: "success: " + req.url,
-                  headers: dataHead
-                }
-              );
-        });
+      return !r
+        ? R(["data", {}], false, [
+            "no response from durable object chain",
+            "",
+            dataHead
+          ])
+        : !r.data
+        ? R(["response", JSON.stringify(r)], false, [
+            r.status,
+            r.statusText ? r.statusText : r.message,
+            dataHead
+          ])
+        : R([true, JSON.stringify(r.data)], true, [
+            "200",
+            "success: " + req.url,
+            dataHead
+          ]);
     });
+  //});
   //new Response({})
 }
 //new instance class fetch waits without await
