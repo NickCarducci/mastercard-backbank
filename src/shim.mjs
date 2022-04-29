@@ -2,7 +2,6 @@
 //import * as Read from "./index.mjs";
 //const Require = { ...Read };
 export { DurableObjectExample } from "./index.mjs";
-export { Require } from "./require.mjs";
 
 export default {
   async fetch(request, env /*, ctx*/) {
