@@ -420,7 +420,7 @@ async function requir() {
         return requi;
       })
   );
-  return new Response(r);
+  return r && new Response(r);
   /*R = (keyValue, obj) =>
     new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
       status: obj[0],
