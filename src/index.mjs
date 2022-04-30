@@ -8,7 +8,12 @@ export class DurableObjectExample {
       JSON.stringify(env)
     ); //el.textContent
     this.handle = async (req) => {
-      console.log("req.url" + req.url); //https://developers.cloudflare.com/workers/platform/compatibility-dates/ //.then((R) => thi.handle(R, req)); // Create a URL to give to the Worker constructor //const url = URL.createObjectURL(blob); //reader.readAsArrayBuffer(requi); //reader.onloadend = () => (requir = reader.result);
+      console.log(
+        "req.url" + req.url
+      ); /*console.log(
+              "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
+              requir
+            );*/ //https://developers.cloudflare.com/workers/platform/compatibility-dates/ //.then((R) => thi.handle(R, req)); // Create a URL to give to the Worker constructor //const url = URL.createObjectURL(blob); //reader.readAsArrayBuffer(requi); //reader.onloadend = () => (requir = reader.result);
       //new Int32Array(requ)
       /*var readable = req.body.getReader(/*{ mode: "byob" }*), //new FileReader(),
               // Create a blob containing the worker code
@@ -39,16 +44,12 @@ export class DurableObjectExample {
                   stream += r.value;
                 }
                 return await readable.read().then(processText); // Read some more, and call thi function again
-              });*/ /*console.log(
-              "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
-              requir
-            );*/
-      //const requirer = await requir.fetch(req);
+              });*/ //const requirer = await requir.fetch(req);
       //.then(async (res) => await res.text());
       //console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
       //const { requir } = Require();//"nutritious but not delicious."
-      const locs = requir.call(this, "mastercard-locations");
-      const places = requir.call(this, "mastercard-places");
+      const locs = requir().call(this, "mastercard-locations");
+      const places = requir().call(this, "mastercard-places");
       //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
       console.log("locs", locs, "requir", requir);
       var iMCard = null,
