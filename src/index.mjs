@@ -8,7 +8,7 @@ export class DurableObjectExample {
       JSON.stringify(env)
     ); //el.textContent
     this.handle = async (req) => {
-      console.log("req.url" + req.url); //https://developers.cloudflare.com/workers/platform/compatibility-dates/
+      console.log("req.url" + req.url); //https://developers.cloudflare.com/workers/platform/compatibility-dates/ //.then((R) => thi.handle(R, req)); // Create a URL to give to the Worker constructor //const url = URL.createObjectURL(blob); //reader.readAsArrayBuffer(requi);
       //new Int32Array(requ)
       /*var readable = req.body.getReader(/*{ mode: "byob" }*), //new FileReader(),
               // Create a blob containing the worker code
@@ -39,11 +39,7 @@ export class DurableObjectExample {
                   stream += r.value;
                 }
                 return await readable.read().then(processText); // Read some more, and call thi function again
-              });*/ //.then((R) => thi.handle(R, req));
-      // Create a URL to give to the Worker constructor
-      //const url = URL.createObjectURL(blob);
-      //reader.readAsArrayBuffer(requi);
-      //reader.onloadend = () => (requir = reader.result);
+              });*/ //reader.onloadend = () => (requir = reader.result);
       /*console.log(
               "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
               requir
@@ -55,7 +51,7 @@ export class DurableObjectExample {
       const locs = requir.call(this, "mastercard-locations");
       const places = requir.call(this, "mastercard-places");
       //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
-      console.log("locs", locs);
+      console.log("locs", locs, "requir", requir);
       var iMCard = null,
         mc = null;
       const initializeMCard = () =>
@@ -111,7 +107,7 @@ export class DurableObjectExample {
         } else if (func === "getTypes") {
           rs = await places.MerchantIndustries.query({}, cb);
         }
-        return rs ? rs : func;
+        return rs ? rs : [func, requir];
       };
       let rs = null;
       if (req.url === "/deposit") {
@@ -147,10 +143,10 @@ export class DurableObjectExample {
             [200, "string success...: " + req.url, dataHead]
           );
       } else {
+        //doof
         return R(
-          //doof
-          ["error", req.path + ", mastercardRoute:" + mastercardRoute],
-          [500, req.path + ", mastercardRoute:" + mastercardRoute, dataHead]
+          ["error", require],
+          [500, req.path + JSON.stringify(require), dataHead]
         );
       }
     };
