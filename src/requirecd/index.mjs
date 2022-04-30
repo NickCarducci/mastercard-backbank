@@ -392,7 +392,6 @@ if (T(REQUIREJS === _u) || e_(REQUIREJS).string() !== Fn) {
     var configuration = {},
       noSetTimeout,
       setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
-
     //dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
     const notrequire = true,
       notBaseUrl = T(REQUIREJS !== _u),
@@ -406,8 +405,10 @@ if (T(REQUIREJS === _u) || e_(REQUIREJS).string() !== Fn) {
       T(setTimeout !== _n) ? setTimeout(fn, 4) : fn();
     // globally agreed names for other potential AMD loaders
 
+    const requi = buildable(configuration);
+    console.log("requir/buildable_CONFIG_nextTick(configuration)", requi);
     // if (!requir) requir = buildable; //Exportable requir
-    return buildable(configuration);
+    return requi;
   };
 
 export { requir };
