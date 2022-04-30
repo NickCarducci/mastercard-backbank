@@ -84,9 +84,11 @@ var T = (x) => typeof x,
     return true;
   }, //seratimNull
   _n = "undefined",
-  buildable = (Build) => {
-    console.log("buildable/Build", Build);
-    return function () {}.bind(Build);
+  buildable = (callName) => {
+    console.log("buildable/Build", callName); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
+    return function () {
+      return requir(...arguments);
+    }.bind(callName);
   }, //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
   _t = "string",
   useInteractive = false,
