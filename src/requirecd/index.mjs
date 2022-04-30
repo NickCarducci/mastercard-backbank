@@ -391,7 +391,7 @@ Y(
 //} else
 
 async function requir() {
-  return await new Promise(
+  const r = await new Promise(
     (resolve) =>
       T(REQUIREJS !== _u) &&
       e_(REQUIREJS).string() === Fn &&
@@ -420,5 +420,12 @@ async function requir() {
         return requi;
       })
   );
+  return new Response(r);
+  /*R = (keyValue, obj) =>
+    new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
+      status: obj[0],
+      message: obj[1],
+      headers: obj[2]
+    });*/
 }
 export { requir };
