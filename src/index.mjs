@@ -13,7 +13,7 @@ export class DurableObjectExample {
       ); /*console.log(
               "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
               requir
-            );*/ //https://developers.cloudflare.com/workers/platform/compatibility-dates/ //.then((R) => thi.handle(R, req)); // Create a URL to give to the Worker constructor //const url = URL.createObjectURL(blob); //reader.readAsArrayBuffer(requi); //reader.onloadend = () => (requir = reader.result);
+            );*/ //https://developers.cloudflare.com/workers/platform/compatibility-dates/ //.then((R) => thi.handle(R, req)); // Create a URL to give to the Worker constructor //const url = URL.createObjectURL(blob); //reader.readAsArrayBuffer(requi); //reader.onloadend = () => (requir = reader.result); //const requirer = await requir.fetch(req);
       //new Int32Array(requ)
       /*var readable = req.body.getReader(/*{ mode: "byob" }*), //new FileReader(),
               // Create a blob containing the worker code
@@ -44,111 +44,116 @@ export class DurableObjectExample {
                   stream += r.value;
                 }
                 return await readable.read().then(processText); // Read some more, and call thi function again
-              });*/ //const requirer = await requir.fetch(req);
-      //.then(async (res) => await res.text());
+              });*/ //.then(async (res) => await res.text());
       //console.log("Fetched REQUIRE_CLASS_DURABLE_OBJECT (requirer) :", requir);
       //const { requir } = Require();//"nutritious but not delicious."
-      const locs = requir().call(this, "mastercard-locations");
-      const places = requir().call(this, "mastercard-places");
-      //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
-      console.log("locs", locs, "requir", requir);
-      var iMCard = null,
-        mc = null;
-      const initializeMCard = () =>
-        !iMCard &&
-        console.log("initializing mastercard api") &&
-        (mc = locs.MasterCardAPI) &&
-        (iMCard = true) &&
-        mc.init({
-          sandbox: secrets.NODE_ENV !== "production",
-          authentication: new mc.OAuth(
-            secrets.MASTERCARD_CONSUMER_KEY,
-            Buffer.from(secrets.MASTERCARD_P12_BINARY, "base64"),
-            "keyalias",
-            "keystorepassword"
-          )
-        });
-
-      const mastercardRoute = async (req, func) => {
-        const cb = (error, data) => (error ? error : data);
-        initializeMCard();
-        let rs = null;
-        if (func === "getAtms") {
-          const {
-            PageLength, //"5"
-            PostalCode, //"11101"
-            PageOffset //"0"
-          } = req.body; //query
-          rs = await locs.ATMLocations.query(
-            {
-              PageLength,
-              PostalCode,
-              PageOffset
-            },
-            cb
-          );
-        } else if (func === "getMerchants") {
-          const { countryCode, latitude, longitude, distance } = req.body; //query
-          const q = {
-            pageOffset: 0,
-            pageLength: 10,
-            radiusSearch: "true",
-            unit: "km",
-            distance,
-            place: {
-              countryCode,
-              latitude,
-              longitude
-            }
-          };
-          rs = await places.MerchantPointOfInterest.create(q, cb);
-        } else if (func === "getNames") {
-          rs = await places.MerchantCategoryCodes.query({}, cb);
-        } else if (func === "getTypes") {
-          rs = await places.MerchantIndustries.query({}, cb);
-        }
-        return rs ? rs : [func, requir];
-      };
-      let rs = null;
-      if (req.url === "/deposit") {
-        rs = await mastercardRoute(req, "getAtms");
-      } else if (req.url === "/merchant_names") {
-        rs = await mastercardRoute(req, "getNames");
-      } else if (req.url === "/merchant_types") {
-        rs = await mastercardRoute(req, "getTypes");
-      } else if (req.url === "/merchants") {
-        rs = await mastercardRoute(req, "getMerchants");
-      }
-      /*return new Response(`{ok: true,data: ${r} }`);*/
-      const dataHead = {
-          "Content-Type": "application/json"
-        },
-        R = (keyValue, obj) =>
-          new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
-            status: obj[0],
-            message: obj[1],
-            headers: obj[2]
+      requir().then(async (requir) => {
+        const locs = requir().call(this, "mastercard-locations");
+        const places = requir().call(this, "mastercard-places");
+        //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
+        console.log("locs", locs, "requir", requir);
+        var iMCard = null,
+          mc = null;
+        const initializeMCard = () =>
+          !iMCard &&
+          console.log("initializing mastercard api") &&
+          (mc = locs.MasterCardAPI) &&
+          (iMCard = true) &&
+          mc.init({
+            sandbox: secrets.NODE_ENV !== "production",
+            authentication: new mc.OAuth(
+              secrets.MASTERCARD_CONSUMER_KEY,
+              Buffer.from(secrets.MASTERCARD_P12_BINARY, "base64"),
+              "keyalias",
+              "keystorepassword"
+            )
           });
 
-      if (rs) {
-        //isBase64Encoded: false,
-        if (rs.constructor === Object) {
+        const mastercardRoute = async (req, func) => {
+          const cb = (error, data) => (error ? error : data);
+          initializeMCard();
+          let rs = null;
+          if (func === "getAtms") {
+            const {
+              PageLength, //"5"
+              PostalCode, //"11101"
+              PageOffset //"0"
+            } = req.body; //query
+            rs = await locs.ATMLocations.query(
+              {
+                PageLength,
+                PostalCode,
+                PageOffset
+              },
+              cb
+            );
+          } else if (func === "getMerchants") {
+            const { countryCode, latitude, longitude, distance } = req.body; //query
+            const q = {
+              pageOffset: 0,
+              pageLength: 10,
+              radiusSearch: "true",
+              unit: "km",
+              distance,
+              place: {
+                countryCode,
+                latitude,
+                longitude
+              }
+            };
+            rs = await places.MerchantPointOfInterest.create(q, cb);
+          } else if (func === "getNames") {
+            rs = await places.MerchantCategoryCodes.query({}, cb);
+          } else if (func === "getTypes") {
+            rs = await places.MerchantIndustries.query({}, cb);
+          }
+          return rs ? rs : [func, requir];
+        };
+        let rs = null;
+        if (req.url === "/deposit") {
+          rs = await mastercardRoute(req, "getAtms");
+        } else if (req.url === "/merchant_names") {
+          rs = await mastercardRoute(req, "getNames");
+        } else if (req.url === "/merchant_types") {
+          rs = await mastercardRoute(req, "getTypes");
+        } else if (req.url === "/merchants") {
+          rs = await mastercardRoute(req, "getMerchants");
+        }
+        /*return new Response(`{ok: true,data: ${r} }`);*/
+        const dataHead = {
+            "Content-Type": "application/json"
+          },
+          R = (keyValue, obj) =>
+            new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
+              status: obj[0],
+              message: obj[1],
+              headers: obj[2]
+            });
+
+        if (rs) {
+          //isBase64Encoded: false,
+          if (rs.constructor === Object) {
+            return R(
+              ["data", rs],
+              [
+                200,
+                "success: " + req.url,
+                { "Content-Type": "application/json" }
+              ]
+            );
+          } else
+            return R(
+              ["response", rs],
+              [200, "string success...: " + req.url, dataHead]
+            );
+        } else {
+          //doof
           return R(
-            ["data", rs],
-            [200, "success: " + req.url, { "Content-Type": "application/json" }]
+            ["error", requir],
+            [500, req.path + JSON.stringify(requir), dataHead]
           );
-        } else
-          return R(
-            ["response", rs],
-            [200, "string success...: " + req.url, dataHead]
-          );
-      } else {
-        //doof
-        return R(
-          ["error", requir],
-          [500, req.path + JSON.stringify(requir), dataHead]
-        );
-      }
+        }
+      });
     };
     (this.el = el) &&
       (this.env = env) &&
