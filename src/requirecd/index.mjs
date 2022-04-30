@@ -371,6 +371,7 @@ buildable.CONFIG = {
     return { [x]: {} };
   })
 };
+console.log("configure defined ", configure);
 //buildable({});
 buildable.start = { contexts };
 Y(
