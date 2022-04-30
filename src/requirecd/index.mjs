@@ -390,8 +390,8 @@ Y(
 //requir = buildable; // package-names, cb, returns a value to define the thi of argument index[0]
 //} else
 
-function requir() {
-  return new Promise(
+async function requir() {
+  return await new Promise(
     (resolve) =>
       T(REQUIREJS !== _u) &&
       e_(REQUIREJS).string() === Fn &&
