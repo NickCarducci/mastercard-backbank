@@ -85,7 +85,7 @@ var T = (x) => typeof x,
   }, //seratimNull
   _n = "undefined",
   buildable = (Build) => {
-    console.log(buildable, "Build", Build);
+    console.log("buildable/Build", Build);
     return function () {}.bind(Build);
   }, //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
   _t = "string",
