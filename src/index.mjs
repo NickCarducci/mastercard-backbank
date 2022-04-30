@@ -123,28 +123,34 @@ export class DurableObjectExample {
       } else if (req.url === "/merchants") {
         rs = await mastercardRoute(req, "getMerchants");
       }
+      /*return new Response(`{ok: true,data: ${r} }`);*/
+      const dataHead = {
+          "Content-Type": "application/json"
+        },
+        R = (keyValue, obj) =>
+          new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
+            status: obj[0],
+            message: obj[1],
+            headers: obj[2]
+          });
+
       if (rs) {
         //isBase64Encoded: false,
         if (rs.constructor === Object) {
-          return new Response(JSON.stringify(`{data: ${rs} }`), {
-            status: 200,
-            message: "success: " + req.url,
-            headers: { "Content-Type": "application/json" }
-          });
+          return R(
+            ["data", rs],
+            [200, "success: " + req.url, { "Content-Type": "application/json" }]
+          );
         } else
-          return new Response(JSON.stringify(`{response: ${rs} }`), {
-            status: 200,
-            message: "string success...: " + req.url,
-            headers: { "Content-Type": "application/json" }
-          });
+          return R(
+            ["response", rs],
+            [200, "string success...: " + req.url, dataHead]
+          );
       } else {
-        return new Response(
-          JSON.stringify(`{error:${"no success doof- " + req.url}}`),
-          {
-            status: 500,
-            message: "no success doof: " + req.url,
-            headers: { "Content-Type": "application/json" }
-          }
+        return R(
+          //doof
+          ["error", req.path + ", mastercardRoute:" + mastercardRoute],
+          [500, req.path + ", mastercardRoute:" + mastercardRoute, dataHead]
         );
       }
     };
