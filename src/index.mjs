@@ -8,7 +8,7 @@ export class DurableObjectExample {
       JSON.stringify(env)
     ); //el.textContent
     this.handle = async (req) => {
-      console.log("req.url" + req.url); //https://developers.cloudflare.com/workers/platform/compatibility-dates/ //.then((R) => thi.handle(R, req)); // Create a URL to give to the Worker constructor //const url = URL.createObjectURL(blob); //reader.readAsArrayBuffer(requi);
+      console.log("req.url" + req.url); //https://developers.cloudflare.com/workers/platform/compatibility-dates/ //.then((R) => thi.handle(R, req)); // Create a URL to give to the Worker constructor //const url = URL.createObjectURL(blob); //reader.readAsArrayBuffer(requi); //reader.onloadend = () => (requir = reader.result);
       //new Int32Array(requ)
       /*var readable = req.body.getReader(/*{ mode: "byob" }*), //new FileReader(),
               // Create a blob containing the worker code
@@ -39,8 +39,7 @@ export class DurableObjectExample {
                   stream += r.value;
                 }
                 return await readable.read().then(processText); // Read some more, and call thi function again
-              });*/ //reader.onloadend = () => (requir = reader.result);
-      /*console.log(
+              });*/ /*console.log(
               "gotten/(-piped) REQUIRE_CLASS_DURABLE_OBJECT (requirer) :",
               requir
             );*/
@@ -145,8 +144,8 @@ export class DurableObjectExample {
       } else {
         //doof
         return R(
-          ["error", require],
-          [500, req.path + JSON.stringify(require), dataHead]
+          ["error", requir],
+          [500, req.path + JSON.stringify(requir), dataHead]
         );
       }
     };
