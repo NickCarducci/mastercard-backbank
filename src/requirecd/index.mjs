@@ -387,44 +387,41 @@ Y(
 //requir = buildable; // package-names, cb, returns a value to define the thi of argument index[0]
 //} else
 
-export default async function requir() {
+export default function requir() /**f */ {
+  var configuration = {},
+    noSetTimeout,
+    setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
+  //dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
+  const notrequire = true,
+    notBaseUrl = T(REQUIREJS !== _u),
+    c = notBaseUrl ? (REQUIREJS ? notrequire : requir) : null,
+    r = notBaseUrl ? (undefined ? notrequire : undefined) : null;
+  Y((configuration = c)) && Y((REQUIREJS = r));
+  //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
+
+  buildable.CONFIG = (config) => buildable(config);
+  buildable.nextTick = (fn) =>
+    T(setTimeout !== _n) ? setTimeout(fn, 4) : fn();
+  // globally agreed names for other potential AMD loaders
+
+  const requi = buildable(configuration);
+  console.log("requir/buildable_CONFIG_nextTick(configuration)", requi);
+  // if (!requir) requir = buildable; //Exportable requir
+  return requi;
+}
+
+/*export default async function requir() {
   const r = await new Promise(
-    (re) =>
-      T(REQUIREJS !== _u) &&
-      e_(REQUIREJS).string() === Fn &&
-      re(function () {
-        var configuration = {},
-          noSetTimeout,
-          setTimeout = T(noSetTimeout === "undefined")
-            ? undefined
-            : noSetTimeout;
-        //dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
-        const notrequire = true,
-          notBaseUrl = T(REQUIREJS !== _u),
-          c = notBaseUrl ? (REQUIREJS ? notrequire : requir) : null,
-          r = notBaseUrl ? (undefined ? notrequire : undefined) : null;
-        Y((configuration = c)) && Y((REQUIREJS = r));
-        //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
-
-        buildable.CONFIG = (config) => buildable(config);
-        buildable.nextTick = (fn) =>
-          T(setTimeout !== _n) ? setTimeout(fn, 4) : fn();
-        // globally agreed names for other potential AMD loaders
-
-        const requi = buildable(configuration);
-        console.log("requir/buildable_CONFIG_nextTick(configuration)", requi);
-        // if (!requir) requir = buildable; //Exportable requir
-        return requi;
-      })
+    (re) => T(REQUIREJS !== _u) && e_(REQUIREJS).string() === Fn && re(f)
   );
-  return r && new Response(r);
+  return new Response(r);
   /*R = (keyValue, obj) =>
     new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
       status: obj[0],
       message: obj[1],
       headers: obj[2]
-    });*/
-}
+    });*
+}*/
 /*export default function () {
   console.log("default index.mjs, try DurableObjectExample");
 }*/
