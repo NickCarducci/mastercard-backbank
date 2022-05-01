@@ -1,4 +1,4 @@
-import { requir } from "./requirecd";
+import requir from "./requirecd";
 
 export class DurableObjectExample {
   constructor(el, env) {
