@@ -84,27 +84,30 @@ async function noException(req, env) {
           "Content-Type": "application/json"
         },
         R = (keyValue, ok, obj) =>
-          new Response(`{${keyValue[0]}: ${keyValue[1]}, ${ok}}`, {
-            status: obj[0],
-            message: obj[1],
-            headers: obj[2]
-          });
+          new Response(
+            `{\nsuccess: ${ok},\n,${keyValue[0]}: ${keyValue[1]}\n}`,
+            {
+              status: obj[0],
+              message: obj[1],
+              headers: obj[2]
+            }
+          );
 
       return !r
-        ? R(["data", {}], false, [
+        ? R(false, { data: {} }, [
+            400,
             "no response from durable object chain",
-            "",
             dataHead
           ])
         : !r.data
-        ? R(["response", JSON.stringify(r)], false, [
+        ? R(false, { response: JSON.stringify(r) }, [
             r.status,
             r.statusText ? r.statusText : r.message,
             dataHead
           ])
-        : R([true, JSON.stringify(r.data)], true, [
-            "200",
-            "success: " + req.url,
+        : R(true, { true: JSON.stringify(r.data) }, [
+            200,
+            `success: ${req.url}`,
             dataHead
           ]);
     });
