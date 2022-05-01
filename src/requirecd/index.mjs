@@ -148,6 +148,99 @@ export function applyREQUIREJS(
       config
     ); /*context, newContext, bundlesMap; call is like prototype*/
   }
+  const configure = (
+    c = (c) => {
+      const r = T(c[_a] === _t)
+        ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
+        : c[_a];
+
+      return c[_u].charAt(c[_u].length - 1) ===
+        "/" /* Convert old style urlArgs string to a function.*/
+        ? { ...c, [_a]: r }
+        : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
+    },
+    KeyValue,
+    makeModuleMap,
+    Building,
+    mixin,
+    e_
+  ) => {
+    //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","Building.CONFIG","map"]);
+    Object.keys(c).forEach((prop = (op) => {
+      const arr = ["paths", "bundles", "config", "map"];
+      return Y(!arr.includes(op) ? KeyValue(`CONFIG.${op}`, c[op]) : arr.forEach(
+                (op) =>
+                  KeyValue(
+                    `CONFIG.${op}`,
+                    !Building.CONFIG[op] ? {} : Building.CONFIG[op]
+                  )
+              )) && op;
+    }, i) => mixin(Building.CONFIG[prop], c[prop], true, true));
+    /*args prop; save paths for special "additive processing;" Reverse map the bundles; 'exportable' = tobeshim*/
+    const mend = (bundles, exportables) => {
+        var exportable = Building.CONFIG.exportable;
+        bundles &&
+          Object.keys(bundles).forEach((prop, i) =>
+            bundles[prop].forEach((v) =>
+              KeyValue(`bdlMap.${v}`, v !== prop ? prop : Building.bdlMap[v])
+            )
+          );
+        Y(
+          exportables &&
+            Object.keys(exportables).forEach((id, i) => {
+              var exportable = exportables[id];
+              return (
+                Y(
+                  e_(exportable).string() === Ar &&
+                    (exportable = { REM: exportable })
+                ) && //Merge exportable, Normalize the structure
+                Y(
+                  (exportable.exports || exportable[_i]) &&
+                    !exportable[_xf] &&
+                    (exportable[_xf] = Building.makeShimExports(exportable))
+                ) &&
+                (exportable[id] = exportable)
+              );
+            })
+        );
+        return { exportable, exportables };
+      },
+      { exportables, exportable } = mend(c[_b], c[_s]);
+    return (
+      Y(
+        KeyValue(
+          `CONFIG.${exportable}`,
+          exportables ? exportable : Building.CONFIG.exportable
+        )
+      ) &&
+      Y(
+        (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
+          pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
+          var name = pkgObj.name,
+            location = pkgObj[_l]; //Adjust packages if necessary.
+          (location ? KeyValue(`CONFIG.paths.${name}`, pkgObj[_l]) : true) &&
+            KeyValue(
+              `CONFIG.bundle.${name}`,
+              `${pkgObj.name}/${(pkgObj.main || "main")
+                .replace(/^\.\//, "")
+                .replace(/\.js$/, "")}`
+            ); /*normalize pkg name main thi ID pointer paths; Update maps for
+            "waiting to execute" modules in the Building.dependencies.
+            When requir is Building.defined, as a Building.CONFIG object, before requir.js is loaded,*/
+        })
+      ) &&
+      ((z) =>
+        Y(
+          Object.keys(z).forEach(
+            (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
+              (z[id].map = makeModuleMap(id, null, true))
+          )
+        ))(Building.dependencies) &&
+      (c.REM || c.cb) &&
+      Building.requir(c.REM || [], c.cb)
+    );
+  };
+  console.log("configure defined ", configure);
   return (
     Y(
       config &&
@@ -267,98 +360,6 @@ const _p = "packages",
   _a = "urlArgs",
   _xf = "exportsFn",
   _i = "init";
-const configure = (
-  c = (c) => {
-    const r = T(c[_a] === _t)
-      ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
-      : c[_a];
-
-    return c[_u].charAt(c[_u].length - 1) ===
-      "/" /* Convert old style urlArgs string to a function.*/
-      ? { ...c, [_a]: r }
-      : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
-  },
-  KeyValue,
-  makeModuleMap,
-  Building,
-  mixin,
-  e_
-) => {
-  //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","Building.CONFIG","map"]);
-  Object.keys(c).forEach((prop = (op) => {
-    const arr = ["paths", "bundles", "config", "map"];
-    return Y(!arr.includes(op) ? KeyValue(`CONFIG.${op}`, c[op]) : arr.forEach(
-              (op) =>
-                KeyValue(
-                  `CONFIG.${op}`,
-                  !Building.CONFIG[op] ? {} : Building.CONFIG[op]
-                )
-            )) && op;
-  }, i) => mixin(Building.CONFIG[prop], c[prop], true, true));
-  /*args prop; save paths for special "additive processing;" Reverse map the bundles; 'exportable' = tobeshim*/
-  const mend = (bundles, exportables) => {
-      var exportable = Building.CONFIG.exportable;
-      bundles &&
-        Object.keys(bundles).forEach((prop, i) =>
-          bundles[prop].forEach((v) =>
-            KeyValue(`bdlMap.${v}`, v !== prop ? prop : Building.bdlMap[v])
-          )
-        );
-      Y(
-        exportables &&
-          Object.keys(exportables).forEach((id, i) => {
-            var exportable = exportables[id];
-            return (
-              Y(
-                e_(exportable).string() === Ar &&
-                  (exportable = { REM: exportable })
-              ) && //Merge exportable, Normalize the structure
-              Y(
-                (exportable.exports || exportable[_i]) &&
-                  !exportable[_xf] &&
-                  (exportable[_xf] = Building.makeShimExports(exportable))
-              ) &&
-              (exportable[id] = exportable)
-            );
-          })
-      );
-      return { exportable, exportables };
-    },
-    { exportables, exportable } = mend(c[_b], c[_s]);
-  return (
-    Y(
-      KeyValue(
-        `CONFIG.${exportable}`,
-        exportables ? exportable : Building.CONFIG.exportable
-      )
-    ) &&
-    Y(
-      (!c[_p] ? [] : c[_p]).forEach((pkgObj) => {
-        pkgObj = T(pkgObj === _t) ? { name: pkgObj } : pkgObj;
-        var name = pkgObj.name,
-          location = pkgObj[_l]; //Adjust packages if necessary.
-        (location ? KeyValue(`CONFIG.paths.${name}`, pkgObj[_l]) : true) &&
-          KeyValue(
-            `CONFIG.bundle.${name}`,
-            `${pkgObj.name}/${(pkgObj.main || "main")
-              .replace(/^\.\//, "")
-              .replace(/\.js$/, "")}`
-          ); /*normalize pkg name main thi ID pointer paths; Update maps for
-          "waiting to execute" modules in the Building.dependencies.
-          When requir is Building.defined, as a Building.CONFIG object, before requir.js is loaded,*/
-      })
-    ) &&
-    ((z) =>
-      Y(
-        Object.keys(z).forEach(
-          (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
-            (z[id].map = makeModuleMap(id, null, true))
-        )
-      ))(Building.dependencies) &&
-    (c.REM || c.cb) &&
-    Building.requir(c.REM || [], c.cb)
-  );
-};
 
 const sign = { version: "2.3.6.carducci", isBrowser: false };
 var REQUIREJS = applyREQUIREJS.bind(sign);
@@ -371,7 +372,6 @@ buildable.CONFIG = {
     return { [x]: {} };
   })
 };
-console.log("configure defined ", configure);
 //buildable({});
 buildable.start = { contexts };
 Y(
