@@ -3,8 +3,8 @@ import requir from "./requirecd";
 var iMCard = null,
   mc = null;
 const requi = requir(), //
-  locs = requi.call(this, "mastercard-locations"),
-  places = requi.call(this, "mastercard-places");
+  locs = requi("mastercard-locations"),
+  places = requi("mastercard-places");
 //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
 
 const initializeMCard = () =>
