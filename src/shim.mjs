@@ -73,7 +73,10 @@ async function noException(req, env) {
       body: requir.arrayBuffer()
     }*/
     ) // Forward the current HTTP request to it
-    .then(async (res) => await res.json())
+    .then(async (res) => {
+      console.log("response from worker object", res);
+      return await res.json();
+    })
     .then((r) => {
       console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
       /*return new Response(`{ok: true,data: ${r} }`);*/
