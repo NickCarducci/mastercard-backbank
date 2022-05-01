@@ -122,19 +122,22 @@ export class DurableObjectExample {
       const dataHead = {
           "Content-Type": "application/json"
         },
-        R = (keyValue, obj) => {
+        R = (
+          keyValue,
+          obj /*{
           return {
             [keyValue[0]]: keyValue[1],
             status: obj[0],
             message: obj[1],
             headers: obj[2]
           };
-        };
-      /*new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
+        };*/
+        ) =>
+          new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
             status: obj[0],
             message: obj[1],
             headers: obj[2]
-          });*/
+          });
 
       if (rs) {
         //isBase64Encoded: false,
