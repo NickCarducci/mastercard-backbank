@@ -148,7 +148,7 @@ export function applyREQUIREJS(
       config
     ); /*context, newContext, bundlesMap; call is like prototype*/
   }
-  const configure = (
+  const cg = (
     c = (c) => {
       const r = T(c[_a] === _t)
         ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
@@ -240,11 +240,11 @@ export function applyREQUIREJS(
       Building.requir(c.REM || [], c.cb)
     );
   };
-  console.log("configure defined ", configure);
+  console.log("configure defined ", cg);
   return (
     Y(
       config &&
-        configure(
+        cg(
           config,
           KeyValue,
           makeModuleMap,
@@ -259,9 +259,6 @@ export function applyREQUIREJS(
         )
     ) && Build.requir(REM, cb, eb)
   );
-}
-export default function () {
-  console.log("default index.mjs, try DurableObjectExample");
 }
 
 //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same thi
@@ -390,12 +387,12 @@ Y(
 //requir = buildable; // package-names, cb, returns a value to define the thi of argument index[0]
 //} else
 
-async function requir() {
+export default async function requir() {
   const r = await new Promise(
-    (resolve) =>
+    (re) =>
       T(REQUIREJS !== _u) &&
       e_(REQUIREJS).string() === Fn &&
-      resolve(function () {
+      re(function () {
         var configuration = {},
           noSetTimeout,
           setTimeout = T(noSetTimeout === "undefined")
@@ -428,4 +425,6 @@ async function requir() {
       headers: obj[2]
     });*/
 }
-export { requir };
+/*export default function () {
+  console.log("default index.mjs, try DurableObjectExample");
+}*/
