@@ -18,7 +18,8 @@ import Functions, {
   isBrowser,
   mk,
   rmvScrpt,
-  modulehelp
+  modulehelp,
+  reduce
 } from "./module/functions";
 import { e_, hasPathFallback, KeyValue, SETSTATE, onError } from "..";
 var clrsec, watch;
