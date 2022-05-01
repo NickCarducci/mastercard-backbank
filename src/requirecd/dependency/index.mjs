@@ -18,8 +18,7 @@ import Functions, {
   isBrowser,
   mk,
   rmvScrpt,
-  modulehelp,
-  reduce
+  modulehelp
 } from "./module/functions";
 import { e_, hasPathFallback, KeyValue, SETSTATE, onError } from "..";
 var clrsec, watch;
@@ -55,7 +54,7 @@ export function checkLoaded(/*parentThis = arguments[0]*/) {
   const _e = "error",
     _em = "emit",
     erro = _e;
-  console.log("In Checkloaded", "dependency reduced for purpose: ", this);
+  console.log("In Checkloaded", "dependen reduced for purpose: ", this);
   Object.keys(enabledRegistry).forEach(
     (
       { id, noCyc } = (mod = (x) => enabledRegistry[x]) =>
@@ -130,11 +129,25 @@ const _i = "init",
   _t = "string",
   Y = (value, z, _) => {
     if (z && _) z[_] = value;
-    return true;
+    return value ? value : true;
   }, //seratimNull
   T = (x) => typeof x,
   _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
+var countrefs = 0;
+function references() {
+  countrefs++;
+  function refs() {
+    this.refs = [];
+    this.citeRef = (idx) => {
+      return (this.refs[idx] = {});
+    };
+    return this.refs;
+  }
+  return new refs();
+}
 export default function Dependency() {
+  var dependen = references.citeRef(countrefs);
+  //citation = refs.citeRef()
   var config,
     defQueue = [];
   const nextDef = (id) =>
@@ -146,14 +159,13 @@ export default function Dependency() {
         ? Y(
             defineables.forEach((queueItem) => {
               var id = queueItem[0];
-              (T(id === _t) ? (dependency.defQueueMap[id] = true) : true) &&
+              (T(id === _t) ? (dependen.defQueueMap[id] = true) : true) &&
                 defQueue.push(queueItem);
             })
           )
         : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
-    args = [this, config, nextDef, () => defQueue.shift(), defQueue, tkeGblQue],
-    {
-      dependency,
+    args = [config, nextDef, () => defQueue.shift(), defQueue, tkeGblQue];
+  var {
       BUILD,
       makeModuleMap,
       //build args output
@@ -161,7 +173,11 @@ export default function Dependency() {
       callGetModule,
       getGlobal
     } = Functions.bind(...args),
-    os = (o) => (o.constructor === Object ? dependency[o] : {}),
+    { onResourceLoad, exec, onError: oe } = BUILD;
+  const os = (o) => (o.constructor === Object ? dependen[o] : {}),
+    CONFIG = os("CONFIG"),
+    urlFchd = os("urlFchd"), //thi able's
+    load = (id, url) => BUILD.load(dependen, id, url),
     set = {
       bdlMap: {},
       NAME: arguments[0],
@@ -170,13 +186,10 @@ export default function Dependency() {
       makeModuleMap,
       nextTick: BUILD.nextTick,
       Module,
-      load: (id, url) => BUILD.load(dependency, id, url),
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
-      onError,
-      CONFIG: os("CONFIG"),
+      onError: oe,
       unDE: os("unDE"),
       enabledRegistry: os("enabledRegistry"),
-      urlFchd: os("urlFchd"), //thi able's
       defined: os("defined"),
       dependencies: os("dependencies")
     },
@@ -187,18 +200,12 @@ export default function Dependency() {
         //...args spread (naming for documentation-comment sugar field-value)
         ...{
           //...as independent objects copy spread
-          dependency: reduce.call(
-            this,
-            ["CONFIG", "urlFchd", "load"],
-            "dependency",
-            dependency
-          ),
-          build: reduce.call(
-            this,
-            ["onResourceLoad", "exec", "onError"],
-            "BUILD",
-            BUILD
-          )
+          dependen: { CONFIG, urlFchd, load },
+          build: {
+            onResourceLoad,
+            exec,
+            oe
+          } //reduce.call(dependen,args,"BUILD",BUILD)
         }
       ]
     ),
@@ -220,10 +227,10 @@ export default function Dependency() {
             );
           }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
       enable: (depMap) =>
-        e_(dependency.dependencies).yes(depMap.id) &&
-        dependency.dependencies[depMap.id] &&
+        e_(dependen.dependencies).yes(depMap.id) &&
+        dependen.dependencies[depMap.id] &&
         getModule(depMap).enable(),
-      /*if "m" thi is in dependency.dependencies, parent's dependency when overridden in "optimizer" (Not shown).
+      /*if "m" thi is in dependen.dependencies, parent's dependen when overridden in "optimizer" (Not shown).
       method used "internally" by environment adapters script-load or a synchronous load call.
       anonymous thi bound to name already  thi is another anon thi waiting for its completeLoad to fire.*/
       completeLoad: (scriptId) => {
@@ -240,21 +247,21 @@ export default function Dependency() {
                 : null) &&
             callGetModule(args);
         } /*matched a define call in thi script
-        in case-/init-calls change the dependency.dependencies*/
-        dependency.defQueueMap = {};
+        in case-/init-calls change the dependen.dependencies*/
+        dependen.defQueueMap = {};
         var m = ((d) => e_(d).yes(scriptId) && d[scriptId])(
-          dependency.dependencies
+          dependen.dependencies
         );
-        if (!found && !e_(dependency.defined).yes(scriptId) && m && !m.inited) {
-          var exportable = e_(dependency.CONFIG.exportable).yes(scriptId)
-            ? dependency.CONFIG.exportable[scriptId]
+        if (!found && !e_(dependen.defined).yes(scriptId) && m && !m.inited) {
+          var exportable = e_(dependen.CONFIG.exportable).yes(scriptId)
+            ? dependen.CONFIG.exportable[scriptId]
             : {};
           if (
-            dependency.CONFIG.enforceDefine &&
+            dependen.CONFIG.enforceDefine &&
             (!exportable.exports || !getGlobal(exportable.exports))
           )
             return (
-              !hasPathFallback(scriptId, dependency.CONFIG.paths) &&
+              !hasPathFallback(scriptId, dependen.CONFIG.paths) &&
               onError(
                 mk([
                   "nodefine",
@@ -272,11 +279,11 @@ export default function Dependency() {
     };
   return (
     checkLoaded(this.checkProto) &&
-    Y(_K(dependency).forEach((key) => (dependency[key] = stat[key]))) &&
-    (dependency.makeRequire = (modMap, options) =>
+    Y(_K(dependen).forEach((key) => (dependen[key] = stat[key]))) &&
+    (dependen.makeRequire = (modMap, options) =>
       makeRequire(modMap, options, arguments[0])) &&
-    KeyValue("requir", dependency.makeRequire()) &&
-    SETSTATE(dependency) &&
-    dependency
+    KeyValue("requir", dependen.makeRequire()) &&
+    SETSTATE(dependen) &&
+    dependen
   );
 } //dependencyy
