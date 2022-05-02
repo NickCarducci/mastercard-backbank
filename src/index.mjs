@@ -64,11 +64,11 @@ const initializeMCard = () =>
 
 export class DurableObjectExample {
   constructor(el, env) {
-    console.log(
+    /*console.log(
       "Example headers, ev's :",
       JSON.stringify(el),
       JSON.stringify(env)
-    ); //el.textContent
+    );*/ //el.textContent
     const dataHead = {
         "Content-Type": "application/json"
       },
