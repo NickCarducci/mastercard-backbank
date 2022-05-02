@@ -91,25 +91,27 @@ async function noException(req, env) {
             message: opts[1],
             headers: opts[2]
           });
-        };
-
-      return !r
-        ? R(false, { data: {} }, [
-            400,
-            "no response from durable object chain",
-            dataHead
-          ])
-        : !r.data
-        ? R(false, { response: r }, [
-            r.status,
-            r.statusText ? r.statusText : r.message,
-            dataHead
-          ])
-        : R(true, { true: JSON.stringify(r.data) }, [
-            200,
-            `success: ${req.url}`,
-            dataHead
-          ]);
+        },
+        Y = (m) => (() => true)(m);
+      var t = {};
+      Y((t.opts = [])) && (t.obj = {});
+      if (!r) {
+        t.opts = [400, "no response from durable object chain", dataHead];
+        t.obj = { data: {} };
+        return R(false, t.obj, t.opts);
+      }
+      if (!r.data) {
+        t.opts = [
+          "no data on Response: " + r.status,
+          r.statusText ? r.statusText : r.message,
+          dataHead
+        ];
+        t.obj = { response: r };
+        return R(false, t.obj, t.opts);
+      }
+      t.opts = [200, `success: ${req.url}`, dataHead];
+      t.obj = { true: JSON.stringify(r.data) };
+      return R(true, t.obj, t.opts);
     });
   //});
   //new Response({})
