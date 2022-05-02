@@ -36,7 +36,7 @@ const noaccess = (origin) =>
   new Response(
     JSON.stringify(`{error:${"no access for this origin- " + origin}}`),
     {
-      status: "400",
+      status: 400,
       message: "no access for this origin: " + origin
       //headers: { "Content-Type": "application/json" }
     }
@@ -96,14 +96,14 @@ async function noException(req, env) {
       var t = {};
       Y((t.opts = [])) && (t.obj = {});
       if (!r) {
-        t.opts = [400, "no response from durable object chain", dataHead];
+        t.opts = [400, "no Response from durable object chain", dataHead];
         t.obj = { data: {} };
         return R(false, t.obj, t.opts);
       }
       if (!r.data) {
         t.opts = [
-          "no data on Response: " + r.status,
-          r.statusText ? r.statusText : r.message,
+          r.status,
+          "no data on Response: " + r.statusText ? r.statusText : r.message,
           dataHead
         ];
         t.obj = { response: r };
