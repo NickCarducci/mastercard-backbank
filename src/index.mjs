@@ -138,26 +138,29 @@ export class DurableObjectExample {
             message: obj[1],
             headers: obj[2]
           });
-
-      if (rs) {
-        //isBase64Encoded: false,
-        if (rs.constructor === Object) {
-          return R(
-            ["data", rs],
-            [200, "success: " + req.url, { "Content-Type": "application/json" }]
-          );
-        } else
-          return R(
-            ["response", rs],
-            [200, "string success...: " + req.url, dataHead]
-          );
-      } else {
+      var t = {};
+      t.obj = {};
+      t.opts = [];
+      if (!rs) {
         //doof
-        return R(
-          ["error", requir],
-          [500, req.path + JSON.stringify(requir), dataHead]
-        );
+        t.obj = { error: requir };
+        t.opts = [500, req.path + JSON.stringify(requir), dataHead];
+        return R(t.obj, t.opts);
       }
+
+      //isBase64Encoded: false,
+      if (rs.constructor !== Object) {
+        t.obj = { response: rs };
+        t.opts = [200, "string success...: " + req.url, dataHead];
+        return R(t.obj, t.opts);
+      }
+      t.obj = { data: rs };
+      t.opts = [
+        200,
+        "success: " + req.url,
+        { "Content-Type": "application/json" }
+      ];
+      return R(t.obj, t.opts);
     };
     (this.el = el) &&
       (this.env = env) &&
