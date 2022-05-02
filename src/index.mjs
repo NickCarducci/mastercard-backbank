@@ -69,7 +69,28 @@ export class DurableObjectExample {
       JSON.stringify(el),
       JSON.stringify(env)
     ); //el.textContent
+    const dataHead = {
+        "Content-Type": "application/json"
+      },
+      R = (
+        keyValue,
+        obj /*{
+      return {
+        [keyValue[0]]: keyValue[1],
+        status: obj[0],
+        message: obj[1],
+        headers: obj[2]
+      };
+    };*/
+      ) =>
+        new Response(keyValue, {
+          status: obj[0],
+          message: obj[1],
+          headers: obj[2]
+        });
     this.handle = async (req) => {
+      if (!req.url)
+        return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
       console.log(
         "req.url" + req.url
       ); /*console.log(
@@ -119,32 +140,18 @@ export class DurableObjectExample {
         rs = await mastercardRoute(req, "getMerchants");
       }
       /*return new Response(`{ok: true,data: ${r} }`);*/
-      const dataHead = {
-          "Content-Type": "application/json"
-        },
-        R = (
-          keyValue,
-          obj /*{
-          return {
-            [keyValue[0]]: keyValue[1],
-            status: obj[0],
-            message: obj[1],
-            headers: obj[2]
-          };
-        };*/
-        ) =>
-          new Response(keyValue, {
-            status: obj[0],
-            message: obj[1],
-            headers: obj[2]
-          });
+
       var t = {};
       t.obj = {};
       t.opts = [];
       if (!rs) {
         //doof
         t.obj = { error: requir };
-        t.opts = [500, req.path + JSON.stringify(requir), dataHead];
+        t.opts = [
+          500,
+          req.path.split("://")[1] + JSON.stringify(requir),
+          dataHead
+        ];
         return R(t.obj, t.opts);
       }
 
@@ -155,11 +162,7 @@ export class DurableObjectExample {
         return R(t.obj, t.opts);
       }
       t.obj = { data: rs };
-      t.opts = [
-        200,
-        "success: " + req.url,
-        { "Content-Type": "application/json" }
-      ];
+      t.opts = [200, "success: " + req.url, dataHead];
       return R(t.obj, t.opts);
     };
     (this.el = el) &&
