@@ -88,7 +88,7 @@ async function noException(req, env) {
           const R = JSON.stringify(
             (() => true)((keyValue.success = ok)) && keyValue
           );
-          return new Response(R.replace("\\", "\n"), {
+          return new Response(R, {
             status: opts[0],
             message: opts[1],
             headers: opts[2]
@@ -102,7 +102,7 @@ async function noException(req, env) {
             dataHead
           ])
         : !r.data
-        ? R(false, { response: JSON.stringify(r).replace("\\", "\n") }, [
+        ? R(false, { response: r }, [
             r.status,
             r.statusText ? r.statusText : r.message,
             dataHead
