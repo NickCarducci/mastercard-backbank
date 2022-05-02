@@ -133,7 +133,7 @@ export class DurableObjectExample {
           };
         };*/
         ) =>
-          new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
+          new Response(keyValue, {
             status: obj[0],
             message: obj[1],
             headers: obj[2]
