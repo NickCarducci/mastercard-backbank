@@ -88,7 +88,7 @@ async function noException(req, env) {
           const R = JSON.stringify(
             (() => true)((keyValue.success = ok)) && keyValue
           );
-          return new Response(R, {
+          return new Response(R.replace("\\", "\n"), {
             status: opts[0],
             message: opts[1],
             headers: opts[2]
