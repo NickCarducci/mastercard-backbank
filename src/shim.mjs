@@ -102,7 +102,7 @@ async function noException(req, env) {
             dataHead
           ])
         : !r.data
-        ? R(false, { response: JSON.stringify(r) }, [
+        ? R(false, { response: JSON.stringify(r).replace("\\", "\n") }, [
             r.status,
             r.statusText ? r.statusText : r.message,
             dataHead
