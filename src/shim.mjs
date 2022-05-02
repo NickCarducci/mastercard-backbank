@@ -85,11 +85,14 @@ async function noException(req, env) {
         },
         R = (keyValue, ok, obj) =>
           //`{\nsuccess: ${ok},\n${keyValue.success=ok}\n}`
-          new Response(JSON.stringify((keyValue.success = ok)) && keyValue, {
-            status: obj[0],
-            message: obj[1],
-            headers: obj[2]
-          });
+          new Response(
+            JSON.stringify((() => true)((keyValue.success = ok)) && keyValue),
+            {
+              status: obj[0],
+              message: obj[1],
+              headers: obj[2]
+            }
+          );
 
       return !r
         ? R(false, { data: {} }, [
