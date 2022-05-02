@@ -83,16 +83,17 @@ async function noException(req, env) {
       const dataHead = {
           "Content-Type": "application/json"
         },
-        R = (ok, keyValue, opts) =>
+        R = (ok, keyValue, opts) => {
           //`{\nsuccess: ${ok},\n${keyValue.success=ok}\n}`
-          new Response(
-            JSON.stringify((() => true)((keyValue.success = ok)) && keyValue),
-            {
-              status: opts[0],
-              message: opts[1],
-              headers: opts[2]
-            }
+          const R = JSON.stringify(
+            (() => true)((keyValue.success = ok)) && keyValue
           );
+          return new Response(R, {
+            status: opts[0],
+            message: opts[1],
+            headers: opts[2]
+          });
+        };
 
       return !r
         ? R(false, { data: {} }, [
