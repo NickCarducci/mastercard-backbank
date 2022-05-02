@@ -85,9 +85,7 @@ async function noException(req, env) {
         },
         R = (ok, keyValue, opts) => {
           //`{\nsuccess: ${ok},\n${keyValue.success=ok}\n}`
-          const R = JSON.stringify(
-            (() => true)((keyValue.success = ok)) && keyValue
-          );
+          const R = JSON.stringify({ success: ok, ...keyValue });
           return new Response(R, {
             status: opts[0],
             message: opts[1],
