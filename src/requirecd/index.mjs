@@ -40,6 +40,9 @@ export default async function requir() /**f */ {
   // globally agreed names for other potential AMD loaders
   return await buildable(configuration);
 }
+//albeit var, immutable outside of this page
+export const SetBuildable = (depen) => (buildable = buildable.bind(depen));
+
 export var buildable = (callName) => {
   return function () {
     /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
@@ -65,8 +68,7 @@ export var buildable = (callName) => {
 
 buildable({});
 buildable.start = { contexts };
-export const SetBuildable = (depen) => (buildable = buildable.bind(depen)),
-  mixin = (tgt, s, frc, dSM) =>
+export const mixin = (tgt, s, frc, dSM) =>
     _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
   KeyValue = (key, value, delet) =>
     delet === "delete"
