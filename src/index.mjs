@@ -144,7 +144,7 @@ export class DurableObjectExample {
       var t = {};
       t.obj = {};
       t.opts = [];
-      if (!response) {
+      /*if (!response) {
         //doof
         console.log("!response");
         t.obj = { error: requir };
@@ -155,18 +155,19 @@ export class DurableObjectExample {
           dataHead
         ];
         return R(t.obj, t.opts);
-      }
-
-      //isBase64Encoded: false,
-      if (response.constructor !== Object) {
-        console.log("response.c!==Obj");
-        t.obj = { response }; //response for response object
-        t.opts = [200, "string success...: " + req.url, dataHead]; //network of network
+      }*/
+      if (response) {
+        //isBase64Encoded: false,
+        if (response.constructor !== Object) {
+          console.log("response.c!==Obj");
+          t.obj = { response }; //response for response object
+          t.opts = [200, "string success...: " + req.url, dataHead]; //network of network
+          return R(t.obj, t.opts);
+        }
+        t.obj = { data: response };
+        t.opts = [200, "success: " + req.url, dataHead];
         return R(t.obj, t.opts);
       }
-      t.obj = { data: response };
-      t.opts = [200, "success: " + req.url, dataHead];
-      return R(t.obj, t.opts);
     };
     (this.el = el) &&
       (this.env = env) &&
