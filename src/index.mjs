@@ -24,14 +24,14 @@ const initializeMCard = () =>
   mastercardRoute = async (req, func) => {
     const cb = (error, data) => (error ? error : data);
     initializeMCard();
-    let rs = null;
+    let response = null;
     if (func === "getAtms") {
       const {
         PageLength, //"5"
         PostalCode, //"11101"
         PageOffset //"0"
       } = req.body; //query
-      rs = await locs.ATMLocations.query(
+      response = await locs.ATMLocations.query(
         {
           PageLength,
           PostalCode,
@@ -53,13 +53,13 @@ const initializeMCard = () =>
           longitude
         }
       };
-      rs = await places.MerchantPointOfInterest.create(q, cb);
+      response = await places.MerchantPointOfInterest.create(q, cb);
     } else if (func === "getNames") {
-      rs = await places.MerchantCategoryCodes.query({}, cb);
+      response = await places.MerchantCategoryCodes.query({}, cb);
     } else if (func === "getTypes") {
-      rs = await places.MerchantIndustries.query({}, cb);
+      response = await places.MerchantIndustries.query({}, cb);
     }
-    return rs ? rs : [func, requir];
+    return response ? response : [func, requir];
   };
 
 export class DurableObjectExample {
@@ -129,24 +129,24 @@ export class DurableObjectExample {
                 return await readable.read().then(processText); // Read some more, and call thi function again
               });*/
       console.log("locs", locs, "requi", requi);
-      let rs = null;
+      let response = null;
       if (req.url === "/deposit") {
-        rs = await mastercardRoute(req, "getAtms");
+        response = await mastercardRoute(req, "getAtms");
       } else if (req.url === "/merchant_names") {
-        rs = await mastercardRoute(req, "getNames");
+        response = await mastercardRoute(req, "getNames");
       } else if (req.url === "/merchant_types") {
-        rs = await mastercardRoute(req, "getTypes");
+        response = await mastercardRoute(req, "getTypes");
       } else if (req.url === "/merchants") {
-        rs = await mastercardRoute(req, "getMerchants");
+        response = await mastercardRoute(req, "getMerchants");
       }
       /*return new Response(`{ok: true,data: ${r} }`);*/
 
       var t = {};
       t.obj = {};
       t.opts = [];
-      if (!rs) {
+      if (!response) {
         //doof
-        console.log("!rs");
+        console.log("!response");
         t.obj = { error: requir };
         const url = req.path && req.path.split("://");
         t.opts = [
@@ -158,13 +158,13 @@ export class DurableObjectExample {
       }
 
       //isBase64Encoded: false,
-      if (rs.constructor !== Object) {
-        console.log("rs.c!==Obj");
-        t.obj = { response: rs }; //response for response object
+      if (response.constructor !== Object) {
+        console.log("response.c!==Obj");
+        t.obj = { response }; //response for response object
         t.opts = [200, "string success...: " + req.url, dataHead]; //network of network
         return R(t.obj, t.opts);
       }
-      t.obj = { data: rs };
+      t.obj = { data: response };
       t.opts = [200, "success: " + req.url, dataHead];
       return R(t.obj, t.opts);
     };
