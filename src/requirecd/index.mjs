@@ -11,7 +11,61 @@ const _S = Object.prototype.toString,
   _e = "error",
   _em = "emit",
   _ev = "events";
-export const SetBuildable = (depen) => (buildable = depen),
+export default async function requir() /**f */ {
+  var noSetTimeout,
+    setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
+  /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
+        uses 'thi' as 'z', but when called () the function is returned,*/
+  const sign = { version: "2.3.6.carducci", isBrowser: false };
+  var REQUIREJS = Context.bind(sign),
+    _u = "baseUrl";
+  //dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
+  const notbase = T(REQUIREJS !== _u);
+
+  var configuration = Y(
+    notbase ? (REQUIREJS ? true /**notrequire */ : requir) : null
+  );
+  Y(
+    (REQUIREJS = notbase
+      ? undefined
+        ? true /**notrequire */
+        : undefined
+      : null)
+  );
+  //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
+
+  buildable.CONFIG = (config) => buildable(config);
+  buildable.nextTick = (fn) =>
+    T(setTimeout !== _n) ? setTimeout(fn, 4) : fn();
+  // globally agreed names for other potential AMD loaders
+  return await buildable(configuration);
+}
+export var buildable = (callName) => {
+  return function () {
+    /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
+       uses 'thi' as 'z', but when called () the function is returned,*/
+    this.NAME = null;
+    this.CONFIG = {
+      waitSeconds: 7,
+      baseUrl: "./", //bundle used to be packages
+      ...["paths", "bundles", "bundle", "exportable", "config"].map((x) => {
+        return { [x]: {} };
+      })
+    };
+    Y(
+      ["toUrl", "undef", "defined", "specified"].forEach(
+        (prop) => (this[prop] = binds(prop))
+      )
+    );
+    console.log("buildable/Build", callName); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
+
+    return requir(...arguments);
+  }.bind(callName);
+}; //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
+
+buildable({});
+buildable.start = { contexts };
+export const SetBuildable = (depen) => (buildable = buildable.bind(depen)),
   mixin = (tgt, s, frc, dSM) =>
     _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
   KeyValue = (key, value, delet) =>
@@ -79,67 +133,13 @@ var T = (x) => typeof x,
     if (z && _) z[_] = value;
     return value ? value : true;
   }, //seratimNull
-  _n = "undefined",
-  buildable = (callName) => {
-    console.log("buildable/Build", callName); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
-    return function () {
-      return requir(...arguments);
-    }.bind(callName);
-  }; //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
-
+  _n = "undefined";
 const Ar = "[object Array]",
   Fn = "[object Function]",
   _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
 
 //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same thi
 
-var _u = "baseUrl";
-/*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
-      uses 'thi' as 'z', but when called () the function is returned,*/
-buildable.NAME = null;
-buildable.CONFIG = {
-  waitSeconds: 7,
-  baseUrl: "./", //bundle used to be packages
-  ...["paths", "bundles", "bundle", "exportable", "config"].map((x) => {
-    return { [x]: {} };
-  })
-};
-buildable({});
-buildable.start = { contexts };
-Y(
-  ["toUrl", "undef", "defined", "specified"].forEach(
-    (prop) => (buildable[prop] = binds(prop))
-  )
-);
-export default async function requir() /**f */ {
-  var noSetTimeout,
-    setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
-  /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
-      uses 'thi' as 'z', but when called () the function is returned,*/
-  const sign = { version: "2.3.6.carducci", isBrowser: false };
-  var REQUIREJS = Context.bind(sign);
-  //dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
-  const notbase = T(REQUIREJS !== _u);
-
-  var configuration = Y(
-    notbase ? (REQUIREJS ? true /**notrequire */ : requir) : null
-  );
-  Y(
-    (REQUIREJS = notbase
-      ? undefined
-        ? true /**notrequire */
-        : undefined
-      : null)
-  );
-  //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
-
-  buildable.CONFIG = (config) => buildable(config);
-  buildable.nextTick = (fn) =>
-    T(setTimeout !== _n) ? setTimeout(fn, 4) : fn();
-  // globally agreed names for other potential AMD loaders
-  return await buildable(configuration);
-}
-export { buildable };
 /*
         buildable.requir.undef(id);
         buildable.makeRequire(null, { skipMap: true })([id]);
