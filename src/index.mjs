@@ -146,6 +146,7 @@ export class DurableObjectExample {
       t.opts = [];
       if (!rs) {
         //doof
+        console.log("!rs");
         t.obj = { error: requir };
         const url = req.path && req.path.split("://");
         t.opts = [
@@ -158,8 +159,9 @@ export class DurableObjectExample {
 
       //isBase64Encoded: false,
       if (rs.constructor !== Object) {
-        t.obj = { response: rs };
-        t.opts = [200, "string success...: " + req.url, dataHead];
+        console.log("rs.c!==Obj");
+        t.obj = { response: rs }; //response for response object
+        t.opts = [200, "string success...: " + req.url, dataHead]; //network of network
         return R(t.obj, t.opts);
       }
       t.obj = { data: rs };
