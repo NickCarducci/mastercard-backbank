@@ -150,7 +150,7 @@ export class DurableObjectExample {
         t.obj = { error: requir };
         const url = req.path && req.path.split("://");
         t.opts = [
-          500,
+          400,
           url ? url[1] + JSON.stringify(requir) : req.path,
           dataHead
         ];
