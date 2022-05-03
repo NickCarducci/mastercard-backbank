@@ -6,7 +6,7 @@ const place = { default: {} },
 var module = fun("./module"),
   { default: Module } = module ? module : place;
 var home = fun("."),
-  { hasPathFallback, KeyValue, mk, e_, SETSTATE, onError } = home
+  { hasPathFallback, KeyValue, mk, e_, SetBuildable, onError } = home
     ? home
     : place;
 var funcs = fun("./Functions"),
@@ -20,7 +20,7 @@ import Functions, {
   rmvScrpt,
   modulehelp
 } from "./module/functions";
-import { e_, hasPathFallback, KeyValue, SETSTATE, onError } from "..";
+import { e_, hasPathFallback, KeyValue, SetBuildable, onError } from "..";
 var clrsec, watch;
 
 export function checkLoaded(/*parentThis = arguments[0]*/) {
@@ -283,7 +283,7 @@ export default function Dependency() {
     (dependen.makeRequire = (modMap, options) =>
       makeRequire(modMap, options, arguments[0])) &&
     KeyValue("requir", dependen.makeRequire()) &&
-    SETSTATE(dependen) &&
+    SetBuildable(dependen) &&
     dependen
   );
 } //dependencyy
