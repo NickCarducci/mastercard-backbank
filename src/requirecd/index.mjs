@@ -85,19 +85,20 @@ export const mixin = (tgt, s, frc, dSM) =>
     return {
       yes,
       reducer: (prop, nextProp) => {
-        const go =
-          obj[3] &&
-          T(obj[0][prop] === "object") &&
-          obj[0][prop] &&
-          !e_(obj[0][prop]).a() &&
-          !e_(obj[0][prop]).string() === Fn &&
-          !(obj[0][prop] instanceof RegExp);
+        const e = obj[0][prop],
+          go =
+            obj[3] &&
+            T(e === "object") &&
+            e &&
+            !e_(e).a() &&
+            e_(e).string() !== Fn &&
+            !(e instanceof RegExp);
 
         return !obj[0]
           ? obj[1]
           : (obj[2] || !e_(obj[1]).yes(prop)) &&
-              (obj[1][prop] = !go ? obj[0][prop] : obj[1][prop] || {}) &&
-              mixin(obj[1][prop], obj[0][prop], obj[2], obj[3]) &&
+              (obj[1][prop] = !go ? e : obj[1][prop] || {}) &&
+              mixin(obj[1][prop], e, obj[2], obj[3]) &&
               obj[1];
       }, //s,tgt,frc,dSM
       create: (ns = n) => createElement(ns),
