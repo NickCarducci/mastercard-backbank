@@ -1,5 +1,5 @@
 import { e_, KeyValue, onError } from "../..";
-import { checkLoaded } from ".../check";
+import { checkLoaded } from "../check";
 
 const T = (x) => typeof x,
   Y = (value, z, _) => {
