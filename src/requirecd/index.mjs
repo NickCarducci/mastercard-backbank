@@ -11,6 +11,32 @@ const _S = Object.prototype.toString,
   _e = "error",
   _em = "emit",
   _ev = "events";
+//albeit var, immutable outside of this page
+export const SetBuildable = (depen) => (buildable = buildable.bind(depen));
+
+export var buildable = (callName) => {
+  return function () {
+    /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
+       uses 'thi' as 'z', but when called () the function is returned,*/
+    this.NAME = null;
+    this.CONFIG = {
+      waitSeconds: 7,
+      baseUrl: "./", //bundle used to be packages
+      ...["paths", "bundles", "bundle", "exportable", "config"].map((x) => {
+        return { [x]: {} };
+      })
+    };
+    Y(
+      ["toUrl", "undef", "defined", "specified"].forEach(
+        (prop) => (this[prop] = binds(prop))
+      )
+    );
+    console.log("buildable/Build", callName); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
+
+    return requir(...arguments);
+  }.bind(callName);
+}; //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
+
 export default async function requir() /**f */ {
   var noSetTimeout,
     setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
@@ -40,34 +66,6 @@ export default async function requir() /**f */ {
   // globally agreed names for other potential AMD loaders
   return await buildable(configuration);
 }
-//albeit var, immutable outside of this page
-export const SetBuildable = (depen) => (buildable = buildable.bind(depen));
-
-export var buildable = (callName) => {
-  return function () {
-    /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
-       uses 'thi' as 'z', but when called () the function is returned,*/
-    this.NAME = null;
-    this.CONFIG = {
-      waitSeconds: 7,
-      baseUrl: "./", //bundle used to be packages
-      ...["paths", "bundles", "bundle", "exportable", "config"].map((x) => {
-        return { [x]: {} };
-      })
-    };
-    Y(
-      ["toUrl", "undef", "defined", "specified"].forEach(
-        (prop) => (this[prop] = binds(prop))
-      )
-    );
-    console.log("buildable/Build", callName); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
-
-    return requir(...arguments);
-  }.bind(callName);
-}; //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
-
-buildable({});
-buildable.start = { contexts };
 export const mixin = (tgt, s, frc, dSM) =>
     _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
   KeyValue = (key, value, delet) =>
@@ -175,3 +173,6 @@ const Ar = "[object Array]",
 /*export default function () {
     console.log("default index.mjs, try DurableObjectExample");
   }*/
+
+buildable({});
+buildable.start = { contexts };
