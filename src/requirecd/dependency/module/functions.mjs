@@ -1,10 +1,10 @@
 import { e_, KeyValue, onError } from "../..";
-import { checkLoaded } from "..";
+import { checkLoaded } from ".../check";
 
 const T = (x) => typeof x,
   Y = (value, z, _) => {
     if (z && _) z[_] = value;
-    return true;
+    return value ? value : true;
   }, //seratimNull
   _n = "undefined",
   window = _n,
