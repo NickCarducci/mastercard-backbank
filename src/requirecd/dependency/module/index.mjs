@@ -1,4 +1,5 @@
-import { handlers } from "./functions";
+import { T, Y } from "./functions";
+import { handlers } from "./utils";
 
 var _e = "error",
   _d = "defined",
@@ -8,12 +9,7 @@ var _e = "error",
   _t = "string",
   Fn = "[object Function]";
 
-const Y = (value, z, _) => {
-    if (z && _) z[_] = value;
-    return true;
-  }, //seratimNull
-  _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []),
-  T = (x) => typeof x;
+const _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
 export default function Module() {
   var map = arguments[0],
     makeModuleMap = arguments[1],
