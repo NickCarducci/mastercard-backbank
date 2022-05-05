@@ -1,5 +1,5 @@
 import { KeyValue, onError } from "../..";
-import { mk, normalize, reduce, tryCatch } from "./functions";
+import { mk, normalize, reduce, tryCatch } from "../functions";
 import { nameToUrl } from "./nametourl";
 
 export function handlers(
