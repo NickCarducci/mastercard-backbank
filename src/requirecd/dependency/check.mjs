@@ -1,5 +1,5 @@
-import { iifeapp, isBrowser, mk, rmvScrpt } from "./module/functions";
 import { e_, hasPathFallback, onError } from "..";
+import { iifeapp, isBrowser, mk, rmvScrpt } from "./module/functions";
 var clrsec,
   watch,
   Y = (value, z, _) => {
