@@ -13,7 +13,7 @@ var funcs = fun("./Functions"),
   { default: Functions, checkLoaded, modulehelp, reduce } = funcs;*/
 
 import Module from "./module";
-import Functions, { mk, modulehelp } from "./module/functions";
+import MakeRequire, { mk, modulehelp } from "./module/makerequire";
 import { e_, hasPathFallback, KeyValue, SetBuildable, onError } from "..";
 import { checkLoaded } from "./check";
 
@@ -27,20 +27,20 @@ const _i = "init",
   }, //seratimNull
   T = (x) => typeof x,
   _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
-var countrefs = 0;
-function references() {
-  countrefs++;
-  function refs() {
-    this.refs = [];
-    this.citeRef = (idx) => {
-      return (this.refs[idx] = {});
-    };
-    return this.refs;
-  }
-  return new refs();
-}
+var countrefs = 0,
+  references = () => {
+    countrefs++;
+    function refs() {
+      this.refs = [];
+      this.citeRef = (idx) => {
+        return (this.refs[idx] = {});
+      };
+      return this.refs;
+    }
+    return new refs();
+  };
 export default function Dependency() {
-  var dependen = references.citeRef(countrefs);
+  var dependen = references.citeRef(countrefs); //ref is a func returned by fat, references is THE return, unhoisted
   //citation = refs.citeRef()
   var config,
     defQueue = [];
@@ -66,7 +66,7 @@ export default function Dependency() {
       makeRequire,
       callGetModule,
       getGlobal
-    } = Functions.bind(...args),
+    } = MakeRequire.bind(...args),
     { onResourceLoad, exec, onError: oe } = BUILD;
   const os = (o) => (o.constructor === Object ? dependen[o] : {}),
     CONFIG = os("CONFIG"),
