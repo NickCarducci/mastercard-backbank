@@ -1,4 +1,4 @@
-import { Y, e_ } from "./functions";
+import { e_, Y } from ".";
 const _f = "*";
 
 export const normalize = (nm, bn, applyMap, conId, system, configPkgs) => {
@@ -91,3 +91,4 @@ export const normalize = (nm, bn, applyMap, conId, system, configPkgs) => {
     tool().convertName(nm, system, applyMap, rs);
   return e_(configPkgs).yes(nm) ? configPkgs[nm] : nm;
 }; //obj.prototype["hasOwnProperty"][name]; const method =string?"toString":"hasOwnProperty"
+
