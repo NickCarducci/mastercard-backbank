@@ -1,6 +1,6 @@
-import { KeyValue, mixin, buildable } from ".";
+import { KeyValue, buildable } from ".";
 import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency";
-import { T, Y, _K, e_, reduce } from "./dependency/module/functions";
+import { T, Y, _K, e_, reduce, mixin } from "./dependency/module/functions";
 import makeModuleMap from "./makemap";
 
 var useInteractive = false;
