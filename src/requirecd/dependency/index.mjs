@@ -21,9 +21,27 @@ import { mk, T, Y, _K } from "./module/functions";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
+
 const _i = "init",
   _t = "string";
-var countrefs = 0,
+
+var config,
+  defQueue = [];
+
+const nextDef = (id) =>
+    defQueue
+      .sort((a, b) => b - a)
+      .map((args, i) => args[0] === id && defQueue.splice(i, 1)),
+  tkeGblQue = (cb) =>
+    (defineables.length
+      ? Y(
+          defineables.forEach((queueItem) => {
+            var id = queueItem[0];
+            (T(id === _t) ? cb(id) : true) && defQueue.push(queueItem);
+          })
+        )
+      : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
+  args = [config, nextDef, () => defQueue.shift(), defQueue, tkeGblQue],
   references = () => {
     countrefs++;
     function refs() {
@@ -35,40 +53,36 @@ var countrefs = 0,
     }
     return new refs();
   };
+
+var {
+    BUILD,
+    makeModuleMap,
+    //build args output
+    makeRequire,
+    callGetModule,
+    getGlobal
+  } = MakeRequire.bind(...args),
+  { onResourceLoad, exec, onError: oe } = BUILD;
+var countrefs = 0; //citation = refs.citeRef()
 export default function Dependency() {
   var dependen = references.citeRef(countrefs); //ref is a func returned by fat, references is THE return, unhoisted
-  //citation = refs.citeRef()
-  var config,
-    defQueue = [];
-  const nextDef = (id) =>
-      defQueue
-        .sort((a, b) => b - a)
-        .map((args, i) => args[0] === id && defQueue.splice(i, 1)),
-    tkeGblQue = () =>
-      (defineables.length
-        ? Y(
-            defineables.forEach((queueItem) => {
-              var id = queueItem[0];
-              (T(id === _t) ? (dependen.defQueueMap[id] = true) : true) &&
-                defQueue.push(queueItem);
-            })
-          )
-        : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
-    args = [config, nextDef, () => defQueue.shift(), defQueue, tkeGblQue];
-  var {
-      BUILD,
-      makeModuleMap,
-      //build args output
-      makeRequire,
-      callGetModule,
-      getGlobal
-    } = MakeRequire.bind(...args),
-    { onResourceLoad, exec, onError: oe } = BUILD;
+
   const os = (o) => (o.constructor === Object ? dependen[o] : {}),
     CONFIG = os("CONFIG"),
     urlFchd = os("urlFchd"), //thi able's
     load = (id, url) => BUILD.load(dependen, id, url),
-    set = {
+    //...args spread (naming for documentation-comment sugar field-value)
+    //...as independent objects copy spread
+    depbu = {
+      dependen: { CONFIG, urlFchd, load },
+      build: {
+        onResourceLoad,
+        exec,
+        oe
+      }
+    },
+    { getModule } = modulehelp.call(this, e_, ...[...depbu]),
+    stat = {
       bdlMap: {},
       NAME: arguments[0],
       defQueue,
@@ -81,26 +95,8 @@ export default function Dependency() {
       unDE: os("unDE"),
       enabledRegistry: os("enabledRegistry"),
       defined: os("defined"),
-      dependencies: os("dependencies")
-    },
-    { getModule } = modulehelp.call(
-      this,
-      e_,
-      ...[
-        //...args spread (naming for documentation-comment sugar field-value)
-        ...{
-          //...as independent objects copy spread
-          dependen: { CONFIG, urlFchd, load },
-          build: {
-            onResourceLoad,
-            exec,
-            oe
-          } //reduce.call(dependen,args,"BUILD",BUILD)
-        }
-      ]
-    ),
-    stat = {
-      ...set,
+      dependencies: os("dependencies"),
+
       //configure,
       makeShimExports: (value) =>
         function () {
@@ -108,24 +104,18 @@ export default function Dependency() {
             (value[_i] && value[_i].apply(config, arguments)) ||
             (value.exports && getGlobal(value.exports))
           );
-        }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
-      /* makeShimExports: (value) =>
-          function () {
-            return (
-              (value[_i] && value[_i].apply(dependencyy, arguments)) ||
-              (value.exports && getGlobal(value.exports))
-            );
-          }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
+        },
       enable: (depMap) =>
         e_(dependen.dependencies).yes(depMap.id) &&
         dependen.dependencies[depMap.id] &&
         getModule(depMap).enable(),
-      /*if "m" thi is in dependen.dependencies, parent's dependen when overridden in "optimizer" (Not shown).
-      method used "internally" by environment adapters script-load or a synchronous load call.
-      anonymous thi bound to name already  thi is another anon thi waiting for its completeLoad to fire.*/
       completeLoad: (scriptId) => {
         var found, args;
-        for (tkeGblQue(); defQueue.length; ) {
+        for (
+          tkeGblQue((id) => (dependen.defQueueMap[id] = true));
+          defQueue.length;
+
+        ) {
           defQueue.shift();
           if (found) break;
           (found = true) &&
@@ -160,8 +150,7 @@ export default function Dependency() {
                   [scriptId]
                 ])
               )
-            ); /*type, msg, err, requireModules; does not call define(), but simulated scriptId = moduleName; 
-            abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"; thi param?*/
+            );
           callGetModule([scriptId, exportable.REM || [], exportable.exportsFn]);
         }
         return checkLoaded(this.checkProto) && true;
@@ -177,3 +166,17 @@ export default function Dependency() {
     dependen
   );
 } //dependencyy
+/*type, msg, err, requireModules; does not call define(), but simulated scriptId = moduleName; 
+            abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"; thi param?*/
+/*if "m" thi is in dependen.dependencies, parent's dependen when overridden in "optimizer" (Not shown).
+method used "internally" by environment adapters script-load or a synchronous load call.
+anonymous thi bound to name already  thi is another anon thi waiting for its completeLoad to fire.*/
+
+//Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
+/* makeShimExports: (value) =>
+          function () {
+            return (
+              (value[_i] && value[_i].apply(dependencyy, arguments)) ||
+              (value.exports && getGlobal(value.exports))
+            );
+          }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
