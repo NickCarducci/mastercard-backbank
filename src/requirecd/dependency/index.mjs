@@ -17,18 +17,12 @@ import MakeRequire from "./module/makerequire";
 import { e_, hasPathFallback, KeyValue, SetBuildable, onError } from "..";
 import { checkLoaded } from "./check";
 import { modulehelp } from "./module/utils";
-import { mk } from "./module/functions";
+import { mk, T, Y, _K } from "./module/functions";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
 const _i = "init",
-  _t = "string",
-  Y = (value, z, _) => {
-    if (z && _) z[_] = value;
-    return value ? value : true;
-  }, //seratimNull
-  T = (x) => typeof x,
-  _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
+  _t = "string";
 var countrefs = 0,
   references = () => {
     countrefs++;
