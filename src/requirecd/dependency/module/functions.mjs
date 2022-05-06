@@ -1,9 +1,8 @@
-import { e_ } from "../..";
-
 const _n = "undefined",
   window = _n,
   navigator = _n;
-export const T = (x) => typeof x,
+export const _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []),
+  T = (x) => typeof x,
   Y = (value, z, _) => {
     if (z && _) z[_] = value;
     return value ? value : true;
@@ -94,4 +93,46 @@ iifefunc(
     } catch (e) {
       return console.log(/*this*/ "", e);
     }
-  };
+  },
+  _S = Object.prototype.toString,
+  _H = "hasOwnProperty",
+  createElement = (ns) =>
+    document[`createElementNS${ns ? "NS" : ""}`](
+      ns ? ("http://www.w3.org/1999/xhtml", "html:script") : "script"
+    ),
+  mixin = (tgt, s, frc, dSM) =>
+    _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
+  e_ = (obj /*,string*/) => {
+    /* !obj && console.log(obj + " error obj in ", thi);*/
+    const n = (NS) => NS.constructor === "String" && NS.toUpperCase() === "NS",
+      yes = (name) => obj[_H](name) /*[_P]*/,
+      string = () => _S(obj),
+      tag = (ind) => document.getElementsByTagName(obj ? obj : "script")[ind];
+    return {
+      yes,
+      reducer: (prop, nextProp) => {
+        const e = obj[0][prop],
+          go =
+            obj[3] &&
+            T(e === "object") &&
+            e &&
+            !e_(e).a() &&
+            e_(e).string() !== Fn &&
+            !(e instanceof RegExp);
+
+        return !obj[0]
+          ? obj[1]
+          : (obj[2] || !e_(obj[1]).yes(prop)) &&
+              (obj[1][prop] = !go ? e : obj[1][prop] || {}) &&
+              mixin(obj[1][prop], e, obj[2], obj[3]) &&
+              obj[1];
+      }, //s,tgt,frc,dSM
+      create: (ns = n) => createElement(ns),
+      string,
+      a: (x) => x.string() === Ar,
+      tag,
+      interA: (x) => x.readyState === "interactive"
+    };
+  },
+  Ar = "[object Array]",
+  Fn = "[object Function]";
