@@ -1,10 +1,10 @@
 import { KeyValue, buildable } from ".";
 import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency";
-import { T, Y, _K, e_, reduce, mixin } from "./dependency/module/functions";
-import makeModuleMap from "./makemap";
+import { T, Y, _K, e_, reduce, mixin } from "./dependency/utils";
+import MakeModuleMap from "./makemap";
 
 var useInteractive = false;
-export var contexts = {};
+export var contexts = {}; //albeit var, read-only, -exported
 const _p = "packages",
   _b = "bundles",
   _s = "exportable",
@@ -79,11 +79,11 @@ export default function Context(
       config = {
         Build,
         buildable,
-        makeModuleMap,
+        MakeModuleMap,
         KeyValue,
         Y,
         checkProto: reduce.call(this, copyable, "Build", Build),
-        moduleProto: { makeModuleMap, useInteractive, _e }
+        moduleProto: { MakeModuleMap, useInteractive, _e }
       };
     contexts[NAME] = Build = Dependency.bind(config);
     /*context, newContext, bundlesMap; call is like prototype*/
@@ -107,7 +107,7 @@ export default function Context(
             [_a]: r
           },
     KeyValue,
-    makeModuleMap,
+    MakeModuleMap,
     Building,
     mixin,
     e_
@@ -152,7 +152,7 @@ export default function Context(
         Y(
           _K(z).forEach(
             (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
-              (z[id].map = makeModuleMap(id, null, true))
+              (z[id].map = MakeModuleMap(id, null, true))
           )
         ))(Building.dependencies) &&
       (c.REM || c.cb) &&
@@ -168,7 +168,7 @@ export default function Context(
         cg(
           config,
           KeyValue,
-          makeModuleMap,
+          MakeModuleMap,
           reduce.call(
             this,
             ["CONFIG", "bdlMap", "makeShimExports", "dependencies", "requir"],
