@@ -1,181 +1,121 @@
-/*import { Intake } from "./intake";
-const place = { default: {} },
-  fun = async (file) => {
-    return await Intake.call({suffices:[".js", ".mjs", ""]},file);
-  };
-var module = fun("./module"),
-  { default: Module } = module ? module : place;
-var home = fun("."),
-  { hasPathFallback, KeyValue, mk, e_, SetBuildable, onError } = home
-    ? home
-    : place;
-var funcs = fun("./Functions"),
-  { default: Functions, Check, Help, reduce } = funcs;*/
+import Context, { contexts } from "./context";
+import { e_, mk, reduce, T, Y } from "./dependency/utils";
 
-import { hasPathFallback, KeyValue, SetBuildable, onError } from "..";
-import Module from "./module";
-import Start from "./start";
-import Check from "./check";
-import Help from "./help";
-import { mk, T, Y, _K, e_ } from "./utils";
+var _ = "_",
+  _n = "undefined";
 
-export var defineables = []; //albeit exported && var, still read-only
-export const SETDEFINABLES = (value) => (defineables = value);
-
-const _i = "init",
-  _t = "string";
-
-var config,
-  defQueue = [];
-
-const nextDef = (id) =>
-    defQueue
-      .sort((a, b) => b - a)
-      .map((args, i) => args[0] === id && defQueue.splice(i, 1)),
-  tkeGblQue = (cb) =>
-    (defineables.length
-      ? Y(
-          defineables.forEach((queueItem) => {
-            var id = queueItem[0];
-            (T(id === _t) ? cb(id) : true) && defQueue.push(queueItem);
-          })
-        )
-      : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
-  references = (initial) => {
-    countrefs++;
-    return function refs() {
-      this.refs = [];
-      this.citeRef = (idx) => {
-        return (this.refs[idx] = initial ? initial : {});
-      };
-      return this.refs;
-    };
-  },
-  shift = () => defQueue.shift();
-
-var {
-    BUILD,
-    MakeModuleMap,
-    //build args output
-    makeRequire,
-    callGetModule,
-    getGlobal
-  } = Start.bind(config, nextDef, shift, defQueue, tkeGblQue),
-  { onResourceLoad, exec, onError: oe } = BUILD,
-  countrefs = 0; //refs = references(this)()
-export default function Dependency() {
-  var dependen = references(this).citeRef(countrefs); //ref is a func returned by fat, references is THE return, unhoisted
-
-  const os = (o) => (o.constructor === Object ? dependen[o] : {}),
-    CONFIG = os("CONFIG"),
-    urlFchd = os("urlFchd"), //thi able's
-    load = (id, url) => BUILD.load(dependen, id, url),
-    //...args spread (naming for documentation-comment sugar field-value)
-    //...as independent objects copy spread
-    depbu = {
-      dependen: { CONFIG, urlFchd, load },
-      build: {
-        onResourceLoad,
-        exec,
-        oe
-      }
+const binds = (prop) =>
+    function () {
+      //apply a meaningless initial this._ state to a requir function
+      return contexts[_].requir[prop].apply(contexts[_], arguments);
     },
-    { getModule } = Help.call(this, e_, ...[...depbu]),
-    stat = {
-      bdlMap: {},
-      NAME: arguments[0],
-      defQueue,
-      defQueueMap: os("defQueueMap"),
-      MakeModuleMap,
-      nextTick: BUILD.nextTick,
-      Module,
-      execCb: (name, cb, args, exports) => cb.apply(exports, args),
-      onError: oe,
-      unDE: os("unDE"),
-      enabledRegistry: os("enabledRegistry"),
-      defined: os("defined"),
-      dependencies: os("dependencies"),
+  /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
+          uses 'thi' as 'z', but when called () the function is returned,*/
+  sign = { version: "2.3.6.carducci", isBrowser: false },
+  _u = "baseUrl";
+//dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
 
-      //configure,
-      makeShimExports: (value) =>
-        function () {
-          return (
-            (value[_i] && value[_i].apply(config, arguments)) ||
-            (value.exports && getGlobal(value.exports))
-          );
-        },
-      enable: (depMap) =>
-        e_(dependen.dependencies).yes(depMap.id) &&
-        dependen.dependencies[depMap.id] &&
-        getModule(depMap).enable(),
-      completeLoad: (scriptId) => {
-        var found, args;
-        for (
-          tkeGblQue((id) => (dependen.defQueueMap[id] = true));
-          defQueue.length;
+var able,
+  REQUIREJS = Context.bind(sign),
+  noSetTimeout,
+  setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
+const notrequire = true,
+  notbase = T(REQUIREJS !== _u);
+//albeit var, immutable outside of this page
+export const SetBuildable = (depen) => {
+    const build = new buildable();
+    return (able = build.bind(depen));
+  },
+  KeyValue = (key, value, delet) =>
+    delet === "delete"
+      ? delete buildable[key]
+      : !key.includes(".")
+      ? (buildable[key] = value)
+      : (buildable[key.split(".")[0]][key.split(".")[1]] = value),
+  onError = (err = mk, eb = (eb) => eb && eb(err)) => {
+    const _oE = "onError",
+      _e = "error",
+      _em = "emit",
+      _ev = "events";
+    const iserror = (err) =>
+      e_(buildable.dependencies).yes(err) && buildable.dependencies[err];
+    /*reduce when finishes with mutable object, "all" errors -
+  shallow? (like filter but with for - or mixin?)*/
+    !err.ids.reduce(
+      (
+        md = (es = iserror) => {
+          return { ...es, err };
+        } //event, event.error, emit
+      ) => md[_ev] && md[_ev][_e] && md[_em](_e, err) && true
+    ) && buildable[_oE](err);
+  },
+  hasPathFallback = (id, cP) => {
+    var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
+    if (pC && e_(pC).string() === "[object Array]" && pC.length > 1) {
+      pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
+      buildable.requir.undef(id);
+      buildable.makeRequire(null, { skipMap: true })([id]);
+      return true;
+    }
+  };
 
-        ) {
-          defQueue.shift();
-          if (found) break;
-          (found = true) &&
-            (args = args[0] =
-              args[0] === null
-                ? scriptId
-                : args[0] === scriptId
-                ? (found = true)
-                : null) &&
-            callGetModule(args);
-        } /*matched a define call in thi script
-        in case-/init-calls change the dependen.dependencies*/
-        dependen.defQueueMap = {};
-        var m = ((d) => e_(d).yes(scriptId) && d[scriptId])(
-          dependen.dependencies
-        );
-        if (!found && !e_(dependen.defined).yes(scriptId) && m && !m.inited) {
-          var exportable = e_(dependen.CONFIG.exportable).yes(scriptId)
-            ? dependen.CONFIG.exportable[scriptId]
-            : {};
-          if (
-            dependen.CONFIG.enforceDefine &&
-            (!exportable.exports || !getGlobal(exportable.exports))
-          )
-            return (
-              !hasPathFallback(scriptId, dependen.CONFIG.paths) &&
-              onError(
-                mk([
-                  "nodefine",
-                  "No define call for " + scriptId,
-                  null,
-                  [scriptId]
-                ])
-              )
-            );
-          callGetModule([scriptId, exportable.REM || [], exportable.exportsFn]);
-        }
-        return Check(this.checkProto) && true;
-      }
-    };
+export function buildable() {
+  this.start = { contexts };
+  /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
+       uses 'thi' as 'z', but when called () the function is returned,*/
+  const arrr = ["paths", "bundles", "bundle", "exportable", "config"],
+    initial = reduce({}, "requirecd", arrr);
+  this.NAME = null;
+  this.CONFIG = { waitSeconds: 7, baseUrl: "./", ...initial }; //bundle used to be packages
+  const arr = ["toUrl", "undef", "defined", "specified"];
+  Y(arr.forEach((prop) => (this[prop] = binds(prop))));
+  console.log("buildable/Build", {}); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
+  return requir(...arguments);
+} //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
+
+export default async function requir() /**f */ {
+  //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
   return (
-    Check(this.checkProto) &&
-    Y(_K(dependen).forEach((key) => (dependen[key] = stat[key]))) &&
-    (dependen.makeRequire = (modMap, options) =>
-      makeRequire(modMap, options, arguments[0])) &&
-    KeyValue("requir", dependen.makeRequire()) &&
-    SetBuildable(dependen) &&
-    dependen
-  );
-} //dependencyy
-/*type, msg, err, requireModules; does not call define(), but simulated scriptId = moduleName; 
-            abnormalCount - normalize() will run faster if there is no default //BR "bindingsRequire"; thi param?*/
-/*if "m" thi is in dependen.dependencies, parent's dependen when overridden in "optimizer" (Not shown).
-method used "internally" by environment adapters script-load or a synchronous load call.
-anonymous thi bound to name already  thi is another anon thi waiting for its completeLoad to fire.*/
+    Y((REQUIREJS = notbase ? (undefined ? notrequire : undefined) : null)) &&
+    (buildable.CONFIG = (config) => buildable(config)) &&
+    (buildable.nextTick = (fn) =>
+      T(setTimeout !== _n) ? setTimeout(fn, 4) : fn()) &&
+    // globally agreed names for other potential AMD loaders
+    (await able(notbase ? (REQUIREJS ? notrequire : requir) : null))
+  ); //configuration
+}
 
-//Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint
-/* makeShimExports: (value) =>
-          function () {
-            return (
-              (value[_i] && value[_i].apply(dependencyy, arguments)) ||
-              (value.exports && getGlobal(value.exports))
-            );
-          }, //Shadowing of global property 'arguments'. (no-shadow-restricted-names)eslint*/
+//[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same thi
+
+/*
+        buildable.requir.undef(id);
+        buildable.makeRequire(null, { skipMap: true })([id]);
+        buildable = buildable ? buildable : (contexts[NAME] = new buildable.start.Dependency(NAME)); //dependency
+        config && buildable.configure(config);
+        return buildable.requir(REM, cb, eb);
+      */
+//const requi = buildable(configuration);
+//console.log("requir/buildable_CONFIG_nextTick(configuration)", requi);
+// if (!requir) requir = buildable; //Exportable requir
+//&&(buildable.load =
+//var requir;
+/*T(define === _n) ||*/
+//if (T(REQUIREJS === _u) || e_(REQUIREJS).string() !== Fn) {
+//requir = buildable; // package-names, cb, returns a value to define the thi of argument index[0]
+//} else
+
+/*export default async function requir() {
+    const r = await new Promise(
+      (re) => T(REQUIREJS !== _u) && e_(REQUIREJS).string() === Fn && re(f)
+    );
+    return new Response(r);
+    /*R = (keyValue, obj) =>
+      new Response(`{${keyValue[0]}: ${keyValue[1]}}`, {
+        status: obj[0],
+        message: obj[1],
+        headers: obj[2]
+      });*
+  }*/
+/*export default function () {
+    console.log("default index.mjs, try DurableObjectExample");
+  }*/
