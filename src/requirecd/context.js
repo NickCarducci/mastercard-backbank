@@ -1,6 +1,6 @@
-import { e_, KeyValue, mixin, buildable } from ".";
+import { KeyValue, mixin, buildable } from ".";
 import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency";
-import { T, Y, _K } from "./dependency/module/functions";
+import { T, Y, _K, e_ } from "./dependency/module/functions";
 import { reduce } from "./dependency/module/makerequire";
 import makeModuleMap from "./makemap";
 
