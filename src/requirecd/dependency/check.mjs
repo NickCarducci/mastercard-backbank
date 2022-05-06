@@ -1,13 +1,13 @@
 import { hasPathFallback, onError } from "..";
-import { iifeapp, isBrowser, mk, rmvScrpt, e_ } from "./module/functions";
+import { iifeapp, isBrowser, mk, rmvScrpt, e_ } from "./utils";
 var clrsec,
   watch,
   Y = (value, z, _) => {
     if (z && _) z[_] = value;
     return value ? value : true;
   }; //seratimNull
-export function checkLoaded(/*parentThis = arguments[0]*/) {
-  // console.log("checkLoaded: ", this);
+export default function Check(/*parentThis = arguments[0]*/) {
+  // console.log("Check: ", this);
   const {
     CONFIG,
     startTime,
@@ -75,7 +75,7 @@ export function checkLoaded(/*parentThis = arguments[0]*/) {
     wait &&
     brwr &&
     !clrsec &&
-    setTimeout(() => checkLoaded.bind(this) && null, 50);
+    setTimeout(() => Check.bind(this) && null, 50);
   var dep,
     progress = (
       { m, depMaps, id, tt, p } = (m) =>
