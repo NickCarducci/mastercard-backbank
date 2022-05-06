@@ -1,5 +1,4 @@
-import { e_ } from "../..";
-import { Y } from "./functions";
+import { Y, e_ } from "./functions";
 const _f = "*";
 
 export const normalize = (nm, bn, applyMap, conId, system, configPkgs) => {
