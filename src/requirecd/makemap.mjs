@@ -1,5 +1,7 @@
 import { buildable } from ".";
-import { iifeapp, nameToUrl, normalize } from "./dependency/module/functions";
+import { iifeapp } from "./dependency/module/functions";
+import { normalize } from "./dependency/module/normalize";
+import { nameToUrl } from "./dependency/module/utils/nametourl";
 
 var requireCounter = 1,
   unnormalizedCounter = 1,
