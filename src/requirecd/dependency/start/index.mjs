@@ -1,4 +1,4 @@
-import { KeyValue, onError } from "..";
+import { KeyValue, onError } from "../..";
 import Check from "../check";
 import { mk, reduce, T, Y, isBrowser, e_, rmvScrpt, handlers } from "../utils";
 import { normalize } from "../utils/normalize";
