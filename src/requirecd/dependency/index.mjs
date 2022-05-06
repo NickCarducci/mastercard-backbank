@@ -10,14 +10,14 @@ var home = fun("."),
     ? home
     : place;
 var funcs = fun("./Functions"),
-  { default: Functions, checkLoaded, modulehelp, reduce } = funcs;*/
+  { default: Functions, Check, Help, reduce } = funcs;*/
 
 import { hasPathFallback, KeyValue, SetBuildable, onError } from "..";
 import Module from "./module";
-import MakeRequire from "./makerequire";
-import { checkLoaded } from "./check";
-import { modulehelp } from "./module/utils";
-import { mk, T, Y, _K, e_ } from "./module/functions";
+import Start from "./start";
+import Check from "./check";
+import Help from "./help";
+import { mk, T, Y, _K, e_ } from "./utils";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
@@ -55,12 +55,12 @@ const nextDef = (id) =>
 
 var {
     BUILD,
-    makeModuleMap,
+    MakeModuleMap,
     //build args output
     makeRequire,
     callGetModule,
     getGlobal
-  } = MakeRequire.bind(config, nextDef, shift, defQueue, tkeGblQue),
+  } = Start.bind(config, nextDef, shift, defQueue, tkeGblQue),
   { onResourceLoad, exec, onError: oe } = BUILD,
   countrefs = 0; //refs = references(this)()
 export default function Dependency() {
@@ -80,13 +80,13 @@ export default function Dependency() {
         oe
       }
     },
-    { getModule } = modulehelp.call(this, e_, ...[...depbu]),
+    { getModule } = Help.call(this, e_, ...[...depbu]),
     stat = {
       bdlMap: {},
       NAME: arguments[0],
       defQueue,
       defQueueMap: os("defQueueMap"),
-      makeModuleMap,
+      MakeModuleMap,
       nextTick: BUILD.nextTick,
       Module,
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
@@ -152,11 +152,11 @@ export default function Dependency() {
             );
           callGetModule([scriptId, exportable.REM || [], exportable.exportsFn]);
         }
-        return checkLoaded(this.checkProto) && true;
+        return Check(this.checkProto) && true;
       }
     };
   return (
-    checkLoaded(this.checkProto) &&
+    Check(this.checkProto) &&
     Y(_K(dependen).forEach((key) => (dependen[key] = stat[key]))) &&
     (dependen.makeRequire = (modMap, options) =>
       makeRequire(modMap, options, arguments[0])) &&
