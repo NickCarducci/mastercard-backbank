@@ -1,5 +1,5 @@
 import Context, { contexts } from "./context";
-import { e_, mk, T, Y } from "./dependency/module/functions";
+import { e_, mk, reduce, T, Y } from "./dependency/module/functions";
 
 var _ = "_",
   _n = "undefined";
@@ -48,53 +48,38 @@ export var buildable = (callName) => {
   return function () {
     /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
        uses 'thi' as 'z', but when called () the function is returned,*/
+    const arrr = ["paths", "bundles", "bundle", "exportable", "config"],
+      initial = reduce({}, "requirecd", arrr);
     this.NAME = null;
-    this.CONFIG = {
-      waitSeconds: 7,
-      baseUrl: "./", //bundle used to be packages
-      ...["paths", "bundles", "bundle", "exportable", "config"].map((x) => {
-        return { [x]: {} };
-      })
-    };
-    Y(
-      ["toUrl", "undef", "defined", "specified"].forEach(
-        (prop) => (this[prop] = binds(prop))
-      )
-    );
+    this.CONFIG = { waitSeconds: 7, baseUrl: "./", ...initial }; //bundle used to be packages
+    const arr = ["toUrl", "undef", "defined", "specified"];
+    Y(arr.forEach((prop) => (this[prop] = binds(prop))));
     console.log("buildable/Build", callName); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
-
     return requir(...arguments);
   }.bind(callName);
 }; //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
 
-export default async function requir() /**f */ {
-  var noSetTimeout,
-    setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
-  /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
+/*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
         uses 'thi' as 'z', but when called () the function is returned,*/
-  const sign = { version: "2.3.6.carducci", isBrowser: false };
-  var REQUIREJS = Context.bind(sign),
-    _u = "baseUrl";
-  //dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
-  const notbase = T(REQUIREJS !== _u);
+const sign = { version: "2.3.6.carducci", isBrowser: false },
+  _u = "baseUrl";
+//dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
 
-  var configuration = Y(
-    notbase ? (REQUIREJS ? true /**notrequire */ : requir) : null
-  );
-  Y(
-    (REQUIREJS = notbase
-      ? undefined
-        ? true /**notrequire */
-        : undefined
-      : null)
-  );
+var REQUIREJS = Context.bind(sign),
+  noSetTimeout,
+  setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
+const notrequire = true,
+  notbase = T(REQUIREJS !== _u);
+export default async function requir() /**f */ {
   //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
-
-  buildable.CONFIG = (config) => buildable(config);
-  buildable.nextTick = (fn) =>
-    T(setTimeout !== _n) ? setTimeout(fn, 4) : fn();
-  // globally agreed names for other potential AMD loaders
-  return await buildable(configuration);
+  return (
+    Y((REQUIREJS = notbase ? (undefined ? notrequire : undefined) : null)) &&
+    (buildable.CONFIG = (config) => buildable(config)) &&
+    (buildable.nextTick = (fn) =>
+      T(setTimeout !== _n) ? setTimeout(fn, 4) : fn()) &&
+    // globally agreed names for other potential AMD loaders
+    (await buildable(notbase ? (REQUIREJS ? notrequire : requir) : null))
+  ); //configuration
 }
 
 //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same thi
