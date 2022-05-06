@@ -1,5 +1,5 @@
-import { KeyValue, onError } from "../../..";
-import { mk, reduce, tryCatch } from ".";
+import { KeyValue, onError } from "../..";
+import { mk, reduce, tryCatch } from "../utils";
 import { normalize } from "../utils/normalize";
 import { nameToUrl } from "../utils/nametourl";
 
