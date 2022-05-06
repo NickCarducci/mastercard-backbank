@@ -1,10 +1,9 @@
-import { KeyValue, onError } from "../..";
-import { checkLoaded } from "../check";
-import { mk, reduce, T, Y, isBrowser, e_ } from "./functions";
-import { rmvScrpt } from "./module/functions";
-import { normalize } from "./normalize";
-import { handlers, modulehelp } from "./utils";
-import { nameToUrl } from "./utils/nametourl";
+import { KeyValue, onError } from "..";
+import { checkLoaded } from "./check";
+import { mk, reduce, T, Y, isBrowser, e_, rmvScrpt } from "./module/functions";
+import { normalize } from "./module/normalize";
+import { handlers, modulehelp } from "./module/utils";
+import { nameToUrl } from "./module/utils/nametourl";
 
 var mixin = (tgt, s, frc, dSM) =>
   Object.keys(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt);
