@@ -14,10 +14,10 @@ var funcs = fun("./Functions"),
 
 import Module from "./module";
 import MakeRequire from "./module/makerequire";
-import { e_, hasPathFallback, KeyValue, SetBuildable, onError } from "..";
+import { hasPathFallback, KeyValue, SetBuildable, onError } from "..";
 import { checkLoaded } from "./check";
 import { modulehelp } from "./module/utils";
-import { mk, T, Y, _K } from "./module/functions";
+import { mk, T, Y, _K, e_ } from "./module/functions";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
