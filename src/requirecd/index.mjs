@@ -5,12 +5,27 @@ var _ = "_",
   _n = "undefined";
 
 const binds = (prop) =>
-  function () {
-    //apply a meaningless initial this._ state to a requir function
-    return contexts[_].requir[prop].apply(contexts[_], arguments);
-  };
+    function () {
+      //apply a meaningless initial this._ state to a requir function
+      return contexts[_].requir[prop].apply(contexts[_], arguments);
+    },
+  /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
+          uses 'thi' as 'z', but when called () the function is returned,*/
+  sign = { version: "2.3.6.carducci", isBrowser: false },
+  _u = "baseUrl";
+//dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
+
+var able,
+  REQUIREJS = Context.bind(sign),
+  noSetTimeout,
+  setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
+const notrequire = true,
+  notbase = T(REQUIREJS !== _u);
 //albeit var, immutable outside of this page
-export const SetBuildable = (depen) => (buildable = buildable.bind(depen)),
+export const SetBuildable = (depen) => {
+    const build = new buildable();
+    return (able = build.bind(depen));
+  },
   KeyValue = (key, value, delet) =>
     delet === "delete"
       ? delete buildable[key]
@@ -44,32 +59,20 @@ export const SetBuildable = (depen) => (buildable = buildable.bind(depen)),
     }
   };
 
-export var buildable = (callName) => {
-  return function () {
-    /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
+export function buildable() {
+  this.start = { contexts };
+  /*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
        uses 'thi' as 'z', but when called () the function is returned,*/
-    const arrr = ["paths", "bundles", "bundle", "exportable", "config"],
-      initial = reduce({}, "requirecd", arrr);
-    this.NAME = null;
-    this.CONFIG = { waitSeconds: 7, baseUrl: "./", ...initial }; //bundle used to be packages
-    const arr = ["toUrl", "undef", "defined", "specified"];
-    Y(arr.forEach((prop) => (this[prop] = binds(prop))));
-    console.log("buildable/Build", callName); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
-    return requir(...arguments);
-  }.bind(callName);
-}; //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
+  const arrr = ["paths", "bundles", "bundle", "exportable", "config"],
+    initial = reduce({}, "requirecd", arrr);
+  this.NAME = null;
+  this.CONFIG = { waitSeconds: 7, baseUrl: "./", ...initial }; //bundle used to be packages
+  const arr = ["toUrl", "undef", "defined", "specified"];
+  Y(arr.forEach((prop) => (this[prop] = binds(prop))));
+  console.log("buildable/Build", {}); //console.log (in custom 'function') runs ONCE AT THE END OF THE FIRST TIME
+  return requir(...arguments);
+} //well-characterized safety profiles - returns a function, how apropos of bind with a fat arrow
 
-/*'applyMap' for dependency ID, 'baseName' relative to 'name,' the most relative
-        uses 'thi' as 'z', but when called () the function is returned,*/
-const sign = { version: "2.3.6.carducci", isBrowser: false },
-  _u = "baseUrl";
-//dependency = arguments[0], //T(requir === _n) || e_(requir).string() === Fn;
-
-var REQUIREJS = Context.bind(sign),
-  noSetTimeout,
-  setTimeout = T(noSetTimeout === "undefined") ? undefined : noSetTimeout;
-const notrequire = true,
-  notbase = T(REQUIREJS !== _u);
 export default async function requir() /**f */ {
   //(name,baseName,applyMap,configNodeIdCompat,configMap,configPkgs)
   return (
@@ -78,7 +81,7 @@ export default async function requir() /**f */ {
     (buildable.nextTick = (fn) =>
       T(setTimeout !== _n) ? setTimeout(fn, 4) : fn()) &&
     // globally agreed names for other potential AMD loaders
-    (await buildable(notbase ? (REQUIREJS ? notrequire : requir) : null))
+    (await able(notbase ? (REQUIREJS ? notrequire : requir) : null))
   ); //configuration
 }
 
@@ -116,6 +119,3 @@ export default async function requir() /**f */ {
 /*export default function () {
     console.log("default index.mjs, try DurableObjectExample");
   }*/
-
-buildable({});
-buildable.start = { contexts };
