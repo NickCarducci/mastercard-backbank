@@ -1,6 +1,6 @@
 import { e_, KeyValue, onError } from "../..";
 import { checkLoaded } from "../check";
-import { mk, reduce, T, Y, isBrowser } from "./functions";
+import { mk, reduce, T, Y, isBrowser, e_ } from "./functions";
 import { normalize } from "./normalize";
 import { handlers, modulehelp } from "./utils";
 import { nameToUrl } from "./utils/nametourl";
