@@ -89,6 +89,9 @@ iifefunc(
       Object.keys(dependency).forEach(
         (key) => arr.includes(key) && (newobject[key] = dependency[key])
       );
+      arr.forEach(
+        (x) => !Object.keys(newobject).includes(x) && (newobject[x] = {})
+      );
       return newobject;
     } catch (e) {
       return console.log(/*this*/ "", e);
