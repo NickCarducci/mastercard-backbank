@@ -12,9 +12,9 @@ var home = fun("."),
 var funcs = fun("./Functions"),
   { default: Functions, checkLoaded, modulehelp, reduce } = funcs;*/
 
-import Module from "./module";
-import MakeRequire from "./module/makerequire";
 import { hasPathFallback, KeyValue, SetBuildable, onError } from "..";
+import Module from "./module";
+import MakeRequire from "./makerequire";
 import { checkLoaded } from "./check";
 import { modulehelp } from "./module/utils";
 import { mk, T, Y, _K, e_ } from "./module/functions";
@@ -41,18 +41,17 @@ const nextDef = (id) =>
           })
         )
       : true) && SETDEFINABLES([]), //globalQueue by internal method to thi defQueue
-  args = [config, nextDef, () => defQueue.shift(), defQueue, tkeGblQue],
-  references = () => {
+  references = (initial) => {
     countrefs++;
-    function refs() {
+    return function refs() {
       this.refs = [];
       this.citeRef = (idx) => {
-        return (this.refs[idx] = {});
+        return (this.refs[idx] = initial ? initial : {});
       };
       return this.refs;
-    }
-    return new refs();
-  };
+    };
+  },
+  shift = () => defQueue.shift();
 
 var {
     BUILD,
@@ -61,11 +60,11 @@ var {
     makeRequire,
     callGetModule,
     getGlobal
-  } = MakeRequire.bind(...args),
-  { onResourceLoad, exec, onError: oe } = BUILD;
-var countrefs = 0; //citation = refs.citeRef()
+  } = MakeRequire.bind(config, nextDef, shift, defQueue, tkeGblQue),
+  { onResourceLoad, exec, onError: oe } = BUILD,
+  countrefs = 0; //refs = references(this)()
 export default function Dependency() {
-  var dependen = references.citeRef(countrefs); //ref is a func returned by fat, references is THE return, unhoisted
+  var dependen = references(this).citeRef(countrefs); //ref is a func returned by fat, references is THE return, unhoisted
 
   const os = (o) => (o.constructor === Object ? dependen[o] : {}),
     CONFIG = os("CONFIG"),
