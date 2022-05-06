@@ -1,7 +1,7 @@
 import { buildable } from ".";
-import { iifeapp } from "./dependency/module/functions";
-import { normalize } from "./dependency/module/normalize";
-import { nameToUrl } from "./dependency/module/utils/nametourl";
+import { iifeapp } from "./dependency/utils";
+import { normalize } from "./dependency/utils/normalize";
+import { nameToUrl } from "./dependency/utils/nametourl";
 
 var requireCounter = 1,
   unnormalizedCounter = 1,
@@ -10,7 +10,7 @@ var requireCounter = 1,
     return value ? value : true;
   }; //seratimNull
 
-export default function makeModuleMap(
+export default function MakeModuleMap(
   n = arguments[0],
   sourcemap = arguments[1],
   isNormed = arguments[2],
