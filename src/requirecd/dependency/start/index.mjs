@@ -1,8 +1,8 @@
 import { KeyValue, onError } from "..";
-import Check from "./check";
-import { mk, reduce, T, Y, isBrowser, e_, rmvScrpt, handlers } from "./utils";
-import { normalize } from "./utils/normalize";
-import { nameToUrl } from "./utils/nametourl";
+import Check from "../check";
+import { mk, reduce, T, Y, isBrowser, e_, rmvScrpt, handlers } from "../utils";
+import { normalize } from "../utils/normalize";
+import { nameToUrl } from "../utils/nametourl";
 import Help from "./help";
 
 var mixin = (tgt, s, frc, dSM) =>
