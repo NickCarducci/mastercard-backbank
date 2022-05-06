@@ -15,8 +15,8 @@ var funcs = fun("./Functions"),
 import { hasPathFallback, KeyValue, SetBuildable, onError } from "..";
 import Module from "./module";
 import Start from "./start";
+import Help from "./start/help";
 import Check from "./check";
-import Help from "./help";
 import { mk, T, Y, _K, e_ } from "./utils";
 
 export var defineables = []; //albeit exported && var, still read-only
