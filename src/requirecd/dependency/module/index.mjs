@@ -1,4 +1,4 @@
-import { T, Y } from "./functions";
+import { T, Y, _K } from "./functions";
 import { handlers } from "./utils";
 
 var _e = "error",
@@ -9,7 +9,6 @@ var _e = "error",
   _t = "string",
   Fn = "[object Function]";
 
-const _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
 export default function Module() {
   var map = arguments[0],
     makeModuleMap = arguments[1],
