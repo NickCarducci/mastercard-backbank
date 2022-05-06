@@ -1,18 +1,48 @@
-import Context, { binds, contexts } from "./context";
-import { mk } from "./dependency/module/functions";
+import Context, { contexts } from "./context";
+import { e_, mk, T, Y } from "./dependency/module/functions";
 
-const _S = Object.prototype.toString,
-  _H = "hasOwnProperty",
-  createElement = (ns) =>
-    document[`createElementNS${ns ? "NS" : ""}`](
-      ns ? ("http://www.w3.org/1999/xhtml", "html:script") : "script"
-    ),
-  _oE = "onError",
-  _e = "error",
-  _em = "emit",
-  _ev = "events";
+var _ = "_",
+  _n = "undefined";
+
+const binds = (prop) =>
+  function () {
+    //apply a meaningless initial this._ state to a requir function
+    return contexts[_].requir[prop].apply(contexts[_], arguments);
+  };
 //albeit var, immutable outside of this page
-export const SetBuildable = (depen) => (buildable = buildable.bind(depen));
+export const SetBuildable = (depen) => (buildable = buildable.bind(depen)),
+  KeyValue = (key, value, delet) =>
+    delet === "delete"
+      ? delete buildable[key]
+      : !key.includes(".")
+      ? (buildable[key] = value)
+      : (buildable[key.split(".")[0]][key.split(".")[1]] = value),
+  onError = (err = mk, eb = (eb) => eb && eb(err)) => {
+    const _oE = "onError",
+      _e = "error",
+      _em = "emit",
+      _ev = "events";
+    const iserror = (err) =>
+      e_(buildable.dependencies).yes(err) && buildable.dependencies[err];
+    /*reduce when finishes with mutable object, "all" errors -
+  shallow? (like filter but with for - or mixin?)*/
+    !err.ids.reduce(
+      (
+        md = (es = iserror) => {
+          return { ...es, err };
+        } //event, event.error, emit
+      ) => md[_ev] && md[_ev][_e] && md[_em](_e, err) && true
+    ) && buildable[_oE](err);
+  },
+  hasPathFallback = (id, cP) => {
+    var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
+    if (pC && e_(pC).string() === "[object Array]" && pC.length > 1) {
+      pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
+      buildable.requir.undef(id);
+      buildable.makeRequire(null, { skipMap: true })([id]);
+      return true;
+    }
+  };
 
 export var buildable = (callName) => {
   return function () {
@@ -66,78 +96,6 @@ export default async function requir() /**f */ {
   // globally agreed names for other potential AMD loaders
   return await buildable(configuration);
 }
-export const mixin = (tgt, s, frc, dSM) =>
-    _K(s).reduce(e_([s, tgt, frc, dSM]).reducer(), tgt),
-  KeyValue = (key, value, delet) =>
-    delet === "delete"
-      ? delete buildable[key]
-      : !key.includes(".")
-      ? (buildable[key] = value)
-      : (buildable[key.split(".")[0]][key.split(".")[1]] = value),
-  e_ = (obj /*,string*/) => {
-    /* !obj && console.log(obj + " error obj in ", thi);*/
-    const n = (NS) => NS.constructor === "String" && NS.toUpperCase() === "NS",
-      yes = (name) => obj[_H](name) /*[_P]*/,
-      string = () => _S(obj),
-      tag = (ind) => document.getElementsByTagName(obj ? obj : "script")[ind];
-    return {
-      yes,
-      reducer: (prop, nextProp) => {
-        const e = obj[0][prop],
-          go =
-            obj[3] &&
-            T(e === "object") &&
-            e &&
-            !e_(e).a() &&
-            e_(e).string() !== Fn &&
-            !(e instanceof RegExp);
-
-        return !obj[0]
-          ? obj[1]
-          : (obj[2] || !e_(obj[1]).yes(prop)) &&
-              (obj[1][prop] = !go ? e : obj[1][prop] || {}) &&
-              mixin(obj[1][prop], e, obj[2], obj[3]) &&
-              obj[1];
-      }, //s,tgt,frc,dSM
-      create: (ns = n) => createElement(ns),
-      string,
-      a: (x) => x.string() === Ar,
-      tag,
-      interA: (x) => x.readyState === "interactive"
-    };
-  },
-  onError = (err = mk, eb = (eb) => eb && eb(err)) => {
-    const iserror = (err) =>
-      e_(buildable.dependencies).yes(err) && buildable.dependencies[err];
-    /*reduce when finishes with mutable object, "all" errors -
-      shallow? (like filter but with for - or mixin?)*/
-    !err.ids.reduce(
-      (
-        md = (es = iserror) => {
-          return { ...es, err };
-        } //event, event.error, emit
-      ) => md[_ev] && md[_ev][_e] && md[_em](_e, err) && true
-    ) && buildable[_oE](err);
-  },
-  hasPathFallback = (id, cP) => {
-    var pC = e_(cP).yes(id) && cP[id]; //pathConfig,configPaths
-    if (pC && e_(pC).string() === "[object Array]" && pC.length > 1) {
-      pC.shift(); //config is live? but 'id' is variable as args.. [for the?] next try
-      buildable.requir.undef(id);
-      buildable.makeRequire(null, { skipMap: true })([id]);
-      return true;
-    }
-  };
-
-var T = (x) => typeof x,
-  Y = (value, z, _) => {
-    if (z && _) z[_] = value;
-    return value ? value : true;
-  }, //seratimNull
-  _n = "undefined";
-const Ar = "[object Array]",
-  Fn = "[object Function]",
-  _K = (o) => (o && o.constructor === Object ? Object.keys(o) : []);
 
 //[], () => d, null,{enabled: true,ignore: true} if multiple define calls for the same thi
 
