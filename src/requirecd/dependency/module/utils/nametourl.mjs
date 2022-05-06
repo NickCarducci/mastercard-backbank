@@ -1,4 +1,4 @@
-import { e_ } from "../../..";
+import { e_ } from "../functions";
 
 export function nameToUrl() {
   const { CONFIG, bdlMap } = this;
