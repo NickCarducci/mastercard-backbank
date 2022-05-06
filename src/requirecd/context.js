@@ -1,24 +1,11 @@
 import { e_, KeyValue, mixin, buildable } from ".";
 import Dependency /*, { defineables, SETDEFINABLES }*/ from "./dependency";
-import { reduce } from "./dependency/module/functions";
+import { T, Y, _K } from "./dependency/module/functions";
+import { reduce } from "./dependency/module/makerequire";
 import makeModuleMap from "./makemap";
 
-var _ = "_",
-  _u = "baseUrl";
-export const binds = (prop) =>
-  function () {
-    //apply a meaningless initial this._ state to a requir function
-    return contexts[_].requir[prop].apply(contexts[_], arguments);
-  };
+var useInteractive = false;
 export var contexts = {};
-var _t = "string",
-  useInteractive = false,
-  T = (x) => typeof x,
-  Y = (value, z, _) => {
-    if (z && _) z[_] = value;
-    return value ? value : true;
-  }; //seratimNull
-
 const _p = "packages",
   _b = "bundles",
   _s = "exportable",
@@ -27,7 +14,38 @@ const _p = "packages",
   _xf = "exportsFn",
   _i = "init",
   _e = "error",
-  Ar = "[object Array]";
+  Ar = "[object Array]",
+  _ = "_",
+  _u = "baseUrl",
+  _t = "string";
+
+const mend = (bundles, exportables, Building) => {
+  var exportable = Building.CONFIG.exportable;
+  bundles &&
+    _K(bundles).forEach((prop, i) =>
+      bundles[prop].forEach((v) =>
+        KeyValue(`bdlMap.${v}`, v !== prop ? prop : Building.bdlMap[v])
+      )
+    );
+  Y(
+    exportables &&
+      _K(exportables).forEach((id, i) => {
+        var exportable = exportables[id];
+        return (
+          Y(
+            e_(exportable).string() === Ar && (exportable = { REM: exportable })
+          ) && //Merge exportable, Normalize the structure
+          Y(
+            (exportable.exports || exportable[_i]) &&
+              !exportable[_xf] &&
+              (exportable[_xf] = Building.makeShimExports(exportable))
+          ) &&
+          (exportable[id] = exportable)
+        );
+      })
+  );
+  return { exportable, exportables };
+};
 
 export default function Context(
   REM = arguments[0], //String(requir|export|module)
@@ -51,42 +69,44 @@ export default function Context(
     Y((Build = e_(contexts).yes(NAME) && contexts[NAME]));
   //https://github.com/NickCarducci/mastercard-backbank/blob/main/src/notes/require.js#L231 231
   if (!Build) {
-    const checkProto = reduce.call(
-        this,
-        [
-          "CONFIG",
-          "startTime",
-          "dependencies",
-          "defined",
-          "enabledRegistry",
-          "NAME"
-        ],
-        "Build",
-        Build
-      ),
+    const copyable = [
+        "CONFIG",
+        "startTime",
+        "dependencies",
+        "defined",
+        "enabledRegistry",
+        "NAME"
+      ],
       config = {
         Build,
         buildable,
         makeModuleMap,
         KeyValue,
         Y,
-        checkProto,
+        checkProto: reduce.call(this, copyable, "Build", Build),
         moduleProto: { makeModuleMap, useInteractive, _e }
       };
     contexts[NAME] = Build = Dependency.bind(config);
     /*context, newContext, bundlesMap; call is like prototype*/
   }
   const cg = (
-    c = (c) => {
-      const r = T(c[_a] === _t)
-        ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
-        : c[_a];
-
-      return c[_u].charAt(c[_u].length - 1) ===
-        "/" /* Convert old style urlArgs string to a function.*/
+    c = (
+      { c, r } = (c) => {
+        return {
+          c,
+          r: T(c[_a] === _t)
+            ? (id, url) => (url.indexOf("?") === -1 ? "?" : "&") + c[_a]
+            : c[_a]
+        };
+      } /* Convert old style urlArgs string to a function.*/
+    ) =>
+      c[_u].charAt(c[_u].length - 1) === "/"
         ? { ...c, [_a]: r }
-        : { ...c, [_u]: `${c[_u]}/`, [_a]: r };
-    },
+        : {
+            ...c,
+            [_u]: `${c[_u]}/`,
+            [_a]: r
+          },
     KeyValue,
     makeModuleMap,
     Building,
@@ -94,8 +114,8 @@ export default function Context(
     e_
   ) => {
     //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","Building.CONFIG","map"]);
-    Object.keys(c).forEach((prop = (op) => {
-      const arr = ["paths", "bundles", "config", "map"];
+    const arr = ["paths", "bundles", "config", "map"];
+    _K(c).forEach((prop = (op) => {
       return Y(!arr.includes(op) ? KeyValue(`CONFIG.${op}`, c[op]) : arr.forEach(
                 (op) =>
                   KeyValue(
@@ -105,35 +125,7 @@ export default function Context(
               )) && op;
     }, i) => mixin(Building.CONFIG[prop], c[prop], true, true));
     /*args prop; save paths for special "additive processing;" Reverse map the bundles; 'exportable' = tobeshim*/
-    const mend = (bundles, exportables) => {
-        var exportable = Building.CONFIG.exportable;
-        bundles &&
-          Object.keys(bundles).forEach((prop, i) =>
-            bundles[prop].forEach((v) =>
-              KeyValue(`bdlMap.${v}`, v !== prop ? prop : Building.bdlMap[v])
-            )
-          );
-        Y(
-          exportables &&
-            Object.keys(exportables).forEach((id, i) => {
-              var exportable = exportables[id];
-              return (
-                Y(
-                  e_(exportable).string() === Ar &&
-                    (exportable = { REM: exportable })
-                ) && //Merge exportable, Normalize the structure
-                Y(
-                  (exportable.exports || exportable[_i]) &&
-                    !exportable[_xf] &&
-                    (exportable[_xf] = Building.makeShimExports(exportable))
-                ) &&
-                (exportable[id] = exportable)
-              );
-            })
-        );
-        return { exportable, exportables };
-      },
-      { exportables, exportable } = mend(c[_b], c[_s]);
+    const { exportables, exportable } = mend(c[_b], c[_s], Building);
     return (
       Y(
         KeyValue(
@@ -159,7 +151,7 @@ export default function Context(
       ) &&
       ((z) =>
         Y(
-          Object.keys(z).forEach(
+          _K(z).forEach(
             (id = (id) => !z[id].inited && !z[id].map.unnormalized && id) =>
               (z[id].map = makeModuleMap(id, null, true))
           )
