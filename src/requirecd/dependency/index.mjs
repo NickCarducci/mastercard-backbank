@@ -13,9 +13,11 @@ var funcs = fun("./Functions"),
   { default: Functions, checkLoaded, modulehelp, reduce } = funcs;*/
 
 import Module from "./module";
-import MakeRequire, { mk, modulehelp } from "./module/makerequire";
+import MakeRequire from "./module/makerequire";
 import { e_, hasPathFallback, KeyValue, SetBuildable, onError } from "..";
 import { checkLoaded } from "./check";
+import { modulehelp } from "./module/utils";
+import { mk } from "./module/functions";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
