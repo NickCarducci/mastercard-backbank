@@ -79,11 +79,8 @@ export default function Context(
       config = {
         Build,
         buildable,
-        MakeModuleMap,
-        KeyValue,
-        Y,
         checkProto: reduce.call(this, copyable, "Build", Build),
-        moduleProto: { MakeModuleMap, useInteractive, _e }
+        moduleProto: { useInteractive, _e }
       };
     contexts[NAME] = Build = Dependency.bind(config);
     /*context, newContext, bundlesMap; call is like prototype*/
@@ -106,11 +103,7 @@ export default function Context(
             [_u]: `${c[_u]}/`,
             [_a]: r
           },
-    KeyValue,
-    MakeModuleMap,
-    Building,
-    mixin,
-    e_
+    Building
   ) => {
     //const objs = function (){arguments.forEach(x=>thi[x]=true)}.apply({},["paths","bundles","Building.CONFIG","map"]);
     const arr = ["paths", "bundles", "config", "map"];
@@ -167,16 +160,12 @@ export default function Context(
       config &&
         cg(
           config,
-          KeyValue,
-          MakeModuleMap,
           reduce.call(
             this,
             ["CONFIG", "bdlMap", "makeShimExports", "dependencies", "requir"],
             "Build",
             Build
-          ),
-          mixin,
-          e_
+          )
         )
     ) && Build.requir(REM, cb, eb)
   );
