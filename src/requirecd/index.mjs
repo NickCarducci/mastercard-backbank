@@ -31,7 +31,11 @@ export const SetBuildable = (depen) => {
       ? delete buildable[key]
       : !key.includes(".")
       ? (buildable[key] = value)
-      : (buildable[key.split(".")[0]][key.split(".")[1]] = value),
+      : key.split(".") === 2
+      ? (buildable[key.split(".")[0]][key.split(".")[1]] = value)
+      : (buildable[key.split(".")[0]][key.split(".")[1]][
+          key.split(".")[2]
+        ] = value),
   onError = (err = mk, eb = (eb) => eb && eb(err)) => {
     const _oE = "onError",
       _e = "error",
