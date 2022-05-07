@@ -52,10 +52,17 @@ const nextDef = (id) =>
     };
   },
   shift = () => defQueue.shift();
-
-var {
+/**
+ * 
+    dependency,
     BUILD,
     MakeModuleMap,
+    checkProto,
+    moduleProto,
+    Dependency: thisDep
+ */
+var {
+    BUILD,
     //build args output
     makeRequire,
     callGetModule,
@@ -86,7 +93,6 @@ export default function Dependency() {
       NAME: arguments[0],
       defQueue,
       defQueueMap: os("defQueueMap"),
-      MakeModuleMap,
       nextTick: BUILD.nextTick,
       Module,
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
