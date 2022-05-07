@@ -1,16 +1,14 @@
 import { KeyValue, onError } from "../..";
-import { mk, reduce, tryCatch } from "../utils";
+import { e_, mk, reduce, tryCatch } from "../utils";
 import { normalize } from "../utils/normalize";
 import { nameToUrl } from "../utils/nametourl";
 
 export default function Help(
-  e_ = arguments[0],
-  dependency = arguments[1],
-  BUILD = arguments[2],
-  s
+  dependency = arguments[0],
+  BUILD = arguments[1],
+  moduleProto = arguments[2]
 ) {
-  const { moduleProto } = this,
-    {
+  const {
       Module,
       CONFIG: config = (CONFIG) => CONFIG.config,
       urlFchd,
