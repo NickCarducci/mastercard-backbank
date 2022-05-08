@@ -1,7 +1,7 @@
 import { e_ } from "../../utils";
-import Call from "../call";
+import Call from ".";
 import Module from "../module";
-import { nameToUrl } from "../utils/nametourl";
+import { nameToUrl } from "../../utils/nametourl";
 import { fromText } from "./fromtext";
 
 const _P = "prototype",
