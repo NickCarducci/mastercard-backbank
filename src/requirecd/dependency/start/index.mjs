@@ -40,7 +40,7 @@ export default function Start(
       getModule(MakeModuleMap(args[0], null, true))[_i](args[1], args[2]);
   return {
     //dependency,
-    //BUILD,
+    BUILD,
     //MakeModuleMap,
     callGetModule,
     getGlobal: (value) =>
