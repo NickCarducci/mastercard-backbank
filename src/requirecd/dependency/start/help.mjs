@@ -1,7 +1,7 @@
+import Module from "./module";
 import { KeyValue, onError } from "../..";
 import { e_, mk, reduce, tryCatch } from "../utils";
 import { normalize } from "../utils/normalize";
-import { nameToUrl } from "../utils/nametourl";
 
 export default function Help(
   dependency = arguments[0],
@@ -9,14 +9,10 @@ export default function Help(
   moduleProto = arguments[2]
 ) {
   const {
-      Module,
       CONFIG: config = (CONFIG) => CONFIG.config,
       urlFchd,
       load
     } = dependency,
-    clrRegstr = (id) =>
-      KeyValue(`dependencies.${id}`, null, "delete") &&
-      KeyValue(`enabledRegistry.${id}`, null, "delete"),
     depMap = (dm) => {
       return {
         dm,
@@ -41,67 +37,86 @@ export default function Help(
                   )
               )
             : true,
-        mold = (id, tkn) =>
-          e_(config).yes(id)
-            ? KeyValue(`CONFIG.config.${tkn}`, config[id])
-            : true,
         loadd = () =>
           !urlFchd[dm.url]
             ? KeyValue(`urlFchd.${dm.url}`, true) && load(dm.id, dm.url)
             : console.log(
                 `redundant dependency.load(${dm.id}, ${dm.url}) call (?), dependency.urlFchd[${dm.url}] === true`
               ),
-        execute = (text, id) => {
-          const erro = tryCatch(BUILD.exec, [text]);
-          if (erro)
-            return onError(
-              mk([
-                "fromtexteval",
-                `fromText eval for ${id} failed: ${erro}`,
-                erro,
-                [id]
-              ])
-            );
-        },
-        matches = [
+        trans = [
           "unDE",
           "CONFIG",
           "dependencies",
-          "makeRequire",
-          "bdlMap",
-          "completeLoad",
-          "enable",
           "execCb",
           "defined",
           "defQueueMap"
-        ],
-        { MakeModuleMap, useInteractive, _e } = moduleProto;
+        ];
       const Dependency = this;
       return m
         ? m
         : KeyValue(
             `dependencies.${dm.id}`,
-            new Module(
-              dm,
-              MakeModuleMap,
-              useInteractive,
-              _e,
-              clrRegstr,
-              nameToUrl,
-              Help(e_, dependency, BUILD, moduleProto, Dependency).getModule,
+            //Bind (no call) || (new && prototype) || (return Call with prototype)
+            Module.bind({
+              map: dm,
               onError,
-              ...reduce.call(this, matches, "dependency", dependency),
+              ...reduce(/*.call(this,*/ trans, "dependency", dependency),
               manage,
-              mold,
-              loadd,
-              KeyValue(`startTime`, new Date().getTime()),
-              KeyValue(`enabledRegistry.${dm.id}`, Dependency),
+              load: loadd,
+              start: KeyValue(`startTime`, new Date().getTime()),
+              set: KeyValue(`enabledRegistry.${dm.id}`, Dependency),
               normalize,
-              BUILD.onError !== ((err) => err),
-              execute,
-              depMap
-            )
+              noErrorHandler: BUILD.onError !== ((err) => err),
+              enable: dependency.enable,
+              getModule: Help.call(Dependency, dependency, BUILD, moduleProto)
+                .getModule,
+              //depMap,
+              bdlMap: dependency.bdlMap,
+              loaded: dependency.loaded,
+              make: dependency.make,
+
+              execute: (text, id) => {
+                const erro = tryCatch(BUILD.exec, [text]);
+                if (erro)
+                  return onError(
+                    mk([
+                      "fromtexteval",
+                      `fromText eval for ${id} failed: ${erro}`,
+                      erro,
+                      [id]
+                    ])
+                  );
+              }
+            })
           );
     }
   };
 }
+
+/**{
+         * 
+      bdlMap: {},
+      NAME: arguments[0],
+      defQueue,
+      defQueueMap: os("defQueueMap"),
+      nextTick: BUILD.nextTick,
+      execCb: (name, cb, args, exports) => cb.apply(exports, args),
+      onError: oe,
+      unDE: os("unDE"),
+      enabledRegistry: os("enabledRegistry"),
+      defined: os("defined"),
+      dependencies: os("dependencies"),
+
+      //configure,
+      makeShimExports: (value) =>
+        function () {
+          return (
+            (value[_i] && value[_i].apply(config, arguments)) ||
+            (value.exports && getGlobal(value.exports))
+          );
+        },
+      enable: (depMap) =>
+        e_(dependen.dependencies).yes(depMap.id) &&
+        dependen.dependencies[depMap.id] &&
+        getModule(depMap).enable()
+    };*/
