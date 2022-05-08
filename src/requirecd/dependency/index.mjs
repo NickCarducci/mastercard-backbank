@@ -79,7 +79,7 @@ export default function Dependency() {
     //...as independent objects copy spread
     depbu = {
       dependen: { CONFIG, urlFchd, load },
-      build: {
+      BUILD: {
         onResourceLoad,
         exec,
         oe
