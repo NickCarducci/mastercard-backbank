@@ -12,12 +12,11 @@ var home = fun("."),
 var funcs = fun("./Functions"),
   { default: Functions, Check, Help, reduce } = funcs;*/
 
-import { hasPathFallback, KeyValue, SetBuildable, onError } from "..";
-import Module from "./module";
+import { hasPathFallback, KeyValue, onError, SetBuildable } from "..";
 import Start from "./start";
 import Help from "./start/help";
 import Check from "./check";
-import { mk, T, Y, _K, e_ } from "./utils";
+import { T, Y, _K, e_, mk } from "./utils";
 
 export var defineables = []; //albeit exported && var, still read-only
 export const SETDEFINABLES = (value) => (defineables = value);
@@ -25,9 +24,9 @@ export const SETDEFINABLES = (value) => (defineables = value);
 const _i = "init",
   _t = "string";
 
-var config,
-  defQueue = [];
-
+var config, callGetModule;
+export var defQueue = [];
+export const defQueueShift = () => defQueue.shift();
 const nextDef = (id) =>
     defQueue
       .sort((a, b) => b - a)
@@ -65,7 +64,6 @@ var {
     BUILD,
     //build args output
     makeRequire,
-    callGetModule,
     getGlobal
   } = Start.bind(config, nextDef, shift, defQueue, tkeGblQue),
   { onResourceLoad, exec, onError: oe } = BUILD,
@@ -94,7 +92,6 @@ export default function Dependency() {
       defQueue,
       defQueueMap: os("defQueueMap"),
       nextTick: BUILD.nextTick,
-      Module,
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
       onError: oe,
       unDE: os("unDE"),
@@ -114,14 +111,14 @@ export default function Dependency() {
         e_(dependen.dependencies).yes(depMap.id) &&
         dependen.dependencies[depMap.id] &&
         getModule(depMap).enable(),
-      completeLoad: (scriptId) => {
+      loaded(scriptId) {
         var found, args;
         for (
           tkeGblQue((id) => (dependen.defQueueMap[id] = true));
           defQueue.length;
 
         ) {
-          defQueue.shift();
+          defQueueShift();
           if (found) break;
           (found = true) &&
             (args = args[0] =
@@ -132,7 +129,7 @@ export default function Dependency() {
                 : null) &&
             callGetModule(args);
         } /*matched a define call in thi script
-        in case-/init-calls change the dependen.dependencies*/
+                in case-/init-calls change the dependen.dependencies*/
         dependen.defQueueMap = {};
         var m = ((d) => e_(d).yes(scriptId) && d[scriptId])(
           dependen.dependencies
