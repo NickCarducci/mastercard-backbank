@@ -31,13 +31,8 @@ export default function Start(
 
   const { getModule, clrRegstr } = Help.call(
       thisDep,
-      reduce.call(
-        this,
-        ["CONFIG", "urlFchd", "load"],
-        "dependency",
-        dependency
-      ),
-      reduce.call(this, ["onResourceLoad", "exec", "onError"], "BUILD", BUILD),
+      reduce(["CONFIG", "urlFchd", "load"], "dependency", dependency),
+      reduce(["onResourceLoad", "exec", "onError"], "BUILD", BUILD), //BUILD
       moduleProto
     ),
     callGetModule = (args) =>
