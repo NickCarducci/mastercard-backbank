@@ -61,12 +61,11 @@ const nextDef = (id) =>
     Dependency: thisDep
  */
 var {
-    BUILD,
     //build args output
     makeRequire,
     getGlobal
   } = Start.bind(config, nextDef, shift, defQueue, tkeGblQue),
-  { onResourceLoad, exec, onError: oe } = BUILD,
+  { onResourceLoad, exec, onError: oe } = config,
   countrefs = 0; //refs = references(this)()
 export default function Dependency() {
   var dependen = references(this).citeRef(countrefs); //ref is a func returned by fat, references is THE return, unhoisted
@@ -74,7 +73,7 @@ export default function Dependency() {
   const os = (o) => (o.constructor === Object ? dependen[o] : {}),
     CONFIG = os("CONFIG"),
     urlFchd = os("urlFchd"), //thi able's
-    load = (id, url) => BUILD.load(dependen, id, url),
+    load = (id, url) => config.load(dependen, id, url),
     //...args spread (naming for documentation-comment sugar field-value)
     //...as independent objects copy spread
     depbu = {
@@ -91,7 +90,7 @@ export default function Dependency() {
       NAME: arguments[0],
       defQueue,
       defQueueMap: os("defQueueMap"),
-      nextTick: BUILD.nextTick,
+      nextTick: config.nextTick,
       execCb: (name, cb, args, exports) => cb.apply(exports, args),
       onError: oe,
       unDE: os("unDE"),
