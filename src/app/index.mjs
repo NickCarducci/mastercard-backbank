@@ -1,5 +1,3 @@
-///dist/index.mjs
-const app = () => 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
@@ -53,5 +51,4 @@ const app = () =>
 
     return Window;
 
-})));
-export default app
+})))();
