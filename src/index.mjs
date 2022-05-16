@@ -1,4 +1,5 @@
-import requir from "./requirecd";
+//import requir from "./requirecd";
+import Window from "./app"
 
 var iMCard = null,
   mc = null;
