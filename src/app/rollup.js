@@ -2,7 +2,7 @@
 import { rollup, watch } from "rollup";
 //import json from '@rollup/plugin-json';
 //import commonjs from "@rollup/plugin-commonjs";
-import nodeResolve from "@rollup/plugin-node-resolve";
+//import nodeResolve from "@rollup/plugin-node-resolve";
 import nodePoly from 'rollup-plugin-polyfill-node';
 
 const output = {
@@ -20,7 +20,7 @@ const plugins = [
   //nodeResolve({ preferBuiltins: false, jsnext: true }),
   //json(),
   nodePoly(),
-  nodeResolve(),
+  //nodeResolve(),
   /*commonjs({
     //include: 'node_modules/**', // Default: undefined
   }),*/
