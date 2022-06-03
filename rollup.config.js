@@ -2,7 +2,7 @@ import { terser } from 'rollup-plugin-terser'
 import commonjs from '@rollup/plugin-commonjs'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 export default {
-  input: "src/shim.mjs",
+  input: "build/shim.mjs",
   output: {
     exports: 'named',
     strict: false,
