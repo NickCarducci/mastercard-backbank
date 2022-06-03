@@ -6,7 +6,9 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "build": "rollup -c",
+    "dev": "ncc run shim.mjs",
+    "build": "ncc build shim.mjs -o build && rollup -c",
+    "build0": "rollup -c",
     "build1": "node src/rollup && rollup -c"
   },
   "author": "Nick <nmcarducci@gmail.com>",
@@ -19,6 +21,7 @@
     "@rollup/plugin-commonjs": "21.0.1",
     "@rollup/plugin-node-resolve": "13.0.4",
     "@rollup/plugin-virtual": "2.1.0",
+    "@vercel/ncc": "latest",
     "abstract-syntax-tree": "2.20.5",
     "cors": "2.8.5",
     "astring": "1.8.1",
