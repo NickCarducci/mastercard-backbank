@@ -1,10 +1,12 @@
 //import requir from "./requirecd";
-import Window from "./app"
-const {locs, places} = Window;
+//import Window from "./app"
+//const {locs, places} = Window;
 
+const locs = require("mastercard-locations");
+const places = require("mastercard-places");
 var iMCard = null,
   mc = null;
-const requi = requir();//, 
+//const requi = requir();//, 
   //locs = requi("mastercard-locations"),
   //places = requi("mastercard-places");
 //const { locs, places, crs } = thi//.value//.default(); //Window() //thi.modules; //Window.sourcesContent();
