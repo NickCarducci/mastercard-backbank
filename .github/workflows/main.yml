@@ -16,6 +16,19 @@ jobs:
       - uses: actions/setup-node@main
         with:
           node-version: "14.x"
+          
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '["7.4", "8.0"]'
+          coverage: xdebug
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+      
+      - name: Validate Composer
+        run: composer validate --strict
+        
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --ignore-platform-reqs
       - name: Install deps
         run: npm install
       - name: Build docs
