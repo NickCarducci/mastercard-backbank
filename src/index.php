@@ -3,7 +3,8 @@
  * Script-Name: mastercard-backbank for vaumoney
  */
 //namespace locations\MasterCard\Api\Locations;//import namespace
-require_once('./vendor/autoload.php');//declare(strict_types=1);
+//require_once('./vendor/autoload.php');
+//declare(strict_types=1);
 //bin stuff (callable from any folder, "global" if functions are files)
 //use MasterCard\Core\Model\RequestMap;
 //use MasterCard\Core\ApiConfig;
