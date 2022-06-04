@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "private": true,
   "name": "mastercard-backbank",
   "version": "1.0.0",
@@ -7,6 +6,7 @@
   "main": "./index.js",
   "scripts": {
     "build": "babel index.php -o index.js",
+    "format": "prettier --write '**/*.{js,css,json,md}'"
   },
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED", 
