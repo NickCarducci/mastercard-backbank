@@ -4,8 +4,9 @@
   "name": "mastercard-backbank",
   "version": "1.0.0",
   "description": "mastercard worker for vaumoney of vaults.biz",
-  "module": "./dist/shim.mjs",
+  "main": "./index.js",
   "scripts": {
+    "module": "./dist/shim.mjs",
     "dev1": "ncc run shim.mjs",
     "build": "babel index.php -o index.js",
     "build2": "ncc build shim.mjs -o build && rollup -c",
