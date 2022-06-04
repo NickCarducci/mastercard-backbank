@@ -6,7 +6,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "src/index.mjs",
   "scripts": {
-    "build": "babel src/index.php -o src/index.mjs",
+    "build": "cd src && composer install && babel index.php -o index.mjs",
     "format": "prettier --write '**/*.{js,css,json,md}'"
   },
   "author": "Nick <nmcarducci@gmail.com>",
