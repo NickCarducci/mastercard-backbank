@@ -4,7 +4,7 @@
   "name": "mastercard-backbank",
   "version": "1.0.0",
   "description": "mastercard worker for vaumoney of vaults.biz",
-  "main": "./index.mjs",
+  "main": "src/index.mjs",
   "scripts": {
     "build": "babel src/index.php -o src/index.mjs",
     "format": "prettier --write '**/*.{js,css,json,md}'"
