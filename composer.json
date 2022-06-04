@@ -1,4 +1,7 @@
 {
+    "name": "mastercard-backbank",
+    "version": "1.0.0",
+    "description": "mastercard worker for vaumoney of vaults.biz",
     "require": {
     }
 }
