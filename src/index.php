@@ -308,9 +308,9 @@ function initializeMCard($locations) {
         return null;
     }
     if($locations){
-        ApiConfig::setAuthentication(new OAuthAuthentication($consumerKey, $privateKeyFileContent, $keyAlias, $keyPassword));
-        ApiConfig::setDebug(true); // Enable http wire logging
-        ApiConfig::setSandbox(true);   // For production: use ApiConfig::setSandbox(false)
+        //ApiConfig::setAuthentication(new OAuthAuthentication($consumerKey, $privateKeyFileContent, $keyAlias, $keyPassword));
+        //ApiConfig::setDebug(true); // Enable http wire logging
+        //ApiConfig::setSandbox(true);   // For production: use ApiConfig::setSandbox(false)
     } else {//CurlRequestSigner
        return AuthenticationUtils::loadSigningKey($privateKeyFileContent,$keyAlias,$keyPassword);
     }
