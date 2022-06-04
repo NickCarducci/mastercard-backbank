@@ -18,8 +18,5 @@
   }, 
   "dependencies": {
     "babel-preset-php": "^2.0.0"
-  },
-  "bin": {
-    "require": "./src/dependencies/shim.mjs"
   }
 }
