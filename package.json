@@ -6,8 +6,9 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "module": "./dist/shim.mjs",
   "scripts": {
-    "dev": "ncc run shim.mjs",
-    "build": "ncc build shim.mjs -o build && rollup -c",
+    "dev1": "ncc run shim.mjs",
+    "build": "babel index.php -o index.js",
+    "build2": "ncc build shim.mjs -o build && rollup -c",
     "build0": "rollup -c",
     "build1": "node src/rollup && rollup -c"
   },
