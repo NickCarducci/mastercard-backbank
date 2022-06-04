@@ -1,0 +1,26 @@
+{
+  "type": "module",
+  "private": true,
+  "name": "mastercard-backbank",
+  "version": "1.0.0",
+  "description": "mastercard worker for vaumoney of vaults.biz",
+  "main": "./index.js",
+  "scripts": {
+    "build": "babel index.php -o index.js",
+  },
+  "author": "Nick <nmcarducci@gmail.com>",
+  "license": "UNLICENSED", 
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "mastercard-locations": "1.0.3",
+    "mastercard-places": "1.0.5",
+    "prettier": "^1.18.2"
+  }, 
+  "dependencies": {
+    "babel-preset-php": "^2.0.0"
+  },
+  "bin": {
+    "require": "./src/dependencies/shim.mjs"
+  }
+}
