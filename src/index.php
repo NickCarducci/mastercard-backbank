@@ -178,13 +178,13 @@ addEventListener("fetch", function ($event) {
 function handleRequest($request) {
     $PHPWorkerHelloWorld = null;
     if ($request.url === "/deposit") {
-    $PHPWorkerHelloWorld = mastercardRoute($request, "getAtms");
+        $PHPWorkerHelloWorld = mastercardRoute($request, "getAtms");
     } else if ($request.url === "/choose_category") {
-    $PHPWorkerHelloWorld = mastercardRoute($request, "getCategories");
+        $PHPWorkerHelloWorld = mastercardRoute($request, "getCategories");
     } else if ($request.url === "/choose_industry") {
-    $PHPWorkerHelloWorld = mastercardRoute($request, "getIndustries");
+        $PHPWorkerHelloWorld = mastercardRoute($request, "getIndustries");
     } else if ($request.url === "/merchants") {
-    $PHPWorkerHelloWorld = mastercardRoute($request, "getMerchants");
+        $PHPWorkerHelloWorld = mastercardRoute($request, "getMerchants");
     }
     /*return new Response(`{ok: true,data: ${r} }`);*/
     return new Response($PHPWorkerHelloWorld, [
