@@ -133,7 +133,7 @@ function mastercardRoute ($req, $func) {
                                     sprintf(
                                         '%s/rest/?%s',
                                         $base_uri+'location-intelligence/places-locator/'+'places/searches',//?limit=25',
-                                        http_build_query([...$q ,'limit' => 25,])
+                                        http_build_query($q + ['limit' => 25])
                                     ), 'r'
                                 )
                             )
