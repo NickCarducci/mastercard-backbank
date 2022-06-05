@@ -1,5 +1,6 @@
 import Engine from 'php-parser';
 import translateProgram from './trans';
+import babelparser from "@babel/parser";
 
 /**
  * Recursively replace identifiers within an AST tree.
@@ -257,7 +258,7 @@ export function stringFunctions(babel) {
                                     regstr = "new Regexp('[' + _var_char + ']*$')";
                                     break;
                                 }
-                                var template = require("@babel/parser").parseExpression(regstr);
+                                var template = babelparser.parseExpression(regstr);
                                 regex = ast_recursive_replace(template, '_var_char', charListNode);
                             }
 
@@ -462,7 +463,7 @@ export function otherFunctions(babel) {
                     case 'range': {
                         // Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
                         var [start, stop, step] = p.node.arguments;
-                        var template = require("@babel/parser").parseExpression("Array(Math.ceil((_var_stop - _var_start) / _var_step)).fill(_var_start).map((x, y) => x + y * _var_step)");
+                        var template = babelparser.parseExpression("Array(Math.ceil((_var_stop - _var_start) / _var_step)).fill(_var_start).map((x, y) => x + y * _var_step)");
                         ast_recursive_replace(template, '_var_start', start);
                         ast_recursive_replace(template, '_var_stop', stop);
                         ast_recursive_replace(template, '_var_step', step);
