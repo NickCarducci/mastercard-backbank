@@ -7,7 +7,7 @@ export default {
     exports: 'named',
     strict: false,
     file: "index.mjs",
-    format: "es",
+    format: "umd",
     sourcemap: true
   },
   plugins: [
