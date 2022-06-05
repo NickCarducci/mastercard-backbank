@@ -7,7 +7,7 @@
   "main": "src/index.mjs",
   "scripts": {
     "build": "cd src && babel index.php -o index.mjs",
-    "format": "prettier --write '**/*.{js,css,json,md}'"
+    "format": "prettier --write '**/*.{mjs,js,css,json,md}'"
   },
   "author": "Nick <nmcarducci@gmail.com>",
   "license": "UNLICENSED", 
