@@ -1,6 +1,7 @@
 {
     "name": "mastercard-backbank/vaults",
     "description": "mastercard worker for vaumoney of vaults.biz",
+    "license": "none",
     "require": {
     }
 }
