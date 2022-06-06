@@ -44,7 +44,7 @@ export class DurableObjectExample {
     switch (url.pathname) {
     case "/":
       const response = MasterCardPHP(request);
-      var t = {keyValue = {},opts = []};
+      var t = {keyValue: {},opts: []};
       if (response) {
         //isBase64Encoded: false,
         if (response.constructor !== Object) {
