@@ -23,6 +23,7 @@
   "dependencies": {
      "@babel/helper-plugin-utils": "^7.17.12",
      "@babel/parser": "^7.18.4",
+     "babel-preset-php": "^2.0.0",
      "php-parser": "^3.1.0-beta.7"
   }
 }
