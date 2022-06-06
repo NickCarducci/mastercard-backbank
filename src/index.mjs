@@ -13,6 +13,7 @@ export class DurableObjectExample {
     // same key every request is fast. (That said, you could also store the
     // value in a class member if you prefer.)
     //let value = await this.state.storage.get("value") || 0;
+    let value = null;
     switch (url.pathname) {
     case "/increment":
      // ++value;
