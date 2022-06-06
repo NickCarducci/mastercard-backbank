@@ -1,4 +1,4 @@
-import assert from 'assert';
+const assert = require('assert');
 //import assert from 'node:assert/strict';
 
 class Scope {
