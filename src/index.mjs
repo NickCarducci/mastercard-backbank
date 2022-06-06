@@ -1,4 +1,5 @@
 // let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
+import MasterCardPHP from "./babelphp.mjs";
 export class DurableObjectExample {
   constructor(state, env) {
     this.state = state;
