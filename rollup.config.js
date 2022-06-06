@@ -25,7 +25,10 @@ export default {
      //exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
      //include: "src/**/*",
     }),
-    nodeResolve({browser:true}),
+    nodeResolve({
+      exportConditions: ['browser', 'worker'],
+      browser:true
+    }),
     terser()
   ]
 };
