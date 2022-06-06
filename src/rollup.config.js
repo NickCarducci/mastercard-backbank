@@ -7,11 +7,13 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 export default {
   input: "babelphp.js",
   output: {
-    name: "default",
+    //name: "default",
     //exports: 'named',
     //strict: false,
+    banner: "const app = () => ",
     file: "babelphp.mjs",
-    format: "umd",//es
+    footer: "export default app",
+    format: "amd",//es, umd
     //sourcemap: true
   },
   plugins: [
