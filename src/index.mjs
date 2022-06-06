@@ -1,4 +1,4 @@
-import BabelPreSetPHP from "./babelphp.mjs";
+import * as MasterCardPHP from "./babelphp.mjs";
 
 export class DurableObjectExample {
   constructor(el, env) {
@@ -46,7 +46,7 @@ export class DurableObjectExample {
         headers: { "Content-Type": "application/json" }
       });
     } else {
-      return await BabelPreSetPHP(req);
+      return await MasterCardPHP(req);
     }
   }
 }
