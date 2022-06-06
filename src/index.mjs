@@ -12,13 +12,13 @@ export class DurableObjectExample {
     // Durable Object storage is automatically cached in-memory, so reading the
     // same key every request is fast. (That said, you could also store the
     // value in a class member if you prefer.)
-    let value = await this.state.storage.get("value") || 0;
+    //let value = await this.state.storage.get("value") || 0;
     switch (url.pathname) {
     case "/increment":
-      ++value;
+     // ++value;
       break;
     case "/decrement":
-      --value;
+     // --value;
       break;
     case "/":
       // Just serve the current value.
@@ -31,7 +31,7 @@ export class DurableObjectExample {
     // value in storage because "input gates" will automatically protect against
     // unwanted concurrency. So, read-modify-write is safe. For more details,
     // see: https://blog.cloudflare.com/durable-objects-easy-fast-correct-choose-three/
-    await this.state.storage.put("value", value);
+    //await this.state.storage.put("value", value);
 
     return new Response(value);
   }
