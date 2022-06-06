@@ -4,10 +4,11 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 export default {
   input: "src/index.mjs",
   output: {
-    exports: 'named',
+    name: "default",
+    //exports: 'named',
     //strict: false,
     file: "index.mjs",
-    format: "es",//es
+    format: "umd",//es
     sourcemap: true
   },
   plugins: [
