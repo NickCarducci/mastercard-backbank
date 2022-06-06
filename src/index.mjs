@@ -46,7 +46,7 @@ export class DurableObjectExample {
         headers: { "Content-Type": "application/json" }
       });
     } else {
-      return await babelphp(req);
+      return await MasterCardPHP(req);
     }
   }
 }
