@@ -21,6 +21,9 @@
     "rollup-plugin-terser": "7.0.2"
   }, 
   "dependencies": {
+     "babel-preset-php": "^2.0.0"
+  },
+  "false":{
      "@babel/helper-plugin-utils": "^7.17.12",
      "@babel/parser": "^7.18.4",
      "babel-preset-php": "^2.0.0",
