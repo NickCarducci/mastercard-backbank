@@ -1,6 +1,8 @@
-import { terser } from 'rollup-plugin-terser'
-import commonjs from '@rollup/plugin-commonjs'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
+import { terser } from 'rollup-plugin-terser';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
+
 export default {
   input: "src/index.mjs",
   output: {
@@ -12,6 +14,7 @@ export default {
     //sourcemap: true
   },
   plugins: [
+    nodePolyfills(),
     commonjs({
       /*
       depreciated, done automatically, not the problem!
