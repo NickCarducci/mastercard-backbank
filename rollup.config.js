@@ -7,11 +7,11 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 export default {
   input: "src/index.mjs",
   output: {
-    name: "default",
-    //exports: 'named',
+    //name: "default",
+    exports: 'named',
     //strict: false,
     file: "index.mjs",
-    format: "umd",//es
+    format: "es",//umd
     //sourcemap: true
   },
   plugins: [
