@@ -9,7 +9,7 @@ export default {
     //strict: false,
     file: "index.mjs",
     format: "umd",//es
-    sourcemap: true
+    //sourcemap: true
   },
   plugins: [
     commonjs({
