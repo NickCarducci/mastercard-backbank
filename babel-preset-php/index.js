@@ -514,9 +514,9 @@ export function defineToConstant(babel) {
     };
 }
 
-Object.defineProperty(exports, "__esModule", {
+/*Object.defineProperty(exports, "__esModule", {
   value: true
-});
+});*/
 
 /**
  * Support options (see lib/trans.js)
@@ -569,3 +569,4 @@ export default function(api, options) {
         ].filter(Boolean),
     };
 };
+
