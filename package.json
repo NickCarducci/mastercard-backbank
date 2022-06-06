@@ -5,8 +5,8 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "src/index.mjs",
   "scripts": {
-    "build": "rollup -c",
-    "build1": "cd src && babel index.php -o index.mjs && cd .. && rollup -c",
+    "build1": "rollup -c",
+    "build": "cd src && babel index.php -o index.mjs && cd ..",
     "format": "prettier --write '**/*.{mjs,js,css,json,md}'"
   },
   "author": "Nick <nmcarducci@gmail.com>",
