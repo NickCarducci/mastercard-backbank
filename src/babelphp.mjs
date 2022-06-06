@@ -423,7 +423,7 @@
 
 	  return response;
 	}
-	addEventListener("fetch", event => {
+	/*addEventListener("fetch", event => {
 	  event.respondWith(handleRequest(event.request));
 	});
 
@@ -445,7 +445,7 @@
 	      "content-type": "text/plain"
 	    }
 	  });
-	}
+	}*/
 	//return  static function () {}
 	class Mgillicuddy {
 	  constructor() {
