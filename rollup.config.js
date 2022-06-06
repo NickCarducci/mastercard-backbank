@@ -10,7 +10,7 @@ export default {
     //name: "default",
     exports: 'named',
     //strict: false,
-    file: "index.mjs",
+    file: "dist/index.mjs",
     format: "es",//umd
     //sourcemap: true
   },
