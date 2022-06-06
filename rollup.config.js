@@ -17,8 +17,8 @@ export default {
       namedExports: {
         'node_modules/picomatch/index.js': ['pm']
       },*/
-     exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
-     include: "src/**/*",
+     //exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
+     //include: "src/**/*",
     }),
     nodeResolve({browser:true}),
     terser()
