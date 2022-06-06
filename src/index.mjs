@@ -1,4 +1,4 @@
-import * as MasterCardPHP from "./babelphp";
+import MasterCardPHP from "./babelphp";
 
 export class DurableObjectExample {
   constructor(el, env) {
