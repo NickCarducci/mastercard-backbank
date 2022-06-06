@@ -1,5 +1,15 @@
 // let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
 import MasterCardPHP from "./babelphp.mjs";
+
+/*{
+  return {
+    [keyValue[0]]: keyValue[1],
+    status: obj[0],
+    message: obj[1],
+    headers: obj[2]
+  };
+};*/
+
 export class DurableObjectExample {
   constructor(state, env) {
     this.state = state;
@@ -8,16 +18,45 @@ export class DurableObjectExample {
   // Handle HTTP requests from clients.
   async fetch(request) {
     // Apply requested action.
-    let url = new URL(request.url);
-
+    if (!req.url)
+      return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
+    
     // Durable Object storage is automatically cached in-memory, so reading the
-    // same key every request is fast. (That said, you could also store the
-    // value in a class member if you prefer.)
-    //let value = await this.state.storage.get("value") || 0;
-    let value = null;
+    // same key every request is fast. 
+    let url = new URL(request.url),
+        value = null;
+    // That said, you could also store the value in a class member if you prefer.
+    // let value = await this.state.storage.get("value") || 0;
+    
+    const dataHead = {
+      "Content-Type": "application/json"
+    },
+    R = (
+      keyValue,
+      opts 
+    ) =>
+      new Response(keyValue, {
+        status: opts[0],
+        message: opts[1],
+        headers: opts[2]
+      });
+    
     switch (url.pathname) {
     case "/":
-      MasterCardPHP(request)
+      const response = MasterCardPHP(request);
+      var t = {keyValue = {},opts = []};
+      if (response) {
+        //isBase64Encoded: false,
+        if (response.constructor !== Object) {
+          console.log("response.c!==Obj");
+          t.keyValue = { response }; //response for response object
+          t.opts = [200, "string success...: " + req.url, dataHead]; //network of network
+          return R(t.keyValue, t.opts);
+        }
+        t.keyValue = { data: response };
+        t.opts = [200, "success: " + req.url, dataHead];
+        return R(t.keyValue, t.opts);
+      }
       // Just serve the current value.
       break;
     default:
