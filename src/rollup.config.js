@@ -13,7 +13,7 @@ export default {
     banner: "const app = () => ",
     file: "babelphp.mjs",
     footer: "export default app",
-    format: "amd",//es, umd
+    format: "iife",//es, umd, amd(define)
     //sourcemap: true
   },
   plugins: [
