@@ -16,8 +16,8 @@ export class DurableObjectExample {
     //let value = await this.state.storage.get("value") || 0;
     let value = null;
     switch (url.pathname) {
-        MasterCardPHP(request)
     case "/":
+      MasterCardPHP(request)
       // Just serve the current value.
       break;
     default:
