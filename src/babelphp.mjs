@@ -1,11 +1,3 @@
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function createCommonjsModule(fn) {
-  var module = { exports: {} };
-	return fn(module, module.exports), module.exports;
-}
-
-var babelphp = createCommonjsModule(function (module) {
 //traits? namespace defaultok; just comments in babel-preset-php
 // Script-Name: mastercard-backbank for vaumoney
 //namespace locations\MasterCard\Api\Locations;//import namespace
@@ -55,19 +47,20 @@ class AuthenticationUtils {
     try {
       var keystore = file_get_contents(pkcs12KeyFilePath);
     } catch (e) {
-      throw new commonjsGlobal.InvalidArgumentException("Failed to read the given file: " + pkcs12KeyFilePath, 0, e);
+      throw new global.InvalidArgumentException("Failed to read the given file: " + pkcs12KeyFilePath, 0, e);
     }
 
     openssl_pkcs12_read(keystore, certs, signingKeyPassword);
 
     if (is_null(certs)) {
-      throw new commonjsGlobal.InvalidArgumentException("Failed to open keystore with the provided password!");
+      throw new global.InvalidArgumentException("Failed to open keystore with the provided password!");
     }
 
     return openssl_get_privatekey(certs.pkey);
   }
 
-}
+};
+
 //
 //Creates a Mastercard API compliant OAuth Authorization header.
 //@return string
@@ -117,19 +110,19 @@ class OAuth {
   //Constructs and returns a valid Authorization header as per https://tools.ietf.org/html/rfc5849#section-3.5.1
   {
     if (!uri) {
-      throw new commonjsGlobal.InvalidArgumentException("URI must be set!");
+      throw new global.InvalidArgumentException("URI must be set!");
     }
 
     if (!method) {
-      throw new commonjsGlobal.InvalidArgumentException("HTTP method must be set!");
+      throw new global.InvalidArgumentException("HTTP method must be set!");
     }
 
     if (!consumerKey) {
-      throw new commonjsGlobal.InvalidArgumentException("Consumer key must be set!");
+      throw new global.InvalidArgumentException("Consumer key must be set!");
     }
 
     if (!signingKey) {
-      throw new commonjsGlobal.InvalidArgumentException("Signing key must be set!");
+      throw new global.InvalidArgumentException("Signing key must be set!");
     }
 
     var queryParameters = OAuth.extractQueryParams(uri);
@@ -159,11 +152,11 @@ class OAuth {
     var uriParts = parse_url(uri);
 
     if (!uriParts) {
-      throw new commonjsGlobal.InvalidArgumentException("URI is not valid!");
+      throw new global.InvalidArgumentException("URI is not valid!");
     }
 
     if (!("host" in uriParts)) {
-      throw new commonjsGlobal.InvalidArgumentException("No URI host!");
+      throw new global.InvalidArgumentException("No URI host!");
     }
 
     if (!("query" in uriParts)) {
@@ -232,7 +225,7 @@ class OAuth {
     var uriParts = parse_url(uriString);
 
     if (!uriParts) {
-      throw new commonjsGlobal.InvalidArgumentException("URI is not valid!");
+      throw new global.InvalidArgumentException("URI is not valid!");
     }
 
     var normalizedUrl = uriParts.scheme.toLowerCase() + "://" + uriParts.host.toLowerCase();
@@ -285,7 +278,26 @@ class OAuth {
     return Date.now() / 1000;
   }
 
-}
+};
+
+class BaseSigner {
+  constructor(consumerKey, signingKey) {
+    this.consumerKey = consumerKey;
+    this.signingKey = signingKey;
+  }
+
+};
+
+class CurlRequestSigner extends BaseSigner {
+  sign(handle, method, headers = Array(), payload = undefined) {
+    var uri = curl_getinfo(handle, CURLINFO_EFFECTIVE_URL);
+    var authHeader = OAuth.getAuthorizationHeader(uri, method, payload, this.consumerKey, this.signingKey);
+    headers.push(OAuth.AUTHORIZATION_HEADER_NAME + ": " + authHeader);
+    curl_setopt(handle, CURLOPT_HTTPHEADER, headers);
+  }
+
+};
+
 function initializeMCard(locations) //$password = '...';
 //    $results = array();
 //    $worked = openssl_pkcs12_read(secrets.MASTERCARD_P12_BINARY, $results, $password));
@@ -303,7 +315,7 @@ function initializeMCard(locations) //$password = '...';
 //your production key
 //e.g. /Users/yourname/project/sandbox.p12 | C:\Users\yourname\project\sandbox.p12
 {
-  secrets + MASTERCARD_CONSUMER_KEY;
+  var consumerKey = secrets + MASTERCARD_CONSUMER_KEY;
   var keyAlias = "keyalias";
   var keyPassword = "keystorepassword";
   var privateKeyFileContent = file_get_contents(getcwd()[secrets + MASTERCARD_P12_BINARY]);
@@ -316,25 +328,34 @@ function initializeMCard(locations) //$password = '...';
   if (locations) //ApiConfig::setAuthentication(new OAuthAuthentication($consumerKey, $privateKeyFileContent, $keyAlias, $keyPassword));
     //ApiConfig::setDebug(true); // Enable http wire logging
     //ApiConfig::setSandbox(true);   // For production: use ApiConfig::setSandbox(false)
-    ; else //CurlRequestSigner
+    {} else //CurlRequestSigner
     {
       return AuthenticationUtils.loadSigningKey(privateKeyFileContent, keyAlias, keyPassword);
     }
-}
+};
+
 function mastercardRoute(req, func) //$consumerKey = '<insert consumer key>';
 //    $uri = 'https://sandbox.api.mastercard.com/service';
 //    $method = 'POST';
 //    $payload = 'Hello world!';
 //    $authHeader = OAuth::getAuthorizationHeader($uri, $method, $payload, $consumerKey, $signingKey);
 {
+  function cb(error, data) {
+    return error ? error : data;
+  };
 
   var response = undefined;
-  initializeMCard();
+  var signingKey = initializeMCard();
+  var method = "POST";
   var base_uri = "https://sandbox.api.mastercard.com/";
   var payload = JSON.stringify({
     foo: "b\xE5r"
   });
-  ["Content-Type: application/json", "Content-Length: " + payload.length];
+  var headers = ["Content-Type: application/json", "Content-Length: " + payload.length];
+
+  function setmap(object, key) {
+    return key = object[key];
+  };
 
   if (func === "getAtms") //$map = new RequestMap();
     //        $map->setmap($req.body,"PageOffset");
@@ -392,7 +413,8 @@ function mastercardRoute(req, func) //$consumerKey = '<insert consumer key>';
     {
       var distance = req + body;
 
-      class Place {}
+      class Place {};
+
       var place = new Place();
       place.countryCode = req + body + countryCode;
       place.latitude = req + body + latitude;
@@ -421,39 +443,16 @@ function mastercardRoute(req, func) //$consumerKey = '<insert consumer key>';
     }
 
   return response;
-}
-addEventListener("fetch", event => {
-  event.respondWith(handleRequest(event.request));
-});
+};
 
-function handleRequest(request) {
-  var PHPWorkerHelloWorld = undefined;
-
-  if (request + url === "/deposit") {
-    PHPWorkerHelloWorld = mastercardRoute(request, "getAtms");
-  } else if (request + url === "/choose_category") {
-    PHPWorkerHelloWorld = mastercardRoute(request, "getCategories");
-  } else if (request + url === "/choose_industry") {
-    PHPWorkerHelloWorld = mastercardRoute(request, "getIndustries");
-  } else if (request + url === "/merchants") {
-    PHPWorkerHelloWorld = mastercardRoute(request, "getMerchants");
-  }
-
-  return new Response(PHPWorkerHelloWorld, {
-    headers: {
-      "content-type": "text/plain"
-    }
-  });
-}
 //return  static function () {}
 class Mgillicuddy {
   constructor() {
     this.AuthenticationUtils = AuthenticationUtils;
     this.OAuth = OAuth;
+    this.mastercardRoute = mastercardRoute;
   }
 
-}
-return new Mgillicuddy();
-});
+};
 
-export { babelphp as default };
+return new Mgillicuddy();
