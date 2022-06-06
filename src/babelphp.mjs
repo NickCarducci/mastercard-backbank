@@ -450,9 +450,9 @@ class Mgillicuddy {
   constructor() {
     this.AuthenticationUtils = AuthenticationUtils;
     this.OAuth = OAuth;
-    this.mastercardRoute = mastercardRoute;
+    return mastercardRoute;
   }
 
 };
 
-return new Mgillicuddy();
+export default new Mgillicuddy();
