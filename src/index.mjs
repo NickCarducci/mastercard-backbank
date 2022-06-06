@@ -1,4 +1,4 @@
-import BabelPreSetPHP from "./index";
+import BabelPreSetPHP from "./babelphp.mjs";
 
 export class DurableObjectExample {
   constructor(el, env) {
