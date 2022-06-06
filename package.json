@@ -4,10 +4,10 @@
   "name": "mastercard-backbank",
   "version": "1.0.0",
   "description": "mastercard worker for vaumoney of vaults.biz",
-  "main": "src/index.mjs",
+  "main": "dist/index.mjs",
   "scripts": {
-    "build": "rollup -c",
-    "build1": "cd src && babel index.php -o babelphp.js && rollup -c && cd .. && rollup -c",
+    "build1": "rollup -c",
+    "build": "cd src && babel index.php -o babelphp.js && rollup -c && cd .. && rollup -c",
     "format": "prettier --write '**/*.{mjs,js,css,json,md}'"
   },
   "author": "Nick <nmcarducci@gmail.com>",
