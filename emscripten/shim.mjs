@@ -1,6 +1,3 @@
-// import the emscripten glue code
-import emscripten from './build/module.js'
-
 export {DurableObjectExample} from ".index"
   
 export default {
