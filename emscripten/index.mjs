@@ -1,3 +1,6 @@
+// import the emscripten glue code
+import emscripten from './build/module.js'
+
 export class DurableObjectExample {
   constructor(state, env) {
     this.state = state;
@@ -31,6 +34,23 @@ export class DurableObjectExample {
     
     switch (url.pathname) {
     case "/":
+      // '.wasm' as global scope-bound module of WASM instance, from emscripten('instantiateWasm')
+      let MasterCardPHP = new Promise((resolve, reject) => {
+        emscripten({
+          instantiateWasm(info, receive) {
+            let instance = new WebAssembly.Instance(wasm, info)
+            receive(instance)
+            return instance.exports
+          },
+        }).then(module => {
+          resolve({
+            init: module.cwrap('init', 'number', ['number']),
+            resize: module.cwrap('resize', 'number', ['number', 'number']),
+            module: module,
+          })
+        })
+      })
+
       const response = MasterCardPHP(request);
       var t = {keyValue: {},opts: []};
       if (response) {
