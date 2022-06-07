@@ -2,4 +2,4 @@
 
 (npm) babel-preset-php
 
-([cloudflare](https://github.com/cloudflare/php-worker-hello-world)/php-worker-hello-world)
+[(cloudflare)](https://github.com/cloudflare/php-worker-hello-world)/php-worker-hello-world
