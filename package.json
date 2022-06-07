@@ -7,7 +7,7 @@
   "main": "dist/index.mjs",
   "scripts": {
     "build1": "rollup -c",
-    "build": "babel src/PHP -o src/babelphp.js && rollup -c && cd .. && rollup -c",
+    "build": "babel src/PHP -o src/babelphp.js && cd .. && rollup -c",
     "format": "prettier --write '**/*.{mjs,js,css,json,md}'"
   },
   "author": "Nick <nmcarducci@gmail.com>",
