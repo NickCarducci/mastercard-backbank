@@ -108,7 +108,7 @@ async function noException(req, env) {
       t.opts = [200, `success: ${req.url}`, dataHead];
       t.obj = { true: JSON.stringify(r.data) };
       return R(true, t.obj, t.opts);
-    });
+    }); 
   //});
   //new Response({})
 }
