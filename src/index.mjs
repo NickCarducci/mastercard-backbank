@@ -69,6 +69,6 @@ export class DurableObjectExample {
     // see: https://blog.cloudflare.com/durable-objects-easy-fast-correct-choose-three/
     //await this.state.storage.put("value", value);
 
-    return new Response(value);
+    //return new Response(value);
   }
 }
