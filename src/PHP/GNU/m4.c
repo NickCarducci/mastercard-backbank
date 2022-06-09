@@ -11,6 +11,62 @@ struct whatever
 };
 typedef struct whatever whatever;
 
+
+
+#include "m4.h"
+
+#include <getopt.h>
+#include <limits.h>
+#include <signal.h>
+
+#include "c-stack.h"
+#include "configmake.h"
+#include "ignore-value.h"
+#include "progname.h"
+#include "propername.h"
+#include "version-etc.h"
+
+#ifdef DEBUG_STKOVF
+# include "assert.h"
+#endif
+
+/* TRANSLATORS: This is a non-ASCII name: The first name is (with
+   Unicode escapes) "Ren\u00e9" or (with HTML entities) "Ren&eacute;".  */
+#define AUTHORS proper_name_utf8 ("Rene' Seindal", "Ren\xC3\xA9 Seindal")
+
+static _Noreturn void usage (int);
+
+int sync_output = 0;// /lib/cpp (-s).
+int debug_level = 0;// Debug (-d[flags])
+size_t hash_table_size = HASHMAX;//(prime) Hash table size (-Hsize)
+int no_gnu_extensions = 0;// Disable GNU extensions (-G).
+int prefix_all_builtins = 0;// Prefix `m4_' on builtin functions/methods.
+int max_debug_argument_length = 0;// Max length of arguments in trace output (-lsize).
+int suppress_warnings = 0;// Suppress warnings about missing arguments.
+
+static bool fatal_warnings = false;// warnings affect fatal 'exit'.
+
+int warning_status = 0;// exit status if non-zero.
+int nesting_limit = 1024;// expansion_level macro.c limit
+
+#ifdef ENABLE_CHANGEWORD
+const char *user_word_regexp = "";// Optional regexp input for describing m4 words.
+#endif
+
+int retcode;// (watcher) Global catchall of final error status (running).
+
+//pointer first struct definition declaration 
+struct whatever
+{
+  struct whatever *next;
+  int code;
+  const char *arg;
+};
+typedef struct whatever whatever;
+
+
+
+
 void //Error
 m4_error (int status, int errnum, const char *format, ...)
 {
