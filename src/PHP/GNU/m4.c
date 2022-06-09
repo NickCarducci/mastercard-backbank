@@ -320,18 +320,13 @@ static const struct option long_options[] =
   { NULL, 0, NULL, 0 },
 };
 
-/* Process a command line file NAME, and return true only if it was
-   stdin.  */
-static void
+static void // stdin cli-file-NAME conditional process
 process_file (const char *name)
 {
   if (STREQ (name, "-"))
     {
-      /* If stdin is a terminal, we want to allow 'm4 - file -'
-         to read input from stdin twice, like GNU cat.  Besides,
-         there is no point closing stdin before wrapped text, to
-         minimize bugs in syscmd called from wrapped text.  */
-      push_file (stdin, "stdin", false);
+      push_file (stdin, "stdin", false); // stdin terminal 'm4 - file -' 
+           //read stdin twice (i.e. GNU cat) for full 'syscmd' text call
     }
   else
     {
@@ -351,11 +346,8 @@ process_file (const char *name)
   expand_input ();
 }
 
-/* POSIX requires only -D, -U, and -s; and says that the first two
-   must be recognized when interspersed with file names.  Traditional
-   behavior also handles -s between files.  Starting OPTSTRING with
-   '-' forces getopt_long to hand back file names as arguments to opt
-   '\1', rather than reordering the command line.  */
+/* POSIX requires -D, -U, -s (non-interspersed file names, ok);
+'-OPTSTRING': getopt_long->(args:file names) "'\1', rather than reordering the command line."
 #ifdef ENABLE_CHANGEWORD
 #define OPTSTRING "-B:D:EF:GH:I:L:N:PQR:S:T:U:W:d::egil:o:st:"
 #else
@@ -389,12 +381,10 @@ main (int argc, char *const *argv)
   include_init ();
   debug_init ();
 
-  /* Stack overflow and program error handling.  Ignore failure to
-     install a handler, since this is merely for improved output on
-     crash, and we should never crash ;).  We install SIGBUS and
-     SIGSEGV handlers prior to using the c-stack module; depending on
-     the platform, c-stack will then override none, SIGSEGV, or both
-     handlers.  */
+  // Stack overflow and program error handling.
+  // Ignore failure to install a crash handler.
+  // We install SIGBUS and SIGSEGV handlers prior to using the c-stack module;
+  // depending on the platform, c-stack will then override none, SIGSEGV, or both handlers.
   program_error_message
     = xasprintf (_("internal error detected; please report this bug to <%s>"),
                  PACKAGE_BUGREPORT);
@@ -405,9 +395,7 @@ main (int argc, char *const *argv)
   if (SIGBUS != SIGILL && SIGBUS != SIGSEGV)
     signal_message[SIGBUS] = xstrdup (strsignal (SIGBUS));
   sigemptyset (&act.sa_mask);
-  /* One-shot - if we fault while handling a fault, we want to revert
-     to default signal behavior.  */
-  act.sa_flags = SA_NODEFER | SA_RESETHAND;
+  act.sa_flags = SA_NODEFER | SA_RESETHAND;//fault handling while fault handling, default signal behavior.
   act.sa_handler = fault_handler;
   sigaction (SIGSEGV, &act, NULL);
   sigaction (SIGABRT, &act, NULL);
@@ -418,8 +406,8 @@ main (int argc, char *const *argv)
     nesting_limit = 0;
 
 #ifdef DEBUG_STKOVF
-  /* Make it easier to test our fault handlers.  Exporting M4_CRASH=0
-     attempts a SIGSEGV, exporting it as 1 attempts an assertion
+  // Make it easier to test our fault handlers.
+  // Exporting/(.so extension? this is what M4 does) M4_CRASH=0 attempts a SIGSEGV; 1, assertion
      failure with a fallback to abort.  */
   {
     char *crash = getenv ("M4_CRASH");
@@ -433,8 +421,7 @@ main (int argc, char *const *argv)
   }
 #endif /* DEBUG_STKOVF */
 
-  /* First, we decode the arguments, to size up tables and stuff.  */
-  head = tail = NULL;
+  head = tail = NULL;// decode-arguments, size-tables, & more.
 
   while ((optchar = getopt_long (argc, (char **) argv, OPTSTRING,
                                  long_options, NULL)) != -1)
@@ -446,19 +433,15 @@ main (int argc, char *const *argv)
       case 'B':
       case 'S':
       case 'T':
-        /* Compatibility junk: options that other implementations
-           support, but which we ignore as no-ops and don't list in
-           --help.  */
         error (0, 0, _("warning: `m4 -%c' may be removed in a future release"),
-               optchar);
+               optchar);// no-ops, potentially supported elsewhere than --help
         break;
 
       case 'N':
       case DIVERSIONS_OPTION:
-        /* -N became an obsolete no-op in 1.4.x.  */
         error (0, 0, _("warning: `m4 %s' is deprecated"),
                optchar == 'N' ? "-N" : "--diversions");
-        break;
+        break;// no-ops since 1.4.x (-N)
 
       case 'D':
       case 'U':
@@ -466,11 +449,10 @@ main (int argc, char *const *argv)
       case 't':
       case '\1':
       case DEBUGFILE_OPTION:
-        /* Arguments that cannot be handled until later are accumulated.  */
-
+          
         defn = (macro_definition *) xmalloc (sizeof (macro_definition));
         defn->code = optchar;
-        defn->arg = optarg;
+        defn->arg = optarg;//arguments, -queued
         defn->next = NULL;
 
         if (head == NULL)
@@ -555,21 +537,12 @@ main (int argc, char *const *argv)
         break;
 
       case 'o':
-        /* -o/--error-output are deprecated synonyms of --debugfile,
-           but don't issue a deprecation warning until autoconf 2.61
-           or later is more widely established, as such a warning
-           would interfere with all earlier versions of autoconf.  */
-        /* Don't call debug_set_output here, as it has side effects.  */
-        debugfile = optarg;
-        break;
+        debugfile = optarg;//WARNING: debug_set_output side effects.
+        break;// (deprecated-fully, upon 2.61 autoconf) -o/--error-output (use --debugfile)
 
       case WARN_MACRO_SEQUENCE_OPTION:
-         /* Don't call set_macro_sequence here, as it can exit.
-            --warn-macro-sequence sets optarg to NULL (which uses the
-            default regexp); --warn-macro-sequence= sets optarg to ""
-            (which disables these warnings).  */
-        macro_sequence = optarg;
-        break;
+        macro_sequence = optarg;//WARNING set_macro_sequence exit
+        break;// regexp optarg null --warn-macro-sequence ("" disables warnings)
 
       case VERSION_OPTION:
         version_etc (stdout, PACKAGE, PACKAGE_NAME, VERSION, AUTHORS, NULL);
@@ -583,10 +556,9 @@ main (int argc, char *const *argv)
 
   defines = head;
 
-  /* Do the basic initializations.  */
   if (debugfile && !debug_set_output (debugfile))
     M4ERROR ((warning_status, errno, _("cannot set debug file `%s'"),
-              debugfile));
+              debugfile));// basic install
 
   input_init ();
   output_init ();
@@ -599,16 +571,11 @@ main (int argc, char *const *argv)
   else
     builtin_init ();
 
-  /* Interactive mode means unbuffered output, and interrupts ignored.  */
-
   if (interactive)
     {
       signal (SIGINT, SIG_IGN);
       setbuf (stdout, (char *) NULL);
-    }
-
-  /* Handle deferred command line macro definitions.  Must come after
-     initialization of the symbol table.  */
+    };// unbuffered output interrupts
 
   while (defines != NULL)
     {
@@ -619,8 +586,7 @@ main (int argc, char *const *argv)
         {
         case 'D':
           {
-            /* defines->arg is read-only, so we need a copy.  */
-            char *macro_name = xstrdup (defines->arg);
+            char *macro_name = xstrdup (defines->arg);//deferred cli macros after symbol table init
             char *macro_value = strchr (macro_name, '=');
             if (macro_value)
               *macro_value++ = '\0';
