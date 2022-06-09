@@ -4,9 +4,11 @@
 
 bison m4_define
 m4 skeletal-muscles[ are declared] parser-definitions `--trace=muscles`
+
 formal arguments[ prefix type] effective arguments
 
 bison.exe ./output.c `prepare_symbol_definitions` macros
+
 field has_id, id
 token
 of symbols --tag --type_name --whether_terminal
