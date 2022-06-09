@@ -406,9 +406,8 @@ main (int argc, char *const *argv)
     nesting_limit = 0;
 
 #ifdef DEBUG_STKOVF
-  // Make it easier to test our fault handlers.
-  // Exporting/(.so extension? this is what M4 does) M4_CRASH=0 attempts a SIGSEGV; 1, assertion
-     failure with a fallback to abort.  */
+  // Test our fault handlers or fail (and abort).
+  // Exporting/(.so extension? this is what M4 does) M4_CRASH=0, SIGSEGV; 1, assertion.
   {
     char *crash = getenv ("M4_CRASH");
     if (crash)
