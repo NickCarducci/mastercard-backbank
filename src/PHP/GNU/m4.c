@@ -11,13 +11,7 @@ struct whatever
 };
 typedef struct whatever whatever;
 
-/* Error handling functions.  */
-
-/*-----------------------.
-| Wrapper around error.  |
-`-----------------------*/
-
-void
+void //Error
 m4_error (int status, int errnum, const char *format, ...)
 {
   va_list args;
@@ -29,7 +23,7 @@ m4_error (int status, int errnum, const char *format, ...)
   va_end (args);
 }
 
-void
+void //failure
 m4_failure (int errnum, const char *format, ...)
 {
   va_list args;
@@ -39,11 +33,7 @@ m4_failure (int errnum, const char *format, ...)
   assume (false);
 }
 
-/*-------------------------------.
-| Wrapper around error_at_line.  |
-`-------------------------------*/
-
-void
+void //error at line
 m4_error_at_line (int status, int errnum, const char *file, int line,
                   const char *format, ...)
 {
@@ -55,7 +45,7 @@ m4_error_at_line (int status, int errnum, const char *file, int line,
   va_end (args);
 }
 
-void
+void //failure at line
 m4_failure_at_line (int errnum, const char *file, int line,
                     const char *format, ...)
 {
@@ -117,11 +107,7 @@ fault_handler (int signo)
 }
 
 
-/*---------------------------------------------.
-| Print a usage message and exit with STATUS.  |
-`---------------------------------------------*/
-
-static void
+static void //usage and status print message
 usage (int status)
 {
   if (status != EXIT_SUCCESS)
@@ -228,13 +214,9 @@ mismatch, or whatever value was passed to the m4exit macro.\n\
   exit (status);
 }
 
-/*--------------------------------------.
-| Decode options and launch execution.  |
-`--------------------------------------*/
-
 /* For long options that have no equivalent short option, use a
    non-character as a pseudo short option, starting with CHAR_MAX + 1.  */
-enum
+enum // decode, launch
 {
   DEBUGFILE_OPTION = CHAR_MAX + 1,      /* no short opt */
   DIVERSIONS_OPTION,                    /* not quite -N, because of message */
