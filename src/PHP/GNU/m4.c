@@ -1,17 +1,4 @@
-//https://github.com/php/php-src/blob/master/Zend/Makefile.frag
-//https://www.gnu.org/software/m4/
-//https://savannah.gnu.org/projects/m4/
 //https://git.savannah.gnu.org/cgit/m4.git/tree/src/m4.c?h=branch-1.4
-//pointer first struct definition declaration 
-struct whatever
-{
-  struct whatever *next;
-  int code;
-  const char *arg;
-};
-typedef struct whatever whatever;
-
-
 
 #include "m4.h"
 
@@ -54,7 +41,9 @@ const char *user_word_regexp = "";// Optional regexp input for describing m4 wor
 #endif
 
 int retcode;// (watcher) Global catchall of final error status (running).
-
+//https://github.com/php/php-src/blob/master/Zend/Makefile.frag
+//https://www.gnu.org/software/m4/
+//https://savannah.gnu.org/projects/m4/
 //pointer first struct definition declaration 
 struct whatever
 {
