@@ -2,7 +2,7 @@
 
 [Bison, git.savannah.gnu.org/cgit/bison.git](https://git.savannah.gnu.org/cgit/bison.git/tree/data/README.md)
 
-[Bison 3.8.2](https://fossies.org/dox/bison-3.8.2/glr_8cc_source.html)
+[Bison 3.8.2, fossies.org/dox/bison-3.8.2/glr_8cc_source.html](https://fossies.org/dox/bison-3.8.2/glr_8cc_source.html)
 
 bison m4_define
 
