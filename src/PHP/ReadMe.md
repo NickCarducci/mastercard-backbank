@@ -10,7 +10,7 @@ Or, thrift
 
 Or, a new extension by PHP... but wait... GNU::bison 3.8.2 is not being read by PHP upon Mac OS homebrew commands.
 
-## PHP Extension for C++
+## [PHP Extension for C++](https://www.zend.com/setting-up-your-php-build-environment)
 
 Mac OS
 
@@ -23,4 +23,3 @@ git clone https://github.com/php/php-src.git && cd php-src && git checkout php-8
     --prefix=$HOME/php-bin/DEBUG \
     --with-config-file-path=$HOME/php-bin/DEBUG/etc
 
-### https://www.zend.com/setting-up-your-php-build-environment
