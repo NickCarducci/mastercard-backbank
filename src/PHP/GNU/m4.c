@@ -20,7 +20,7 @@ completed the statement (reached the semicolon) creating struct node
 struct macro_definition
 {
   struct macro_definition *next;
-  int code; /* D, U, s, t, '\1', or DEBUGFILE_OPTION.  */
+  int code; //D, U, s, t, '\1', or DEBUGFILE_OPTION. 
   const char *arg;
 };
 typedef struct macro_definition macro_definition;
