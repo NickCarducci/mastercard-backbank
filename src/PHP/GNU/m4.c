@@ -346,8 +346,9 @@ process_file (const char *name)
   expand_input ();
 }
 
-/* POSIX requires -D, -U, -s (non-interspersed file names, ok);
-'-OPTSTRING': getopt_long->(args:file names) "'\1', rather than reordering the command line."
+// POSIX requires -D, -U, -s (non-interspersed file names, ok);
+// '-OPTSTRING': getopt_long->(args:file names),
+//   "'\1', rather than reordering the command line."
 #ifdef ENABLE_CHANGEWORD
 #define OPTSTRING "-B:D:EF:GH:I:L:N:PQR:S:T:U:W:d::egil:o:st:"
 #else
