@@ -44,14 +44,28 @@ int retcode;// (watcher) Global catchall of final error status (running).
 //https://github.com/php/php-src/blob/master/Zend/Makefile.frag
 //https://www.gnu.org/software/m4/
 //https://savannah.gnu.org/projects/m4/
-//pointer first struct definition declaration 
 struct whatever
 {
   struct whatever *next;
   int code;
   const char *arg;
 };
+//pointer first struct definition declaration 
 typedef struct whatever whatever;
+/*
+http://www.cs.toronto.edu/~heap/270F02/node31.html
+'struct' declares a pointer to itself as member before creation.
+'public' declares a callable member.
+'member' is method of a class.
+-----
+struct macro_definition
+{
+  struct macro_definition *next;
+  int code; //D, U, s, t, '\1', or DEBUGFILE_OPTION. 
+  const char *arg;
+};
+typedef struct macro_definition macro_definition;
+*/
 
 
 
@@ -649,24 +663,17 @@ main (int argc, char *const *argv)
       defines = next;
     }
 
-  /* Handle remaining input files.  Each file is pushed on the input,
-     and the input read.  Wrapup text is handled separately later.  */
-
   if (optind == argc && !seen_file)
     process_file ("-");
   else
     for (; optind < argc; optind++)
-      process_file (argv[optind]);
-
-  /* Now handle wrapup text.  */
+      process_file (argv[optind]);//input->file; read input
 
   while (pop_wrapup ())
-    expand_input ();
-
-  /* Change debug stream back to stderr, to force flushing the debug
-     stream and detect any errors it might have encountered.  The
-     three standard streams are closed by close_stdin.  */
-  debug_set_output (NULL);
+    expand_input ();// handle-wrap expand-input 
+   
+  debug_set_output (NULL);// Debug stream->stderr (flush and read)
+   //close_stdin() closes the "three standard streams."
 
   if (frozen_file_to_write)
     produce_frozen_state (frozen_file_to_write);
@@ -679,18 +686,3 @@ main (int argc, char *const *argv)
   free_macro_sequence ();
   exit (retcode);
 }
-/*
-http://www.cs.toronto.edu/~heap/270F02/node31.html
-struct node is that it includes a pointer to itself. From the 
-point-of-view of the compiler, it ensures that struct node has 
-a member that is a pointer to struct node before it has even 
-completed the statement (reached the semicolon) creating struct node
------
-struct macro_definition
-{
-  struct macro_definition *next;
-  int code; //D, U, s, t, '\1', or DEBUGFILE_OPTION. 
-  const char *arg;
-};
-typedef struct macro_definition macro_definition;
-*/
