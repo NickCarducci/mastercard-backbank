@@ -4,6 +4,8 @@
 
 [""-init-parser.y](https://github.com/php/php-src/blob/master/Zend/zend_ini_parser.y)
 
+export from [ZEND_API](https://github.com/php/php-src/blob/master/Zend/zend.c)
+
 [Bison, git.savannah.gnu.org/cgit/bison.git](https://git.savannah.gnu.org/cgit/bison.git/tree/data/README.md)
 
 bison m4_define
