@@ -6,7 +6,7 @@
 
 bison m4_define
 
-m4 skeletal-muscles[ are declared] parser-definitions `--trace=muscles`
+m4 **skeletal-**muscles[ are declared] **parser-**definitions `--trace=muscles`
 
 formal arguments[ prefix type] effective arguments
 
