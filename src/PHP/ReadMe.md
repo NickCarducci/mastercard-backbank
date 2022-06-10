@@ -8,7 +8,7 @@ Instead, use Emscripten Wasm worker
 
 Or, thrift
 
-Or, a new extension by PHP... but wait... GNU::bison 3.8.2 is not being read by PHP upon Mac OS homebrew commands.
+Or, a [new extension by PHP](https://github.com/php/php-src/blob/master/ext/ext_skel.php)... but wait... GNU::bison 3.8.2 is not being read by PHP upon Mac OS homebrew commands.
 
 ## [PHP Extension for C++](https://www.zend.com/setting-up-your-php-build-environment)
 
