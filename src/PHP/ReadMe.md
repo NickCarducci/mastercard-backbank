@@ -1,6 +1,4 @@
-https://pecl.php.net/
-
-https://vaults.quora.com/Can-you-boycott-credit-1
+pecl.php.net
 
 ### (cli) babel index.php -o babelphp.js
 
