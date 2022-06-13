@@ -1,6 +1,6 @@
 pecl.php.net
 
-xml sitemap (gnu_m4/rss/...)
+xml sitemap (gnu_m4/[rss](https://www.quora.com/What-is-the-most-effective-way-to-promote-a-podcast/answer/Nick-Carducci)/...)
 
 ### (cli) babel index.php -o babelphp.js
 
