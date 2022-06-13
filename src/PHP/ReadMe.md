@@ -1,5 +1,7 @@
 pecl.php.net
 
+xml sitemap (gnu_m4/rss/...)
+
 ### (cli) babel index.php -o babelphp.js
 
 (npm) babel-preset-php
