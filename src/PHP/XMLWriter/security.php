@@ -14,9 +14,6 @@ class InvalidArgumentException implements ExceptionInterface
 {
 }
 
-use DOMDocument;
-use SimpleXMLElement;
-
 class Security
 {
     const ENTITY_DETECT = 'Detected use of ENTITY in XML, disabled to prevent XXE/XEE attacks';
