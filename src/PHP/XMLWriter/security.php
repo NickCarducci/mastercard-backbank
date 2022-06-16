@@ -1,6 +1,6 @@
 <?php
 //https://github.com/laminas/laminas-xml/blob/1.5.x/src/Security.php
-namespace Laminas\Xml;
+namespace Backbank\;
 
 interface ExceptionInterface
 {
