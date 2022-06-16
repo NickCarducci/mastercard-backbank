@@ -1,7 +1,7 @@
 <?php
 //old https://github.com/laminas/laminas-xmlrpc/blob/2.14.x/src/Generator/DomDocument.php
 
-namespace Laminas\XmlRpc\Generator;
+namespace Backbank\;
 
 // XML generator adapter interface
 interface GeneratorInterface
