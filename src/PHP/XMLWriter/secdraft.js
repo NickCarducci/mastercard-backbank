@@ -1,4 +1,8 @@
 
+use DOMDocument;
+use SimpleXMLElement;
+
+class Security {
     // Heuristic expansion or external declaration
     protected static function heuristicScan($xml)
     {
@@ -104,3 +108,4 @@
         }
         return self::scan(file_get_contents($file), $dom);
     }
+}
