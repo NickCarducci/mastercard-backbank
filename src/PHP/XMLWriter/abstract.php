@@ -1,7 +1,7 @@
 <?php
 
 //namespace Mastercard\XmlRpc;//autoload composer.json
-namespace src\PHP\XMLWriter;
+namespace Backbank\;
 
 use DateTime;
 use Exception;
