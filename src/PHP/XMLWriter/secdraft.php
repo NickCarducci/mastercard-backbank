@@ -3,6 +3,8 @@ use DOMDocument;
 use SimpleXMLElement;
 
 class Security {
+    const ENTITY_DETECT = 'Detected use of ENTITY in XML, disabled to prevent XXE/XEE attacks';
+
     // Heuristic expansion or external declaration
     protected static function heuristicScan($xml)
     {
