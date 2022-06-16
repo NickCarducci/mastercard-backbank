@@ -65,7 +65,7 @@ class Security {
                 if (0 === strncmp($xml, $prefix, strlen($prefix))) return $encoding;}
             return 'UTF-8';// Fallback
         }
-        return self::bom($xml) ?: self::xmlstring($xml);//BOM or heuristic string File encoding
+        return bom($xml) ?: xmlstring($xml);//BOM or heuristic string File encoding
     }
 
     protected static function xml($xml, $fileEncoding) {
