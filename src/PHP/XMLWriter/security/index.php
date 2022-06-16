@@ -2,6 +2,18 @@
 //https://github.com/laminas/laminas-xml/blob/1.5.x/src/Security.php
 namespace Laminas\Xml;
 
+interface ExceptionInterface
+{
+}
+// extends \RuntimeException implements ExceptionInterface 
+class RuntimeException implements ExceptionInterface
+{
+}
+
+class InvalidArgumentException implements ExceptionInterface
+{
+}
+
 use DOMDocument;
 use SimpleXMLElement;
 
