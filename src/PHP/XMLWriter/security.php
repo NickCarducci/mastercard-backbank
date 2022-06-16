@@ -53,19 +53,19 @@ class Security {
     }
 
     protected static function string($xml) {
-        static function bom($string) {
+        function bom($string) {
             foreach ($utils.getBomMap() as $criteria) {
                 int lng = strncmp($string, $criteria['bom'], $criteria['length']);
                 if (0 === lng) return $criteria['encoding'];}
             return false;// getBomMap() filter for when initial bytes == BOM && return encoding
         }
-        static function DECODExmlstring($xml) {
+        function xmlstring($xml) {
             foreach ($utils.asciimap() as $encoding => $generator) {
                 $prefix = $generator('<' . '?xml');
                 if (0 === strncmp($xml, $prefix, strlen($prefix))) return $encoding;}
             return 'UTF-8';// Fallback
         }
-        return self::bom($xml) ?: self::DECODExmlstring($xml);//BOM or heuristic string File encoding
+        return self::bom($xml) ?: self::xmlstring($xml);//BOM or heuristic string File encoding
     }
 
     protected static function xml($xml, $fileEncoding) {
