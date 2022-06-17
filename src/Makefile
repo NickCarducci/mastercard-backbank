@@ -20,6 +20,6 @@ CF_KEYFILE=.cf-keys
 upload: backbank.wasm
 	(. $(CF_KEYFILE) && curl -X PUT -H "X-Auth-Email: $$API_EMAIL" -H "X-Auth-Key: $$API_KEY" \
 	  "https://api.cloudflare.com/client/v4/accounts/$$ACCOUNT_ID/workers/scripts/wasm-demo" \
-		-F metadata=@emscript-metadata.json \
-		-F script=@emscript.js \
+		-F metadata=@shim-metadata.json \
+		-F script=@shim.js \
 		-F wasm=@backbank.wasm)
