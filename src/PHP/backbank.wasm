@@ -1,4 +1,4 @@
-# Using Emscripten 2.0.25
+# Using Emscripten 2.0.25 https://cloudflare.tv/event/5H5JZQgQZWQwYonKhekr80
 emcc -02 exec.c
   -o emscript.js \
   -s MODULARIZE=1 \
