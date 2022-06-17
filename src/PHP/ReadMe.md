@@ -29,4 +29,6 @@ git clone https://github.com/php/php-src.git && cd php-src && git checkout php-8
 ./buildconf --force && ./configure --enable-debug \                
     --prefix=$HOME/php-bin/DEBUG \
     --with-config-file-path=$HOME/php-bin/DEBUG/etc
+    
+Or... [pear/XML_Serializer](https://github.com/pear/XML_Serializer)
 
