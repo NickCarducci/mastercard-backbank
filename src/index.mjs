@@ -10,6 +10,14 @@ import MasterCardPHP from "./babelphp.mjs";
   };
 };*/
 
+const wasmMemory = new WebAssembly.Memory({initial: 512});//32MB
+const wasmInstance = new WebAssembly.Instance(
+    RESIZER_WASM,//Resource Bindings UI (or API).
+    {env: {memory: wasmMemory}})
+
+const resizer = wasmInstance.exports;
+const memoryBytes = new Uint8Array(wasmMemory.buffer);
+
 export class DurableObjectExample {
   constructor(state, env) {
     this.state = state;
