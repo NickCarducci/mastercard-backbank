@@ -1,5 +1,5 @@
 // let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
-import MasterCardPHP from "./babelphp.mjs";
+//import MasterCardPHP from "./babelphp.mjs";
 
 /*{
   return {
@@ -10,13 +10,14 @@ import MasterCardPHP from "./babelphp.mjs";
   };
 };*/
 
-const wasmMemory = new WebAssembly.Memory({initial: 512});//32MB
-const wasmInstance = new WebAssembly.Instance(
-    RESIZER_WASM,//Resource Bindings UI (or API).
-    {env: {memory: wasmMemory}})
+//wasmMemory - 32MB
+const store = new WebAssembly.Memory({initial: 512});
+const keyvalue = new Uint8Array(store.buffer);//set keyvalue.set(bytes, ptr);bytememory
+//read let resultBytes = keyvalue.slice(ptr, ptr + newSize)
 
-const resizer = wasmInstance.exports;
-const memoryBytes = new Uint8Array(wasmMemory.buffer);
+//wrangler.toml\(wasm_modules={BACKBANK_WASM="./backbank.wasm"};)//resource-binding-UI/API.
+const MasterCardPHP = new WebAssembly.Instance(BACKBANK_WASM,{env:{memory:store}}).exports;
+
 
 export class DurableObjectExample {
   constructor(state, env) {
