@@ -7,7 +7,8 @@ NO_STANDARD_LIBS=-nostdlib -nostdinc -isystemstubs
 # import WebAssembly.Memory in worker.js or DurableObjectExample.mjs
 WASM_LINKER_FLAGS=-Wl,--no-entry -Wl,--import-memory -Wl,--export-dynamic
 
-backbank.wasm: exec.c bootstrap.h
+# 86' bootstrap.h use Emscripten full C library, but Emscripten requires -s TEXTDECODER=0
+backbank.wasm: exec.c
 	clang $(CFLAGS) --target=wasm32-unknown-unknown-wasm \
 	    $(NO_STANDARD_LIBS) $(WASM_LINKER_FLAGS) \
 	    exec.c -o backbank.wasm
