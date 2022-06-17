@@ -1,0 +1,6 @@
+# Using Emscripten 2.0.25
+emcc -02 exec.c
+  -o emscript.js \
+  -s MODULARIZE=1 \
+  -s INVOKE_RUN=0 \
+  -s EXPORTED_RUNTIME_METHODS=["callMain"]
