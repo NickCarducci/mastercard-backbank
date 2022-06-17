@@ -1,5 +1,6 @@
 # Using Emscripten 2.0.25 https://cloudflare.tv/event/5H5JZQgQZWQwYonKhekr80
 # Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 – 2:30 PM (EDT)
+
 emcc -02 exec.c
   -o emscript.js \
   -s MODULARIZE=1 \
