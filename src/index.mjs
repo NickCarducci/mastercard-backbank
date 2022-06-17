@@ -12,12 +12,20 @@
 
 //wasmMemory - 32MB
 const store = new WebAssembly.Memory({initial: 512});
-const keyvalue = new Uint8Array(store.buffer);//set keyvalue.set(bytes, ptr);bytememory
+//resource-binding-UI/API.
+const MasterCardPHP = new WebAssembly
+              //wrangler.toml\(wasm_modules={BACKBANK_WASM="./backbank.wasm"};)
+              .Instance(BACKBANK_WASM,{env:{memory:store}}).exports;
+
+/*
+const options = { env:{ memory: new WebAssembly.Memory({initial: 512}) } };
+const MasterCardPHP = new WebAssembly.Instance(BACKBANK_WASM, options).exports;
+const store = MasterCardPHP.Memory();
+*/
+//set keyvalue.set(bytes, ptr); "bytememory"
+//const keyvalue = new Uint8Array(store.buffer);
+const keyvalue = new Uint8Array(MasterCardPHP.Memory().buffer);
 //read let resultBytes = keyvalue.slice(ptr, ptr + newSize)
-
-//wrangler.toml\(wasm_modules={BACKBANK_WASM="./backbank.wasm"};)//resource-binding-UI/API.
-const MasterCardPHP = new WebAssembly.Instance(BACKBANK_WASM,{env:{memory:store}}).exports;
-
 
 export class DurableObjectExample {
   constructor(state, env) {
