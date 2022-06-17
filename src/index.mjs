@@ -13,7 +13,7 @@
 //wasmMemory - 32MB
 const store = new WebAssembly.Memory({initial: 512});
 //resource-binding-UI/API.
-const MasterCardPHP = new WebAssembly
+const MasterCardPHP = new WebAssembly//https://cloudflare.tv/event/5H5JZQgQZWQwYonKhekr80 7-9'
               //wrangler.toml\(wasm_modules={BACKBANK_WASM="./backbank.wasm"};)
               .Instance(BACKBANK_WASM,{env:{memory:store}}).exports;
 
