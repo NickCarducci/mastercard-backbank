@@ -468,7 +468,6 @@ function mastercardRoute ($req, $func) {
 /*addEventListener("fetch", function ($event) {
     $event->respondWith(handleRequest($event->request));
 });
-
 function handleRequest($request) {
     $PHPWorkerHelloWorld = null;
     if ($request.url === "/deposit") {
@@ -491,6 +490,27 @@ class Mgillicuddy {
     public $mastercardRoute = mastercardRoute;
     //return  static function () {}
 };
-return new Mgillicuddy;
+//return new Mgillicuddy;
 //define('DEFAULT',new Mgillicuddy);
 //console var_dump(constant('DEFAULT'));
+error_reporting(E_ALL);
+
+require_once 'XML/Serializer.php';
+
+$index = new stdClass();
+$index->error = PEAR::raiseError('error',123);
+$index->app = new Mgillicuddy;//require_once 'sxml_index.php';//new Index();
+
+$serializer = new XML_Serializer(array(
+    XML_SERIALIZER_OPTION_INDENT      => '    ',
+    XML_SERIALIZER_OPTION_LINEBREAKS  => "\n",
+    XML_SERIALIZER_OPTION_DEFAULT_TAG => 'unnamedItem',
+    XML_SERIALIZER_OPTION_TYPEHINTS   => true
+  ));
+
+if($serializer-> serialize($index)) 
+    $xml = $serializer-> getSerializedData();
+
+echo '<pre>';
+echo htmlspecialchars($xml);
+echo '</pre>';
