@@ -6,7 +6,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "dist/index.mjs",
   "scripts": {
-    "build": "cd src/ && node emscript.txt && cd .. && rollup -c",
+    "build": "cd src/ && node emscript.sh && cd .. && rollup -c",
     "build1": "babel src/PHP -o src/babelphp.js && rollup -c",
     "format": "prettier --write '**/*.{mjs,js,css,json,md}'"
   },
