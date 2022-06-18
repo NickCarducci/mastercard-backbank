@@ -24,6 +24,6 @@ emcc -02 exec.c
 *run the above command* (with the former installations && in a folder with `src/source/exec.c`, `src/source/package.json`, `src/source/backbank.php`) *then copy & paste* **`src/exec.js`** -
 for `src/iWAM.js` to import & [initiateWasm](https://emscripten.org/docs/api_reference/module.html?highlight=instantiatewasm)
 
-`index.mjs` can use the `backbank.php` dependency, ..., first serialized to `exec.c`
+`index.mjs` CAN use the `backbank.php` dependency, ..., first serialized to `exec.c`
 
 `main shim.mjs` export, with DurableObjectExample referenced from `wrangler.toml`
