@@ -17,12 +17,12 @@ Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 –
 
 ````
 emcc -02 exec.c
-  -o instive.js \
+  -o exec.js \
   -s MODULARIZE=1 \
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"]
 ````
-2. *run the above command* (with the former installations && in a folder with `src/source/exec.c`, `src/source/backbank.php`) *then copy & paste* **`src/instive.js`** version of the c++ plugin.
+2. *run the above command* (with the former installations && in a folder with `src/source/exec.c`, `src/source/backbank.php`) *then copy & paste* **`src/exec.js`** version of the c++ plugin.
 
 3. Put `./backbank.wasm` in in the root outsice of `./src/source` for `iWAM.js` [instantiation](https://emscripten.org/docs/api_reference/module.html?highlight=instantiatewasm).
 
@@ -36,7 +36,7 @@ workers_dev = true #if entending default subdomain
 ````
 > RECAP: `index.mjs` CAN use the `backbank.php` dependency
 
-`wasm_modules={BACKBANK_WASM="./backbank.wasm"}`-`wrangler.toml`, `instive.js`-instantiable, `c` class
+`wasm_modules={BACKBANK_WASM="./backbank.wasm"}`-`wrangler.toml`, `exec.js`-instantiable, `c` class
 ..., first serialized to `exec.c`
 
 `package.json\{main: "shim.mjs"}`
