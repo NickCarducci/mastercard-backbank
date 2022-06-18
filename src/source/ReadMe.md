@@ -8,6 +8,7 @@ brew install python \
   ./emsdk install latest \
   ./emsdk activate latest
 
+## safely ignore the following when cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/
 source "/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk/emsdk_env.sh"
 echo 'source "/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk/emsdk_env.sh"' >> $HOME/.zprofile
 ````
