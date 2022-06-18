@@ -58,6 +58,7 @@ tag = "v1" # initial migration
 new_classes = ["DurableObjectExample"] # deleted_classes
 [build.upload]
 format = "modules" # "service-workers"
-dir = "dist" # build folder of [rollup-transformations](https://github.com/cloudflare/durable-objects-rollup-esm/blob/master/README.md)  
+dir = "dist"
 main = "./shim.mjs" # 'eyeball'
 ````
+dir = 'build' folder of [rollup-transformations](https://github.com/cloudflare/durable-objects-rollup-esm/blob/master/README.md)  
