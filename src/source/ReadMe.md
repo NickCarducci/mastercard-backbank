@@ -63,7 +63,7 @@ format = "modules" # "service-workers"
 dir = "dist"
 main = "./shim.mjs" # 'eyeball'
 ````
-dir = 'build' folder of [rollup-transformations](https://github.com/cloudflare/durable-objects-rollup-esm/blob/master/README.md)  
+dir = 'build' folder of `~/rollup.config.js` [rollup-transformations](https://github.com/cloudflare/durable-objects-rollup-esm/blob/master/README.md)  
 
 ````
 [build]
