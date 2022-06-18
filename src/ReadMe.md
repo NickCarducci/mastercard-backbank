@@ -16,7 +16,7 @@ Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 –
 
 ````
 emcc -02 exec.c
-  -o index.mjs \
+  -o exec.js \
   -s MODULARIZE=1 \
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"]
