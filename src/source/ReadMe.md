@@ -28,13 +28,13 @@ emcc -02 exec.c
 
 Recap:
 `index.mjs` CAN use the `backbank.php` dependency, ..., first serialized to `exec.c`
-
+````
 compatibility_date = "2021-10-18"
 name = "mastercard-backbank-dev"
 type = "javascript" # webpack
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
 workers_dev = true #if entending default subdomain
-
+````
 ... = `wasm_modules={BACKBANK_WASM="./backbank.wasm"}`-`wrangler.toml`, `exec.js`-instantiable, `c` class
 
 `package.json\{main: "shim.mjs"}`
