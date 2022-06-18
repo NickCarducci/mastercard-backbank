@@ -39,7 +39,7 @@ workers_dev = true #if entending default subdomain
 `wasm_modules={BACKBANK_WASM="./backbank.wasm"}`-`wrangler.toml`, `exec.js`-instantiable, `c` class
 ..., first serialized to `exec.c`
 
-`package.json\{main: "dist/shim.mjs"}`
+`package.json\{main: "dist/shim.mjs"}` "~/eyeball"
 
 ````
 kv_namespaces = [{ binding="backbank", id="e4609a2b6fa943aab9e44185293dae3a"}]
