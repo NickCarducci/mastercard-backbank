@@ -1,12 +1,13 @@
 ### Build source to enable `emcc` in command line terminals
-1. Use [tip of tree](https://github.com/emscripten-core/emsdk/issues/671) "emscripten" [build](https://emscripten.org/docs/getting_started/downloads.html)
+1. Use [tip of tree](https://github.com/emscripten-core/emsdk/issues/671) "emscripten" [build](https://emscripten.org/docs/getting_started/downloads.html) or tot=latest
 ````
 git clone https://github.com/emscripten-core/emsdk.git
 cd emsdk
 
 brew install python &&
 ./emsdk install tot &&
-./emsdk activate tot
+./emsdk activate tot &&
+source ./emsdk_env.sh
 
 ## safely ignore the following when cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/
 source "/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk/emsdk_env.sh"
