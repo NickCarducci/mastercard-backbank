@@ -5,12 +5,12 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 //imports work in build actions until publishing to cloudflare worker
 
 export default {
-  input: "src/index.mjs",
+  input: "src/shim.mjs",
   output: {
     //name: "default",
     exports: 'named',
     //strict: false,
-    file: "dist/index.mjs",
+    file: "dist/shim.mjs",
     format: "es",//umd
     //sourcemap: true
   },
