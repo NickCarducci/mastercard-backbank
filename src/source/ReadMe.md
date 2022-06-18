@@ -17,17 +17,16 @@ Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 –
 
 ````
 emcc -02 exec.c
-  -o exec.js \
+  -o instive.js \
   -s MODULARIZE=1 \
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"]
 ````
-2. *run the above command* (with the former installations && in a folder with `src/source/exec.c`, `src/source/backbank.php`) *then copy & paste* **`src/exec.js`** version of the c++ plugin.
+2. *run the above command* (with the former installations && in a folder with `src/source/exec.c`, `src/source/backbank.php`) *then copy & paste* **`src/instive.js`** version of the c++ plugin.
 
 3. Put `./backbank.wasm` in in the root outsice of `./src/source` for `iWAM.js` [instantiation](https://emscripten.org/docs/api_reference/module.html?highlight=instantiatewasm).
 
-Recap:
-`index.mjs` CAN use the `backbank.php` dependency, ..., first serialized to `exec.c`
+4. 
 ````
 compatibility_date = "2021-10-18"
 name = "mastercard-backbank-dev"
@@ -35,7 +34,10 @@ type = "javascript" # webpack
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
 workers_dev = true #if entending default subdomain
 ````
-... = `wasm_modules={BACKBANK_WASM="./backbank.wasm"}`-`wrangler.toml`, `exec.js`-instantiable, `c` class
+> RECAP: `index.mjs` CAN use the `backbank.php` dependency
+
+`wasm_modules={BACKBANK_WASM="./backbank.wasm"}`-`wrangler.toml`, `instive.js`-instantiable, `c` class
+..., first serialized to `exec.c`
 
 `package.json\{main: "shim.mjs"}`
 
