@@ -53,7 +53,7 @@ deleted_classes = ["Require"]
 [build.upload]
 format = "modules" # "service-workers"
 # dir = "src"
-main = "./index.mjs"
+main = "./shim.mjs"
 [build]
 # command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
 command = "npm install && npm run build"
