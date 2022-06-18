@@ -17,8 +17,8 @@ Using [Emscripten 2.0.25](https://cloudflare.tv/event/5H5JZQgQZWQwYonKhekr80)
 Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 – 2:30 PM (EDT) [9 mo earlier](https://github.com/robertaboukhalil/cf-workers-emscripten/blob/main/README.md)
 
 ````
-emcc -02 exec.c
-  -o exec.js \
+emcc -02 ../exec.c
+  -o ../exec.js \
   -s MODULARIZE=1 \
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"]
