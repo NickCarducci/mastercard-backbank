@@ -1,4 +1,4 @@
-export {DurableObjectExample} from ".index"
+export {DurableObjectExample} from "./index"
   
 export default {
   async fetch(request, env /*, ctx*/) {
