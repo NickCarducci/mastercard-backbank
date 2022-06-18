@@ -29,5 +29,7 @@ emcc -02 exec.c
 Recap:
 `index.mjs` CAN use the `backbank.php` dependency, ..., first serialized to `exec.c`
 
+... = `wasm_modules={BACKBANK_WASM="./backbank.wasm"}`-`wrangler.toml`, `exec.js`-instantiable, `c` class
+
 `main shim.mjs` export, with DurableObjectExample referenced from `wrangler.toml`
 
