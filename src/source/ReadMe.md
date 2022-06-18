@@ -27,3 +27,5 @@ for `src/iWAM.js` to import & [initiateWasm](https://emscripten.org/docs/api_ref
 `index.mjs` CAN use the `backbank.php` dependency, ..., first serialized to `exec.c`
 
 `main shim.mjs` export, with DurableObjectExample referenced from `wrangler.toml`
+
+Put `./backbank.js` in in the root outsice of `src/source`
