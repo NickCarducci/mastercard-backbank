@@ -62,3 +62,10 @@ dir = "dist"
 main = "./shim.mjs" # 'eyeball'
 ````
 dir = 'build' folder of [rollup-transformations](https://github.com/cloudflare/durable-objects-rollup-esm/blob/master/README.md)  
+
+````
+[build]
+command = "npm install && npm run build"
+[miniflare]
+global_async_io = true # may or may not be required
+````
