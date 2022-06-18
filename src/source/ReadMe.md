@@ -11,7 +11,7 @@ brew install python &&
 2. START [A NEW](https://github.com/emscripten-core/emscripten/issues/5696) TERMINAL
 ````
 cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk &&
-source emsdk_env.sh
+source ./emsdk_env.sh
 
 ## safely ignore the following when cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/
 source "/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk/emsdk_env.sh"
