@@ -1,41 +1,15 @@
 // let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
-//import MasterCardPHP from "./babelphp.mjs";
-import Module from "./exec.js";
+import MasterCardPHP from "./iWAM.js"; //"./babelphp.mjs";
 
-/*{
-  return {
-    [keyValue[0]]: keyValue[1],
-    status: obj[0],
-    message: obj[1],
-    headers: obj[2]
-  };
-};*/
-// Initialize WebAssembly module
-let output = "";
-// By default, stdout/stderr is output to console.log/warn
-const MasterCardPHP = await Module({
-  wasmMemory: new WebAssembly.Memory({initial: 512}),//32MB
-  print: text => output += `${text}\n`,
-  printErr: text => output += `${text}\n`,// Instead of downloading the .wasm file, fetch it from a global var
-  instantiateWasm: (imports, callback) => {
-    //resource-binding-UI/API.
-    const inst = new WebAssembly//https://cloudflare.tv/event/5H5JZQgQZWQwYonKhekr80 7-9'
-                  //wrangler.toml\(wasm_modules={BACKBANK_WASM="./backbank.wasm"};)
-                  .Instance(BACKBANK_WASM,imports);
-    callback(inst);
-    return inst.exports;
-  }
-});
-
+//(set) keyvalue.set(bytes, ptr); "bytememory"
+//const keyvalue = new Uint8Array(store.buffer);
+const keyvalue = new Uint8Array(MasterCardPHP.Memory().buffer);
+//(read) let resultBytes = keyvalue.slice(ptr, ptr + newSize)
 /*
 const options = { env:{ memory: new WebAssembly.Memory({initial: 512}) } };
 const MasterCardPHP = new WebAssembly.Instance(BACKBANK_WASM, options).exports;
 const store = MasterCardPHP.Memory();
 */
-//(set) keyvalue.set(bytes, ptr); "bytememory"
-//const keyvalue = new Uint8Array(store.buffer);
-const keyvalue = new Uint8Array(MasterCardPHP.Memory().buffer);
-//(read) let resultBytes = keyvalue.slice(ptr, ptr + newSize)
 
 export class DurableObjectExample {
   constructor(state, env) {
