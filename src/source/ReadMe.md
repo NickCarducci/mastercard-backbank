@@ -7,7 +7,7 @@ cd emsdk
 brew install python &&
 ./emsdk install tot &&
 ./emsdk activate tot &&
-source ./emsdk_env.sh
+source emsdk_env.sh
 
 ## safely ignore the following when cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/
 source "/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk/emsdk_env.sh"
