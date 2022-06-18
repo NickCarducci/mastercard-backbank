@@ -21,3 +21,9 @@ emcc -02 exec.c
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"]
 ````
+run the above command then copy & paste exec.js
+for `src/iWAM.js` to import & [initiateWasm](https://emscripten.org/docs/api_reference/module.html?highlight=instantiatewasm)
+
+`index.mjs` can use the `backbank.php` dependency, ..., first serialized to `backbank.c`
+
+`main shim.mjs` export, with DurableObjectExample referenced from `wrangler.toml`
