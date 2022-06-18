@@ -4,9 +4,9 @@
 git clone https://github.com/emscripten-core/emsdk.git
 cd emsdk
 
-brew install python \
-  ./emsdk install tot \
-  ./emsdk activate tot
+brew install python &&
+./emsdk install tot &&
+./emsdk activate tot
 
 ## safely ignore the following when cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/
 source "/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk/emsdk_env.sh"
