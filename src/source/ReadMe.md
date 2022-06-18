@@ -32,7 +32,7 @@ compatibility_date = "2021-10-18"
 name = "mastercard-backbank-dev"
 type = "javascript" # webpack
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
-workers_dev = true #if entending default subdomain
+workers_dev = true #if extending default subdomain
 ````
 > RECAP: `index.mjs` CAN use the `backbank.php` dependency
 
