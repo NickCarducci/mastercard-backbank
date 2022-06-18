@@ -6,7 +6,8 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "dist/index.mjs",
   "scripts": {
-    "build": "npx emsdk-checkout && npx emsdk install <version> && npx emsdk activate <version> && node run emcc",
+    "build": "rollup -c",
+    "build1": "npx emsdk-checkout && npx emsdk install <version> && npx emsdk activate <version> && node run emcc",
     "emcc": "cd src/ && npx emsdk-run emscript.sh && cd .. && rollup -c",
     "build2": "babel src/PHP -o src/babelphp.js && rollup -c",
     "format": "prettier --write '**/*.{mjs,js,css,json,md}'"
