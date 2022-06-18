@@ -6,7 +6,11 @@ cd emsdk
 
 brew install python &&
 ./emsdk install tot &&
-./emsdk activate tot &&
+./emsdk activate tot
+````
+2. START A NEW TERMINAL
+````
+cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk &&
 source emsdk_env.sh
 
 ## safely ignore the following when cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/
@@ -24,11 +28,11 @@ emcc -02 ../exec.c
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"]
 ````
-2. *run the above command* (with the former installations && in a folder with `src/source/exec.c`, `src/source/backbank.php`) *then copy & paste* **`src/exec.js`** version of the c++ plugin.
+3. *run the above command* (with the former installations && in a folder with `src/source/exec.c`, `src/source/backbank.php`) *then copy & paste* **`src/exec.js`** version of the c++ plugin.
 
-3. Put `./backbank.wasm` in in the root outsice of `./src/source` for `iWAM.js` [instantiation](https://emscripten.org/docs/api_reference/module.html?highlight=instantiatewasm).
+4. Put `./backbank.wasm` in in the root outsice of `./src/source` for `iWAM.js` [instantiation](https://emscripten.org/docs/api_reference/module.html?highlight=instantiatewasm).
 
-4. 
+5. 
 ````
 compatibility_date = "2021-10-18"
 name = "mastercard-backbank-dev"
