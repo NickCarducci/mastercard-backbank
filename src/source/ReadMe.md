@@ -8,7 +8,7 @@ brew install python &&
 ./emsdk install tot &&
 ./emsdk activate tot
 ````
-2. START A NEW TERMINAL
+2. START [A NEW](https://github.com/emscripten-core/emscripten/issues/5696) TERMINAL
 ````
 cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk &&
 source emsdk_env.sh
