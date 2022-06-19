@@ -21,9 +21,9 @@ export default {
       depreciated, done automatically, not the problem!
       namedExports: {
         'node_modules/picomatch/index.js': ['pm']
-      },*/
-     //exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
-     //include: "src/**/*",
+      },* /
+     //exclude: ["node_modules/** /*", "notes/** /*", "src/notes/** /*"],
+     //include: "src/** /*",
     }),*/
     nodeResolve({
       exportConditions: ['browser', 'worker'],
