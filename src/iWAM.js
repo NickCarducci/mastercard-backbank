@@ -3,9 +3,10 @@ import Module from "./exec.js";
 // Initialize WebAssembly module
 let output = "";
 // By default, stdout/stderr is output to console.log/warn
-export default async function MasterCardPHP (url) { 
+export default async function MasterCardPHP (request) { 
   return await Module({
     locateFile: function(path, prefix) {
+      let url = new URL(request.url),
       //if (path.endsWith(".mem")) // if it's a mem init file, use a custom dir
         //return "https://mycdn.com/memory-init-dir/" + path;
       return /*prefix*/url + path;// otherwise, use the default, the prefix (JS file's dir) + the path
