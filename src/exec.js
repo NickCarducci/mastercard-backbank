@@ -1,3 +1,4 @@
+//output emitted of ./source/emsdk
 var Module = typeof Module != "undefined" ? Module : {};
 var moduleOverrides = Object.assign({}, Module);
 var arguments_ = [];
