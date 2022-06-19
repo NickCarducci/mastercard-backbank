@@ -4,9 +4,9 @@
   "name": "mastercard-backbank",
   "version": "1.0.0",
   "description": "mastercard worker for vaumoney of vaults.biz",
-  "main": "src/shim.mjs",
+  "main": "dist/shim.mjs",
   "scripts": {
-    "buildr": "rollup -c",
+    "build": "rollup -c",
     "build1": "npx emsdk-checkout && npx emsdk install <version> && npx emsdk activate <version> && node run emcc",
     "emcc": "cd src/ && npx emsdk-run emscript.sh && cd .. && rollup -c",
     "build2": "babel src/PHP -o src/babelphp.js && rollup -c",
