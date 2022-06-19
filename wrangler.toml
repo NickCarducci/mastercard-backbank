@@ -56,7 +56,7 @@ dir = "src"
 main = "./shim.mjs"
 [build]
 # command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
-command = "npm install && npm run build"
+command = "npm install" # "npm install && npm run build"
 # command = "npx parcel build src/index.js"
 # command = "node build.js"
 # command = "npx rollup src/index.js --file dist/index.js --format es"
