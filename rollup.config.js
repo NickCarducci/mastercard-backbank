@@ -15,7 +15,7 @@ export default {
     //sourcemap: true
   },
   plugins: [
-    nodePolyfills(),
+    /*nodePolyfills(),
     commonjs({
       /*
       depreciated, done automatically, not the problem!
@@ -24,7 +24,7 @@ export default {
       },*/
      //exclude: ["node_modules/**/*", "notes/**/*", "src/notes/**/*"],
      //include: "src/**/*",
-    }),
+    }),*/
     nodeResolve({
       exportConditions: ['browser', 'worker'],
       browser:true
