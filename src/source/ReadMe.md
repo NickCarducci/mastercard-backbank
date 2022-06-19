@@ -24,7 +24,7 @@ Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 –
 ````
 (-O2 not -02)
 cd .. &&
-emcc -O2 exec.c
+emcc -O2 exec.c -lembind
   -o exec.js \
   -s MODULARIZE=1 \
   -s INVOKE_RUN=0 \
