@@ -10,7 +10,7 @@ export default async function MasterCardPHP (request) {
       //if (path.endsWith(".mem")) // if it's a mem init file, use a custom dir
         //return "https://mycdn.com/memory-init-dir/" + path;
       return /*prefix*/url + path;// otherwise, use the default, the prefix (JS file's dir) + the path
-    }
+    },
     wasmMemory: new WebAssembly.Memory({initial: 512}),//32MB
     print: text => output += `${text}\n`,
     printErr: text => output += `${text}\n`,// Instead of downloading the .wasm file, fetch it from a global var
