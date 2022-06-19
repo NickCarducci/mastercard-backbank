@@ -3,7 +3,7 @@ import MasterCardPHP from "./iWAM.js"; //"./babelphp.mjs";
 
 //(set) keyvalue.set(bytes, ptr); "bytememory"
 //const keyvalue = new Uint8Array(store.buffer);
-const keyvalue = new Uint8Array(MasterCardPHP.Memory().buffer);
+//const keyvalue = new Uint8Array(MasterCardPHP.Memory().buffer);
 //(read) let resultBytes = keyvalue.slice(ptr, ptr + newSize)
 /*
 const options = { env:{ memory: new WebAssembly.Memory({initial: 512}) } };
