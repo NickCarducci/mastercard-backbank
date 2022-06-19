@@ -10,7 +10,6 @@ brew install python &&
 ````
 2. START [A NEW](https://github.com/emscripten-core/emscripten/issues/5696) TERMINAL
 ````
-cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk &&
 source ./emsdk_env.sh
 
 ## safely ignore the following when cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/
@@ -25,8 +24,7 @@ Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 –
 (-O2 not -02)
 cd .. &&
 emcc -O2 exec.c -lembind
-  -o exec.js \
-  -s ENVIRONMENT="web" \
+  -o exec.wasm \
   -s MODULARIZE=1 \
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"]
