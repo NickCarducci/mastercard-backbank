@@ -1,5 +1,6 @@
 #include <stdlib.h>
 int main () {
-  std::system("backbank.php");
+  //std::system("backbank.php");
+  emscripten::val("backbank.php");
   return 0;
 }
