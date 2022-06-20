@@ -3374,5 +3374,6 @@ if (Module["preInit"]) {
 }
 var shouldRunNow = true;
 if (Module["noInitialRun"]) shouldRunNow = false;
-export { run as default };
+run();
+export { Module as default };
 
