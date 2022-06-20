@@ -32,6 +32,8 @@ emcc -O2 exec.c
   -s ASSERTIONS
 remove this for verbose if successfully uploaded, AND not aborted - both (a)sync fetching of wasm fails
   -s ASSERTIONS \
+disables scripts from string...
+  -s DYNAMIC_EXECUTION=0 \
 ````
 MODULARIZE = [cwrap ok](https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html#calling-compiled-c-functions-from-javascript-using-ccall-cwrap)
 
