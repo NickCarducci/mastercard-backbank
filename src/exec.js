@@ -1,4 +1,3 @@
-//output emitted of ./source/emsdk
 var Module = typeof Module != "undefined" ? Module : {};
 var moduleOverrides = Object.assign({}, Module);
 var arguments_ = [];
@@ -7,7 +6,7 @@ var quit_ = (status, toThrow) => {
   throw toThrow;
 };
 var ENVIRONMENT_IS_WEB = typeof window == "object";
-var ENVIRONMENT_IS_WORKER = false;//typeof importScripts == "function";
+var ENVIRONMENT_IS_WORKER = false; // typeof importScripts == "function";
 var ENVIRONMENT_IS_NODE =
   typeof process == "object" &&
   typeof process.versions == "object" &&
@@ -3375,4 +3374,4 @@ if (Module["preInit"]) {
 var shouldRunNow = true;
 if (Module["noInitialRun"]) shouldRunNow = false;
 run();
-export {Module as default}
+export { Module as default };
