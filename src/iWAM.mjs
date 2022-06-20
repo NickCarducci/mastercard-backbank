@@ -24,7 +24,7 @@ export default async function MasterCardPHP (request) {
     }
   }).then(module=>{
     return {
-      app: module.ccall("index", null/*return type*/, [null]/*argument types*/, request/*arguments*/);
+      app: module.ccall("index", null/*return type*/, [null]/*argument types*/, request/*arguments*/, {async:"true"});
     }
   });//'null' == object return/argument type "since the beginning of javascript" - MDN typeof
 }
