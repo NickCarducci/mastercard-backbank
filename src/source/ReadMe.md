@@ -26,8 +26,7 @@ cd .. &&
 emcc -O2 exec.c
   -o exec.js \
   -s ENVIRONMENT="web" \
-  -s MODULARIZE=1 \
-  -s EXPORT_NAME="default" \
+  -s MODULARIZE=1 '-sEXPORT_NAME="default"' \
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"] \
   -s ASSERTIONS
