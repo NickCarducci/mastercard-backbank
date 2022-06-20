@@ -26,7 +26,8 @@ cd .. &&
 emcc -O2 exec.c
   -o exec.js \
   -s ENVIRONMENT="web" \
-  -s MODULARIZE=1 '-sEXPORT_NAME="default"' \
+  -s DYNAMIC_EXECUTION=0 \
+  -s MODULARIZE=1 '-sEXPORT_NAME="default"' --pre-js \'./pre.js\' \
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"] \
   -s ASSERTIONS
