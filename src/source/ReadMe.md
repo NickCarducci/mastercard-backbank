@@ -24,10 +24,12 @@ Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 –
 (-O2 not -02)
 cd .. &&
 emcc -O2 exec.c
-  -o exec.js \
+  -o exec.js \  
+  -s MODULARIZE=1 -s WASM=1 \
   -s ENVIRONMENT="web" \
   -s DYNAMIC_EXECUTION=0 \
-  -s MODULARIZE=1 '-sEXPORT_NAME="default"' --pre-js \'./pre.js\' \
+  -s EXPORT_NAME="default" --pre-js \'./pre.js\' \
+  -s EXTRA_EXPORTED_RUNTIME_METHODS=\'["ccall"]\'
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"] \
   -s ASSERTIONS
