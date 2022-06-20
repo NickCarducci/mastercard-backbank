@@ -22,5 +22,9 @@ export default async function MasterCardPHP (request) {
       callback(inst);
       return inst.exports;
     }
-  });
+  }).then(module=>{
+    return {
+      app: module.ccall("index", null/*return type*/, [null]/*argument types*/, request/*arguments*/);
+    }
+  });//'null' == object return/argument type "since the beginning of javascript" - MDN typeof
 }
