@@ -37,7 +37,7 @@ MODULARIZE = [cwrap ok](https://emscripten.org/docs/porting/connecting_cpp_and_j
 
 3. changeDirectory one level up of `emcc_enable_folder_/emsdk` and *run the above command* (with the former installations && in a folder with `src/source/exec.c`, `src/source/backbank.php`) *then copy & paste* **`src/exec.js`** version of the c++ plugin.
 
-4. Put `./backbank.wasm` in in the root outsice of `./src/source` for `iWAM.js` [instantiation](https://emscripten.org/docs/api_reference/module.html?highlight=instantiatewasm).
+4. Put `./a.out.wasm` in in the root outsice of `./src/source` for `iWAM.js` [instantiation](https://emscripten.org/docs/api_reference/module.html?highlight=instantiatewasm).
 
 5. 
 ````
@@ -49,7 +49,7 @@ workers_dev = true #if extending default subdomain
 ````
 > RECAP: `index.mjs` CAN use the `backbank.php` dependency
 
-`wasm_modules={BACKBANK_WASM="./backbank.wasm"}`-`wrangler.toml`, `exec.js`-instantiable, `c` class
+`wasm_modules={BACKBANK_WASM="./a.out.wasm"}`-`wrangler.toml`, `exec.js`-instantiable, `c` class
 ..., first serialized to `exec.c`
 
 `package.json\{main: "dist/shim.mjs"}` "~/eyeball"
