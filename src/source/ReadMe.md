@@ -28,7 +28,10 @@ emcc -O2 exec.c
   -s ENVIRONMENT="web" \
   -s MODULARIZE=1 \
   -s INVOKE_RUN=0 \
-  -s EXPORTED_RUNTIME_METHODS=["callMain"]
+  -s EXPORTED_RUNTIME_METHODS=["callMain"] \
+  -s ASSERTIONS
+remove this for verbose if successfully uploaded, AND not aborted - both (a)sync fetching of wasm fails
+  -s ASSERTIONS \
 ````
 MODULARIZE = [cwrap ok](https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html#calling-compiled-c-functions-from-javascript-using-ccall-cwrap)
 
