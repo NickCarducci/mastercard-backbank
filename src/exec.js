@@ -1,4 +1,5 @@
-//output emitted of ./source/emsdkvar Module = typeof Module != "undefined" ? Module : {};
+//output emitted of ./source/emsdk
+var Module = typeof Module != "undefined" ? Module : {};
 var moduleOverrides = Object.assign({}, Module);
 var arguments_ = [];
 var thisProgram = "./this.program";
