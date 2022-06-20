@@ -17,14 +17,14 @@ export class DurableObjectExample {
   }
 
   // Handle HTTP requests from clients.
-  async fetch(request) {
+  async fetch(req) {
     // Apply requested action.
     if (!req.url)
       return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
     
     // Durable Object storage is automatically cached in-memory, so reading the
     // same key every request is fast. 
-    let url = new URL(request.url),
+    let url = new URL(req.url),
         value = null;
     // That said, you could also store the value in a class member if you prefer.
     // let value = await this.state.storage.get("value") || 0;
@@ -44,7 +44,7 @@ export class DurableObjectExample {
     
     switch (url.pathname) {
     case "/":
-      const response = MasterCardPHP.callMain(request);
+      const response = MasterCardPHP.callMain(req);
       var t = {keyValue: {},opts: []};
       if (response) {
         //isBase64Encoded: false,
