@@ -27,7 +27,7 @@ emcc -O2 exec.c
   -o exec.js \  
   -s ENVIRONMENT="web" \
   -s DYNAMIC_EXECUTION=0 \
-  -s MODULARIZE=1 -s WASM=1 '-s EXPORT_NAME="default"' --pre-js \'./pre.js\' \
+  -s MODULARIZE=1 \
   -s EXTRA_EXPORTED_RUNTIME_METHODS=\'["ccall"]\' \
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"] \
@@ -36,6 +36,8 @@ remove this for verbose if successfully uploaded, AND not aborted - both (a)sync
   -s ASSERTIONS \
 disables scripts from string...
   -s DYNAMIC_EXECUTION=0 \
+extra
+  noglob 
 ````
 MODULARIZE = [cwrap ok](https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html#calling-compiled-c-functions-from-javascript-using-ccall-cwrap)
 
