@@ -64,7 +64,7 @@ export class DurableObjectExample {
           console.log(e.message)
           return [e.message, {status: 505}]
         })
-      return v && R(v);
+      return v && R(...v);
       // Just serve the current value.
       break;
     default:
