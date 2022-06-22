@@ -8,6 +8,14 @@ brew install python &&
 ./emsdk install tot &&
 ./emsdk activate tot
 ````
+````
+if there is an error with python3
+
+cd .. until ls command shows the folder with 'Users' and 'usr'
+cd usr/bin
+
+sudo ln -s python3 ~/bin
+````
 2. START [A NEW](https://github.com/emscripten-core/emscripten/issues/5696) TERMINAL
 ````
 source ./emsdk_env.sh
