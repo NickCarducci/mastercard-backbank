@@ -45,22 +45,24 @@ export class DurableObjectExample {
     //console.log(MasterCardPHP);
     switch (url.pathname) {
     case "/":
-      return await MasterCardPHP().then(index=>{
-        const response = index.app(req);//"callMain"
-        var t = {keyValue: {},opts: []};
-        if (response) {
-          //isBase64Encoded: false,
-          if (response.constructor !== Object) {
-            console.log("response.c!==Obj");
-            t.keyValue = { response }; //response for response object
-            t.opts = [200, "string success...: " + req.url, dataHead]; //network of network
+      return new Response(
+        await MasterCardPHP().then(index=>{
+          const response = index.app(req);//"callMain"
+          var t = {keyValue: {},opts: []};
+          if (response) {
+            //isBase64Encoded: false,
+            if (response.constructor !== Object) {
+              console.log("response.c!==Obj");
+              t.keyValue = { response }; //response for response object
+              t.opts = [200, "string success...: " + req.url, dataHead]; //network of network
+              return R(t.keyValue, t.opts);
+            }
+            t.keyValue = { data: response };
+            t.opts = [200, "success: " + req.url, dataHead];
             return R(t.keyValue, t.opts);
           }
-          t.keyValue = { data: response };
-          t.opts = [200, "success: " + req.url, dataHead];
-          return R(t.keyValue, t.opts);
-        }
-      }).catch(e=>console.log(e.message));
+        }).catch(e=>console.log(e.message))
+      );
       // Just serve the current value.
       break;
     default:
