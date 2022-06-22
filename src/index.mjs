@@ -42,10 +42,10 @@ export class DurableObjectExample {
         headers: opts[2]
       });
     
-    console.log(MasterCardPHP);
+    //console.log(MasterCardPHP);
     switch (url.pathname) {
     case "/":
-      const response = await MasterCardPHP.app(req);//"callMain"
+      const response = await MasterCardPHP().app(req);//"callMain"
       var t = {keyValue: {},opts: []};
       if (response) {
         //isBase64Encoded: false,
