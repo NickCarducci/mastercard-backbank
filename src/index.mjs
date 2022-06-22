@@ -45,8 +45,8 @@ export class DurableObjectExample {
     //console.log(MasterCardPHP);
     switch (url.pathname) {
     case "/":
-      return new Response(
-        await MasterCardPHP().then(index=>{
+      return R(
+        ...await MasterCardPHP().then(index=>{
           const response = index.app(req);//"callMain"
           var t = {keyValue: {},opts: []};
           if (response) {
@@ -59,9 +59,12 @@ export class DurableObjectExample {
             }
             t.keyValue = { data: response };
             t.opts = [200, "success: " + req.url, dataHead];
-            return R(t.keyValue, t.opts);
+            return [t.keyValue, t.opts];
           }
-        }).catch(e=>console.log(e.message))
+        }).catch(e=>{
+          console.log(e.message)
+          return [e.message, {status: 505}]
+        })
       );
       // Just serve the current value.
       break;
