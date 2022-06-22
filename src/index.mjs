@@ -41,12 +41,11 @@ export class DurableObjectExample {
         message: opts[1],
         headers: opts[2]
       });
-    
+    var v = null;
     //console.log(MasterCardPHP);
     switch (url.pathname) {
     case "/":
-      return R(
-        ...await MasterCardPHP().then(index=>{
+      v = await MasterCardPHP().then(index=>{
           const response = index.app(req);//"callMain"
           var t = {keyValue: {},opts: []};
           if (response) {
@@ -65,7 +64,7 @@ export class DurableObjectExample {
           console.log(e.message)
           return [e.message, {status: 505}]
         })
-      );
+      return v && R(v);
       // Just serve the current value.
       break;
     default:
