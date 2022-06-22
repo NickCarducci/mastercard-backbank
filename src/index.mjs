@@ -45,7 +45,7 @@ export class DurableObjectExample {
     //console.log(MasterCardPHP);
     switch (url.pathname) {
     case "/":
-      MasterCardPHP().then(index=>{
+      return await MasterCardPHP().then(index=>{
         const response = index.app(req);//"callMain"
         var t = {keyValue: {},opts: []};
         if (response) {
