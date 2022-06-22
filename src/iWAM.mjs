@@ -4,8 +4,7 @@ import Module from "./exec.js";
 let output = "";
 // By default, stdout/stderr is output to console.log/warn
 export default async function MasterCardPHP (request) { 
-  return new Response(
-    await Module({
+  return await Module({
       locateFile: function(path, prefix) {
         let url = new URL(request.url);
         //if (path.endsWith(".mem")) // if it's a mem init file, use a custom dir
@@ -28,5 +27,4 @@ export default async function MasterCardPHP (request) {
         app: module.ccall("index", null/*return type*/, [null]/*argument types*/, request/*arguments*/, {async:"true"})
       }
     })//'null' == object return/argument type "since the beginning of javascript" - MDN typeof
-  )
 }
