@@ -31,7 +31,8 @@ maybe $ `brew doctor`
 ````
 source ./emsdk_env.sh
 
-This sets environment variables PATH, EMSDK, EM_CONFIG, EMSDK_NODE, EMSDK_PYTHON, SSL_CERT_FILE after having a new [terminal-]shell
+This sets environment variables PATH, EMSDK, EM_CONFIG, EMSDK_NODE, EMSDK_PYTHON, SSL_CERT_FILE
+after having a new [terminal-]shell
 
 ## safely ignore the following when cd ~/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/
 source "/Users/YOUR_NAME/YOUR_CODING/emcc_enable_folder_/emsdk/emsdk_env.sh"
