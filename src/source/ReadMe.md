@@ -53,10 +53,10 @@ emcc -O2 exec.c -o exec.js
   -s INVOKE_RUN=0 \
   -s EXPORTED_RUNTIME_METHODS=["callMain"] \
   -s ASSERTIONS
-  
+````
 -s EXPORT_NAME="emscripten" --pre-js \'./pre.js\' \
 makes the -o [target .js] expect an input " " from where? 
-  
+````
 emcc -O2 exec.c -o exec.js
   -s ENVIRONMENT="web" \
   -s DYNAMIC_EXECUTION=0 \
