@@ -54,7 +54,7 @@ emcc -O2 exec.c -o exec.js
   -s EXPORTED_RUNTIME_METHODS=["callMain"] \
   -s ASSERTIONS
 ````
--s EXPORT_NAME="emscripten" --pre-js \'./pre.js\' \
+`-s EXPORT_NAME="emscripten" --pre-js \'./pre.js\' \`
 makes the -o [target .js] expect an input " " from where? 
 ````
 emcc -O2 exec.c -o exec.js
