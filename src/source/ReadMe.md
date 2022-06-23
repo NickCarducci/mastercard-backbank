@@ -3,13 +3,16 @@
 ````
 git clone https://github.com/emscripten-core/emsdk.git
 cd emsdk
-
+````
+([MAC OS has its own python](https://stackoverflow.com/questions/3819449/how-to-uninstall-python-2-7-on-a-mac-os-x-10-6-4), and EMSCRIPTEN does too, which uses environment variables to store path parts)
+````
 brew install python &&
 ./emsdk install tot &&
 ./emsdk activate tot
 ````
 ````
-if there is an error with python3
+if there is an error with python3 on M1, you might just have multiple parts of EMSCRIPTEN
+in `set` environment variable tool.
 
 cd .. until ls command shows the folder with 'Users' and 'usr'
 cd usr/bin
