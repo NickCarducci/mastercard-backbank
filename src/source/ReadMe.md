@@ -48,7 +48,7 @@ cd .. &&
 emcc -O2 exec.c
   -o exec.js \  
   -s ENVIRONMENT="web" \
-  -s EXPORT_NAME="emscripten" --pre-js \'./pre.js\'
+  -s EXPORT_NAME="emscripten" --pre-js \'./pre.js\' \
   -s DYNAMIC_EXECUTION=0 \
   -s MODULARIZE=1 \
   -s EXTRA_EXPORTED_RUNTIME_METHODS=\'["ccall"]\' \
