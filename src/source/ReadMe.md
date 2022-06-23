@@ -14,7 +14,7 @@ brew install python &&
 if there is an error with python3 on M1, you might just have multiple parts of EMSCRIPTEN
 in `set` environment variable tool.
 
-cd .. until ls command shows the folder with 'Users' and 'usr'
+cd .. until `ls` command shows the folder with 'Users' and 'usr'
 cd usr/bin
 
 sudo ln -s python3 ~/bin
