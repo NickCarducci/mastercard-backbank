@@ -55,7 +55,7 @@ emcc -O2 exec.c -o exec.js
   -s ASSERTIONS
 ````
 `-s EXPORT_NAME="emscripten" --pre-js \'./pre.js\' \`
-makes the -o [target .js] expect an input " " from where? 
+makes the -o [target .js] expect an input " " from where? `;` was missing to --pre-js file end
 ````
 emcc -O2 exec.c -o exec.js
   -s ENVIRONMENT="web" \
