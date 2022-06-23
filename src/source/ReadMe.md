@@ -43,12 +43,14 @@ Using [Emscripten 2.0.25](https://cloudflare.tv/event/5H5JZQgQZWQwYonKhekr80)
 Serverless WebAssembly with Cloudflare Workers, Aired on June 1, 2022 @ 2:00 – 2:30 PM (EDT) [9 mo earlier](https://github.com/robertaboukhalil/cf-workers-emscripten/blob/main/README.md)
 
 ````
+
+-s EXPORT_NAME="emscripten" --pre-js \'./pre.js\' \
+makes the -o [target .js] expect an input " " from where? 
+
 (-O2 not -02)
 cd .. &&
-emcc -O2 exec.c
-  -o exec.js \  
+emcc -O2 exec.c -o exec.js
   -s ENVIRONMENT="web" \
-  -s EXPORT_NAME="emscripten" --pre-js \'./pre.js\' \
   -s DYNAMIC_EXECUTION=0 \
   -s MODULARIZE=1 \
   -s EXTRA_EXPORTED_RUNTIME_METHODS=\'["ccall"]\' \
