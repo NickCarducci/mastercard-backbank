@@ -16,6 +16,10 @@ cd usr/bin
 
 sudo ln -s python3 ~/bin
 ````
+or 
+````
+file $(which python3) \ cntrl+c for location
+````
 [set EMSDK_PYTHON=~/bin/python3](https://www3.ntu.edu.sg/home/ehchua/programming/howto/Environment_Variables.html)
 
 2. START [A NEW](https://github.com/emscripten-core/emscripten/issues/5696) TERMINAL
