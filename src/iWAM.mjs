@@ -13,7 +13,7 @@ export default async function MasterCardPHP (request) {
     return new WebAssembly.Instance(BACKBANK_WASM,imports).exports;
   })
   .catch(err=>{
-    console.log(WebAssembly.validate(source), " the buffer is not a 'WAM binary', Instance with the emcc out js helper");
+    console.log(WebAssembly.validate(source), " the buffer is not a 'WAM binary', Instance with the emcc out[-file] .js helper");
     return await Module({
         locateFile: function(path, prefix) {
           let url = new URL(request.url);
