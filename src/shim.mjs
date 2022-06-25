@@ -57,7 +57,7 @@ async function noException(req, env) {
     .fetch(req)
     .then(async (requir) => {
       console.log(requir);*/
-  return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
+  return await ((eo=env.DurableObjectExample) => eo.get(eo.idFromName(urlObject.href)))(
     env.EXAMPLE_CLASS_DURABLE_OBJECT
   )
     .fetch(
