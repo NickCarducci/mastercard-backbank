@@ -5,15 +5,15 @@ let output = "";
 // By default, stdout/stderr is output to console.log/warn
 export default async function MasterCardPHP (request) { 
   //fetch the final return/arrow, 'this-deepest-function'
-  return fetch('a.out.wasm').then(response =>
+  return await fetch('a.out.wasm').then(response =>
     response.arrayBuffer()//WebAssembly.instantiateStreaming(fetch('a.out.wasm'), importObject)
-  ).then(bytes => {
+  ).then(bufferSource => {
     if(!WebAssembly.validate(bufferSource)) throw {name:"not bufferable",message: "cloudflare workers buffers array 'in-house'"}
     console.log("the buffer is WAM binary, fetch() return param arrayBuffer()=initiateStreaming()");
     return new WebAssembly.Instance(BACKBANK_WASM,imports).exports;
   })
-  .catch(err=>{
-    console.log(WebAssembly.validate(source), " the buffer is not a 'WAM binary', Instance with the emcc out[-file] .js helper");
+  .catch( async err => {
+    console.log("the source is not a bufferable 'WAM binary', Instance with the emcc out[-file] .js helper");
     return await Module({
         locateFile: function(path, prefix) {
           let url = new URL(request.url);
@@ -21,7 +21,7 @@ export default async function MasterCardPHP (request) {
             //return "https://mycdn.com/memory-init-dir/" + path;
           return /*prefix*/url + path;// otherwise, use the default, the prefix (JS file's dir) + the path
         },
-        wasmMemory: new WebAssembly.Memory({initial: 512}),//32MB wasmMemory
+        //{env:{ memory: new WebAssembly.Memory({initial: 512}) }},//32MB wasmMemory
         print: text => output += `${text}\n`,
         printErr: text => output += `${text}\n`,// Instead of downloading the .wasm file, fetch it from a global var
         instantiateWasm: (imports, callback) => {
