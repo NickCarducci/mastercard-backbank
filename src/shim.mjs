@@ -42,40 +42,35 @@ async function noException(req, env) {
   // boot instance, if necessary //https://<worker-name>.<your-namespace>.workers.dev/
   //https://linc.sh/blog/durable-objects-in-production
   //const clientId = request.headers.get("cf-connecting-ip");
-  const urlObject = new URL(req.url); //.pathname;//path
-  var origin = urlObject.origin; // request.headers.get("Origin");
   var allowedOrigins = [
     "https://vau.money",
     "https://jwi5k.csb.app",
     "https://mastercard-backbank.backbank.workers.dev"
   ];
+  
+  const urlObject = new URL(req.url); //.pathname;//path
+  var origin = urlObject.origin; // request.headers.get("Origin");
+  
   if (allowedOrigins.indexOf(origin) === -1) return noaccess(origin);
+  
   console.log("env", env, origin, ": making example class durable object");
-  /*  return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
-    env.REQUIRE_CLASS_DURABLE_OBJECT
-  )
+  
+  //  return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
+  //  env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req).then(async (requir) => {console.log(requir);
+  
+  const href = url.searchParams.get("name")
+  return await (eo=env.EXAMPLE_CLASS_DURABLE_OBJECT) => eo.get(eo.idFromName(href))
     .fetch(req)
-    .then(async (requir) => {
-      console.log(requir);*/
-  return await ((eo=env.DurableObjectExample) => eo.get(eo.idFromName(urlObject.href)))(
-    env.EXAMPLE_CLASS_DURABLE_OBJECT
-  )
-    .fetch(
-      req /*, {
-      headers: {
-        "Content-Type": "application/octet-stream" //"application/json"
-      },
-      method: "POST",
-      body: requir.arrayBuffer()
-    }*/
-    ) // Forward the current HTTP request to it
+    // , {headers: {"Content-Type": "application/octet-stream" //"application/json"},
+    // method: "POST",body: requir.arrayBuffer()}
+    // Forward the current HTTP request to it
     .then(async (res) => {
       console.log("response from worker object", res);
       return res; //await res.json();
     })
     .then((r) => {
       console.log("fetched EXAMPLE_CLASS_DURABLE_OBJECT : ", r);
-      /*return new Response(`{ok: true,data: ${r} }`);*/
+      // return new Response(`{ok: true,data: ${r} }`);
       const dataHead = {
           "Content-Type": "application/json"
         },
