@@ -5,9 +5,9 @@ let output = "";
 // By default, stdout/stderr is output to console.log/warn
 export default async function MasterCardPHP (request) { 
   //fetch the final return/arrow, 'this-deepest-function'
-  return await fetch('a.out.wasm').then(response =>
+  return await WebAssembly.instantiateStreaming(fetch('a.out.wasm')/*await fetch('a.out.wasm').then(response =>
     response.arrayBuffer()//WebAssembly.instantiateStreaming(fetch('a.out.wasm'), importObject)
-  ).then(bufferSource => {
+  )*/.then(bufferSource => {
     if(!WebAssembly.validate(bufferSource)) throw {name:"not bufferable",message: "cloudflare workers buffers array 'in-house'"};
     console.log("the buffer is WAM binary: fetch(), return param arrayBuffer()=initiateStreaming()");
     return WebAssembly.instantiate(bufferSource,imports).instance.exports;
