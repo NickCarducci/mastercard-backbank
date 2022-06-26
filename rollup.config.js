@@ -21,7 +21,7 @@ export default {
     copy({
       targets: [
         { src: 'src/iWAM.mjs', dest: 'src', rename: 'iwam.mjs' },
-        { src: 'a.out.wasm', dest: '', rename: 'backbank.wasm' }
+        { src: 'a.out.wasm', dest: '/', rename: 'backbank.wasm' }
       ]
     }),
     /*spawnProcess({ 
