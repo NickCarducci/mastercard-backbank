@@ -19,7 +19,7 @@ export default async function MasterCardPHP (request) {
     console.log("the source is not a bufferable 'WAM binary': should then be already instantiable thru"+
                                   " 'new WebAssembly.Instance.exports' emcc out[-file] ['exec'].js");
     if(!WebAssembly.validate(BACKBANK_WASM)) return console.log({name:"not bufferable",message: "instantiable already-buffered by cf workers"});
-    function async app () {
+    async function app () {
       return await new WebAssembly.Instance(this,arguments).exports;//callback(inst);
     }
     return app.apply(BACKBANK_WASM,imports);
