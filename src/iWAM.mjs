@@ -1,11 +1,14 @@
-import Module from "./exec.js";
+//import Module from "./exec.js";
+import FSA from "./fileserve.js";
 
 // Initialize WebAssembly module
 let output = "";
 // By default, stdout/stderr is output to console.log/warn
 export default async function MasterCardPHP (request) { 
+  var asmArg = { __asyncjs__openXML: () => FSA({ startIn: "./backbank.php" }) };
+  const info = { env: asmArg, wasi_snapshot_preview1: asmArg }; //asmLibraryArg
   //fetch the final return/arrow, 'this-deepest-function'
-  return await WebAssembly.instantiateStreaming(fetch('a.out.wasm')/*await fetch('a.out.wasm').then(response =>
+  return await WebAssembly.instantiateStreaming(info/*fetch('a.out.wasm')*//*await fetch('a.out.wasm').then(response =>
     response.arrayBuffer()//WebAssembly.instantiateStreaming(fetch('a.out.wasm'), importObject)
   )*/.then(bufferSource => {
     if(!WebAssembly.validate(bufferSource)) throw {name:"not bufferable",message: "cloudflare workers buffers array 'in-house'"};
