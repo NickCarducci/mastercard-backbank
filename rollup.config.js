@@ -5,7 +5,7 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 //import { spawnProcess } from 'rollup-plugin-spawn-process';
 //imports work in build actions until publishing to cloudflare worker
 //import { wasm } from '@rollup/plugin-wasm';
-import copy from 'rollup-plugin-copy'
+//import copy from 'rollup-plugin-copy'//EACCES: permission denied
 
 export default {
   input: "src/shim.mjs",
@@ -18,13 +18,13 @@ export default {
     //sourcemap: true
   },
   plugins: [
-    copy({
+    /*copy({
       targets: [
         { src: 'src/iWAM.mjs', dest: 'src', rename: 'iwam.mjs' },
         { src: 'a.out.wasm', dest: '/', rename: 'backbank.wasm' }
       ]
     }),
-    /*spawnProcess({ 
+    spawnProcess({ 
       command:"node src/iWAM.mjs",//"ln -s src/iWAM.mjs src/iWAM.mjs",
       file:"iWAM.mjs",
       args:[],
