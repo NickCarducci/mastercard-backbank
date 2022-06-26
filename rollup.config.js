@@ -16,7 +16,7 @@ export default {
 	],*/
   output: {
     //name: "default",
-    exports: 'auto',//named
+    //exports: 'auto',//named
     //strict: false,
     file: "dist/shim.mjs",
     format: "es",//umd
