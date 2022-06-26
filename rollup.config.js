@@ -9,11 +9,11 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 
 export default {
   input: "src/shim.mjs",
-	external: [
+	/*external: [
 		//'path',
 		'crypto',
 		'@rollup/plugin-inject'
-	],
+	],*/
   output: {
     //name: "default",
     exports: 'auto',//named
