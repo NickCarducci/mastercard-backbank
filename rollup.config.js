@@ -20,7 +20,7 @@ export default {
   plugins: [
     copy({
       targets: [
-        { src: 'src/iWAM.mjs', dest: 'src', rename: 'iwam.js' }
+        { src: 'src/iWAM.mjs', dest: 'src', rename: 'iwam.mjs' }
       ]
     }),
     /*spawnProcess({ 
