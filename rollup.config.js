@@ -18,7 +18,7 @@ export default {
   },
   plugins: [
     spawnProcess({ 
-      command:"ln -s src/iWAM.mjs src/iWAM.mjs",
+      command:"node src/iWAM.mjs",//"ln -s src/iWAM.mjs src/iWAM.mjs",
       file:"iWAM.mjs",
       args:[],
       key:"serviceService",
