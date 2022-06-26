@@ -1,4 +1,4 @@
-async function FSA(options = (o = [{}]) => (!Array.isArray(o) ? [o] : o)) {
+export default async function FSA(options = (o = [{}]) => (!Array.isArray(o) ? [o] : o)) {
   return await Promise.all(
     await this.showOpenFilePicker({
       skipDirectory: (entry) => entry.name[0] === "./ignore",
