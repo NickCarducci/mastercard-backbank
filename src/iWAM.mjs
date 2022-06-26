@@ -18,10 +18,17 @@ export default async function MasterCardPHP (request) {
   .catch( async err => {
     console.log("the source is not a bufferable 'WAM binary': should then be already instantiable thru"+
                                   " 'new WebAssembly.Instance.exports' emcc out[-file] ['exec'].js");
-    return await Module({
+    if(!WebAssembly.validate(BACKBANK_WASM)) return console.log({name:"not bufferable",message: "instantiable already-buffered by cf workers"});
+    function async app () {
+      await new WebAssembly.Instance(this,arguments).exports;//callback(inst);
+    }
+    return app.apply(BACKBANK_WASM,imports);
+    //if (Module["instantiateWasm"]) {}
+ 
+    /*return await Module({
         locateFile: function(path, prefix) { // if (path.endsWith(".mem")) return "https://mycdn.com/memory-init-dir/" + path
           let url = new URL(request.url); // if it's a mem init file, return custom dir
-          return /*prefix*/url + path;// (default) prefix dir + path
+          return /*prefix* /url + path;// (default) prefix dir + path
         },
         //{env:{ memory: new WebAssembly.Memory({initial: 512}) }},//32MB wasmMemory
         print: text => output += `${text}\n`,
@@ -36,8 +43,9 @@ export default async function MasterCardPHP (request) {
         }
       }).then(module=>{
         return {
-          app: module.ccall("index", null/*return type*/, [null]/*argument types*/, request/*arguments*/, {async:"true"})
+          app: module.ccall("index", null/*return type* /, [null]/*argument types* /, request/*arguments* /, {async:"true"})
         }
       }).catch(err=>console.log(err.message));//'null' == object return/argument type "since the beginning of javascript" - MDN typeof
+      */
   });
 }
