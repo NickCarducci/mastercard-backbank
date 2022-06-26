@@ -1,7 +1,7 @@
 //import { terser } from 'rollup-plugin-terser';
-//import commonjs from '@rollup/plugin-commonjs';
-//import { nodeResolve } from '@rollup/plugin-node-resolve';
-//import nodePolyfills from 'rollup-plugin-polyfill-node';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 //imports work in build actions until publishing to cloudflare worker
 //import { wasm } from '@rollup/plugin-wasm';
 
