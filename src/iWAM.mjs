@@ -63,7 +63,7 @@ rollup(inputOptions)
 
 
 // Initialize WebAssembly module
-let output = "";
+//let output = "";
 // By default, stdout/stderr is output to console.log/warn
 export default async function MasterCardPHP(request) {
   async function app() {
