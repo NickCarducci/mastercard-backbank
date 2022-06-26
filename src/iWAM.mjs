@@ -20,7 +20,7 @@ export default async function MasterCardPHP (request) {
                                   " 'new WebAssembly.Instance.exports' emcc out[-file] ['exec'].js");
     if(!WebAssembly.validate(BACKBANK_WASM)) return console.log({name:"not bufferable",message: "instantiable already-buffered by cf workers"});
     function async app () {
-      await new WebAssembly.Instance(this,arguments).exports;//callback(inst);
+      return await new WebAssembly.Instance(this,arguments).exports;//callback(inst);
     }
     return app.apply(BACKBANK_WASM,imports);
     //if (Module["instantiateWasm"]) {}
