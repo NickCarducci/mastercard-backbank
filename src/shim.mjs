@@ -58,7 +58,7 @@ async function noException(req, env) {
   //  return await ((eo) => eo.get(eo.idFromName(urlObject.href)))(
   //  env.REQUIRE_CLASS_DURABLE_OBJECT).fetch(req).then(async (requir) => {console.log(requir);
   
-  const href = url.searchParams.get("name");
+  const href = urlObject.searchParams.get("name");
   return await ((eo=env.EXAMPLE_CLASS_DURABLE_OBJECT) => eo.get(eo.idFromName(href)))()
     .fetch(req)
     // , {headers: {"Content-Type": "application/octet-stream" //"application/json"},
