@@ -1,62 +1,26 @@
+
 import { rollup, watch } from "rollup";
 import path from "path";
-import commonjs from "@rollup/plugin-commonjs";
-import { terser } from "rollup-plugin-terser";
-import nodeResolve from "@rollup/plugin-node-resolve";
-import json from "@rollup/plugin-json";
-import { babel } from "@rollup/plugin-babel";
-import legacy from '@rollup/plugin-legacy';
-import replace from '@rollup/plugin-replace';
+import { wasm } from '@rollup/plugin-wasm';//import { babel } from "@rollup/plugin-babel";
 
-const presets = [
-  [
-    "@babel/preset-env",
-    {
-      targets: 'defaults',
-      //"esmodules": true,
-      modules: "auto"
-    }
-  ],
-  //"@babel/preset-react"
-];
-
-const plugins = [
-    replace({ 
-      include: './src/browseri.js',
-      values: {//https://stackoverflow.com/questions/40568580/rollup-js-how-import-a-js-file-not-es6-module-without-any-change-myvarextras
-        'module.exports =': 'export default'
-      }//like banner, footer
-    }),
-  nodeResolve({
-    browser: true,
-    only: [/^\.{0,2}\//],
-    extensions: [".js"],
-    mainFields: ["module", "main"]
-  }),
-  legacy({  'browserii.js': 'Window' }),
-  commonjs({
-    include: ["node_modules/**"],
-    exclude: ["node_modules/process-es6/**/*","notes/**/*","src/builders/**/*"]
-  }),
-  babel({
-    babelHelpers: "bundled",
-    presets,
-    exclude: "node_modules/**" // only transpile our source code
-  }),
-  json(),
-  terser()
-];
 const inputOptions = {
-  external: ['cors', 'mastercard-locations','mastercard-places'],
-  input: "src/browseri.js",
-  plugins
+  //external: ['cors', 'mastercard-locations','mastercard-places'],
+  input: "a.out.wasm",
+  plugins:[
+    wasm()
+    /*babel({
+      babelHelpers: "bundled",
+      presets:[["@babel/preset-env",{ targets: 'defaults', modules: "auto",}]],
+        //{"esmodules": true};"@babel/preset-react"
+      exclude: "node_modules/**" // only transpile our source code
+    })*/
+  ]
 };
 const output = {
-  //banner,footer,
-  name: "Window",
-  strict: false,
-  file: "src/browserii.js",
-  format: "iife",
+  name: "Window",//banner,footer,
+  //strict: false,
+  file: "src/backbank.mjs",
+  format: "es",
   sourcemap: false,
   //globals:{"Window":this.storage
 };
@@ -68,8 +32,8 @@ const watchOptions = {
     chokidar: {},
     clearScreen: true,
     skipWrite: false,
-    exclude: ["node_modules/**/*","notes/**/*","src/builders/**/*"],
-    include: "src/**/*"
+    exclude: ["node_modules/**/*","notes/**/*","src/builders/**/*","src/notes/**/*"],
+    include: "**/**"
   }
 };
 console.log("PLUGINS PASSED");
@@ -94,4 +58,3 @@ rollup(inputOptions)
     await bundle.write(output);
   })
   .catch((err) => console.log("rollup.rollup error", err.message));
-  
