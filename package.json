@@ -27,6 +27,9 @@
     "rollup-plugin-spawn-process": "0.0.1",
     "rollup-plugin-terser": "7.0.2"
   }, 
+  "dependencies": {
+    "@rollup/plugin-inject": "^4.0.0"
+  },
   "false":{
      "@babel/helper-plugin-utils": "^7.17.12",
      "@babel/parser": "^7.18.4",
