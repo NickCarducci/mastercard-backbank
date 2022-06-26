@@ -1,13 +1,13 @@
 //import Module from "./exec.js";
-//import FSA from "./fileserve.js";
-import FSA from "../a.out.wasm";
+import FSA from "./fileserve.js";
+//import FSA from "../a.out.wasm";
 
 // Initialize WebAssembly module
 let output = "";
 // By default, stdout/stderr is output to console.log/warn
 export default async function MasterCardPHP(request) {
   async function app() {
-    var asmArg = { __asyncjs__openXML: FSA};//() => FSA({ startIn: "src/a.out.wasm" }) };
+    var asmArg = { __asyncjs__openXML: () => FSA({ startIn: "src/a.out.wasm" }) };
     const info = { env: asmArg, wasi_snapshot_preview1: asmArg }; //asmLibraryArg
     //fetch the final return/arrow, 'this-deepest-function'
     return await WebAssembly.instantiateStreaming(
