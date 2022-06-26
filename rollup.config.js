@@ -5,6 +5,7 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 //import { spawnProcess } from 'rollup-plugin-spawn-process';
 //imports work in build actions until publishing to cloudflare worker
 //import { wasm } from '@rollup/plugin-wasm';
+import copy from 'rollup-plugin-copy'
 
 export default {
   input: "src/shim.mjs",
@@ -17,6 +18,11 @@ export default {
     //sourcemap: true
   },
   plugins: [
+    copy({
+      targets: [
+        { src: 'src/iWAM.mjs', dest: 'src', rename: 'iwam.js' }
+      ]
+    }),
     /*spawnProcess({ 
       command:"node src/iWAM.mjs",//"ln -s src/iWAM.mjs src/iWAM.mjs",
       file:"iWAM.mjs",
@@ -40,7 +46,7 @@ export default {
     nodeResolve({
       exportConditions: ['browser', 'worker'],
       browser:true
-    }),
+    })
     //terser()
     //wasm()
   ]
