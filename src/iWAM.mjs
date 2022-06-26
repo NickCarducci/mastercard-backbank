@@ -67,12 +67,12 @@ let output = "";
 // By default, stdout/stderr is output to console.log/warn
 export default async function MasterCardPHP(request) {
   async function app() {
-    var asmArg = { __asyncjs__openXML: () => FSA({ startIn: "src/a.out.wasm" }) };
-    const info = { env: asmArg, wasi_snapshot_preview1: asmArg }; //asmLibraryArg
+    //var asmArg = { __asyncjs__openXML: () => FSA({ startIn: "src/backbank.mjs" }) };
+    //const info = { env: asmArg, wasi_snapshot_preview1: asmArg }; //asmLibraryArg
     //fetch the final return/arrow, 'this-deepest-function'
-    return await WebAssembly.instantiateStreaming(
-      info /*fetch('a.out.wasm')*/ /*await fetch('a.out.wasm').then(response =>
-        response.arrayBuffer()//WebAssembly.instantiateStreaming(fetch('a.out.wasm'), importObject)*/
+    return await WebAssembly.instantiateStreaming(fetch("src/backbank.mjs")
+      //info /*fetch('a.out.wasm')*/ /*await fetch('a.out.wasm').then(response =>
+        //response.arrayBuffer()//WebAssembly.instantiateStreaming(fetch('a.out.wasm'), importObject)*/
     )
       .then((bufferSource) => {
         if (!WebAssembly.validate(bufferSource))
