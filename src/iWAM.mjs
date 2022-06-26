@@ -9,8 +9,8 @@ export default async function MasterCardPHP (request) {
   const info = { env: asmArg, wasi_snapshot_preview1: asmArg }; //asmLibraryArg
   //fetch the final return/arrow, 'this-deepest-function'
   return await WebAssembly.instantiateStreaming(info/*fetch('a.out.wasm')*//*await fetch('a.out.wasm').then(response =>
-    response.arrayBuffer()//WebAssembly.instantiateStreaming(fetch('a.out.wasm'), importObject)
-  )*/.then(bufferSource => {
+    response.arrayBuffer()//WebAssembly.instantiateStreaming(fetch('a.out.wasm'), importObject)*/
+  ).then(bufferSource => {
     if(!WebAssembly.validate(bufferSource)) throw {name:"not bufferable",message: "cloudflare workers buffers array 'in-house'"};
     console.log("the buffer is WAM binary: fetch(), return param arrayBuffer()=initiateStreaming()");
     return WebAssembly.instantiate(bufferSource,imports).instance.exports;
