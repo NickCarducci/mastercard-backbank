@@ -11,7 +11,7 @@ export default {
   input: "src/shim.mjs",
   output: {
     //name: "default",
-    exports: 'auto',
+    exports: 'auto',//named
     //strict: false,
     file: "dist/shim.mjs",
     format: "es",//umd
