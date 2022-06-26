@@ -7,7 +7,7 @@ export default {
     exports: 'named',
     //strict: false,
     file: "iwam.mjs",
-    format: "cjs"
+    format: "es"
   },
   plugins: [
     wasm()
