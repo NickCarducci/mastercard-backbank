@@ -2,7 +2,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import nodePolyfills from 'rollup-plugin-polyfill-node';
-import { spawnProcess } from 'rollup-plugin-spawn-process';
+//import { spawnProcess } from 'rollup-plugin-spawn-process';
 //imports work in build actions until publishing to cloudflare worker
 //import { wasm } from '@rollup/plugin-wasm';
 
@@ -17,7 +17,7 @@ export default {
     //sourcemap: true
   },
   plugins: [
-    spawnProcess({ 
+    /*spawnProcess({ 
       command:"node src/iWAM.mjs",//"ln -s src/iWAM.mjs src/iWAM.mjs",
       file:"iWAM.mjs",
       args:[],
@@ -26,7 +26,7 @@ export default {
       events:[],
       setup:()=>{},
       cleaup:()=>console.log("see iWAM.js process in iwam.js"),
-    }),
+    }),*/
     nodePolyfills(),
     commonjs({
       /*
