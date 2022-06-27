@@ -8,4 +8,4 @@ https://github.com/cloudflare/wrangler2/blob/main/fixtures/wasm-app/worker/servi
 
 ## Why not use C and C++?
 
-> Rust makes it really easy to create WebAssembly binaries that have fairly idiomatic JavaScript interfaces. ... much more memory safe language ...[so] a whole class of bugs that are common in C and C++ are impossible to have in 'safe' Rust.
+> "Rust makes it really easy to create WebAssembly binaries that have fairly idiomatic JavaScript interfaces. ... much more memory safe language ...[so] a whole class of bugs that are common in C and C++ are impossible to have in 'safe' Rust."
