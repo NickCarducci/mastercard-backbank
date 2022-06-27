@@ -11,3 +11,5 @@ https://github.com/cloudflare/wrangler2/blob/main/fixtures/wasm-app/worker/servi
 > "Rust makes it [really easy](https://github.com/rust-lang/rust/blob/master/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp) to create WebAssembly binaries that have **fairly idiomatic JavaScript interfaces**. ... much more memory safe language ...[so] a whole class of bugs that are common in C and C++ are impossible to have in 'safe' Rust."
 
 [Would showing the volume on bid or ask make it too easy for retail traders](https://www.quora.com/Would-showing-the-volume-on-bid-or-ask-make-it-too-easy-for-retail-traders)?
+
+[Why doesn't the SEC force market makers to use a blind auction](https://virtualid.quora.com/Why-doesnt-the-SEC-force-market-makers-to-use-a-blind-auction)? in Virtual ID
