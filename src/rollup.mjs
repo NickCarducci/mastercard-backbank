@@ -40,7 +40,7 @@ console.log("PLUGINS PASSED");
 const watcher = watch(watchOptions);
 console.log("WATCHER INITIALIZED");
 watcher.on("event", (event) => {
-  console.log("G-FORCE:rollup: ", JSON.stringify(event));
+  //console.log("G-FORCE:rollup: ", JSON.stringify(event));
   if (event.code === "BUNDLE_START") {
   } else if (event.code === "START") {
   } else if (event.code === "END") {
