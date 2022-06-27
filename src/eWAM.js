@@ -4,7 +4,7 @@ import _wasm from "../a.out.wasm";
 const _wasm_memory = new WebAssembly.Memory({ initial: 512 });
 let importsObject = {
   env: { memory: _wasm_memory },
-  "./index_bg.js": __asyncjs__openXML,
+  "src/backbank.mjs": __asyncjs__openXML,
 };
 
 export default new WebAssembly.Instance(_wasm, importsObject).exports;
