@@ -22,4 +22,6 @@ https://github.com/cloudflare/wrangler2/blob/main/fixtures/wasm-app/worker/servi
 
 [alpha llvm](https://github.com/llvm/llvm-project/tree/main/llvm/lib/ExecutionEngine)
 
-[ARCHITECTURE-VENDOR-OPERATING_SYSTEM-ENVIRONMENT](https://github.com/llvm/llvm-project/blob/main/llvm/lib/ExecutionEngine/TargetSelect.cpp) - [target triple = "x86_64-apple-macosx10.7.0"](https://llvm.org/docs/LangRef.html#target-triple)
+ARCHITECTURE-VENDOR-OPERATING_SYSTEM-ENVIRONMENT - [target triple = "x86_64-apple-macosx10.7.0"](https://llvm.org/docs/LangRef.html#target-triple)
+
+-march=x -mcpu=y, and -mattr=a,-b,+c. [ExecutionEnvironment/TargetSelect/selectTarget()]([https://llvm.org/doxygen/TargetSelect_8cpp_source.html](https://github.com/llvm/llvm-project/blob/main/llvm/lib/ExecutionEngine/TargetSelect.cpp))
