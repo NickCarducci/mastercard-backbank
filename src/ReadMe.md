@@ -13,3 +13,7 @@ https://github.com/cloudflare/wrangler2/blob/main/fixtures/wasm-app/worker/servi
 [Would showing the volume on bid or ask make it too easy for retail traders](https://www.quora.com/Would-showing-the-volume-on-bid-or-ask-make-it-too-easy-for-retail-traders)?
 
 [Why doesn't the SEC force market makers to use a blind auction](https://virtualid.quora.com/Why-doesnt-the-SEC-force-market-makers-to-use-a-blind-auction)? in [Virtual ID](https://www.quora.com/Can-we-replace-the-FDA-with-open-source-and-login-gov-Know-Your-Customer)
+
+# [LLVM-C](https://llvm.org/doxygen/group__LLVMC.html#details) or target independent backendable pipelines with [pass manager optimized pipeline operations](https://llvm.org/docs/NewPassManager.html)
+
+If you are interested in implementing a new code generation algorithm, it should only depend on the target-description and machine code representation classes, ensuring that it is [portable.](https://llvm.org/docs/CodeGenerator.html)
