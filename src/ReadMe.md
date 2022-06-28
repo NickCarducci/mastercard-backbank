@@ -16,4 +16,4 @@ https://github.com/cloudflare/wrangler2/blob/main/fixtures/wasm-app/worker/servi
 
 # [LLVM-C](https://llvm.org/doxygen/group__LLVMC.html#details) or target independent backendable pipelines with [pass manager optimized pipeline operations](https://llvm.org/docs/NewPassManager.html)
 
-If you are interested in implementing a new code generation algorithm, it should only depend on the target-description and machine code representation classes, ensuring that it is [portable.](https://llvm.org/docs/CodeGenerator.html)
+> "If you are interested in implementing a new code generation algorithm, it should only depend on the target-description and machine code representation classes, ensuring that it is [portable.](https://llvm.org/docs/CodeGenerator.html)"
