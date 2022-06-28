@@ -21,3 +21,5 @@ https://github.com/cloudflare/wrangler2/blob/main/fixtures/wasm-app/worker/servi
 # [addGlobalMapping()](https://llvm.org/doxygen/classllvm_1_1ExecutionEngine.html#a805704b52a327cc6b37aebf9cba14169) are you the one I am lookin' for?
 
 [alpha llvm](https://github.com/llvm/llvm-project/tree/main/llvm/lib/ExecutionEngine)
+
+[ARCHITECTURE-VENDOR-OPERATING_SYSTEM-ENVIRONMENT](https://github.com/llvm/llvm-project/blob/main/llvm/lib/ExecutionEngine/TargetSelect.cpp)
