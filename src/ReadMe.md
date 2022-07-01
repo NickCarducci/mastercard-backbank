@@ -28,3 +28,5 @@ ARCHITECTURE-VENDOR-OPERATING_SYSTEM-ENVIRONMENT - [target triple = "x86_64-appl
 
 
 # [C compile](https://stackoverflow.com/a/15452246/11711280) ([FFI::Platypus](https://github.com/PerlFFI/FFI-Platypus)) to [Perl2js](https://github.com/goccy/p5-Compiler-Parser/blob/master/src/compiler/parser/Compiler_parser.cpp) & [llvm](https://news.ycombinator.com/item?id=18288217), to run with v8 service worker bound isolate?
+
+[Perlwasm](https://github.com/perlwasm/Wasm) has it?
