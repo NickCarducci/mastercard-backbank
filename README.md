@@ -4,3 +4,5 @@ https://vaults.quora.com/Can-you-boycott-credit-1
 
 "node_version.h is [listed because the N-API version is taken from there](https://github.com/nodejs/node/blob/574ad6d89dd9db2cb7a4b449118d4f8befab9b05/Makefile#L155)
 and included in config.gypi"
+
+# [plasma-umass/browsix](https://github.com/plasma-umass/browsix)
