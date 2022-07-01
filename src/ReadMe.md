@@ -25,3 +25,6 @@ https://github.com/cloudflare/wrangler2/blob/main/fixtures/wasm-app/worker/servi
 ARCHITECTURE-VENDOR-OPERATING_SYSTEM-ENVIRONMENT - [target triple = "x86_64-apple-macosx10.7.0"](https://llvm.org/docs/LangRef.html#target-triple)
 
 -march=x -mcpu=y, and -mattr=a,-b,+c. [ExecutionEnvironment/TargetSelect/selectTarget()](https://github.com/llvm/llvm-project/blob/main/llvm/lib/ExecutionEngine/TargetSelect.cpp)
+
+
+# [C compile](https://stackoverflow.com/a/15452246/11711280) to [Perl2js](https://metacpan.org/release/HATZ/App-perl2js-0.02/source/lib/App/perl2js/Converter/Node/Module.pm) & [llvm](https://news.ycombinator.com/item?id=18288217), to run with v8 service worker bound isolate?
