@@ -16,9 +16,9 @@ fn main() {
 
     let result = result.to_string(scope).unwrap();
     
-    //println!("{}", result.to_rust_string_lossy(scope));
+    println!("{}", result.to_rust_string_lossy(scope));//this returns like javascript
 
-    //byte (not machine binary) code
+    //byte from machine[binary]_code
     let c_source = r#"
           let bytes = new Uint8Array([machine_code]);
           let module = new WebAssembly.Module(bytes);
@@ -37,3 +37,5 @@ fn main() {
   }
   v8::V8::dispose_platform();
 }
+// too verbose? types allow property asserted type (arguments are parameters by apply)
+// stackoverflow.com/questions/61945688/how-to-use-function-return-value-directly-in-rust-println
