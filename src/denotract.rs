@@ -5,7 +5,7 @@ fn main() {
   v8::V8::initialize();
   {
     let spank = v8::CreateParams::default();
-    let stack = &mut v8::Isolate::new(spank);
+    let stack = &mut v8::Isolate::new(spank);// &mut mutable
     let scoper = &mut v8::HandleScope::new(stack);
     let context = v8::Context::new(scoper);
     let scope = &mut v8::ContextScope::new(scoper, context);//compiler
