@@ -6,3 +6,5 @@ https://vaults.quora.com/Can-you-boycott-credit-1
 and included in config.gypi"
 
 # [plasma-umass/browsix](https://github.com/plasma-umass/browsix)
+
+## [Denoland_hello](https://github.com/denoland/rusty_v8/blob/main/examples/hello_world.rs)
