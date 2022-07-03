@@ -505,7 +505,7 @@ function isFileURI(filename) {
   return filename.startsWith("file://");
 }
 var wasmBinaryFile;
-wasmBinaryFile = "exec.wasm";
+wasmBinaryFile = "a.out.wasm";
 if (!isDataURI(wasmBinaryFile)) {
   wasmBinaryFile = locateFile(wasmBinaryFile);
 }
