@@ -10,3 +10,32 @@ and included in config.gypi"
 ## [Denoland_hello/rusty_v8](https://github.com/denoland/rusty_v8/blob/main/examples/hello_world.rs)
 
 ### [parity-wasm/build.js](https://github.com/paritytech/parity-wasm/blob/master/examples/build.rs)
+
+````
+// parity-wasm builder api as a method for small wasm module generation.
+
+extern crate parity_wasm;
+use std::env;
+use parity_wasm::{builder, elements};
+
+fn main() {
+
+	let args = env::args().collect::<Vec<_>>();
+	if args.len() != 2 {
+		println!("Usage: {} backbank.wasm", args[0]);
+		return //generated wasm module ^
+	}
+
+	let module = builder::module()
+		.function()//factory
+		.signature()//describe with param(arg), no return
+		.with_param(elements::ValueType::I32)
+		.build()
+		.body()//no args, empty function
+		.build()// module buildable
+		.build()// wasm module
+		.build();// wasm artefacts appendable empty module builder struct
+
+	parity_wasm::serialize_to_file(&args[1], module).unwrap();// wasm serial
+}
+````
