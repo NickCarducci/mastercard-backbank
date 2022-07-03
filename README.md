@@ -7,6 +7,8 @@ https://vaults.quora.com/Can-you-boycott-credit-1
 "node_version.h is [listed because the N-API version is taken from there](https://github.com/nodejs/node/blob/574ad6d89dd9db2cb7a4b449118d4f8befab9b05/Makefile#L155)
 and included in config.gypi"
 
+<img align="right" alt="N-API abstraction notice in Makefile of nodejs/node" src="https://www.dl.dropboxusercontent.com/s/vsb6z5pny1hg6dr/Screen%20Shot%202022-07-03%20at%2012.52.43%20PM.png?dl=0">
+
 # [plasma-umass/browsix](https://github.com/plasma-umass/browsix)
 
 ## [Denoland_hello/rusty_v8](https://github.com/denoland/rusty_v8/blob/main/examples/hello_world.rs)
