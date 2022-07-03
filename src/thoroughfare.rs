@@ -1,15 +1,26 @@
 use js_sys::Promise;
 use wasm_bindgen::prelude::*;
-use worker_kv::*;
 
 async fn module() -> Result<JsValue, KvError> {
-    let kv = KvStore::create("EXAMPLE")?;
-    let list_response = kv.list().limit(100).execute().await?;
+    let engine = Engine::default();
+    let module = Module::from_file(&engine, "a.out.wat")?;
+    let mut store = Store::new(
+        &engine,
+        MyState {
+            name: "hello, world!".to_string(),
+            count: 0,
+        },
+    );
+    let hello_func = Func::wrap(&mut store, |mut caller: Caller<'_, MyState>| {
+        //println!("> {}", caller.data().name);
+        //caller.data_mut().count += 1;
+    });
+    let imports = [hello_func.into()];
+    let instance = Instance::new(&mut store, &module, &imports)?;
 
-    // Returns a pretty printed version of the listed key value pairs.
-    serde_json::to_string_pretty(&list_response)
-        .map(Into::into)
-        .map_err(Into::into)
+    let run = instance.get_typed_func::<(), (), _>(&mut store, "run")?;
+
+    run.call(&mut store, ())?;
 }
 
 #[wasm_bindgen]
