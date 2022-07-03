@@ -1,4 +1,4 @@
-import Module from "./exec.js";
+import Module from "./exec.mjs";
 async function MasterCardPHP(request) {
   /*async function app() {
   if (Module["instantiateWasm"]) {}*/
