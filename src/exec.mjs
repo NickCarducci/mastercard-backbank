@@ -799,5 +799,5 @@ var shouldRunNow = true;
 if (Module["noInitialRun"]) shouldRunNow = false;
 export default function () {
   run();
-  return Module.apply(Module,arguments);
+  return _main.apply(Module,arguments);
 }
