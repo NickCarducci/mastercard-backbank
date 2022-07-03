@@ -700,6 +700,7 @@ var _main = (Module["_main"] = function () {
     arguments
   );
 });
+
 var ___errno_location = (Module["___errno_location"] = function () {
   return (___errno_location = Module["___errno_location"] =
     Module["asm"]["__errno_location"]).apply(null, arguments);
@@ -797,7 +798,7 @@ if (Module["preInit"]) {
 }
 var shouldRunNow = true;
 if (Module["noInitialRun"]) shouldRunNow = false;
-export default function () {
+export default function _main () {
   run();
-  return _main.apply(Module,arguments);
+  return Module;
 }
