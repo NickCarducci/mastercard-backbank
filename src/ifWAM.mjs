@@ -18,9 +18,11 @@ async function MasterCardPHP(request) {
           name: "not bufferable",
           message: "instantiable already-buffered by cf workers"
         });
+      console.log("instantiateWasm:");
       const inst = new //wrangler.toml\(wasm_modules={BACKBANK_WASM="./backbank.wasm"};)
       WebAssembly.Instance(BACKBANK_WASM, imports); //https://cloudflare.tv/event/5H5JZQgQZWQwYonKhekr80 7-9' //resource-binding-UI/API.
       callback(inst);
+      console.log("app=WebAssembly.Instance(BACKBANK_WASM,imports).exports.ccall("index");");
       return inst.exports;
     }
   })
