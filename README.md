@@ -11,6 +11,7 @@ and included in config.gypi"
 
 ### [parity-wasm/build.rs](https://github.com/paritytech/parity-wasm/blob/master/examples/build.rs)
 
+[push_global or FunctionBuilder](https://github.com/paritytech/parity-wasm/blob/0e9519711970b75d2c0e0a9ce0040417ba3b8a3d/src/builder/module.rs#L266)
 ````
 // parity-wasm builder api as a method for small wasm module generation.
 
