@@ -1,5 +1,5 @@
 import Module from "./exec.js";
-export default async function MasterCardPHP(request) {
+async function MasterCardPHP(request) {
   /*async function app() {
   if (Module["instantiateWasm"]) {}*/
 
@@ -37,3 +37,4 @@ export default async function MasterCardPHP(request) {
     })
     .catch((err) => console.log(err.message)); //'null' == object return/argument type "since the beginning of javascript" - MDN typeof
 }
+export default async function () {return await MasterCardPHP().app()}
