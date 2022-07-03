@@ -1,4 +1,3 @@
-//output emitted of ./source/emsdk
 var Module = typeof Module != "undefined" ? Module : {};
 var moduleOverrides = Object.assign({}, Module);
 var arguments_ = [];
@@ -7,7 +6,7 @@ var quit_ = (status, toThrow) => {
   throw toThrow;
 };
 var ENVIRONMENT_IS_WEB = typeof window == "object";
-var ENVIRONMENT_IS_WORKER = false;//typeof importScripts == "function";
+var ENVIRONMENT_IS_WORKER = typeof importScripts == "function";
 var ENVIRONMENT_IS_NODE =
   typeof process == "object" &&
   typeof process.versions == "object" &&
@@ -506,7 +505,7 @@ function isFileURI(filename) {
   return filename.startsWith("file://");
 }
 var wasmBinaryFile;
-wasmBinaryFile = "a.out.wasm";
+wasmBinaryFile = "exec.wasm";
 if (!isDataURI(wasmBinaryFile)) {
   wasmBinaryFile = locateFile(wasmBinaryFile);
 }
@@ -797,7 +796,4 @@ if (Module["preInit"]) {
 }
 var shouldRunNow = true;
 if (Module["noInitialRun"]) shouldRunNow = false;
-
-export default function () {
-  return run.apply(Module,arguments);
-}
+run();
