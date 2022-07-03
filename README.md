@@ -8,3 +8,5 @@ and included in config.gypi"
 # [plasma-umass/browsix](https://github.com/plasma-umass/browsix)
 
 ## [Denoland_hello/rusty_v8](https://github.com/denoland/rusty_v8/blob/main/examples/hello_world.rs)
+
+### [parity-wasm/build.js](https://github.com/paritytech/parity-wasm/blob/master/examples/build.rs)
