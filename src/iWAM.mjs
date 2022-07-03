@@ -1,5 +1,5 @@
 //import Module from "./exec.js";
-import FSA from "./fileserve.js";
+//import FSA from "./fileserve.js";
 //import FSA from "../a.out.wasm";
 
 // Initialize WebAssembly module
@@ -10,8 +10,9 @@ export default async function MasterCardPHP(request) {
     //var asmArg = { __asyncjs__openXML: () => FSA({ startIn: "src/backbank.mjs" }) };
     //const info = { env: asmArg, wasi_snapshot_preview1: asmArg }; //asmLibraryArg
     //fetch the final return/arrow, 'this-deepest-function'
-    return await WebAssembly.instantiateStreaming(fetch("src/backbank.mjs")
-      //info /*fetch('a.out.wasm')*/ /*await fetch('a.out.wasm').then(response =>
+    return await WebAssembly.instantiateStreaming(//fetch("src/backbank.mjs")
+      //info
+      fetch('a.out.wasm')/*await fetch('a.out.wasm').then(response =>
         //response.arrayBuffer()//WebAssembly.instantiateStreaming(fetch('a.out.wasm'), importObject)*/
     )
       .then((bufferSource) => {
