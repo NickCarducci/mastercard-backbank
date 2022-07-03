@@ -24,22 +24,21 @@ use std::env;
 use parity_wasm::{builder, elements};
 
 fn main() {
+  let args = env::args().collect::<Vec<_>>();
+  if args.len() != 2 {
+    println!("Usage: {} backbank.wasm", args[0]);
+      return //generated wasm module ^
+    }
 
-	let args = env::args().collect::<Vec<_>>();
-	if args.len() != 2 {
-		println!("Usage: {} backbank.wasm", args[0]);
-		return //generated wasm module ^
-	}
-
-	let module = builder::module()
-		.function()//factory
-		.signature()//describe with param(arg), no return
-		.with_param(elements::ValueType::I32)
-		.build()
-		.body()//no args, empty function
-		.build()// module buildable
-		.build()// wasm module
-		.build();// wasm artefacts appendable empty module builder struct
+  let module = builder::module()
+	.function()//factory
+	.signature()//describe with param(arg), no return
+	.with_param(elements::ValueType::I32)
+	.build()
+	.body()//no args, empty function
+	.build()// module buildable
+	.build()// wasm module
+	.build();// wasm artefacts appendable empty module builder struct
 
 	parity_wasm::serialize_to_file(&args[1], module).unwrap();// wasm serial
 }
