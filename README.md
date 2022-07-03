@@ -1,6 +1,6 @@
 # mastercard-backbank
 
-Why does VSCode not allow you to see `.wasm` as text? WebAssembly extension just translates it to `.wat`... 
+Why does VSCode not allow you to see `.wasm` (binarily encoded bytecode) as text? WebAssembly extension just translates it to `.wat`... 
 
 https://vaults.quora.com/Can-you-boycott-credit-1
 
