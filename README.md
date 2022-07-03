@@ -40,3 +40,4 @@ fn main() {
 	parity_wasm::serialize_to_file(&args[1], module).unwrap();// wasm serial
 }
 ````
+or rather wasm-bindgen [example](https://github.com/zebp/worker-kv/tree/master/example)
