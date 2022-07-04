@@ -14,6 +14,8 @@ edition = "2021"
 name = "start"
 path = "./lib.rs"
 # crate-type = ["rlib"] # `rust` file
+# https://stackoverflow.com/questions/70549057/unresolved-import-thiserror-when-expanding-the-code-with-rustc-zunpretty-exp
+# https://github.com/dtolnay/cargo-expand/issues/8#issuecomment-453920573
 
 [lib]
 edition = "2021"
