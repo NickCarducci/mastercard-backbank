@@ -5,9 +5,9 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "dist/shim.mjs",
   "scripts": {
-    "course": "cd src/source/eglue && npm run cargo && npm run wasm && cd ../../..",
-    "cargo": "cargo install cargo-expand && cargo build && cargo expand --lib lib",
-    "wasm": "wasm-pack build --target web --out-dir glue --out-name index",
+    "course": "cd src/source/eglue && npm run bcargo && npm run bwasm && cd ../../..",
+    "bcargo": "cargo install cargo-expand && cargo build && cargo expand --lib lib",
+    "bwasm": "wasm-pack build --target web --out-dir glue --out-name index",
     "build": "npm run course && rollup -c",
     "build4": "cd src/source/eglue && cargo run start && wasm-pack build --target web --out-dir glue --out-name index && cd ../../.. && rollup -c",
     "build3": "node src/rollup.mjs && rollup -c",
