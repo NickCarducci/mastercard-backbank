@@ -1,5 +1,5 @@
 [package]
-name = "eglue"
+name = "eglue" # "src/source/eglue"
 version = "0.1.0"    # obey semver
 authors = ["Nick Carducci <nmcarducci@gmail.com>"]
 [dependencies]
