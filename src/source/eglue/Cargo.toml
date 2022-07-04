@@ -9,7 +9,7 @@ wasm-bindgen = "0.2"
 cc = "1.0"
 bindgen = "0.53.1"
 wasm-bindgen = "0.2"
-[[start]] # cargo run --start starting
+[[start]] # cargo run start
 name = "starting"
 crate-type = ["rlib"] # `rust` file
 
