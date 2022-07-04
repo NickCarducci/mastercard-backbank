@@ -8,10 +8,10 @@ wasm-bindgen = "0.2"
 cc = "1.0"
 [lib]
 name = "index"
-path = "glue"
+path = "eglue"
 crate-type = ["cdylib"] # "rlib"
 # [[bin]]
 # name = "index"
-# path = "glue/index.rs"
+# path = "eglue/index.rs"
 
 # https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
