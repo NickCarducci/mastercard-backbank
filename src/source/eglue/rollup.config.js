@@ -4,12 +4,12 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import nodePolyfills from 'rollup-plugin-polyfill-node';*/
 
 export default {
-  input: "exec.js",
+  input: ".",
   output: {
     //name: "default",
     exports: 'named',
     //strict: false,
-    file: "exec.mjs",
+    file: "src/exec.mjs",
     format: "es"
   },
   plugins: [
