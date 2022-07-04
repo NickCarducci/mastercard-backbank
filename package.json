@@ -26,7 +26,8 @@
     "rollup-plugin-external-globals": "0.6.1",
     "rollup-plugin-polyfill-node": "0.7.0",
     "rollup-plugin-spawn-process": "0.0.1",
-    "rollup-plugin-terser": "7.0.2"
+    "rollup-plugin-terser": "7.0.2",
+    "wasm-pack": "0.10.3"
   }, 
   "false":{
      "@rollup/plugin-inject": "^4.0.0",
