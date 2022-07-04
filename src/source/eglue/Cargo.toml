@@ -8,7 +8,7 @@ wasm-bindgen = "0.2"
 cc = "1.0"
 [lib]
 name = "index"
-path = "glue/index.rs"
+path = "glue"
 crate-type = ["cdylib"] # "rlib"
 # [[bin]]
 # name = "index"
