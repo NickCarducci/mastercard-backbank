@@ -1,2 +1,10 @@
+[package]
+name = "eglue"
+version = "0.1.0"    # obey semver
+authors = ["Nick Carducci <nmcarducci@gmail.com>"]
+[dependencies]
+wasm-bindgen = "0.2"
 [build-dependencies]
 cc = "1.0"
+
+# https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
