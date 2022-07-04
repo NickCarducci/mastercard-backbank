@@ -8,7 +8,6 @@ wasm-bindgen = "0.2"
 [build-dependencies]
 cc = "1.0"
 bindgen = "0.53.1"
-wasm-bindgen = "0.2"
 # doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target
 [[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
 name = "start"
