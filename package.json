@@ -5,7 +5,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "dist/shim.mjs",
   "scripts": {
-    "build": "cd src/source/eglue && cargo run --start starting && wasm-pack build --target web --out-dir glue --out-name index && cd ../../.. && rollup -c",
+    "build": "cd src/source/eglue && cargo run start && wasm-pack build --target web --out-dir glue --out-name index && cd ../../.. && rollup -c",
     "build3": "node src/rollup.mjs && rollup -c",
     "build1": "npx emsdk-checkout && npx emsdk install <version> && npx emsdk activate <version> && node run emcc",
     "emcc": "cd src/ && npx emsdk-run emscript.sh && cd .. && rollup -c",
