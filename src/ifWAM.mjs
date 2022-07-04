@@ -2,7 +2,7 @@ import * as m from "./exec.js";
 async function MasterCardPHP(request) {
   /*async function app() {
   if (Module["instantiateWasm"]) {}*/
-
+  console.log(m);
   return await m.run().Module({
     locateFile: function (path, prefix) {
       // if (path.endsWith(".mem")) return "https://mycdn.com/memory-init-dir/" + path
