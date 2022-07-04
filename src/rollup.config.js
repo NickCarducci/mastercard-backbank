@@ -1,12 +1,12 @@
 import { wasm } from '@rollup/plugin-wasm';
 
 export default {
-  input: "iWAM.mjs",
+  input: "exec.js",
   output: {
     //name: "default",
     exports: 'named',
     //strict: false,
-    file: "iwam.mjs",
+    file: "exec.mjs",
     format: "es"
   },
   plugins: [
