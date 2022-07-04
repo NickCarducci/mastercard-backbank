@@ -9,10 +9,10 @@ wasm-bindgen = "0.2"
 cc = "1.0"
 bindgen = "0.53.1"
 # doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target
-[[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
-edition = "2021"
-name = "start"
-path = "./lib.rs"
+# [[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
+# edition = "2021"
+# name = "start"
+# path = "./lib.rs" # `cargo expand --lib lib` from `npm run` 
 # crate-type = ["rlib"] # `rust` file
 # https://stackoverflow.com/questions/70549057/unresolved-import-thiserror-when-expanding-the-code-with-rustc-zunpretty-exp
 # https://github.com/dtolnay/cargo-expand/issues/8#issuecomment-453920573
