@@ -9,13 +9,16 @@ wasm-bindgen = "0.2"
 cc = "1.0"
 bindgen = "0.53.1"
 wasm-bindgen = "0.2"
-[[start]] # cargo run start
-name = "starting"
+# doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target
+[[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
+name = "start"
+path = "./main.rs"
 crate-type = ["rlib"] # `rust` file
 
-[lib] #[[bin]]
+[lib]
+edition = "2021"
 name = "build"
-path = "./build.rs"
+path = "." # "./build.rs"
 crate-type = ["cdylib"] # "rlib"
 
 # https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
