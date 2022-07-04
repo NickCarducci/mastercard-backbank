@@ -6,6 +6,7 @@ authors = ["Nick Carducci <nmcarducci@gmail.com>"]
 wasm-bindgen = "0.2"
 [build-dependencies]
 cc = "1.0"
+bindgen = "0.53.1"
 [lib] #[[bin]]
 name = "main"
 path = "./main.rs"
