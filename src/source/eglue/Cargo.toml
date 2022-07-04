@@ -13,7 +13,7 @@ wasm-bindgen = "0.2"
 [[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
 name = "start"
 path = "./lib.rs"
-crate-type = ["rlib"] # `rust` file
+# crate-type = ["rlib"] # `rust` file
 
 [lib]
 edition = "2021"
