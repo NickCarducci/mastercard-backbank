@@ -1,4 +1,7 @@
-import { wasm } from '@rollup/plugin-wasm';
+//import { wasm } from '@rollup/plugin-wasm';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 
 export default {
   input: "exec.js",
@@ -10,7 +13,13 @@ export default {
     format: "es"
   },
   plugins: [
-    wasm()
+    nodePolyfills(),
+    commonjs({}),
+    nodeResolve({
+      exportConditions: ['browser', 'worker'],
+      browser:true
+    })
+    //wasm()
   ]
 };
 
