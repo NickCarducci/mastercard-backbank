@@ -10,6 +10,6 @@ cc = "1.0"
 [[bin]]
 name = "main"
 path = "src/source/eglue/main.rs"
-crate-type = ["cdylib"] # "rlib"
+crate-type = ["cdylib", "rlib"]
 
 # https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
