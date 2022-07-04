@@ -1,5 +1,6 @@
 extern crate bindgen;
 #[wasm_bindgen]
 pub fn start() -> Promise {
-  wasm_bindgen_futures::future_to_promise(async { cc::Build::new().file("src/source/exec.c").expand(); })
+  // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()::default()
+  wasm_bindgen_futures::future_to_promise(async { cc::Build::new().file("src/source/exec.c").expand()::default(); })
 }
