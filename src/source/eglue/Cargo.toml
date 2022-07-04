@@ -10,6 +10,7 @@ cc = "1.0"
 bindgen = "0.53.1"
 # doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target
 [[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
+edition = "2021"
 name = "start"
 path = "./lib.rs"
 # crate-type = ["rlib"] # `rust` file
