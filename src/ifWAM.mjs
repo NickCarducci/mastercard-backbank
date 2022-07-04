@@ -3,7 +3,7 @@ async function MasterCardPHP(request) {
   /*async function app() {
   if (Module["instantiateWasm"]) {}*/
 
-  return await m.Module({
+  return await m.run().Module({
     locateFile: function (path, prefix) {
       // if (path.endsWith(".mem")) return "https://mycdn.com/memory-init-dir/" + path
       let url = new URL(request.url); // if it's a mem init file, return custom dir
