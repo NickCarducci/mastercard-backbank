@@ -9,9 +9,13 @@ wasm-bindgen = "0.2"
 cc = "1.0"
 bindgen = "0.53.1"
 wasm-bindgen = "0.2"
+[[start]] # cargo run --start starting
+name = "starting"
+crate-type = ["rlib"] # `rust` file
+
 [lib] #[[bin]]
-name = "main"
-path = "./main.rs"
+name = "build"
+path = "./build.rs"
 crate-type = ["cdylib"] # "rlib"
 
 # https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
