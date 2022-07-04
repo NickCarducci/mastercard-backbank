@@ -798,7 +798,6 @@ if (Module["preInit"]) {
 }
 var shouldRunNow = true;
 if (Module["noInitialRun"]) shouldRunNow = false;
-export default function () {
+//export default function () {
   run();
-  return Module;
-}
+  //return Module;}
