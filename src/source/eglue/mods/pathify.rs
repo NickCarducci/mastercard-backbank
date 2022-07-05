@@ -4,8 +4,7 @@ use crate::mods::utils::iterationforeach;//mods from Cargo.toml?
 //[[bin]] path globals preclude `crate`
 //https://stackoverflow.com/a/57453866/11711280
 //use crate certain pub members (rust)?
-use crate::pubmain::resultable;
-use crate::pubmain::stringifu;
+use crate::pubmain::{resultable,stringifu};
 pub fn pathify () -> resultable {
   let args = stringifu::from_iter(std::env::args_os());
   if args.len() != 2 {
