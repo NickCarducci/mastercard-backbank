@@ -2,7 +2,8 @@
 // https://docs.rs/syn-file-expand/latest/syn_file_expand/fn.read_full_crate_source_code.html
 use stringify;
 use pubmain::stringify;
-pub fn readfm () -> Result<(), syn_file_expand::Error> {
+use pubmain::resultable;
+pub fn readfm () -> resultable {
   let args = stringify::from_iter(std::env::args_os());
   if args.len() != 2 {
       std::process::exit(1);
