@@ -7,8 +7,8 @@ authors = ["Nick Carducci <nmcarducci@gmail.com>"]
 wasm-bindgen-futures = "0.4.31"
 wasm-bindgen = "0.2"
 bindgen = "0.53.1"
-[build-dependencies]
 cc = "1.0"
+# [build-dependencies]
 # doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target
 # [[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
 # edition = "2021"
