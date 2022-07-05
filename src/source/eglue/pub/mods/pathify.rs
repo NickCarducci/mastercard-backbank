@@ -9,7 +9,7 @@ use crate::pubmain::dev::{pathbuf};
 pub fn pathify () -> resultable {
   let mut input_file = pathbuf();
   fn iteration () -> null {
-    input_file.push();
+    input_file.push(arguments[0]);
   }
   let out = iterationforeach(arguments, iteration);
   println!("{}", out);
