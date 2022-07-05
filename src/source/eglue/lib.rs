@@ -10,7 +10,7 @@ use cc;
 use promise;
 
 #[wasm_bindgen]//pub mod main start
-fn main () -> promise::Promise {
+pub fn main () -> promise::Promise {
   // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
   let Mast = async { cc::Build::new().file("src/source/exec.c").expand() = Default::default();};//<i32>
   wasm_bindgen_futures::future_to_promise(Mast);
