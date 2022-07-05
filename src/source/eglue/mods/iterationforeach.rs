@@ -1,5 +1,5 @@
 //https://www.reddit.com/r/rust/comments/gt62x5/comment/fsahfgv
-fn try_count_twos<I: IntoIterator<Item = T>, T>(iter: I) -> Result<usize, T::Error>
+pub fn try_count_twos<I: IntoIterator<Item = T>, T>(iter: I) -> Result<usize, T::Error>
 where
     T: TryInto<u8>,
 {
