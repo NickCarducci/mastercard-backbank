@@ -5,6 +5,7 @@ use bindgen;//use ::ifcrate, "this is an attribute"
 use wasm_bindgen::prelude::wasm_bindgen;
 #[wasm_bindgen]
 pub fn start() -> Promise {
+  use wasm_bindgen_futures;
   // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
   wasm_bindgen_futures::future_to_promise(async { cc::Build::new().file("src/source/exec.c").expand() = Default::default(); })
 }
