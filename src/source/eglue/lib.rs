@@ -2,6 +2,7 @@
 //extern crate bindgen;//https://stackoverflow.com/a/50307802/11711280
 //extern crate bindgen;//mod use crate::c;
 use bindgen;//use ::ifcrate, "this is an attribute"
+use wasm_bindgen::prelude::wasm_bindgen;
 #[wasm_bindgen]
 pub fn start() -> Promise {
   // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
