@@ -7,7 +7,8 @@ use wasm_bindgen::prelude::wasm_bindgen;
 // utils
 use wasm_bindgen_futures;
 use cc;
-use crate::pub::mods::{pathify,arguments};
+use crate::pub::{mods,jsfuture};
+use mods::{pathify,arguments};
 use crate::readfm;
 //use crate::promise;
 //use promise;//"promise-rs"
@@ -23,7 +24,7 @@ use crate::readfm;
 // Future<Output = Result<JsValue, JsValue>>
 #[wasm_bindgen]//pub mod main start, promise::Promise
 pub fn awaitfm () -> jsfuture {
-  let lock = readfm(pathify(arguments.split("/")));
+  let lock = readfm(mods::pathify(mods::arguments.split("/")));
   impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default();};//<i32>
   wasm_bindgen_futures::future_to_promise(Mast);
 }
