@@ -29,7 +29,7 @@ fn read () -> Result<(), syn_file_expand::Error> {
   println!("{}", source.into_token_stream() );
    Ok(())
 }
-fn namer () -> {
+fn namer () -> Result<(), syn_file_expand::Error> {
   let mut input_file = std::path::PathBuf::new();
   input_file.push("src");
   input_file.push("source");
