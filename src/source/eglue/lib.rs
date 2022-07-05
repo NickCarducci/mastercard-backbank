@@ -6,6 +6,7 @@ use bindgen;//use ::ifcrate
 use wasm_bindgen::prelude::wasm_bindgen;
 // utils
 use wasm_bindgen_futures;
+use cc;
 
 #[wasm_bindgen]
 pub fn start() -> Promise {
