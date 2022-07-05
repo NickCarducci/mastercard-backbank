@@ -8,7 +8,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen_futures;
 use cc;
 use crate::pub::{mods,jsfuture};
-use mods::{pathify,arguments};
+
 use crate::readfm;
 //use crate::promise;
 //use promise;//"promise-rs"
