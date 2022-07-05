@@ -8,7 +8,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen_futures;
 use cc;
 //use crate::promise;
-//use promise;
+//use promise;//"promise-rs"
 /*error[E0774]: `derive` may only be applied to `struct`s, `enum`s and `union`s
    --> /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/promise-rs-0.3.0/src/lib.rs:192:9
     |
