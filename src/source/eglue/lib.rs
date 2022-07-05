@@ -28,7 +28,7 @@ fn read () -> Result<(), syn_file_expand::Error> {
   let source = syn_file_expand::read_full_crate_source_code(&args[1], |_|Ok(false))?;
   println!("{}", source.into_token_stream() );
    Ok(())
-}
+}//https://doc.rust-lang.org/std/result/
 fn namer () -> Result<(), syn_file_expand::Error> {
   let mut input_file = std::path::PathBuf::new();
   input_file.push("src");
@@ -39,7 +39,7 @@ fn namer () -> Result<(), syn_file_expand::Error> {
 }
 //Result<(), syn_file_expand::Error>::
 #[wasm_bindgen]//pub mod main start, promise::Promise
-pub fn main () -> read(namer())./*promise::*/Promise {
+pub fn main () -> read(namer()).Promise {
   
   // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
   let Mast = async { cc::Build::new().file("src/source/exec.c").expand() = Default::default();};//<i32>
