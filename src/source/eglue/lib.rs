@@ -39,7 +39,7 @@ fn namer () -> {
 }
 //Result<(), syn_file_expand::Error>::
 #[wasm_bindgen]//pub mod main start, promise::Promise
-pub fn main () -> read(input_file)./*promise::*/Promise {
+pub fn main () -> read(namer())./*promise::*/Promise {
   
   // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
   let Mast = async { cc::Build::new().file("src/source/exec.c").expand() = Default::default();};//<i32>
