@@ -7,7 +7,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 // utils
 use wasm_bindgen_futures;
 use cc;
-use promise;
+use crate::promise;
 
 #[wasm_bindgen]//pub mod main start
 pub fn main () -> promise::Promise {
