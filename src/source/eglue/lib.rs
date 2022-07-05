@@ -7,7 +7,8 @@ use wasm_bindgen::prelude::wasm_bindgen;
 // utils
 use wasm_bindgen_futures;
 use cc;
-use crate::mods::pathify;
+use crate::pub::mods::{pathify,dev};
+use dev::jsfuture;
 use crate::readfm;
 //use crate::promise;
 //use promise;//"promise-rs"
@@ -23,11 +24,10 @@ use crate::readfm;
 
 
 
-//Result<(), syn_file_expand::Error>::
+// Future<Output = Result<JsValue, JsValue>>
 #[wasm_bindgen]//pub mod main start, promise::Promise
-pub fn main () -> readfm(pathify("src/source/promise.rs".split("/")))::/*promise*/{Promise {
-  
-  // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
-  let Mast = async { cc::Build::new().file("src/source/exec.c").expand() = Default::default();};//<i32>
+pub fn main () -> jsfuture {
+  let red = readfm(pathify("src/source/promise.rs".split("/")));
+  impl Future for Mast { cc::Build::new().file(red).expand() = Default::default();};//<i32>
   wasm_bindgen_futures::future_to_promise(Mast);
-}}
+}
