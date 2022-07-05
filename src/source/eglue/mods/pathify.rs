@@ -5,9 +5,9 @@ use crate::mods::utils::iterationforeach;//mods from Cargo.toml?
 //https://stackoverflow.com/a/57453866/11711280
 //use crate certain pub members (rust)?
 use crate::pubmain::resultable;
-use crate::pubmain::stringify;
+use crate::pubmain::stringifu;
 pub fn pathify () -> resultable {
-  let args = stringify::from_iter(std::env::args_os());
+  let args = stringifu::from_iter(std::env::args_os());
   if args.len() != 2 {
       std::process::exit(1);//"Reads rust source file, including referred modules and expands them into a single source with all modules inline"
   }
