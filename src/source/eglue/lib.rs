@@ -1,5 +1,6 @@
 //#![crate_type="cdylib"] // only this bytecode not ./build.rs .. don't use binary/"bin" at all instead of binarily _serialized_ bytecode?
 //extern crate bindgen;//https://stackoverflow.com/a/50307802/11711280
+mod bindgen;//mod crate::c;
 use bindgen;
 #[wasm_bindgen]
 pub fn start() -> Promise {
