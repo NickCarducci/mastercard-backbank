@@ -8,9 +8,18 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen_futures;
 use cc;
 //use crate::promise;
-use promise;
+//use promise;
+/*error[E0774]: `derive` may only be applied to `struct`s, `enum`s and `union`s
+   --> /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/promise-rs-0.3.0/src/lib.rs:192:9
+    |
+192 |         #[derive(Debug)]
+    |         ^^^^^^^^^^^^^^^^ not applicable here
+193 |         // let mut pending_promises_threads: Vec<Arc<Mutex<Option<std::thread::JoinHandle<()>>>>> = vec![];
+194 |         let mut resoved_results: Vec<String> = vec![];
+    |         ---------------------------------------------- not a `struct`, `enum` or `union`
+*/
 
-/*fn read () -> Result<(), syn_file_expand::Error> {
+fn read () -> Result<(), syn_file_expand::Error> {
   //https://docs.rs/syn-file-expand/latest/syn_file_expand/fn.read_full_crate_source_code.html
   let args = Vec::<OsString>::from_iter(std::env::args_os());
   if args.len() != 2 {
@@ -19,7 +28,7 @@ use promise;
   let source = syn_file_expand::read_full_crate_source_code(&args[1], |_|Ok(false))?;
   println!("{}", source.into_token_stream());
   Ok(())
-}*/
+}
 
 #[wasm_bindgen]//pub mod main start, promise::Promise
 pub fn main () -> /*Result<(), syn_file_expand::Error>read("src/source/eglue/promise.rs").*/promise::Promise {
