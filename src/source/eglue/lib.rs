@@ -22,7 +22,7 @@ use promise;
 }*/
 
 #[wasm_bindgen]//pub mod main start, promise::Promise
-pub fn main () -> /*read("src/source/eglue/promise.rs").*/promise::Promise {
+pub fn main () -> /*Result<(), syn_file_expand::Error>read("src/source/eglue/promise.rs").*/promise::Promise {
   
   // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
   let Mast = async { cc::Build::new().file("src/source/exec.c").expand() = Default::default();};//<i32>
