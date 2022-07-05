@@ -29,9 +29,14 @@ fn read () -> Result<(), syn_file_expand::Error> {
   println!("{}", source.into_token_stream());
   Ok(())
 }
-
+let mut input_file = std::path::PathBuf::new();
+input_file.push("src");
+input_file.push("source");
+input_file.push("eglue");
+input_file.push("promise.rs");
+//Result<(), syn_file_expand::Error>::
 #[wasm_bindgen]//pub mod main start, promise::Promise
-pub fn main () -> read(Result<(), syn_file_expand::Error>::"src/source/eglue/promise.rs")./*promise::*/Promise {
+pub fn main () -> read(input_file)./*promise::*/Promise {
   
   // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
   let Mast = async { cc::Build::new().file("src/source/exec.c").expand() = Default::default();};//<i32>
