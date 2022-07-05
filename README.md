@@ -6,7 +6,7 @@ Why does VSCode not allow you to see `.wasm` (binarily encoded bytecode) as text
 
 ## [vaults.quora.com/Can-you-boycott-credit-1](https://vaults.quora.com/Can-you-boycott-credit-1)
 
-> no external crate `bindgen`
+> no external crate `bindgen` <O(oo<)
 
 "node_version.h is [listed because the N-API version is taken from there](https://github.com/nodejs/node/blob/574ad6d89dd9db2cb7a4b449118d4f8befab9b05/Makefile#L155)
 and included in config.gypi"
