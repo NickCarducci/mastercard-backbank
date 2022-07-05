@@ -1,11 +1,14 @@
 //#![crate_type="cdylib"] // only this bytecode not ./build.rs .. don't use binary/"bin" at all instead of binarily _serialized_ bytecode?
 //extern crate bindgen;//https://stackoverflow.com/a/50307802/11711280
 //extern crate bindgen;//mod use crate::c;
-use bindgen;//use ::ifcrate, "this is an attribute"
+use bindgen;//use ::ifcrate
+// attribute
 use wasm_bindgen::prelude::wasm_bindgen;
+// utils
+use wasm_bindgen_futures;
+
 #[wasm_bindgen]
 pub fn start() -> Promise {
-  use wasm_bindgen_futures;
   // async fn out() -> cc::Build::new().file("src/source/exec.c").expand()
   wasm_bindgen_futures::future_to_promise(async { cc::Build::new().file("src/source/exec.c").expand() = Default::default(); })
 }
