@@ -26,15 +26,16 @@ fn read () -> Result<(), syn_file_expand::Error> {
       std::process::exit(1);//"Reads rust source file, including referred modules and expands them into a single source with all modules inline"
   }
   let source = syn_file_expand::read_full_crate_source_code(&args[1], |_|Ok(false))?;
-  println!("{}", source.into_token_stream());
-  Ok(())
+  println!("{}", source.into_token_stream() );
+   Ok(())
 }
 fn namer () -> {
-   let mut input_file = std::path::PathBuf::new();
-   input_file.push("src");
-   input_file.push("source");
-   input_file.push("eglue");
-   input_file.push("promise.rs");
+  let mut input_file = std::path::PathBuf::new();
+  input_file.push("src");
+  input_file.push("source");
+  input_file.push("eglue");
+  println!("{}", input_file.push("promise.rs") );
+   Ok(())
 }
 //Result<(), syn_file_expand::Error>::
 #[wasm_bindgen]//pub mod main start, promise::Promise
