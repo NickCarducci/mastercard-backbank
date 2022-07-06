@@ -4,8 +4,7 @@
 let mut objectarray = Vec::new();
 objectarray.push(Implementable { id: "giv",
                         value: 1525 });*/
-mod bupkis;//defined here
-use crate::bupkis;//declared here for `use` elsewhere from `pub fn main () {}`
+
 
 use env_logger;
 pub fn main () {
