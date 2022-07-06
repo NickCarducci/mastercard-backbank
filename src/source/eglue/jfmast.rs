@@ -1,3 +1,6 @@
+mod bupkis;
+use crate::bupkis::{arguments,mods,jsfuture};
+
 //#![crate_type="cdylib"] // only this bytecode not ./build.rs .. don't use binary/"bin" at all instead of binarily _serialized_ bytecode?
 //extern crate bindgen;//https://stackoverflow.com/a/50307802/11711280
 //extern crate bindgen;//mod use crate::c;
@@ -7,7 +10,6 @@ use wasm_bindgen::prelude::wasm_bindgen;
 // utils
 use wasm_bindgen_futures;
 use cc;
-use crate::bupkis::{arguments,mods,jsfuture};
 
 //let my_num_ptr:*const i32=&*Box<i32>=Box::new(10);//https://doc.rust-lang.org/std/primitive.pointer.html
 
