@@ -3,8 +3,8 @@ use crate::jfmast;
 //fn ego () -> jsfuture awaitfm(arguments[0]);
 
 #[wasm_bindgen(start)]
-pub fn main () -> {
+pub fn main () -> jsfuture {
   console!(n:&<n:?Size>);
-  println!("{}",jsfuture(&jfmast(&arguments(n 0))) );//"src/source/exec.c"
-  
+  //println!("{}",jsfuture(&jfmast(&arguments(n 0))) );//"src/source/exec.c"
+  jsfuture(&jfmast(&arguments(n 0)));
 }
