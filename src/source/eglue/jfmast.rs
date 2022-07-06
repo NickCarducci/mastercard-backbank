@@ -23,7 +23,9 @@ use crate::pub::{mods,jsfuture};
     |         ---------------------------------------------- not a `struct`, `enum` or `union`
 */
 // Future<Output = Result<JsValue, JsValue>>
-#[wasm_bindgen]//pub mod main start, promise::Promise
+//https://rustwasm.github.io/docs/wasm-bindgen/examples/without-a-bundler.html
+//just use #[wasm_bindgen(start)] in lib.rs and init in the calling js code
+//#[wasm_bindgen]//pub mod main start, promise::Promise
 pub fn jfmast () -> jsfuture {
   let lock = mods::pathify(&mods::arguments[0].split("/"));
   impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default(&mods::arguments[1]);};//<i32>
