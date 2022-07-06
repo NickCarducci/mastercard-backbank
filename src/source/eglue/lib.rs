@@ -4,7 +4,7 @@ use crate::jfmast;
 
 #[wasm_bindgen(start)]
 pub fn main () -> jsfuture {
-  console!(n:&<n:?Size>);
-  println!("{}",jsfuture(&jfmast(&arguments(n 0))) );//"src/source/exec.c"
+  console!(n:&<n:?Sized>);
+  println!("{}",jsfuture(&jfmast(&arguments(n:&<0:?Sized>))) );//"src/source/exec.c"
   //jsfuture(&jfmast(&arguments(n 0)));
 }
