@@ -2,7 +2,7 @@ mod bupkis::mods;//defined here
 use crate::bupkis::mods;
 use mods::pathify;//declared here for `use` elsewhere from `pub fn main () {}`
 
-use crate::bupkis::{resultable,arguments,null,mods,dev};
+use crate::bupkis::{resultable,arguments,null,dev};
 
 //each crate has one main function
 //with pub uses
