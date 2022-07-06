@@ -27,7 +27,8 @@ use crate::bupkis::{mods,jsfuture};
 //just use #[wasm_bindgen(start)] in lib.rs and init in the calling js code
 //#[wasm_bindgen]//pub mod main start, promise::Promise
 pub fn jfmast () -> jsfuture {
-  let lock = mods::pathify(&mods::arguments[0].split("/"));
-  impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default(&mods::arguments[1]);};//<i32>
+  let args = mods::arguments();
+  let lock = mods::pathify(&args[0].split("/"));
+  impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default(&args[1]);};//<i32>
   wasm_bindgen_futures::future_to_promise(Mast);
 }
