@@ -1,4 +1,4 @@
-use crate::bupkis::{console,jsfuture,arguments};//'arguments'/stringifu::from_iter(std::env::args_os()) gets rewritten inside deepest scope "apply" thisArg, argsArrayArg
+use crate::bupkis::{console,n,jsfuture,arguments};//'arguments'/stringifu::from_iter(std::env::args_os()) gets rewritten inside deepest scope "apply" thisArg, argsArrayArg
 use crate::jfmast;
 //fn ego () -> jsfuture awaitfm(arguments[0]);
 
