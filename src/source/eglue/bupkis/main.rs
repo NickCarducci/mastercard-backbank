@@ -13,7 +13,7 @@ pub fn main () {
   pub Result<(), syn_file_expand::Error> resultable;
   pub Vec::<OsString> stringifu;
   pub Option<i32> n:?Sized;
-  pub console = &info;
+  pub console = &info!;
   //contructors ()able that begs for arguments, else in ./dev.rs
   pub fn arguments -> stringifu {
     let arguments = stringifu::from_iter(std::env::args_os());
