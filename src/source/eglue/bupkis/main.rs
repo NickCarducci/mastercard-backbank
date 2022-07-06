@@ -12,8 +12,8 @@ pub fn main () {
   pub std::ptr::null_mut() null;
   pub Result<(), syn_file_expand::Error> resultable;
   pub Vec::<OsString> stringifu;
-  pub Option<i32> n:?Sized;
-  pub console = &info!;
+  pub Option<i32> n:?Sized;//Option struct with i32 +/- type ("unsigned")
+  pub console = &info!;//rename
   //contructors ()able that begs for arguments, else in ./dev.rs
   pub fn arguments -> stringifu {
     let arguments = stringifu::from_iter(std::env::args_os());
