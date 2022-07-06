@@ -7,7 +7,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 // utils
 use wasm_bindgen_futures;
 use cc;
-use crate::pub::{mods,jsfuture};
+use crate::bupkis::{mods,jsfuture};
 
 //let my_num_ptr:*const i32=&*Box<i32>=Box::new(10);//https://doc.rust-lang.org/std/primitive.pointer.html
 
