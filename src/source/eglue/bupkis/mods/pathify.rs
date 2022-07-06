@@ -9,9 +9,9 @@ use dev::{pathbuf};
 pub fn pathify () -> resultable {
   let mut input_file = pathbuf();
   fn iteration () -> null {
-    input_file.push(arguments[0]);
+    input_file.push(arguments()[0]);
   }
-  let out = iterationforeach(arguments, iteration);
+  let out = iterationforeach(arguments(), iteration);
   println!("{}", out);
    Ok(())
 }
