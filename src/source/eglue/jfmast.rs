@@ -26,6 +26,6 @@ use crate::pub::{mods,jsfuture};
 #[wasm_bindgen]//pub mod main start, promise::Promise
 pub fn jfmast () -> jsfuture {
   let lock = mods::pathify(&mods::arguments[0].split("/"));
-  impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default();};//<i32>
+  impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default(&mods::arguments[1]);};//<i32>
   wasm_bindgen_futures::future_to_promise(Mast);
 }
