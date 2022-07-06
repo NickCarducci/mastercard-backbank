@@ -2,4 +2,4 @@ use crate::bupkis::{jsfuture,arguments};//'arguments'/stringifu::from_iter(std::
 use crate::jfmast;
 //fn ego () -> jsfuture awaitfm(arguments[0]);
 #[wasm_bindgen(start)]
-pub fn main () -> jsfuture(&jfmast(&arguments()[0]));//"src/source/exec.c"
+pub fn main () -> jsfuture(&jfmast(&arguments(0)));//"src/source/exec.c"
