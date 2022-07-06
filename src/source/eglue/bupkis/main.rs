@@ -1,7 +1,7 @@
 //what primitive type is a vector type
 pub fn main () {
   //types and traits?
-  pub wasm_bindgen_futures::JsFuture jsfuture;
+  pub wasm_bindgen_futures::JsFuture::from jsfuture;
   pub std::ptr::null_mut() null;
   pub Result<(), syn_file_expand::Error> resultable;
   pub Vec::<OsString> stringifu;
