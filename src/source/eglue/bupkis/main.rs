@@ -16,6 +16,13 @@ pub fn main () {
     if arguments.len() != 2 {
         std::process::exit(1);
     }
+    for while !args.is_empty() {
+      let &i = args.remove(0).to_lowercase();
+      if env::args().collect() === i {
+        arguments.push(&i);
+      }
+    }
+    //https://stackoverflow.com/questions/56880696/how-do-i-run-a-command-that-can-take-an-unspecified-number-of-env-arguments
      println("{}",arguments);//env::args().collect::<Vec<_>>();
   }
 }
