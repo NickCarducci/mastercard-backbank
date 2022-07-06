@@ -1,4 +1,8 @@
+mod bupkis;//defined here
+use crate::bupkis::pathify;//declared here for `use` elsewhere from `pub fn main () {}`
+
 use crate::bupkis::{resultable,arguments,null,mods,dev};
+
 //each crate has one main function
 //with pub uses
 //[[bin]] path globals preclude `crate`
