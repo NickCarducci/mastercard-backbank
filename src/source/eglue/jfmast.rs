@@ -7,7 +7,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 // utils
 use wasm_bindgen_futures;
 use cc;
-use crate::bupkis::{mods,jsfuture};
+use crate::bupkis::{arguments,mods,jsfuture};
 
 //let my_num_ptr:*const i32=&*Box<i32>=Box::new(10);//https://doc.rust-lang.org/std/primitive.pointer.html
 
@@ -27,8 +27,8 @@ use crate::bupkis::{mods,jsfuture};
 //just use #[wasm_bindgen(start)] in lib.rs and init in the calling js code
 //#[wasm_bindgen]//pub mod main start, promise::Promise
 pub fn jfmast () -> jsfuture {
-  let args = mods::arguments();
-  let lock = mods::pathify(&args[0].split("/"));
+  let args = &arguments();
+  let lock = &mods::pathify(&args[0].split("/"));
   impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default(&args[1]);};//<i32>
   wasm_bindgen_futures::future_to_promise(Mast);
 }
