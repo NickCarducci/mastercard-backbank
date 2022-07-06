@@ -6,3 +6,5 @@
 
 
 [[bin]] globals can use a ([pub](https://doc.rust-lang.org/reference/visibility-and-privacy.html?highlight=pub#pubin-path-pubcrate-pubsuper-and-pubself)) main function instead ofn just pub mod, but potentially (neither) may not be able to select members without calling the whole binary (or one at a time)
+
+future_to_promise Ok::<JsValue, JsValue>(JsValue::undefined())
