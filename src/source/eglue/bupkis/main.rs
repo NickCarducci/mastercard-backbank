@@ -16,6 +16,6 @@ pub fn main () {
     if arguments.len() != 2 {
         std::process::exit(1);
     }
-     println("{}",env::args().collect::<Vec<_>>();
+     println("{}",arguments);//env::args().collect::<Vec<_>>();
   }
 }
