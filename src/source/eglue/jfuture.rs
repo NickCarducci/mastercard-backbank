@@ -24,8 +24,8 @@ use crate::readfm;
 */
 // Future<Output = Result<JsValue, JsValue>>
 #[wasm_bindgen]//pub mod main start, promise::Promise
-pub fn awaitfm () -> jsfuture {
-  let lock = readfm(mods::pathify(&mods::arguments[0].split("/")));
+pub fn jfuture () -> jsfuture {
+  let lock = readfm(&mods::pathify(&mods::arguments[0].split("/")));
   impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default();};//<i32>
   wasm_bindgen_futures::future_to_promise(Mast);
 }
