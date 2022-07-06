@@ -1,6 +1,4 @@
-mod mods;//defined here
-use crate::bupkis::mods;
-use mods::pathify;//declared here for `use` elsewhere from `pub fn main () {}`
+
 
 use crate::bupkis::{resultable,arguments,null,dev};
 
