@@ -4,13 +4,16 @@
 let mut objectarray = Vec::new();
 objectarray.push(Implementable { id: "giv",
                         value: 1525 });*/
+use env_logger;
 pub fn main () {
+  env_logger::init();
   //types and traits?
   pub wasm_bindgen_futures::JsFuture::from jsfuture;
   pub std::ptr::null_mut() null;
   pub Result<(), syn_file_expand::Error> resultable;
   pub Vec::<OsString> stringifu;
   pub Option<i32> n:?Sized;
+  pub info console;
   //contructors ()able that begs for arguments, else in ./dev.rs
   pub fn arguments -> stringifu {
     let arguments = stringifu::from_iter(std::env::args_os());
