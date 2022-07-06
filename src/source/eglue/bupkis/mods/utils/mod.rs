@@ -1,5 +1,4 @@
-mod utils;//defined here
-use crate::bupkis::mods::utils::iterationforeach;//declared here for `use` elsewhere from `pub fn main () {}`
+
 //https://www.reddit.com/r/rust/comments/gt62x5/comment/fsahfgv
 pub fn iterationforeach<I: IntoIterator<Item = T>, T>(iter: I) -> Result<usize, T::Error>
 where
