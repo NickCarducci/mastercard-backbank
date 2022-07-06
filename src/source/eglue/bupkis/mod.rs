@@ -10,12 +10,12 @@ use env_logger;
 pub fn main () {
   env_logger::init();
   //types and traits?
-  pub wasm_bindgen_futures::JsFuture::from jsfuture;
-  pub std::ptr::null_mut() null;
-  pub Result<(), syn_file_expand::Error> resultable;
-  pub Vec::<OsString> stringifu;
-  pub Option<i32> n:?Sized;//Option struct with i32 +/- type ("unsigned")
-  pub console = &info;//rename
+  pub let jsfuture = wasm_bindgen_futures::JsFuture::from;
+  pub let null = std::ptr::null_mut();
+  pub let resultable = Result<(), syn_file_expand::Error>;
+  pub let stringifu = Vec::<OsString>;
+  pub let n = Option<i32>:?Sized;//Option struct with i32 +/- type ("unsigned")
+  pub let console = &info;//rename
   //contructors ()able that begs for arguments, else in ./dev.rs
   pub fn arguments -> stringifu {
     let arguments = stringifu::from_iter(std::env::args_os());
