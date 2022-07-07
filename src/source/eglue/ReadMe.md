@@ -19,5 +19,5 @@ macro_rules! mak {
         }
     };
 }
-mak("console").
+mak("console").console(<String>"");
 ````
