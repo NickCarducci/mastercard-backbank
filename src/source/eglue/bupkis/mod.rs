@@ -9,7 +9,7 @@ use env_logger;
 pub fn main () -> std::ptr::null_mut() {
   env_logger::init();
   //types and traits?
-  pub static jsfuture : wasm_bindgen_futures::JsFuture::from;
+  pub static jsfuture : Result<JsValue, JsValue>;
   pub static null : std::ptr::null_mut();
   pub static resultable : Result<(), syn_file_expand::Error>;
   pub static stringifu : Vec::<OsString>;
