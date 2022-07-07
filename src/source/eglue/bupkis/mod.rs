@@ -17,7 +17,7 @@ pub fn main () {
   pub static n : Option<i32>;//:?Sized;//Option struct with i32 +/- type ("unsigned")
   pub static console : &info;//rename
   //contructors ()able that begs for arguments, else in ./dev.rs
-  pub fn arguments -> stringifu {
+  pub fn arguments () -> stringifu {
     let arguments = stringifu::from_iter(std::env::args_os());
     if arguments.len() != 2 {
         std::process::exit(1);
