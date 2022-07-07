@@ -12,6 +12,8 @@ cc = "1.0"
 # canonical compilation-logger/watcher
 log = "0.4.0"
 env_logger = "0.8.4"
+# coding suggestions
+rustfmt = "1.5.1"
 # [build-dependencies]
 # doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target
 # [[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
