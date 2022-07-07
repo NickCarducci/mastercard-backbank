@@ -13,12 +13,12 @@ use wasm_bindgen_futures::JsFuture;
     v
 }*/
 //https://www.reddit.com/r/rust/comments/6ln5du/mut_mut_why_is_this_required/
-struct √ {//option+fn+v
+struct _/ {//option+fn+v
     n:<i32>
 }
 //https://www.reddit.com/r/rust/comments/ns9xsr/what_does_a_struct_return/
 #[wasm_bindgen(start)]
-pub fn main () -> jfmast( &arguments(√{n:0}.n) );
+pub fn main () -> jfmast( &arguments(_/{n:0}.n) );
 //pub fn main () -> jsfuture println!("{}",  jfmast( &arguments((&*&0,)) ) );
 /*pub fn main () -> jsfuture {
   console!(&<n:?Sized>);//&0:?Sized
