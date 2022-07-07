@@ -23,7 +23,7 @@ pub fn main () -> std::ptr::null_mut() {
     }
     while !args.is_empty() {//forwhile
       let &i = args.remove(0).to_lowercase();
-      if env::args().collect() === i {
+      if env::args().collect() == i {
         arguments.push(&i);
       }
     }
