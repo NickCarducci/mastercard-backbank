@@ -10,3 +10,14 @@
 future_to_promise Ok::<JsValue, JsValue>(JsValue::undefined())
 
 "unsigned[ primitive]" means polarity[ type]
+
+````
+macro_rules! mak {
+    ($name:ident) => {
+        fn $name<T>(a: T) -> $name<where Output = T> {
+            info!(a);
+        }
+    };
+}
+mak("console").
+````
