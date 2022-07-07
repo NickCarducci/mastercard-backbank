@@ -14,7 +14,7 @@ pub fn main () {
   pub static null : std::ptr::null_mut();
   pub static resultable : Result<(), syn_file_expand::Error>;
   pub static stringifu : Vec::<OsString>;
-  pub static n : Option<i32>:?Sized;//Option struct with i32 +/- type ("unsigned")
+  pub static n : Option<i32>;//:?Sized;//Option struct with i32 +/- type ("unsigned")
   pub static console : &info;//rename
   //contructors ()able that begs for arguments, else in ./dev.rs
   pub fn arguments -> stringifu {
