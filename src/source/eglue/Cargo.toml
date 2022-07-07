@@ -16,6 +16,7 @@ env_logger = "0.8.4"
 # rustfmt = "1.5.1"
 # or
 # {"rust-client.rustupPath": "~/.cargo/bin/rustup"} in VS code settings
+# https://stackoverflow.com/questions/58312319/couldnt-start-client-rust-language-server
 # [build-dependencies]
 # doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target
 # [[bin]] # Configuring a Target [lib], [[bin]], [[example]], [[test]], and [[bench]]
