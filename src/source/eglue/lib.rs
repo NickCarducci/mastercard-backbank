@@ -7,7 +7,8 @@ use wasm_bindgen_futures::JsFuture;
 //fn ego () -> jsfuture awaitfm(arguments[0]);
 
 #[wasm_bindgen(start)]
-pub fn main () -> jsfuture jfmast(  &arguments((&*&0,)) );
+pub fn main () -> jfmast( &arguments((&*&0,)) );
+//pub fn main () -> jsfuture println!("{}",  jfmast( &arguments((&*&0,)) ) );
 /*pub fn main () -> jsfuture {
   console!(&<n:?Sized>);//&0:?Sized
   //impl JFMast for JsFuture;
