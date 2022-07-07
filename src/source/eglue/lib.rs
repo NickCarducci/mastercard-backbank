@@ -1,5 +1,5 @@
 mod bupkis;
-use crate::bupkis::{console,n,jsfuture,arguments};//'arguments'/stringifu::from_iter(std::env::args_os()) gets rewritten inside deepest scope "apply" thisArg, argsArrayArg
+use crate::bupkis::{/*console,n,*/jsfuture,arguments};//'arguments'/stringifu::from_iter(std::env::args_os()) gets rewritten inside deepest scope "apply" thisArg, argsArrayArg
 mod jfmast;
 use crate::jfmast;
 
