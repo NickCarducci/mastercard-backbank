@@ -1,6 +1,6 @@
 mod bupkis;
 use crate::bupkis::{/*console,n,*/jsfuture,arguments};//'arguments'/stringifu::from_iter(std::env::args_os()) gets rewritten inside deepest scope "apply" thisArg, argsArrayArg
-mod jfmast;
+//mod jfmast; mod only needed if with pub mod
 use crate::jfmast;
 
 use wasm_bindgen_futures::JsFuture;
