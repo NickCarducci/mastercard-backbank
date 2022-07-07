@@ -1,4 +1,4 @@
-mod bupkis;
+//mod bupkis; `bupkis/mod.rs` already modded in by `main.rs`
 use crate::bupkis::{arguments,mods,jsfuture};
 
 //#![crate_type="cdylib"] // only this bytecode not ./build.rs .. don't use binary/"bin" at all instead of binarily _serialized_ bytecode?
