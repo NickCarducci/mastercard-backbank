@@ -9,6 +9,7 @@ use crate::bupkis::{arguments,mods,jsfuture};
 use wasm_bindgen::prelude::wasm_bindgen;
 // utils
 use wasm_bindgen_futures;
+use wasm_bindgen_futures::JsFuture::from;
 use cc;
 
 use std::future::Future;
@@ -42,5 +43,11 @@ pub fn jfmast () -> jsfuture {
   //impl Future for Mast { fn app () -> jsfuture { cc::Build::new().file(lock).expand() = Default::default(&args[1]) }; };
    //https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-implement-traits
   impl Future for Mast { async { cc::Build::new().file(lock).expand() = Default::default(&args[1]) }; };
+   //a Trait defines a 
+   //https://stackoverflow.com/questions/28291349/can-you-implement-a-generic-struct-for-multiple-types
+   //a StructType declaration which may be able to have more than one <T> generic types
+   //as functional generics, at least, can `fn genericfn<T,U>(foo:T,bar:U)->{foo}`
+   //https://oswalt.dev/2021/06/using-generic-types-in-rust/
+   //an impl Trait for Struct uses member
   wasm_bindgen_futures::future_to_promise(Mast);
 }
