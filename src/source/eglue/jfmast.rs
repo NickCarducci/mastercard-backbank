@@ -11,6 +11,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen_futures;
 use cc;
 
+use std::future::Future;
 //let my_num_ptr:*const i32=&*Box<i32>=Box::new(10);//https://doc.rust-lang.org/std/primitive.pointer.html
 
 //use crate::promise;
@@ -25,12 +26,21 @@ use cc;
     |         ---------------------------------------------- not a `struct`, `enum` or `union`
 */
 // Future<Output = Result<JsValue, JsValue>>
+//"don't support use of references, or any explicit scope-based mutability"
+//"['&' is ]not required for mutability 1. They're primarily to enforce temporary exclusive access."
+//https://users.rust-lang.org/t/how-can-i-define-struct-that-holds-futures-of-function-which-functions-will-return-a-future/71619/34
 //https://rustwasm.github.io/docs/wasm-bindgen/examples/without-a-bundler.html
 //just use #[wasm_bindgen(start)] in lib.rs and init in the calling js code
 //#[wasm_bindgen]//pub mod main start, promise::Promise
 pub fn jfmast () -> jsfuture {
   let args = &arguments();
   let lock = &mods::pathify(&args[0].split("/"));
-  impl Future for Mast { cc::Build::new().file(lock).expand() = Default::default(&args[1]);};//<i32>
+   //https://doc.rust-lang.org/rust-by-example/custom_types/structs.html
+   //https://doc.rust-lang.org/rust-by-example/generics/impl.html
+  struct Mast { jsfuture };//<i32>
+   //implement TraitMethods [Future] onin TypeStruct [Mast]
+  //impl Future for Mast { fn app () -> jsfuture { cc::Build::new().file(lock).expand() = Default::default(&args[1]) }; };
+   //https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-implement-traits
+  impl Future for Mast { async { cc::Build::new().file(lock).expand() = Default::default(&args[1]) }; };
   wasm_bindgen_futures::future_to_promise(Mast);
 }
