@@ -7,15 +7,16 @@ use wasm_bindgen_futures::JsFuture;
 //fn ego () -> jsfuture awaitfm(arguments[0]);
 
 //(&*&0,)
-fn _<T>(v: Vec<T>) -> Vec<T> {
+/*fn _<T>(v: Vec<T>) -> Vec<T> {
     let mut v = v;
     v.reverse();
     v
-}
+}*/
+//https://www.reddit.com/r/rust/comments/6ln5du/mut_mut_why_is_this_required/
 struct _ {
     n:<i32>
 }
-
+//https://www.reddit.com/r/rust/comments/ns9xsr/what_does_a_struct_return/
 #[wasm_bindgen(start)]
 pub fn main () -> jfmast( &arguments(_{n:0}.n) );
 //pub fn main () -> jsfuture println!("{}",  jfmast( &arguments((&*&0,)) ) );
