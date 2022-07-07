@@ -37,7 +37,7 @@ pub fn jfmast () -> jsfuture {
   let lock = &mods::pathify(&args[0].split("/"));
    //https://doc.rust-lang.org/rust-by-example/custom_types/structs.html
    //https://doc.rust-lang.org/rust-by-example/generics/impl.html
-  struct Mast { jsfuture };//<i32>
+  struct Mast { Future<Output = u8> };//<i32>
    //implement TraitMethods [Future] onin TypeStruct [Mast]
   //impl Future for Mast { fn app () -> jsfuture { cc::Build::new().file(lock).expand() = Default::default(&args[1]) }; };
    //https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-implement-traits
