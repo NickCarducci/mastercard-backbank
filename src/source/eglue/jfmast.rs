@@ -12,7 +12,7 @@ use wasm_bindgen_futures;
 use wasm_bindgen_futures::JsFuture::from;
 use cc;
 
-use std::future::Future;
+use std::future::Future;//Trait
 //let my_num_ptr:*const i32=&*Box<i32>=Box::new(10);//https://doc.rust-lang.org/std/primitive.pointer.html
 
 //use crate::promise;
