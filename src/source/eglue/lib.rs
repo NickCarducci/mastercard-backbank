@@ -14,7 +14,7 @@ use wasm_bindgen_futures::JsFuture;
 }*/
 //https://www.reddit.com/r/rust/comments/6ln5du/mut_mut_why_is_this_required/
 struct typ {//option+fn+v
-    n:<i32>
+    n:u8//unsigned smol num, then (+/-) i32 and String
 }
 //https://www.reddit.com/r/rust/comments/ns9xsr/what_does_a_struct_return/
 #[wasm_bindgen(start)]
