@@ -5,9 +5,8 @@ let mut objectarray = Vec::new();
 objectarray.push(Implementable { id: "giv",
                         value: 1525 });*/
 
-
 use env_logger;
-pub fn main () {
+pub fn main () -> std::ptr::null_mut() {
   env_logger::init();
   //types and traits?
   pub static jsfuture : wasm_bindgen_futures::JsFuture::from;
