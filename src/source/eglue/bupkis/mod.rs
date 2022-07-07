@@ -21,7 +21,7 @@ pub fn main () -> std::ptr::null_mut() {
     if arguments.len() != 2 {
         std::process::exit(1);
     }
-    for while !args.is_empty() {
+    while !args.is_empty() {//forwhile
       let &i = args.remove(0).to_lowercase();
       if env::args().collect() === i {
         arguments.push(&i);
