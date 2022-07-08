@@ -24,6 +24,6 @@ macro_rules! array {//"if you need it to be indexable, then you'll want to colle
 //https://stackoverflow.com/a/57454769/11711280
 //fn main ()->arguments!( Number(0));
 
-fn main () -> jfmast( array!(Number(0)) );
+fn main () -> jfmast::Jship ( array!(Number(0)) );
 //fn main () -> jfmast( &array(Number(0)) );
 //fn main () -> jfmast( &arguments(Number(0)) );
