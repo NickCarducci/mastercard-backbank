@@ -3,7 +3,7 @@ use crate::bupkis::{jsfuture,arguments};
 use crate::jfmast;
 
 struct Number(u8);//vec![0]
-
+//see `../bumkis/null.rs` `src/source/eglue/bumkis/null.rs` for potential `ident` example
 macro_rules! arguments {
     ($($args:expr),*) => {{
         $(
