@@ -21,3 +21,21 @@ macro_rules! mak {
 }
 mak("console").console(<String>"");
 ````
+what the
+````
+macro_rules! mak {
+    ($name:ident) => {
+        trait AnyExt {
+            fn type_name(&self) -> &'static str;
+        }
+        impl<T> AnyExt for T {
+            fn type_name(&self) -> &'static str {
+                std::any::type_name::<T>()
+            }
+        }
+        fn $name<T>(a: T) -> $name<where Output = type_name(a)> {
+          type_name;
+        }
+    };
+}
+````
