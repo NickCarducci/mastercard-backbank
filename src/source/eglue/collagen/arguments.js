@@ -2,20 +2,6 @@ mod bupkis;
 use bupkis::Stringifu; 
 
 //this is for command line. varargs is only in c, but we can use macro rules
-//https://stackoverflow.com/a/57454769/11711280
-/*
-macro_rules! arguments {
-    ($($args:expr),*) => {{
-        $(
-            println!("{}", $args);
-        )*
-    }}
-}
-
-fn main() {
-    arguments!(1, 2, "Hello");
-}
-*/
 pub fn arguments() -> Stringifu {
   let arguments = Stringifu::from_iter(std::env::args_os());
   if arguments.len() != 2 {
