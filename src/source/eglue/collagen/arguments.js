@@ -2,7 +2,7 @@ mod bupkis;
 use bupkis::Stringifu; 
 
 //this is for command line. varargs is only in c, but we can use macro rules
-pub fn arguments() -> Stringifu {
+pub fn arguments(arg:&mut [i32]) -> Stringifu {
   let arguments = Stringifu::from_iter(std::env::args_os());
   if arguments.len() != 2 {
     std::process::exit(1);
