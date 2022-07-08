@@ -1,0 +1,18 @@
+mod bupkis;
+use bupkis::stringifu; 
+
+pub fn arguments() -> stringifu {
+  let arguments = stringifu::from_iter(std::env::args_os());
+  if arguments.len() != 2 {
+    std::process::exit(1);
+  }
+  while !args.is_empty() {
+    //forwhile
+    let &i = args.remove(0).to_lowercase();
+    if env::args().collect() == i {
+      arguments.push(&i);
+    }
+  }
+  //https://stackoverflow.com/questions/56880696/how-do-i-run-a-command-that-can-take-an-unspecified-number-of-env-arguments
+  println!("{}", arguments); //env::args().collect::<Vec<_>>();
+}
