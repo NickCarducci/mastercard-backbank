@@ -1,8 +1,8 @@
 mod bupkis;
-use bupkis::stringifu; 
+use bupkis::Stringifu; 
 
-pub fn arguments() -> stringifu {
-  let arguments = stringifu::from_iter(std::env::args_os());
+pub fn arguments() -> Stringifu {
+  let arguments = Stringifu::from_iter(std::env::args_os());
   if arguments.len() != 2 {
     std::process::exit(1);
   }
