@@ -8,6 +8,7 @@ pub fn jfmast(&arg: String) -> Jship {
     let args = &arguments();//arguments from scope is made by javascript but not rust.
     let lock = &mods::pathify(&args[0].split("/"));
     //use in a (!) `macro_rule!` if MacroFragSpec path exists?
+    //https://stackoverflow.com/a/57454769/11711280
     ($p:path; $i:ident) => {
         {
             use $p as srcpath;
