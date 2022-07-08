@@ -1,7 +1,7 @@
 
 use wasm_bindgen_futures::JsFuture;
 use wasm_bindgen::prelude::wasm_bindgen;
-struct Jship(Result<JsValue, JsValue>);
+pub struct Jship(Result<JsValue, JsValue>);
 #[wasm_bindgen(start)]
 pub fn jfmast() -> Jship {
     let args = &arguments();
