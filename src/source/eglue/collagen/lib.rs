@@ -25,7 +25,7 @@ macro_rules! array {//"if you need it to be indexable, then you'll want to colle
 //fn main ()->arguments!( Number(0));
 
 fn main (args: &mut [i32]) -> jfmast::Jship ( jfmast( args ));//args[0];
-fn main (arg:String) -> jfmast::Jship ( jfmast( &array!(Number(0)) ));
+//fn main (arg:String) -> jfmast::Jship ( jfmast( &array!(Number(0)) ));
 //&mut : Option<String>
 //https://doc.rust-lang.org/rust-by-example/std/option.html
 //
