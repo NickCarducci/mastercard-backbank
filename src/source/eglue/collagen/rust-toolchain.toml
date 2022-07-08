@@ -1,0 +1,3 @@
+[toolchain]
+profile = "default"
+channel = "nightly" # stable|beta|nightly|<major.minor>|<major.minor.patch> (e.g. 1.62.0)
