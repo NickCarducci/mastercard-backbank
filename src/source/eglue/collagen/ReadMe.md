@@ -10,3 +10,4 @@ you can build with the stable version, as shown in `scripts:build` npm `package.
 
 `cargo install _` is like `npm install _`
 
+> `rustup update` new terminal `rm -rf ./cargo`, yadda yadda
