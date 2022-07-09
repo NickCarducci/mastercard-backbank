@@ -18,4 +18,4 @@ ignore this `Failed to install 'rust-lang.rust-analyzer'.` when using Rust starr
 
 > I like [the article](https://www.reddit.com/r/rust/comments/p8jjnl/rust_doesnt_support_default_function_arguments_or/) of course but I must detest the `default` [idolization surplus of actual `composition` excess](https://stackoverflow.com/questions/70082393/why-cant-stdthreadspawn-accept-arguments-in-rust).
 
-For wasm-bindgen, we need to instantiate for passing arguments.
+For wasm-bindgen, we need to instantiate for [passing arguments](https://stackoverflow.com/a/24049607/11711280).
