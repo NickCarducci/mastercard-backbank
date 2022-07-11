@@ -76,7 +76,7 @@ _bosun =
     // run tasks in the pool until `my_app` completes, by default spawning
     // further tasks back onto the pool
     pool.run_until(my_app);
-
+//https://rust-lang-nursery.github.io/futures-api-docs/0.3.0-alpha.19/futures/executor/struct.LocalPool.html
     /*
     let mut c = DropOnce {
         _bosun: PhantomData,
