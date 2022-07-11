@@ -36,5 +36,6 @@ impl std::future::Future for Mast {
 
 fn main() {
     let mut pool = LocalPool::new();
+    //https://rust-lang-nursery.github.io/futures-api-docs/0.3.0-alpha.19/futures/executor/struct.LocalPool.html
     _bosun = pool.run_until(my_app);
 }
