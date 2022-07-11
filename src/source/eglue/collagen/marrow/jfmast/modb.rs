@@ -20,19 +20,49 @@ impl std::future::Future for Mast {
     fn bosun(&self) -> Pin<Box<dyn Future<Output = User> + Send + '_>>;
 }*/
 
-struct DropOnce {
+struct DropOnce <'a>{
     _bosun: dyn PhantomData<&'a mut std::sync::Once<'a>>,
 }
+trait Mak {
+    fn resolve(self) -> Self::Output;
+       fn bosun() {
+        let lock: std::path::PathBuf = pathify("./exec.c"); //.iter();
+        cc::Build::new().file(lock).expand().await; //= Default::default().await
+    }
+}
 
-impl std::future::Future for <'a> DropOnce<'a> {
+//std::future::Future
+impl <'a>std::future::Future for DropOnce<'a> {
     fn poll(&'a mut self) -> &'a mut Self {
         println!("poll");
         self
     }
-
+    async fn bosun() {
+        let lock: std::path::PathBuf = pathify("./exec.c"); //.iter();
+        cc::Build::new().file(lock).expand().await; //= Default::default().await
+    }
     fn do_drop(&'a mut self) {
         println!("last_poll");
     }
+}
+impl<T> Mak <&std::future::Future> for T {
+        fn poll(&'a mut self) -> &'a mut Self {
+        println!("poll");
+        self
+    }
+}
+impl std::future::Future for Mast {
+    fn bosun(&self) -> Pin<Box<dyn Future<Output = User> + Send + '_>>;
+}
+//enum Watcher {Start, Bosun,}
+trait FutureResolve: std::future::Future<Output = u8> {
+    fn resolve(self) -> Self::Output;
+    //type Output = <wasm_bindgen_futures::JsFuture as std::future::Future>::Output;
+    async fn bosun() {
+        let lock: std::path::PathBuf = pathify("./exec.c"); //.iter();
+        cc::Build::new().file(lock).expand().await; //= Default::default().await
+    }
+    fn bosun(&self) -> Pin<Box<dyn Future<Output = User> + Send + '_>>;
 }
 
 //howdeeho discount damages
