@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 pub fn pathify(path: &str) -> std::path::PathBuf {
     let mut input_file = std::path::PathBuf::new();
 
-    let arr: () = path.split("/").map(|x| input_file.push(x)).collect();
+    let _arr: () = path.split("/").map(|x| input_file.push(x)).collect();
     return input_file;
 }
 
