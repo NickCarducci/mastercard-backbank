@@ -6,7 +6,8 @@
   "main": "dist/shim.mjs",
   "scripts": {
     "course": "npm run bcargo && npm run bwasm",
-    "bcargo": "cd eglue && cargo install cargo-expand && rustup override set stable && cargo build && cargo expand --lib lib",
+    "bcargo": "cd eglue && cargo install cargo-expand && cargo build && cargo expand --lib lib",
+    "bcargo1": "cd eglue && cargo install cargo-expand && rustup override set stable && cargo build && cargo expand --lib lib",
     "bwasm": "wasm-pack build --target web --out-dir glue --out-name index",
     "build": "npm run course && rollup -c",
     "build4": "cd src/source/eglue && cargo run start && wasm-pack build --target web --out-dir glue --out-name index && cd ../../.. && rollup -c",
