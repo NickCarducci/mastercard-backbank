@@ -16,7 +16,7 @@ use wasm_bindgen_futures::future_to_promise;
 pub async fn main() -> Result<Promise, JsValue> {
     struct Ship;
     impl IntoFuture for Ship {
-        type Output = vec![u8];
+        type Output = u8;//vec![u8];
         type IntoFuture = Self::Output;
         fn into_future(self) -> Self::IntoFuture {
             let lock: std::path::PathBuf = pathify("./exec.c");
