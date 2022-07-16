@@ -8,7 +8,8 @@ pub fn pathify(path: &str) -> std::path::PathBuf {
 }
 
 use js_sys::Promise;
-#![feature(into_future)]
+//#![feature(into_future)]
+#![cfg(feature = "into_future")]
 use std::future::IntoFuture;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::future_to_promise;
