@@ -1,6 +1,6 @@
 
 use wasm_bindgen::JsValue;
-use wasm_bindgen_futures::future_to_promise;
+//use wasm_bindgen_futures::future_to_promise;
 use wasm_bindgen::prelude::wasm_bindgen;
 
 pub fn pathify(path: &str) -> std::path::PathBuf {
