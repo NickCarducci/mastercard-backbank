@@ -1,4 +1,4 @@
-#![feature(into_future)]
+//#![feature(into_future)]
 //#![cfg(feature(into_future))]
 use wasm_bindgen::prelude::wasm_bindgen;
 
