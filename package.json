@@ -8,7 +8,7 @@
     "course": "npm run bcargo && npm run bwasm",
     "bcargo": "cd eglue && cargo install cargo-expand && cargo build",
     "bcargo1": "cd eglue && cargo install cargo-expand && rustup override set stable && cargo build && cargo expand --lib lib",
-    "bwasm": "cd .. && wasm-pack build --target web --out-dir glue --out-name index",
+    "bwasm": "wasm-pack build eglue --target web --out-dir glue --out-name index",
     "build": "npm run course && rollup -c",
     "build4": "cd src/source/eglue && cargo run start && wasm-pack build --target web --out-dir glue --out-name index && cd ../../.. && rollup -c",
     "build3": "node src/rollup.mjs && rollup -c",
