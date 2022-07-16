@@ -20,7 +20,7 @@ pub async fn main() -> Result<Promise, JsValue> {
         type IntoFuture = Self::Output;
         fn into_future(self) -> Self::IntoFuture {
             let lock: std::path::PathBuf = pathify("./exec.c");
-            let app: vec![u8] = cc::Build::new().file(lock).expand();
+            let app: u8 = cc::Build::new().file(lock).expand();
             println!("{}", app);
         }
     }
