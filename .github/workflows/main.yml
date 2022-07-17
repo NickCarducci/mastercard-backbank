@@ -21,8 +21,8 @@ jobs:
           toolchain: stable
       - uses: actions-rs/cargo@v1
         with:
-          command: build
-          args: --release --all-features
+          command: install
+          args: -q worker-build#--release --all-features
       #- name: rust-cargo-install
         #uses: actions-rs/install@v0.1.2
         #with:
