@@ -14,7 +14,7 @@ fn pathify(path: &str) -> std::path::PathBuf {
 }
 
 #[durable_object]
-impl ExampleDurableObject for Index {
+impl DurableObjectExample for Index {
   fn new(state: State, env: Env) -> Self {
     Self {
       dataiter: vec![],
