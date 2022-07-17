@@ -7,11 +7,11 @@ authors = ["Nick Carducci <nmcarducci@gmail.com>"]
 worker-build = "0.0.6"
 cc = "1.0"
 
-#[lib]
+[lib]
 #edition = "2021"
 #name = "build"
 #path = "./lib.rs"
-#crate-type = ["cdylib"] # "rlib"
+crate-type = ["cdylib", "rlib"] # "rlib"
 
 # https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
 
