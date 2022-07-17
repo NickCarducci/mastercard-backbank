@@ -24,7 +24,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: install
-          args: -q worker-build@0.0.6 # --all-features
+          args: -q worker-build #@0.0.6 # --all-features
           
           #args: -q worker-build#--release --all-features
       #- name: rust-cargo-install
