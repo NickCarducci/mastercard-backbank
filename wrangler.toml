@@ -3,7 +3,7 @@ name = "mastercard-backbank-dev"
 type = "javascript" # webpack
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
 workers_dev = true #if using default subdomain, here: api ok
-wasm_modules={BACKBANK_WASM="a.out.wasm"}# "./src/glue"}
+wasm_modules={BACKBANK_WASM="./a.out.wasm"}# "./src/glue"}
 # webpack_config = "webpack.config.js"
 route = "" #if not using default subdomain, here: api not needed, defaults err
 zone_id = "" #if not using default subdomain, here: api not needed
