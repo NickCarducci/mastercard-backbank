@@ -1,6 +1,6 @@
 // let stored = this.el.storage.get("esm"); //Read requests	100,000 / day, ($free)
 //import MasterCardPHP from "./glue";//"./ifWAM.mjs"; //"./babelphp.mjs";
-import MasterCardPHP from "./WASI.js";//"./ifWAM.mjs"; //"./babelphp.mjs";
+import MasterCardPHP from "./WASI.mjs";//"./ifWAM.mjs"; //"./babelphp.mjs";
 
 //(set) keyvalue.set(bytes, ptr); "bytememory"
 //const keyvalue = new Uint8Array(store.buffer);
