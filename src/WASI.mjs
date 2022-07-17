@@ -1,6 +1,6 @@
 //https://blog.cloudflare.com/announcing-wasi-on-workers/
 import { WASI } from '@cloudflare/workers-wasi';
-import mywasm from '/a.out.wasm';
+import mywasm from './a.out.wasm';
 
 export default async function () {
      const stdout = new TransformStream();
