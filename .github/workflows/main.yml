@@ -16,8 +16,15 @@ jobs:
       #- uses: actions/setup-node@main
         #with:
           #node-version: "14.x"
-      - name: rust-cargo-install
-        uses: actions-rs/install@v0.1.2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
+      #- name: rust-cargo-install
+        #uses: actions-rs/install@v0.1.2
         #with:
           #crate: cargo-audit
           #version: latest
