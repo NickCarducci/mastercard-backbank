@@ -50,13 +50,16 @@ deleted_classes = ["Require"]
 # [build.upload.rules]
 # type = "CommonJS"
 # globs = ["**/*.js", "**/*.cjs"]
+
+[vars]
+WORKERS_RS_VERSION = "0.0.9"
 [build.upload]
 format = "modules" # "service-workers"
 dir = "build/worker"
 main = "./shim.mjs"
-# [build]
+[build]
 # command = "git clone https://github.com/rust-lang/cargo && cargo install -q worker-build && worker-build --release"
-# command = "cargo install -q worker-build && worker-build --release"
+command = "cargo install -q worker-build && worker-build --release"
 # command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
 # command = "ln -s ./a.out.wasm src/a.out.wasm && npm install && npm run build"
 # command = "npx parcel build src/index.js"
