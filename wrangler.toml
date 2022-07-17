@@ -52,7 +52,7 @@ deleted_classes = ["Require"]
 # globs = ["**/*.js", "**/*.cjs"]
 [build.upload]
 format = "modules" # "service-workers"
-dir = "dist"
+dir = "src"
 main = "./shim.mjs"
 [build]
 # command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
