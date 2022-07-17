@@ -5,6 +5,7 @@
   "description": "mastercard worker for vaumoney of vaults.biz",
   "main": "src/shim.mjs",
   "scripts": {
+    "build":"",
     "course": "npm run bcargo && npm run bwasm",
     "bcargo": "cd eglue && cargo install cargo-expand && cargo build --target wasm32-unknown-unknown -Zbuild-std",
     "bcargo1": "cd eglue && cargo install cargo-expand && rustup override set stable && cargo build && cargo expand --lib lib",
