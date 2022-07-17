@@ -1,0 +1,17 @@
+[package]
+edition = "2021"
+name = "eglue" # "src/source/eglue"
+version = "0.1.0"    # obey semver
+authors = ["Nick Carducci <nmcarducci@gmail.com>"]
+[dependencies]
+worker-build = "0.0.6"
+cc = "1.0"
+
+#[lib]
+#edition = "2021"
+#name = "build"
+#path = "./lib.rs"
+#crate-type = ["cdylib"] # "rlib"
+
+# https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
+
