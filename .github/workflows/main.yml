@@ -21,7 +21,7 @@ jobs:
         with:
           crate: cargo-audit
           version: latest
-      - run: cargo audit
+     # - run: cargo audit
 
           
       #- name: Setup PHP
