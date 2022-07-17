@@ -18,6 +18,8 @@ jobs:
           #node-version: "14.x"
       #- uses: cloudflare/wrangler-action@2.0.0
       
+      - run: curl https://sh.rustup.rs -sSf | sh
+      
       #- uses: actions-rs/toolchain@v1
         #with:
           #toolchain: stable
