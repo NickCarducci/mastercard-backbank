@@ -13,9 +13,9 @@ jobs:
       - uses: actions/checkout@main
       - name: Navigate to repo
         run: cd $GITHUB_WORKSPACE
-      - uses: actions/setup-node@main
-        with:
-          node-version: "14.x"
+      #- uses: actions/setup-node@main
+        #with:
+          #node-version: "14.x"
       - name: rust-cargo-install
         uses: actions-rs/install@v0.1.2
         #with:
