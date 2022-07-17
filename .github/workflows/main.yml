@@ -16,12 +16,12 @@ jobs:
       - uses: actions/setup-node@main
         with:
           node-version: "14.x"
-          
-      - uses: actions-rs/install@v0.1
-        with:
-          crate: cargo-audit
-          version: latest
-     # - run: cargo audit
+      - name: rust-cargo-install
+        uses: actions-rs/install@v0.1.2
+        #with:
+          #crate: cargo-audit
+          #version: latest
+      #- run: cargo audit
 
           
       #- name: Setup PHP
