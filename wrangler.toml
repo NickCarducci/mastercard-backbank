@@ -55,7 +55,7 @@ format = "modules" # "service-workers"
 dir = "build/worker"
 main = "./shim.mjs"
 [build]
-command = "worker-build --release"
+command = "git clone https://github.com/rust-lang/cargo && cargo install -q worker-build && worker-build --release"
 # command = "cargo install -q worker-build && worker-build --release"
 # command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
 # command = "ln -s ./a.out.wasm src/a.out.wasm && npm install && npm run build"
