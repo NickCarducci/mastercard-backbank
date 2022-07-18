@@ -20,7 +20,7 @@ jobs:
             override: true
             components: rustfmt, clippy
       - name: Run cargo check
-        uses: actions-rs/cargo@main #main->v1
+        uses: actions-rs/cargo@v1 #main->v1
         with:
           command: check
       #- uses: actions/setup-node@main
