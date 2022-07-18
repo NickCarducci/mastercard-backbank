@@ -10,10 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v2 #main
       - name: Navigate to repo
         run: cd $GITHUB_WORKSPACE
-      # - uses: actions/checkout@v2
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
         with:
