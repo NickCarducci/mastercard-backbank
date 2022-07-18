@@ -6,6 +6,11 @@
 //synchronous
 //https://github.com/spatie/async is optional to take advantage of threat pools in parallel (concurrent is sync in code)
 
+//https://github.com/cloudflare/workers-rs#faq
+//All crates in your Worker project must compile to wasm32-unknown-unknown target,
+//which is more limited in some ways than targets for x86 and ARM64.
+//async
+
 <?php
 
 class AuthenticationUtils {
