@@ -19,8 +19,8 @@ jobs:
       #- uses: cloudflare/wrangler-action@2.0.0
       
       # - run: curl https://sh.rustup.rs -sSf | sh -s -- -y && $HOME/.cargo/bin/cargo install -q worker-build && worker-build --release
-      - run: export CARGO_HOME=$HOME/.cargo export RUSTUP_HOME=$HOME/.rustup
-      - run: curl https://sh.rustup.rs -sSf | sh -s -- -y
+      # - run: export CARGO_HOME=$HOME/.cargo export RUSTUP_HOME=$HOME/.rustup
+      # - run: curl https://sh.rustup.rs -sSf | sh -s -- -y
       # - run: source "$HOME/.cargo/env"
       # - run: cargo install -q worker-build
       # - run: worker-build --release
