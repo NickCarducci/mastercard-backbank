@@ -1,3 +1,11 @@
+//"await will ensure all necessary memory barriers are in place. However, that doesn't make them 'thread-safe'."
+//https://stackoverflow.com/questions/53649448/is-it-needed-to-make-fields-thread-safe-when-using-async-await
+
+//https://www.npmjs.com/package/phpjs
+//no async for `sprintf` datbase call.
+//synchronous
+//https://github.com/spatie/async is optional to take advantage of threat pools in parallel (concurrent is sync in code)
+
 <?php
 
 class AuthenticationUtils {
