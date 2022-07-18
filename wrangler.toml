@@ -58,6 +58,7 @@ format = "modules" # "service-workers"
 dir = "build/worker"
 main = "./shim.mjs"
 [build]
+command = ""
 # command = "worker-build --release"
 # command = "cargo install -q worker-build && worker-build --release"
 # command = "PATH=\"$PATH:$HOME/.cargo/bin\" cargo install -q worker-build && worker-build --release"
