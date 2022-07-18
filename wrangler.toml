@@ -55,8 +55,9 @@ deleted_classes = ["Require"]
 WORKERS_RS_VERSION = "0.0.9"
 [build.upload]
 format = "modules" # "service-workers"
-dir = "build/worker"
+dir = "workers/dist"
 main = "./shim.mjs"
+# Your provided upload_dir build/worker does not exist.workers/dist
 [build]
 command = ""
 # command = "worker-build --release"
