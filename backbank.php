@@ -364,6 +364,7 @@ function mastercardRoute ($req, $func) {
                     );
     } else if ($func === "getIndustries") {
         $response = unserialize(
+            //stream_get_contents is for a stream started by a sprintf that has not been a file_get_contents that hasn't been able to curl
                         stream_get_contents(
                             fopen(
                                 sprintf(
