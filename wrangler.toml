@@ -58,7 +58,7 @@ format = "modules" # "service-workers"
 dir = "build/worker"
 main = "./shim.mjs"
 [build]
-command = "cargo install -q worker-build && worker-build --release"
+command = "$HOME/.cargo/bin/cargo install -q worker-build && worker-build --release"
 # command = "curl https://sh.rustup.rs -sSf | sh -s -- -y && export PATH=\"/root/.cargo/bin:$PATH\" && cargo install -q worker-build && worker-build --release"
 # command = "curl https://sh.rustup.rs -sSf | sh -s -- -y && export PATH=\"$HOME/.cargo/bin:$PATH\" && cargo install -q worker-build && worker-build --release"
 # command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
