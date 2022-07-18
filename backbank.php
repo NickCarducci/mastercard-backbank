@@ -9,32 +9,24 @@
 <?php
 
 class AuthenticationUtils {
-
-    private function __construct() {
-        // This class can't be instantiated
-    }
-
-    /**
-     * Load a RSA signing key out of a PKCS#12 container.
-     */
+    private function __construct() {/*This class can't be instantiated*/}
+    
+    // Load a RSA signing key out of a PKCS#12 container.
     public static function loadSigningKey($pkcs12KeyFilePath, $signingKeyAlias, $signingKeyPassword) { //NOSONAR
         try {
             $keystore = file_get_contents($pkcs12KeyFilePath);
         } catch (\Exception $e) {
             throw new \InvalidArgumentException('Failed to read the given file: ' . $pkcs12KeyFilePath, 0, $e);
         }
-
         openssl_pkcs12_read($keystore, $certs, $signingKeyPassword);
         if (is_null($certs)) {
             throw new \InvalidArgumentException('Failed to open keystore with the provided password!');
         }
-
         return openssl_get_privatekey($certs['pkey']);
     }
 }
 
 class OAuth {
-
     const AUTHORIZATION_HEADER_NAME = 'Authorization';
 
     /**
@@ -260,31 +252,19 @@ class CurlRequestSigner extends BaseSigner {
 }
 
 function initializeMCard($locations) {
-    /*$password = '...';
-    $results = array();
-    $worked = openssl_pkcs12_read(secrets.MASTERCARD_P12_BINARY, $results, $password));
-    //openssl_pkcs12_read(file_get_contents($filename), $results, $password));
-    if($worked) {
-        echo '<pre>', print_r($results, true), '</pre>';
-    } else {
-        echo openssl_error_string();
-    }*/
-    $consumerKey = secrets.MASTERCARD_CONSUMER_KEY;   // You should copy this from "My Keys" on your project page 
-    //e.g. UTfbhDCSeNYvJpLL5l028sWL9it739PYh6LU5lZja15xcRpY!fd209e6c579dc9d7be52da93d35ae6b6c167c174690b72fa
-    $keyAlias = "keyalias";   // For production: change this to the key alias you chose when you created 
-    //your production key
-    $keyPassword = "keystorepassword";   // For production: change this to the key alias you chose when you created 
-    //your production key
+    
+    $consumerKey = secrets.MASTERCARD_CONSUMER_KEY;
+    
+    $keyAlias = "keyalias";   // For production: your production key
+    $keyPassword = "keystorepassword";   // For production: your production key
+    
     $privateKeyFileContent = file_get_contents(getcwd()[secrets.MASTERCARD_P12_BINARY]); 
     // e.g. /Users/yourname/project/sandbox.p12 | C:\Users\yourname\project\sandbox.p12
     if ($privateKeyFileContent === false) {
-        // TODO: file not found
         return null;
     }
     if($locations){
-        //ApiConfig::setAuthentication(new OAuthAuthentication($consumerKey, $privateKeyFileContent, $keyAlias, $keyPassword));
-        //ApiConfig::setDebug(true); // Enable http wire logging
-        //ApiConfig::setSandbox(true);   // For production: use ApiConfig::setSandbox(false)
+        
     } else {//CurlRequestSigner
        return AuthenticationUtils::loadSigningKey($privateKeyFileContent,$keyAlias,$keyPassword);
     }
@@ -295,11 +275,6 @@ function mastercardRoute ($req, $func) {
     $response = null;
     $signingKey = initializeMCard();
         
-    /*$consumerKey = '<insert consumer key>';
-    $uri = 'https://sandbox.api.mastercard.com/service';
-    $method = 'POST';
-    $payload = 'Hello world!';
-    $authHeader = OAuth::getAuthorizationHeader($uri, $method, $payload, $consumerKey, $signingKey);*/
     $method = 'POST';
     $base_uri = 'https://sandbox.api.mastercard.com/';
     $payload = json_encode(['foo' => 'bår']);
@@ -314,42 +289,13 @@ function mastercardRoute ($req, $func) {
         
     if ($func === "getAtms") {
         initializeMCard(true);
-        /*$map = new RequestMap();
-        $map->setmap($req.body,"PageOffset");
-        $map->setmap($req.body,"PageLength");
-        $map->setmap($req.body,"PostalCode");
-        $input = ATMLocations::query($map);*/
+        
         $q = [
             'pageOffset' => $req.body.PageOffset,
             'pageLength' => $req.body.PageLength,
             'postalCode' => $req.body.PostalCode,
         ];
-        /*class Atmlocator {
-            public $PageOffset;//querywideoffset;
-            public $TotalCount;//totalsofar
-            public $atms;
-        }*/
-        /*Location.Name
-        Location.Distance
-        Location.DistanceUnit
-        Location.Address.Line1
-        Location.Address.Line2
-        Location.Address.City
-        Location.Address.PostalCode
-        Location.Address.CountrySubdivision.Name
-        Location.Address.CountrySubdivision.Code
-        Location.Address.Country.Name
-        Location.Address.Country.Code
-        Location.Point.Latitude
-        Location.Point.Longitude
-        Location.LocationType.Type
-        HandicapAccessible
-        Camera,Availability,AccessFees
-        Owner,SharedDeposit,SurchargeFreeAlliance
-        SurchargeFreeAllianceNetwork
-        Sponsor,SupportEMV
-        InternationalMaestroAccepted*/
-    
+        
         $response = unserialize(
             stream_get_contents(
                 fopen(
@@ -387,14 +333,7 @@ function mastercardRoute ($req, $func) {
             'distance' => $distance,
             'place' => $place
         ];
-        /*$handle = curl_init($base_uri + 'location-intelligence/places-locator');
-        curl_setopt_array($handle, array(CURLOPT_RETURNTRANSFER => 1, CURLOPT_CUSTOMREQUEST => $method, CURLOPT_POSTFIELDS => $payload));
-        $signer = new CurlRequestSigner($consumerKey, $signingKey);
-        $signer->sign($handle, $method, $headers, $payload);
-        $result = curl_exec($handle);
-        curl_close($handle);*/
-
-
+        
         $response = unserialize(
                         stream_get_contents(
                             fopen(
@@ -406,7 +345,6 @@ function mastercardRoute ($req, $func) {
                             )
                         )
                     );
-        //$response = await places.MerchantPointOfInterest.create($q, $cb);
     } else if ($func === "getCategories") {
         $response = unserialize(
                         stream_get_contents(
@@ -419,7 +357,6 @@ function mastercardRoute ($req, $func) {
                             )
                         )
                     );
-        //$response = await places.MerchantCategoryCodes.query({}, $cb);
     } else if ($func === "getIndustries") {
         $response = unserialize(
                         stream_get_contents(
@@ -432,41 +369,18 @@ function mastercardRoute ($req, $func) {
                             )
                         )
                     );
-        //$response = await places.MerchantIndustries.query({}, $cb);
     }
     
     return $response;
 };
 
-
-/*addEventListener("fetch", function ($event) {
-    $event->respondWith(handleRequest($event->request));
-});
-function handleRequest($request) {
-    $PHPWorkerHelloWorld = null;
-    if ($request.url === "/deposit") {
-        $PHPWorkerHelloWorld = mastercardRoute($request, "getAtms");
-    } else if ($request.url === "/choose_category") {
-        $PHPWorkerHelloWorld = mastercardRoute($request, "getCategories");
-    } else if ($request.url === "/choose_industry") {
-        $PHPWorkerHelloWorld = mastercardRoute($request, "getIndustries");
-    } else if ($request.url === "/merchants") {
-        $PHPWorkerHelloWorld = mastercardRoute($request, "getMerchants");
-    }
-    /*return new Response(`{ok: true,data: ${r} }`);*
-    return new Response($PHPWorkerHelloWorld, [
-        "headers" => [ "content-type" => "text/plain" ]
-    ]);
-}*/
 class Mgillicuddy {
     public $AuthenticationUtils = AuthenticationUtils;
     public $OAuth = OAuth;
     public $mastercardRoute = mastercardRoute;
     //return  static function () {}
 };
-//return new Mgillicuddy;
-//define('DEFAULT',new Mgillicuddy);
-//console var_dump(constant('DEFAULT'));
+
 error_reporting(E_ALL);
 
 require_once 'XML/Serializer.php';
