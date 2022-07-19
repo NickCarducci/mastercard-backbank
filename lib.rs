@@ -30,8 +30,8 @@ async fn handle_async_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<
         req.cf().region().unwrap_or_else(|| "unknown region".into())
     ))
 }
-#![feature(type_ascription)]
 #[event(fetch)]
+#![feature(type_ascription)]
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     let data = SomeSharedData {
         regex: regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
