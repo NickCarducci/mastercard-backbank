@@ -9,7 +9,7 @@ cc = "1.0"
 
 [lib]
 #edition = "2021"
-name = "."
+name = "/"
 path = "index.rs"
 crate-type = ["cdylib", "rlib"] # "rlib"
 
