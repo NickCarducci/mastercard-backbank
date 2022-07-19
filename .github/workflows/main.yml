@@ -28,6 +28,12 @@ jobs:
           command: install
           args: -q worker-build@0.0.6 #--all-features
           
+      - name: Build worker release
+        uses: Swatinem/rust-cache@v2.0.0
+        with:
+          command: worker-build
+          args: --release
+          
       - name: Run cargo check
         uses: actions-rs/cargo@v1 #main->v1
         with:
