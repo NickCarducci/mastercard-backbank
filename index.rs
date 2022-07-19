@@ -1,4 +1,3 @@
-#![feature(type_ascription)]
 use worker::*;
 
 #[durable_object]
