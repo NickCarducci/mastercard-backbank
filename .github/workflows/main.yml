@@ -92,7 +92,7 @@ jobs:
           # apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: "production"
           publish: false
-          preCommands: install -q worker-build && worker-build --release
+          preCommands: curl https://sh.rustup.rs -sSf | sh -s -- -y && cargo install -q worker-build && worker-build --release
         env:
           USER: root
           
