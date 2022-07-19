@@ -92,7 +92,7 @@ jobs:
           # apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: "production"
           publish: false
-          preCommands: cargo install -q worker-build && worker-build --release
+          preCommands: install -q worker-build && worker-build --release
         env:
           USER: root
           
