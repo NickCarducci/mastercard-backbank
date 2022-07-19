@@ -3,6 +3,7 @@ use worker::*;
 #[durable_object]
 pub struct DurableObjectExample {
   data: Vec<u8>,
+  initialized: bool,
   state: State,
   env: Env, // access `Env` across requests, use inside `fetch`
 }
@@ -18,6 +19,7 @@ impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
     Self {
       data: vec![],
+      initialized: false,
       state: state,
       env,
     }
