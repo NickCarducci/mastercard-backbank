@@ -59,8 +59,9 @@ dir = "build" # dist for libraries...
 main = "./shim.mjs"
 # Your provided upload_dir build/worker does not exist.workers/dist
 [build]
+command = "curl https://sh.rustup.rs -sSf | sh -s -- -y && source \"$HOME/.cargo/env\" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild && worker-build --release"
 # command = "cargo install -q worker-build && worker-build --release"
-command = "worker-build --release"
+# command = "worker-build --release"
 # command = "PATH=\"$PATH:$HOME/.cargo/bin\" cargo install -q worker-build && worker-build --release"
 # command = "curl https://sh.rustup.rs -sSf | sh -s -- -y && export PATH=\"/root/.cargo/bin:$PATH\" && cargo install -q worker-build && worker-build --release"
 # command = "curl https://sh.rustup.rs -sSf | sh -s -- -y && export PATH=\"$HOME/.cargo/bin:$PATH\" && cargo install -q worker-build && worker-build --release"
