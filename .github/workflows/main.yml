@@ -67,11 +67,11 @@ jobs:
       #- name: Build docs
         #run: npm run build
         
-      - name: Install latest worker-build
-        uses: Swatinem/rust-cache@v2.0.0
-        with:
-          command: install
-          args: -q worker-build@0.0.6 #--all-features
+      #- name: Install latest worker-build
+        #uses: Swatinem/rust-cache@v2.0.0
+        #with:
+          #command: install
+          #args: -q worker-build@0.0.6 #--all-features
           
       #- name: Build worker release
         #uses: Swatinem/rust-cache@v2.0.0
@@ -92,7 +92,7 @@ jobs:
           # apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: "production"
           publish: false
-          preCommands: worker-build --release
+          preCommands: cargo install -q worker-build && worker-build --release
         env:
           USER: root
           
