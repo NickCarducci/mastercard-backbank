@@ -4,7 +4,7 @@ name = "eglue" # "src/source/eglue"
 version = "0.1.0"    # obey semver
 authors = ["Nick Carducci <nmcarducci@gmail.com>"]
 [dependencies]
-worker-build = "0.0.6"
+worker-build = "0.0.4"
 cc = "1.0"
 worker = "0.0.9"
 # cfg-if = "1.0.0"
