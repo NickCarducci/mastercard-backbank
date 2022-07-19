@@ -20,8 +20,7 @@ pub fn start() {
         req.cf().coordinates().unwrap_or_default(),
         req.cf().region().unwrap_or_else(|| "unknown region".into())
     ))
-}*/
-
+}
 async fn handle_async_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<Response> {
     Response::ok(&format!(
         "[async] req at: {}, located at: {:?}, within: {}",
@@ -29,10 +28,10 @@ async fn handle_async_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<
         req.cf().coordinates().unwrap_or_default(),
         req.cf().region().unwrap_or_else(|| "unknown region".into())
     ))
-}
+}*/
 #[event(fetch)]//#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
-pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
+pub fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     let data = SomeSharedData {
         regex: regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
