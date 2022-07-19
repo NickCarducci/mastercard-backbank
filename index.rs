@@ -1,3 +1,4 @@
+#![feature(type_ascription)]
 use worker::*;
 
 #[durable_object]
@@ -31,7 +32,6 @@ impl DurableObject for DurableObjectExample {
     //let  value = null;
 
     let lock: std::path::PathBuf = pathify("./exec.c");
-    #![feature(type_ascription)]
     self.dataiter: String = String::from_utf8(cc::Build::new().file(lock).expand()).unwrap();
 
     return Response::ok(&format!("{} data.", self.dataiter));
