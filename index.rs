@@ -23,7 +23,14 @@ impl DurableObject for DurableObjectExample {
     }
   }
   
-  fn fetch(&mut self, _req: Request) -> Result<Response> {
+  async fn fetch(&mut self, _req: Request) -> Result<Response> {
+    if !self.initialized {
+        self.initialized = true;
+        //self.count = self.state.storage().get("count").await.unwrap_or(0);
+    }
+    //self.count += 10;
+    //self.state.storage().put("count", self.count).await?;
+    
     //if (!_req.url)
     //return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
 
