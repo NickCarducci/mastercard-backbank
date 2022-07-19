@@ -39,7 +39,7 @@ pub fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     let router = Router::with_data(data); // if no data is needed, pass `()` or any other valid data
 
     router
-        .get_async("/:id", |_req, ctx| async move {
+        .get("/:id", |_req, ctx| move {//get_async, async move
             let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
             let stub = namespace.id_from_name("A")?.get_stub()?;
             //https://stackoverflow.com/questions/70309403/updating-html-canvas-imagedata-using-rust-webassembly
@@ -47,6 +47,6 @@ pub fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
             // compatibility flag can be provided in wrangler.toml to opt-in to older behavior:
             // https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url
             //stub.fetch_with_str("https://fake-host/").await
-            stub.fetch_with_str(req.url.host_str()).await
+            stub.fetch_with_str(req.url.host_str())
         })
 }
