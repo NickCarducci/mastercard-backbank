@@ -34,7 +34,7 @@ async fn handle_async_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<
 }*/
 #[event(fetch)]//#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
-pub fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
+pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     let data = SomeSharedData {
         regex: regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
