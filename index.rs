@@ -2,7 +2,7 @@ use worker::*;
 
 #[durable_object]
 pub struct DurableObjectExample {
-  data: Vec<String>,//u8
+  data: String,//Vec<u8>,
   initialized: bool,
   state: State,
   env: Env, // access `Env` across requests, use inside `fetch`
@@ -18,7 +18,7 @@ fn pathify(path: &str) -> std::path::PathBuf {
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
     Self {
-      data: vec![],
+      data: format!(""),//vec![]//https://www.hackertouch.com/how-to-create-and-check-string-is-empty-rust.html
       initialized: false,
       state: state,
       env,
