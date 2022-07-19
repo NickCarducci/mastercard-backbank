@@ -30,7 +30,7 @@ async fn handle_async_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<
         req.cf().region().unwrap_or_else(|| "unknown region".into())
     ))
 }
-
+#![feature(type_ascription)]
 #[event(fetch)]
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     let data = SomeSharedData {
