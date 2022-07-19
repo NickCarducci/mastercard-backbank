@@ -2,7 +2,7 @@ use worker::*;
 
 #[durable_object]
 pub struct DurableObjectExample {
-  data: Vec<Data>,
+  data: Vec<u8>,
   state: State,
   env: Env, // access `Env` across requests, use inside `fetch`
 }
