@@ -21,7 +21,6 @@ jobs:
             components: rustfmt, clippy
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2.0.0
-
       #- name: Install latest worker-build
         #uses: actions-rs/cargo@v1
         with:
