@@ -6,7 +6,8 @@ authors = ["Nick Carducci <nmcarducci@gmail.com>"]
 [dependencies]
 # worker-build = "0.0.6"
 cc = "1.0"
-cfg-if = "1.0.0"
+worker = "0.0.9"
+# cfg-if = "1.0.0"
 
 [lib]
 #edition = "2021"
