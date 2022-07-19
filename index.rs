@@ -1,7 +1,7 @@
 use worker::*;
 
 #[durable_object]
-pub struct Index {
+pub struct DurableObjectExample {
   data: Vec<Data>,
   state: State,
   env: Env, // access `Env` across requests, use inside `fetch`
@@ -14,7 +14,7 @@ fn pathify(path: &str) -> std::path::PathBuf {
 }
 
 #[durable_object]
-impl DurableObjectExample for Index {
+impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
     Self {
       dataiter: vec![],
