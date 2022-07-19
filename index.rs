@@ -17,7 +17,7 @@ fn pathify(path: &str) -> std::path::PathBuf {
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
     Self {
-      data: vec![u8],
+      data: vec![],
       state: state,
       env,
     }
@@ -34,6 +34,6 @@ impl DurableObject for DurableObjectExample {
     let durr: Vec<u8> = cc::Build::new().file(lock).expand();
     self.data: String = String::from_utf8(&durr).unwrap();
 
-    return Response::ok(&format!("{} data.", self.dataiter));
+    return Response::ok(&format!("{} data.", self.data));
   }
 }
