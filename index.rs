@@ -22,7 +22,7 @@ impl DurableObject for DurableObjectExample {
       env,
     }
   }
-  #![feature(type_ascription)]
+  #[feature(type_ascription)]
   fn fetch(&mut self, _req: Request) -> Result<Response> {
     //if (!_req.url)
     //return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
