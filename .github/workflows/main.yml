@@ -104,4 +104,4 @@ jobs:
           # apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: "production"
         env:
-          USER: root
+          USER: sudo chown -R $(id -un):$(id -gn) ${{ github.workspace }} #root
