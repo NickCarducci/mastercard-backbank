@@ -1,5 +1,5 @@
 use worker::*;
-
+ 
 #[durable_object]
 pub struct DurableObjectExample {
   data: String,//Vec<u8>,
