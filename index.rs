@@ -22,7 +22,7 @@ impl DurableObject for DurableObjectExample {
       env,
     }
   }
-  #[feature(type_ascription)]
+  
   fn fetch(&mut self, _req: Request) -> Result<Response> {
     //if (!_req.url)
     //return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
@@ -31,6 +31,7 @@ impl DurableObject for DurableObjectExample {
     //let  value = null;
 
     let lock: std::path::PathBuf = pathify("./exec.c");
+    #![feature(type_ascription)]
     self.dataiter: String = String::from_utf8(cc::Build::new().file(lock).expand()).unwrap();
 
     return Response::ok(&format!("{} data.", self.dataiter));
