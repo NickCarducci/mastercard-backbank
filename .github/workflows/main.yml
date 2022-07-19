@@ -19,8 +19,11 @@ jobs:
             toolchain: nightly
             override: true
             components: rustfmt, clippy
-      - name: Install latest worker-build
-        uses: actions-rs/cargo@v1
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2.0.0
+
+      #- name: Install latest worker-build
+        #uses: actions-rs/cargo@v1
         with:
           command: install
           args: -q worker-build@0.0.6 #--all-features
