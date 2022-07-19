@@ -31,7 +31,8 @@ impl DurableObject for DurableObjectExample {
     //let  value = null;
 
     let lock: std::path::PathBuf = pathify("./exec.c");
-    self.dataiter: String = String::from_utf8(cc::Build::new().file(lock).expand()).unwrap();
+    let durr: Vec<u8> = cc::Build::new().file(lock).expand();
+    self.dataiter: String = String::from_utf8(&durr).unwrap();
 
     return Response::ok(&format!("{} data.", self.dataiter));
   }
