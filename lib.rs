@@ -2,7 +2,6 @@
 //"you'll need to define the Durable Object in a separate module. ...this:"
 //"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
 
-
 // We're able to specify a start event that is called when the WASM is initialized before any
 // requests. This is useful if you have some global state or setup code, like a logger. This is
 // only called once for the entire lifetime of the worker.
@@ -49,6 +48,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             // compatibility flag can be provided in wrangler.toml to opt-in to older behavior:
             // https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url
             //stub.fetch_with_str("https://fake-host/").await
-            stub.fetch_with_str(new URL(req.url).pathname).await
+            stub.fetch_with_str(req.url.host_str()).await
         })
 }
