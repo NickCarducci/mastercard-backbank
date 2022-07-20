@@ -7,9 +7,10 @@
 // only called once for the entire lifetime of the worker.
 
 use worker::*;
-use std::sync::atomic::Ordering;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 mod utils;
+static GLOBAL_STATE: AtomicBool = AtomicBool::new(false);
 #[event(start)]
 pub fn start() {
     utils::set_panic_hook();
