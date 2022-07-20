@@ -7,14 +7,16 @@
 // only called once for the entire lifetime of the worker.
 
 use worker::*;
-/*use std::sync::atomic::Ordering;
+use std::sync::atomic::Ordering;
+
+mod utils;
 #[event(start)]
 pub fn start() {
-    //utils::set_panic_hook();
+    utils::set_panic_hook();
 
     // Change some global state so we know that we ran our setup function.
     GLOBAL_STATE.store(true, Ordering::SeqCst);
-}*/
+}
 
 /*fn handle_a_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<Response> {
     Response::ok(&format!(
