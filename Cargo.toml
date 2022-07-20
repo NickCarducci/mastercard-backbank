@@ -9,9 +9,9 @@ wasm-opt = false
 # workers-rs = "0.0.10"
 # worker-build = "0.0.4"
 cc = "1.0"
-worker = "0.0.9"
-# wasm-bindgen = "0.2.78" # "0.2.81"
-web-sys = "0.3.57" # "0.3.58"
+worker = "0.0.10"
+# wasm-bindgen = "0.2.81" # "0.2.78"
+web-sys = "0.3.58" # "0.3.57"
 wasm-bindgen = "0.2.80"
 # cfg-if = "1.0.0"
 
