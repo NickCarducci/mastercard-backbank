@@ -14,7 +14,7 @@ worker = "0.0.9"
 
 [lib]
 #edition = "2021"
-path = "index.rs"
+path = "lib.rs"
 crate-type = ["cdylib", "rlib"] # "rlib"
 name = "build"
 
