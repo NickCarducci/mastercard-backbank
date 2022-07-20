@@ -7,14 +7,14 @@
 // only called once for the entire lifetime of the worker.
 
 use worker::*;
-use std::sync::atomic::Ordering;
+/*use std::sync::atomic::Ordering;
 #[event(start)]
 pub fn start() {
     //utils::set_panic_hook();
 
     // Change some global state so we know that we ran our setup function.
     GLOBAL_STATE.store(true, Ordering::SeqCst);
-}
+}*/
 
 /*fn handle_a_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<Response> {
     Response::ok(&format!(
@@ -34,13 +34,13 @@ async fn handle_async_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<
 }*/
 
 struct SomeSharedData {
-    data: regex::Regex,
+    data: u8//regex::Regex,
 }
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
 #[event(fetch)]//#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     let info = SomeSharedData {
-        data: regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
+        data: 0//regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
 
     let router = Router::with_data(info); // if no data is needed, pass `()` or any other valid data
