@@ -51,8 +51,8 @@ deleted_classes = ["Require"]
 # type = "CommonJS"
 # globs = ["**/*.js", "**/*.cjs"]
 
-[vars]
-WORKERS_RS_VERSION = "0.0.9"
+# [vars]
+# WORKERS_RS_VERSION = "0.0.9"
 [build.upload]
 format = "modules" # "service-workers"
 dir = "build/worker" # dist for libraries...
