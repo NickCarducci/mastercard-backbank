@@ -6,7 +6,7 @@
 // requests. This is useful if you have some global state or setup code, like a logger. This is
 // only called once for the entire lifetime of the worker.
 
-
+use worker::*;
 use std::sync::atomic::Ordering;
 #[event(start)]
 pub fn start() {
@@ -32,14 +32,18 @@ async fn handle_async_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<
         req.cf().region().unwrap_or_else(|| "unknown region".into())
     ))
 }*/
+
+struct SomeSharedData {
+    data: regex::Regex,
+}
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
 #[event(fetch)]//#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
-    let data = SomeSharedData {
-        regex: regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
+    let info = SomeSharedData {
+        data: regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
 
-    let router = Router::with_data(data); // if no data is needed, pass `()` or any other valid data
+    let router = Router::with_data(info); // if no data is needed, pass `()` or any other valid data
 
     router
         .get_async("/:id", |_req, ctx| async move {//get, async move
