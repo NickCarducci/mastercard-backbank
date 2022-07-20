@@ -102,7 +102,7 @@ jobs:
           email: "nmcarducci@gmail.com"
           apiKey: ${{ secrets.CF_API_KEY }}
           # apiToken: ${{ secrets.CF_API_TOKEN }}
-          preCommands: curl https://sh.rustup.rs -sSf | sh -s -- -y && PATH="$PATH:$HOME/.cargo/bin" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild
+          preCommands: curl https://sh.rustup.rs -sSf | sh -s -- -y && PATH="$PATH:$HOME/.cargo/bin" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild && PATH="$PATH:$HOME/.cache/.wasm-pack/.wasm-bindgen-cargo-install-0.2.78/bin"
           environment: "production"
         env:
           USER: root
