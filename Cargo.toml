@@ -14,9 +14,9 @@ worker = "0.0.9"
 
 [lib]
 #edition = "2021"
-name = "build"
 path = "index.rs"
 crate-type = ["cdylib", "rlib"] # "rlib"
+name = "build"
 
 # https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
 
