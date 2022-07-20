@@ -54,6 +54,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             // compatibility flag can be provided in wrangler.toml to opt-in to older behavior:
             // https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url
             //stub.fetch_with_str("https://fake-host/").await
-            stub.fetch_with_str(req.url().host_str()).await
+            let url = web_sys::Url::new(&_req.url())?;//req.url().host_str()//https://developers.cloudflare.com/workers/tutorials/workers-kv-from-rust/#using-the-wrapper
+            stub.fetch_with_str(url.pathname).await
         })
 }
