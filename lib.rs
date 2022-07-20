@@ -7,7 +7,7 @@
 // only called once for the entire lifetime of the worker.
 
 use worker::*;
-//use worker::Url;web_sys
+use url::Url;web_sys
 use std::sync::atomic::{AtomicBool, Ordering};
 
 mod utils;
