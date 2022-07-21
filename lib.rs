@@ -1,11 +1,11 @@
-/*https://github.com/cloudflare/workers-rs/issues/94
-"you'll need to define the Durable Object in a separate module. ...this:"
-"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
-_
- "We're able to specify a start event that is called when the WASM is initialized before any
- requests. This is useful if you have some global state or setup code, like a logger. This is
-only called once for the entire lifetime of the worker."
-use wasm_bindgen::JsValue;*/
+//https://github.com/cloudflare/workers-rs/issues/94
+//"you'll need to define the Durable Object in a separate module. ...this:"
+//"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
+
+// We're able to specify a start event that is called when the WASM is initialized before any
+// requests. This is useful if you have some global state or setup code, like a logger. This is
+// only called once for the entire lifetime of the worker.
+//use wasm_bindgen::JsValue;
 use std::sync::atomic::{AtomicBool, Ordering};
 //use web_sys::Url; //web_sys
 use worker::{event, Env, Request, Response, Result, Router};
@@ -72,15 +72,20 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 //Url::new(&url.host_str()
                 Some(url) => match url.host_str() {
                     //Option
-                    Some(url) => stub.fetch_with_str(url).await,
-                    None => Response::ok(&format!("noope"))//eprintln!("noope"),
+                    Some(url) => match [ 
+                            "https://vau.money","https://jwi5k.csb.app","https://i7l8qe.csb.app"//,"https://mastercard-backbank.backbank.workers.dev"
+                        ].iter().any(|&s| s == url) {
+                            true => stub.fetch_with_str(url).await,
+                            false => Response::ok(&("no access from ".to_owned()+url))//&format!("no access from ")
+                        },
+                    None => Response::ok(&("cannot host_str() ".to_owned()+""))//eprintln!("noope"),
                     /*Some(url) => match stub.fetch_with_str(url).await {
                         Ok(res) => res,//Ok(res) => Response::ok(res),
                         Err(e) => Response::error("noope", 400), //Err(e) => eprintln!("noope"),
                     },
                     None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
                 },
-                None => Response::ok(&format!("noope")),
+                None => Response::ok(&("cannot req.url() ".to_owned()+"")),
             }
             //let url = Url::new(&_req.url())?;//req.url().host_str()//https://developers.cloudflare.com/workers/tutorials/workers-kv-from-rust/#using-the-wrapper
             //stub.fetch_with_str(&Url::new(&_req.url())?.pathname()).await
