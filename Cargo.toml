@@ -3,10 +3,10 @@ edition = "2021"
 name = "eglue" # "src/source/eglue"
 version = "0.1.0"    # obey semver
 authors = ["Nick Carducci <nmcarducci@gmail.com>"]
-# [package.metadata.wasm-pack.profile.release]
-# wasm-opt = false
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
 [dependencies]
-# wasm-bindgen = "0.2.81"
+wasm-bindgen = "0.2.81"
 # web-sys = "0.3.57"
 # workers-rs = "0.0.10"
 # worker-build = "0.0.4"
