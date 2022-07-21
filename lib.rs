@@ -11,6 +11,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use worker::{event, Env, Request, Response, Result, Router};
 
 mod utils;
+mod index;
 static GLOBAL_STATE: AtomicBool = AtomicBool::new(false);
 #[event(start)]
 pub fn start() {
@@ -52,7 +53,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get_async("/:id", |_req, ctx| async move {
             //get, async move
             let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
-            let stub = namespace.id_from_name("A")?.get_stub()?;
+            let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
             //https://stackoverflow.com/questions/70309403/updating-html-canvas-imagedata-using-rust-webassembly
             // when calling fetch to a Durable Object, a full URL must be used. Alternatively, a
             // compatibility flag can be provided in wrangler.toml to opt-in to older behavior:
@@ -60,6 +61,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //stub.fetch_with_str("https://fake-host/").await
             //let _req: Request = _req.dyn_into()?;
             //let url:Result<worker::Url> = _req.url();
+
+            //"when calling fetch to a Durable Object, a full URL must be used."
+            //https://github.com/cloudflare/workers-rs/blob/70461fa402a8e22959855cbd108d0404a8438285/worker-sandbox/src/lib.rs#L350
+            //"Unique IDs are unguessable, therefore they can be used in URL-based access control."
+            //https://developers.cloudflare.com/workers/runtime-apis/durable-objects/#accessing-a-durable-object-from-a-worker
+            //let id = ctx.newUniqueId();
             match _req.url().ok() {
                 //Result.ok to Option
                 //Url::new(&url.host_str()
