@@ -6,7 +6,7 @@ authors = ["Nick Carducci <nmcarducci@gmail.com>"]
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = false
 [dependencies]
-wasm-bindgen = "0.2.81"
+# wasm-bindgen = "0.2.81" ## wasm-bindgen is useable from worker = "^" 
 # web-sys = "0.3.57"
 # workers-rs = "0.0.10"
 # worker-build = "0.0.4"
