@@ -73,7 +73,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 Some(url) => match url.host_str() {
                     //Option
                     Some(url) => match [ 
-                            "https://vau.money","https://jwi5k.csb.app","https://i7l8qe.csb.app"//,"https://mastercard-backbank.backbank.workers.dev"
+                            "https://sausage.vau.money","https://vau.money","https://jwi5k.csb.app","https://i7l8qe.csb.app"//,"https://mastercard-backbank.backbank.workers.dev"
                         ].iter().any(|&s| s == url) {
                             true => stub.fetch_with_str(url).await,
                             false => Response::ok(&("no access from ".to_owned()+url))//&format!("no access from ")
