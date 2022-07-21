@@ -65,8 +65,11 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 //Url::new(&url.host_str()
                 Ok(url) => match url.host_str() {
                     //Option
-                    Some(url) => stub.fetch_with_str(url).await,
-                    None =>  format!("worker _req.url() match Ok host_str None"),
+                    Some(url) => match stub.fetch_with_str(url).await {
+                        Ok(res) => res,
+                        Err(e) => eprintln!("noope"),
+                    },
+                    None => eprintln!("worker _req.url() match Ok host_str None"),//format!()
                 },
                 Err(e) => eprintln!("noope"),
             }
