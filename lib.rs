@@ -1,11 +1,11 @@
-//https://github.com/cloudflare/workers-rs/issues/94
-//"you'll need to define the Durable Object in a separate module. ...this:"
-//"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
-
-// We're able to specify a start event that is called when the WASM is initialized before any
-// requests. This is useful if you have some global state or setup code, like a logger. This is
-// only called once for the entire lifetime of the worker.
-//use wasm_bindgen::JsValue;
+/*https://github.com/cloudflare/workers-rs/issues/94
+"you'll need to define the Durable Object in a separate module. ...this:"
+"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
+_
+ "We're able to specify a start event that is called when the WASM is initialized before any
+ requests. This is useful if you have some global state or setup code, like a logger. This is
+only called once for the entire lifetime of the worker."
+use wasm_bindgen::JsValue;*/
 use std::sync::atomic::{AtomicBool, Ordering};
 //use web_sys::Url; //web_sys
 use worker::{event, Env, Request, Response, Result, Router};
