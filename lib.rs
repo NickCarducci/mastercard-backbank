@@ -60,18 +60,20 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //stub.fetch_with_str("https://fake-host/").await
             //let _req: Request = _req.dyn_into()?;
             //let url:Result<worker::Url> = _req.url();
-            match _req.url() {
-                //Result
+            match _req.url().ok() {
+                //Result.ok to Option
                 //Url::new(&url.host_str()
-                Ok(url) => match url.host_str() {
+                Some(url) => match url.host_str() {
                     //Option
-                    Some(url) => match stub.fetch_with_str(url).await {
-                        Ok(res) => res,
-                        Err(e) => eprintln!("noope"),
+                    Some(url) => stub.fetch_with_str(url).await.ok(),
+                    None => eprintln!("noope"),
+                    /*Some(url) => match stub.fetch_with_str(url).await {
+                        Ok(res) => res,//Ok(res) => Response::ok(res),
+                        Err(e) => Response::error("noope", 400), //Err(e) => eprintln!("noope"),
                     },
-                    None => eprintln!("worker _req.url() match Ok host_str None"),//format!()
+                    None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
                 },
-                Err(e) => eprintln!("noope"),
+                None => eprintln!("noope"),
             }
             //let url = Url::new(&_req.url())?;//req.url().host_str()//https://developers.cloudflare.com/workers/tutorials/workers-kv-from-rust/#using-the-wrapper
             //stub.fetch_with_str(&Url::new(&_req.url())?.pathname()).await
