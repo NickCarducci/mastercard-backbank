@@ -66,14 +66,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 Some(url) => match url.host_str() {
                     //Option
                     Some(url) => stub.fetch_with_str(url).await.ok(),
-                    None => eprintln!("noope"),
+                    None => Response::ok(format!("noope")).ok()//eprintln!("noope"),
                     /*Some(url) => match stub.fetch_with_str(url).await {
                         Ok(res) => res,//Ok(res) => Response::ok(res),
                         Err(e) => Response::error("noope", 400), //Err(e) => eprintln!("noope"),
                     },
                     None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
                 },
-                None => eprintln!("noope"),
+                None => Response::ok(format!("noope")).ok(),
             }
             //let url = Url::new(&_req.url())?;//req.url().host_str()//https://developers.cloudflare.com/workers/tutorials/workers-kv-from-rust/#using-the-wrapper
             //stub.fetch_with_str(&Url::new(&_req.url())?.pathname()).await
