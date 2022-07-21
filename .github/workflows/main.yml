@@ -92,7 +92,7 @@ jobs:
           ## apiToken: ${{ secrets.CF_API_TOKEN }}
           #environment: "production"
           #publish: false
-          #preCommands: curl https://sh.rustup.rs -sSf | sh -s -- -y && source "$HOME/.cargo/env" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild # sudo chown -R $(id -un):$(id -gn) ${{ github.workspace }} # curl https://sh.rustup.rs -sSf | sh -s -- -y && $HOME/.cargo/bin/cargo install -q worker-build && worker-build --release
+          #preCommands: curl https://sh.rustup.rs -sSf | sh -s -- -y && source "$HOME/.cargo/env" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild && cargo install --git https://github.com/WebAssembly/binaryen/releases/download/version_90/binaryen-version_90-x86-linux.tar.gz # sudo chown -R $(id -un):$(id -gn) ${{ github.workspace }} # curl https://sh.rustup.rs -sSf | sh -s -- -y && $HOME/.cargo/bin/cargo install -q worker-build && worker-build --release
         #env:
           #USER: root
           
