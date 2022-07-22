@@ -67,7 +67,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         });
       return await noException(request, env);*/
     router
-        .get_async("/:id", |_req, ctx| async move {
+        .get("/:id", |_, _| {Response::ok(&("404 ".to_owned()+""))})
+        .get_async("/", |_req, ctx| async move {
             //get, async move
             let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
             let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
