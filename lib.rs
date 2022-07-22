@@ -49,6 +49,23 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
     let router = Router::with_data(info); // if no data is needed, pass `()` or any other valid data
 
+      /*if (request.method === "OPTIONS")
+        return new Response(`preflight response for POST`, {
+          status: 200,
+          message: `preflight response for POST`,
+          headers: {
+            "Access-Control-Allow-Headers": [
+              //"Access-Control-Allow-Origin",
+              "Access-Control-Allow-Methods",
+              "Content-Type"
+              //"Origin",
+              //"X-Requested-With",
+              //"Accept"
+            ],
+            "Access-Control-Allow-Methods": ["POST", "OPTIONS"]
+          }
+        });
+      return await noException(request, env);*/
     router
         .get_async("/:id", |_req, ctx| async move {
             //get, async move
