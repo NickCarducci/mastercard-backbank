@@ -8,7 +8,7 @@
 //use wasm_bindgen::JsValue;
 use std::sync::atomic::{AtomicBool, Ordering};
 //use web_sys::Url; //web_sys
-use worker::{event, Env, Request, Response, Result, Router};
+use worker::{/*Headers,RequestInit,*/event, Env, Request, Response, Result, Router};
 
 mod utils;
 mod index;
@@ -67,7 +67,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //"Unique IDs are unguessable, therefore they can be used in URL-based access control."
             //https://developers.cloudflare.com/workers/runtime-apis/durable-objects/#accessing-a-durable-object-from-a-worker
             //let id = ctx.newUniqueId();
-            match _req.url().ok() {
+            return match _req.url().ok() {
                 //Result.ok to Option
                 //Url::new(&url.host_str()
                 Some(url) => match url.host_str() {
@@ -86,7 +86,13 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
                 },
                 None => Response::ok(&("cannot req.url() ".to_owned()+"")),
-            }
+            };
+            /*let mut init = RequestInit::new();
+            init.with_method(worker::Method::Get);
+
+            let mut req_headers = Headers::new();
+            req_headers.set("x-foo", "waffles")?;
+           return Ok(out)?.with_headers(req_headers);*/
             //let url = Url::new(&_req.url())?;//req.url().host_str()//https://developers.cloudflare.com/workers/tutorials/workers-kv-from-rust/#using-the-wrapper
             //stub.fetch_with_str(&Url::new(&_req.url())?.pathname()).await
         })
