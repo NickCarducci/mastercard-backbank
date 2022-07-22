@@ -1,0 +1,4 @@
+[toolchain]
+profile = "default"
+channel = "nightly"
+# https://github.com/NickCarducci/eglue/blob/maintenance/rust-toolchain.toml
