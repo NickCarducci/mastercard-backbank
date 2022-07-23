@@ -67,8 +67,55 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         });
       return await noException(request, env);*/
     router
-        .get("/:id", |_, _| {Response::ok(&("404 ".to_owned()+""))})
-        .get_async("/", |_req, ctx| async move {
+        /*.options("/ *catchall", |_, ctx| {
+            Response::ok(ctx.param("catchall").unwrap())
+
+        })*/
+        .options("/:id", |_, _| {Response::error(&("option (where?) ".to_owned()+""),404)})
+        .options("/",|req, ctx|{
+            let headers = req.headers();//<&worker::Headers>
+            let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string();//<&str>
+            /*match*/
+            fn go (headers:&worker::Headers,cors_origin:&str) ->Result<Response> {
+                
+            //https://rodneylab.com/using-rust-cloudflare-workers/
+            //fn preflight_response(_,_)->Result<Response> {
+                let origin = match headers.get("Origin").unwrap() {
+                    Some(value) => value,
+                    None => return Response::empty(),
+                };
+                let mut headers = worker::Headers::new();
+                headers.set("Access-Control-Allow-Headers", "Content-Type")?;
+                headers.set("Access-Control-Allow-Methods", "POST")?;
+                //headers.set("Vary", "Origin")?;
+            
+                for origin_element in cors_origin.split(',') {
+                    if origin.eq(origin_element) {
+                        headers.set("Access-Control-Allow-Origin", &origin)?;
+                        break;
+                    }
+                }
+                headers.set("Access-Control-Max-Age", "86400")?;
+            Ok(Response::empty()
+                .unwrap()
+                .with_headers(headers)
+                .with_status(204))
+                
+                }/*{
+                    Some(re)=> Response::ok(&(re)),
+                    None => Response::ok(&("options fault ".to_owned()+""))
+                }*/
+            
+            return match [ 
+                "https://sausage.vau.money","https://vau.money","https://jwi5k.csb.app","https://i7l8qe.csb.app"//,"https://mastercard-backbank.backbank.workers.dev"
+            ].iter().any(|&s| s == cors_origin) {
+                true => go(headers,cors_origin),
+                false => Response::error(&("no access from ".to_owned()+cors_origin),403)//&format!("no access from ")
+            }
+        })
+        .get("/:id", |_, _| {Response::error(&("get (where?) ".to_owned()+""),404)})
+        .get("/", |_, _| {Response::error(&("get (method?) ".to_owned()+""),405)})
+        .post_async("/", |_req, ctx| async move {
             //get, async move
             let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
             let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
@@ -90,20 +137,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 //Url::new(&url.host_str()
                 Some(url) => match url.host_str() {
                     //Option
-                    Some(url) => match [ 
-                            "https://sausage.vau.money","https://vau.money","https://jwi5k.csb.app","https://i7l8qe.csb.app"//,"https://mastercard-backbank.backbank.workers.dev"
-                        ].iter().any(|&s| s == url) {
-                            true => stub.fetch_with_str(url).await,
-                            false => Response::ok(&("no access from ".to_owned()+url))//&format!("no access from ")
-                        },
-                    None => Response::ok(&("cannot host_str() ".to_owned()+""))//eprintln!("noope"),
+                    Some(url) =>  stub.fetch_with_str(url).await,
+                    None => Response::error(&("cannot host_str() ".to_owned()+""),505)//eprintln!("noope"),
                     /*Some(url) => match stub.fetch_with_str(url).await {
                         Ok(res) => res,//Ok(res) => Response::ok(res),
                         Err(e) => Response::error("noope", 400), //Err(e) => eprintln!("noope"),
                     },
                     None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
                 },
-                None => Response::ok(&("cannot req.url() ".to_owned()+"")),
+                None => Response::error(&("cannot req.url() ".to_owned()+""),505),
             };
             /*let mut init = RequestInit::new();
             init.with_method(worker::Method::Get);
