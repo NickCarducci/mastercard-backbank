@@ -67,27 +67,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let info = SomeSharedData {
         data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
-    /*match*/
-    fn options(req_headers: &worker::Headers, cors_origin: &str) -> Result<Response> {
-        //https://rodneylab.com/using-rust-cloudflare-workers/
-        //fn preflight_response(_,_)->Result<Response> {
-        let origin = origin_url(req_headers);
-        let mut res_headers = worker::Headers::new();
-        res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
-        res_headers.set("Access-Control-Allow-Methods", "POST")?;
-        //res_headers.set("Vary", "Origin")?;
-        for origin_element in cors_origin.split(',') {
-            if origin.eq(origin_element) {
-                res_headers.set("Access-Control-Allow-Origin", &origin)?;
-                break;
-            };
-        }
-        res_headers.set("Access-Control-Max-Age", "86400")?;
-        return Ok(Response::empty()
-            .unwrap()
-            .with_headers(res_headers)
-            .with_status(204));
-    } /*{
+    /*match
+    fn options(req_headers: &worker::Headers, cors_origin: &str) {
+        //
+    }*//* {
           Some(re)=> Response::ok(&(re)),
           None => Response::ok(&("options fault ".to_owned()+""))
       }*/
@@ -124,7 +107,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .options("/:id", |_, _| {
             return Response::error(&("option (where?) ".to_owned() + ""), 404);
         })
-        .options("/", |req, ctx| {
+        .options_async("/", |req, ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
             let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
 
@@ -137,7 +120,28 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             .iter()
             .any(|&s| s == cors_origin)
             {
-                true => options(req_headers, cors_origin),
+                true => {
+                    //options(req_headers, cors_origin)
+                    //https://rodneylab.com/using-rust-cloudflare-workers/
+                    //fn preflight_response(_,_)->Result<Response> {
+                    let origin = origin_url(req_headers);
+                    let mut res_headers = worker::Headers::new();
+                    res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
+                    res_headers.set("Access-Control-Allow-Methods", "POST")?;
+                    //res_headers.set("Vary", "Origin")?;
+                    for origin_element in cors_origin.split(',') {
+                        if origin.eq(origin_element) {
+                            res_headers.set("Access-Control-Allow-Origin", &origin)?;
+                            break;
+                        };
+                    }
+                    res_headers.set("Access-Control-Max-Age", "86400")?;
+                    let req_method = req.method();
+                    Response::ok(req_method).map(|resp| resp.with_headers(res_headers))
+                    /*.unwrap()
+                    .with_headers(res_headers)
+                    .with_status(204)*/
+                }
                 false => Response::error(&("no access from ".to_owned() + cors_origin), 403), //&format!("no access from ")
             };
         })
@@ -169,7 +173,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //Ok(Response::ok/error()?) to resolve
             /*Some(url) => */
             return Response::ok(match url.host_str() {
-                //Option
+                //Option resolution =>
                 Some(url) => {
                     //get, async move
                     let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
@@ -199,16 +203,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //let url = Url::new(&_req.url())?;//req.url().host_str()//https://developers.cloudflare.com/workers/tutorials/workers-kv-from-rust/#using-the-wrapper
             //stub.fetch_with_str(&Url::new(&_req.url())?.pathname()).await
         })
-        /*.or_else_any_method_async("/ *catchall", |_, ctx| async move {
-            console_log!(
-                "[or_else_any_method_async] caught: {}",
-                ctx.param("catchall").unwrap_or(&"?".to_string())
-            );
-            Fetch::Url("https://github.com/404".parse().unwrap())
-                .send()
-                .await
-                .map(|resp| resp.with_status(404))
-        })*///or_else_any_method_async(
         .or_else_any_method("/*catchall", |req, ctx| {
             /*console_log!(
                 "[or_else_any_method_async] caught: {}",
