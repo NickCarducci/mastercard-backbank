@@ -6,10 +6,14 @@
 // requests. This is useful if you have some global state or setup code, like a logger. This is
 // only called once for the entire lifetime of the worker.
 //use wasm_bindgen::JsValue;
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, Ordering/*,Result as Resultt*/};
 //use web_sys::Url; //web_sys
+//use wasm_bindgen::prelude::wasm_bindgen;
+//use wasm_bindgen_futures::ResponseInit; wrong
+//use web_sys::{ResponseInit,Response as webRes};
+
 use worker::{
-    /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result, Router,
+    /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result, Router
 };
 
 mod index;
@@ -39,6 +43,15 @@ async fn handle_async_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<
     ))
 }*/
 
+/*#[wasm_bindgen]
+pub fn handle(option:Option<String>) ->Resultt<webRes,worker::Error>  {
+    //let req: Request = req.dyn_into()?;
+    //let mut init = ResponseInit::new();
+    //init.status(200);
+    let option = option.as_deref();
+    return webRes::new_with_opt_str(option);//webRes::new_with_opt_str(None, &init);
+}*/
+
 struct SomeSharedData {
     data: u8, //regex::Regex,
 }
@@ -50,7 +63,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             Some(value) => value,
             None => "".to_owned() + "", //Response::empty(),
         };
-    };
+    }
     let info = SomeSharedData {
         data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
@@ -129,7 +142,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             };
         })
         .get("/:id", |_, _| {
-            return Response::error(&("get (where?) ".to_owned() + ""), 404);
+            return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
         })
         .get("/", |_, _| {
             return Response::error(&("get (method?) ".to_owned() + ""), 405);
@@ -148,16 +161,22 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //"Unique IDs are unguessable, therefore they can be used in URL-based access control."
             //https://developers.cloudflare.com/workers/runtime-apis/durable-objects/#accessing-a-durable-object-from-a-worker
             //let id = ctx.newUniqueId();
-            return match _req.url().ok() {
+            return Ok(match _req.url().ok() {
                 //Result.ok to Option
                 //Url::new(&url.host_str()
+                //Ok(.ok()?) to resolve
+                //Ok(Response::ok/error()?) to resolve
                 Some(url) => match url.host_str() {
                     //Option
                     Some(url) => {
                         //get, async move
                         let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
                         let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-                        return stub.fetch_with_str(url).await;
+                        stub.fetch_with_str(url).await?
+                        /*return match stub.fetch_with_str(url).await? {
+                            Some(account) => Response::ok(stub.fetch_with_str(url).await?),//Handle(account.onmessage()),
+                            None => Response::error("Not found", 404),
+                        };*/
                         //eprintln!("noope"),
                         /*Some(url) => match stub.fetch_with_str(url).await {
                             Ok(res) => res,//Ok(res) => Response::ok(res),
@@ -165,10 +184,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         },
                         None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
                     }
-                    None => Response::error(&("cannot host_str() ".to_owned() + ""), 505),
+                    None => Response::error(&("cannot host_str() ".to_owned() + ""),505)?,
                 },
-                None => Response::error(&("cannot req.url() ".to_owned() + ""), 505),
-            };
+                None => Response::error(&("cannot req.url() ".to_owned() + ""), 505)?,
+            });
             /*let mut init = RequestInit::new();
              init.with_method(worker::Method::Get);
 
@@ -226,3 +245,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
 //embargo all the holds! even the payment installments
 //keep advocating countersuits
+
+//Why does Trump want to kill unlicensed pharmacists?
+//Why do conservatives and liberals think access instead of dying is granted by subsidies?
+//true real mean would be square not a percentage net, I am not probability on the skew to recorder "deranged, son"
+
+//spectrum is bunch of dipoles, factions for irv
+//not disapproval of president partisans and non voters, never swing voters nor wall st.
