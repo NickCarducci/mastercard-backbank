@@ -9,7 +9,7 @@
 use std::sync::atomic::{AtomicBool, Ordering};
 //use web_sys::Url; //web_sys
 use worker::{
-    console_log, /*Headers,RequestInit,*/ event, Env, Fetch, Request, Response, Result, Router,
+    /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result, Router,
 };
 
 mod index;
@@ -45,21 +45,20 @@ struct SomeSharedData {
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
 #[event(fetch)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
-
-    fn originURL(req_headers: &worker::Headers) ->std::string::String {
+    fn origin_url(req_headers: &worker::Headers) -> std::string::String {
         return match req_headers.get("Origin").unwrap() {
             Some(value) => value,
-            None => "".to_owned()+""//Response::empty(),
-        }
+            None => "".to_owned() + "", //Response::empty(),
+        };
     };
     let info = SomeSharedData {
         data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
     /*match*/
-    fn go(req_headers: &worker::Headers, cors_origin: &str) -> Result<Response> {
+    fn options(req_headers: &worker::Headers, cors_origin: &str) -> Result<Response> {
         //https://rodneylab.com/using-rust-cloudflare-workers/
         //fn preflight_response(_,_)->Result<Response> {
-        let origin = originURL(req_headers);
+        let origin = origin_url(req_headers);
         let mut res_headers = worker::Headers::new();
         res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
         res_headers.set("Access-Control-Allow-Methods", "POST")?;
@@ -80,11 +79,11 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
           None => Response::ok(&("options fault ".to_owned()+""))
       }*/
     /*return*/
-    fn getIndexResponse() -> Result<Response> {
+    /*fn getIndexResponse() -> Result<Response> {
         let mut res_headers = worker::Headers::new();
             //headers.set("x-foo", "waffles")?;
         return Ok(Response::ok("waffles")?.with_headers(res_headers));
-    }
+    }*/
     Router::with_data(info) // if no data is needed, pass `()` or any other valid data
         /*if (request.method === "OPTIONS")
           return new Response(`preflight response for POST`, {
@@ -125,7 +124,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             .iter()
             .any(|&s| s == cors_origin)
             {
-                true => go(req_headers, cors_origin),
+                true => options(req_headers, cors_origin),
                 false => Response::error(&("no access from ".to_owned() + cors_origin), 403), //&format!("no access from ")
             };
         })
@@ -206,14 +205,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
             res_headers.set("Access-Control-Allow-Methods", "POST")?;
             //headers.set("Vary", "Origin")?;
-        let origin = originURL(req_headers);
+            let origin = origin_url(req_headers);
             for origin_element in cors_origin.split(',') {
                 if origin.eq(origin_element) {
                     res_headers.set("Access-Control-Allow-Origin", &origin)?;
                     break;
                 };
             }
-            return Ok(Response::ok("waffles")?.with_headers(res_headers))
+            return Ok(Response::ok("waffles")?.with_headers(res_headers));
         })
         .run(req, env)
         .await //;
@@ -222,3 +221,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //Is a contractor's profit not only producer surplus when they gain from payment installments in valuation?
 //Why are liberals and conservatives against the subjective use of hard drugs?
 //saver is a directive, not a vicarious materialization
+//leisure direct
+//Would an indirect mechanism not be payment installments in product? That can be as honest as ever exclusion honot be honest yourself real
+
+//embargo all the holds! even the payment installments
+//keep advocating countersuits
