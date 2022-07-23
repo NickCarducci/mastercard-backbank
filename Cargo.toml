@@ -1,5 +1,5 @@
 [package]
-edition = "2021"
+edition = "2018"
 name = "eglue" # "src/source/eglue"
 version = "0.1.0"    # obey semver
 authors = ["Nick Carducci <nmcarducci@gmail.com>"]
