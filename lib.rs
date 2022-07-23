@@ -8,7 +8,7 @@
 //use wasm_bindgen::JsValue;
 use std::sync::atomic::{AtomicBool, Ordering};
 //use web_sys::Url; //web_sys
-use worker::{/*Headers,RequestInit,*/event, Env, Request, Response, Result, Router};
+use worker::{/*Headers,RequestInit,*/event, Env, Request, Response, Result, Router,Fetch,console_log};
 
 mod utils;
 mod index;
@@ -71,6 +71,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             Response::ok(ctx.param("catchall").unwrap())
 
         })*/
+        .options("/*catchall", |_, ctx| {
+            Response::ok(ctx.param("catchall").unwrap())
+        })
         .options("/:id", |_, _| {Response::error(&("option (where?) ".to_owned()+""),404)})
         .options("/",|req, ctx|{
             let headers = req.headers();//<&worker::Headers>
@@ -166,6 +169,17 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 .await
                 .map(|resp| resp.with_status(404))
         })*/
+        .or_else_any_method_async("/*catchall", |_, ctx| async move {
+            console_log!(
+                "[or_else_any_method_async] caught: {}",
+                ctx.param("catchall").unwrap_or(&"?".to_string())
+            );
+
+            Fetch::Url("https://github.com/404".parse().unwrap())
+                .send()
+                .await
+                .map(|resp| resp.with_status(404))
+        })
         .run(req, env)
         .await
 }
