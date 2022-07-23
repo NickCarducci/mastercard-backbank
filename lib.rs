@@ -45,37 +45,46 @@ struct SomeSharedData {
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
 #[event(fetch)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
+
+    fn originURL(req_headers: &worker::Headers) ->std::string::String {
+        return match req_headers.get("Origin").unwrap() {
+            Some(value) => value,
+            None => "".to_owned()+""//Response::empty(),
+        }
+    };
     let info = SomeSharedData {
         data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
     /*match*/
-    fn go(headers: &worker::Headers, cors_origin: &str) -> Result<Response> {
+    fn go(req_headers: &worker::Headers, cors_origin: &str) -> Result<Response> {
         //https://rodneylab.com/using-rust-cloudflare-workers/
         //fn preflight_response(_,_)->Result<Response> {
-        let origin = match headers.get("Origin").unwrap() {
-            Some(value) => value,
-            None => return Response::empty(),
-        };
-        let mut headers = worker::Headers::new();
-        headers.set("Access-Control-Allow-Headers", "Content-Type")?;
-        headers.set("Access-Control-Allow-Methods", "POST")?;
-        //headers.set("Vary", "Origin")?;
+        let origin = originURL(req_headers);
+        let mut res_headers = worker::Headers::new();
+        res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
+        res_headers.set("Access-Control-Allow-Methods", "POST")?;
+        //res_headers.set("Vary", "Origin")?;
         for origin_element in cors_origin.split(',') {
             if origin.eq(origin_element) {
-                headers.set("Access-Control-Allow-Origin", &origin)?;
+                res_headers.set("Access-Control-Allow-Origin", &origin)?;
                 break;
             };
         }
-        headers.set("Access-Control-Max-Age", "86400")?;
+        res_headers.set("Access-Control-Max-Age", "86400")?;
         return Ok(Response::empty()
             .unwrap()
-            .with_headers(headers)
+            .with_headers(res_headers)
             .with_status(204));
     } /*{
           Some(re)=> Response::ok(&(re)),
           None => Response::ok(&("options fault ".to_owned()+""))
       }*/
     /*return*/
+    fn getIndexResponse() -> Result<Response> {
+        let mut res_headers = worker::Headers::new();
+            //headers.set("x-foo", "waffles")?;
+        return Ok(Response::ok("waffles")?.with_headers(res_headers));
+    }
     Router::with_data(info) // if no data is needed, pass `()` or any other valid data
         /*if (request.method === "OPTIONS")
           return new Response(`preflight response for POST`, {
@@ -104,7 +113,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             return Response::error(&("option (where?) ".to_owned() + ""), 404);
         })
         .options("/", |req, ctx| {
-            let headers = req.headers(); //<&worker::Headers>
+            let req_headers = req.headers(); //<&worker::Headers>
             let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
 
             return match [
@@ -116,7 +125,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             .iter()
             .any(|&s| s == cors_origin)
             {
-                true => go(headers, cors_origin),
+                true => go(req_headers, cors_origin),
                 false => Response::error(&("no access from ".to_owned() + cors_origin), 403), //&format!("no access from ")
             };
         })
@@ -179,20 +188,37 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 .send()
                 .await
                 .map(|resp| resp.with_status(404))
-        })*/
-        .or_else_any_method_async("/*catchall", |_, ctx| async move {
-            console_log!(
+        })*///or_else_any_method_async(
+        .or_else_any_method("/*catchall", |req, ctx| {
+            /*console_log!(
                 "[or_else_any_method_async] caught: {}",
                 ctx.param("catchall").unwrap_or(&"?".to_string())
-            );
+            );*/
+            /*Fetch::Url("https://github.com/404".parse().unwrap())
+            .send()
+            .await
+            .map(|resp| resp.with_status(404)) */
 
-            return Fetch::Url("https://github.com/404".parse().unwrap())
-                .send()
-                .await
-                .map(|resp| resp.with_status(404));
+            let req_headers = req.headers();
+            let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
+
+            let mut res_headers = worker::Headers::new();
+            res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
+            res_headers.set("Access-Control-Allow-Methods", "POST")?;
+            //headers.set("Vary", "Origin")?;
+        let origin = originURL(req_headers);
+            for origin_element in cors_origin.split(',') {
+                if origin.eq(origin_element) {
+                    res_headers.set("Access-Control-Allow-Origin", &origin)?;
+                    break;
+                };
+            }
+            return Ok(Response::ok("waffles")?.with_headers(res_headers))
         })
         .run(req, env)
-        .await//;
+        .await //;
 }
 
 //Is a contractor's profit not only producer surplus when they gain from payment installments in valuation?
+//Why are liberals and conservatives against the subjective use of hard drugs?
+//saver is a directive, not a vicarious materialization
