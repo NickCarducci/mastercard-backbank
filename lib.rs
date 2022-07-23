@@ -6,14 +6,14 @@
 // requests. This is useful if you have some global state or setup code, like a logger. This is
 // only called once for the entire lifetime of the worker.
 //use wasm_bindgen::JsValue;
-use std::sync::atomic::{AtomicBool, Ordering/*,Result as Resultt*/};
+use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
 //use web_sys::Url; //web_sys
 //use wasm_bindgen::prelude::wasm_bindgen;
 //use wasm_bindgen_futures::ResponseInit; wrong
 //use web_sys::{ResponseInit,Response as webRes};
 
 use worker::{
-    /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result, Router
+    /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result, Router,
 };
 
 mod index;
@@ -161,33 +161,35 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //"Unique IDs are unguessable, therefore they can be used in URL-based access control."
             //https://developers.cloudflare.com/workers/runtime-apis/durable-objects/#accessing-a-durable-object-from-a-worker
             //let id = ctx.newUniqueId();
-            return Ok(match _req.url().ok() {
-                //Result.ok to Option
-                //Url::new(&url.host_str()
-                //Ok(.ok()?) to resolve
-                //Ok(Response::ok/error()?) to resolve
-                Some(url) => match url.host_str() {
-                    //Option
-                    Some(url) => {
-                        //get, async move
-                        let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
-                        let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-                        stub.fetch_with_str(url).await?
-                        /*return match stub.fetch_with_str(url).await? {
-                            Some(account) => Response::ok(stub.fetch_with_str(url).await?),//Handle(account.onmessage()),
-                            None => Response::error("Not found", 404),
-                        };*/
-                        //eprintln!("noope"),
-                        /*Some(url) => match stub.fetch_with_str(url).await {
-                            Ok(res) => res,//Ok(res) => Response::ok(res),
-                            Err(e) => Response::error("noope", 400), //Err(e) => eprintln!("noope"),
-                        },
-                        None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
-                    }
-                    None => Response::error(&("cannot host_str() ".to_owned() + ""),505)?,
-                },
-                None => Response::error(&("cannot req.url() ".to_owned() + ""), 505)?,
+            let url: worker::Url = _req.url()?;
+            //return Ok(match _req.url().ok() {
+            //Result.ok to Option
+            //Url::new(&url.host_str()
+            //Ok(.ok()?) to resolve
+            //Ok(Response::ok/error()?) to resolve
+            /*Some(url) => */
+            return Response::ok(match url.host_str() {
+                //Option
+                Some(url) => {
+                    //get, async move
+                    let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
+                    let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
+                    return stub.fetch_with_str(url).await;
+                    /*return match stub.fetch_with_str(url).await? {
+                        Some(account) => Response::ok(stub.fetch_with_str(url).await?),//Handle(account.onmessage()),
+                        None => Response::error("Not found", 404),
+                    };*/
+                    //eprintln!("noope"),
+                    /*Some(url) => match stub.fetch_with_str(url).await {
+                        Ok(res) => res,//Ok(res) => Response::ok(res),
+                        Err(e) => Response::error("noope", 400), //Err(e) => eprintln!("noope"),
+                    },
+                    None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
+                }
+                None => "cannot host_str() ".to_owned() + "",
             });
+            /*None => Response::error(&("cannot req.url() ".to_owned() + ""), 505)?,
+            });*/
             /*let mut init = RequestInit::new();
              init.with_method(worker::Method::Get);
 
