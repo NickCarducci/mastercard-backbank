@@ -80,7 +80,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //headers.set("x-foo", "waffles")?;
         return Ok(Response::ok("waffles")?.with_headers(res_headers));
     }*/
-    Router::with_data(info) // if no data is needed, pass `()` or any other valid data
+    let result = Router::with_data(info) // if no data is needed, pass `()` or any other valid data
         /*if (request.method === "OPTIONS")
           return new Response(`preflight response for POST`, {
             status: 200,
@@ -102,7 +102,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
               Response::ok(ctx.param("catchall").unwrap())
           })*/
         .options("/*catchall", |_, ctx| {
-            return Response::ok(ctx.param("catchall").unwrap());
+            Response::ok(ctx.param("catchall").unwrap())
         })
         .options("/:id", |_, _| {
             return Response::error(&("option (where?) ".to_owned() + ""), 404);
@@ -137,7 +137,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     }
                     res_headers.set("Access-Control-Max-Age", "86400")?;
                     let req_method = req.method();
-                    Response::ok(req_method).map(|resp| resp.with_headers(res_headers))
+                    return Response::ok(req_method).map(|resp| resp.with_headers(res_headers));
                     /*.unwrap()
                     .with_headers(res_headers)
                     .with_status(204)*/
@@ -146,7 +146,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             };
         })
         .get("/:id", |_, _| {
-            return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
+            return Response::error(&("get (where?) ".to_owned() + ""), 404);
+            //return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
         })
         .get("/", |_, _| {
             return Response::error(&("get (method?) ".to_owned() + ""), 405);
@@ -227,10 +228,13 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     break;
                 };
             }
-            return Ok(Response::ok("waffles")?.with_headers(res_headers));
+            //return Response::ok("waffles")?.with_headers(res_headers);
+            return Response::ok("waffles").map(|resp| resp.with_headers(res_headers));
         })
         .run(req, env)
-        .await //;
+        .await; //;
+    return result;
+    //return Response::error("key missing", 400);
 }
 
 //Is a contractor's profit not only producer surplus when they gain from payment installments in valuation?
@@ -248,3 +252,5 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
 //spectrum is bunch of dipoles, factions for irv
 //not disapproval of president partisans and non voters, never swing voters nor wall st.
+
+//If an insignificant amount of people are without health insurance, is medicare for all to declare premium as fraud and payment installment surplus?
