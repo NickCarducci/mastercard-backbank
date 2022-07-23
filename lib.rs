@@ -75,7 +75,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
           Some(re)=> Response::ok(&(re)),
           None => Response::ok(&("options fault ".to_owned()+""))
       }*/
-    return Router::with_data(info) // if no data is needed, pass `()` or any other valid data
+    /*return*/
+    Router::with_data(info) // if no data is needed, pass `()` or any other valid data
         /*if (request.method === "OPTIONS")
           return new Response(`preflight response for POST`, {
             status: 200,
@@ -191,5 +192,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 .map(|resp| resp.with_status(404));
         })
         .run(req, env)
-        .await;
+        .await//;
 }
+
+//Is a contractor's profit not only producer surplus when they gain from payment installments in valuation?
