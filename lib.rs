@@ -53,7 +53,7 @@ pub fn handle(option:Option<String>) ->Resultt<webRes,worker::Error>  {
 }*/
 
 struct SomeSharedData {
-    data: u8, //regex::Regex,
+    //data: u8, //regex::Regex,
 }
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
 #[event(fetch)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
@@ -65,7 +65,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         };
     }
     let info = SomeSharedData {
-        data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
+        //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
     /*match
     fn options(req_headers: &worker::Headers, cors_origin: &str) {
@@ -254,3 +254,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //not disapproval of president partisans and non voters, never swing voters nor wall st.
 
 //If an insignificant amount of people are without health insurance, is medicare for all to declare premium as fraud and payment installment surplus?
+
+//contempt constitutional 
+// prevent administrative abuse fine for successful appeal.
+
+//embargo payment installments btw!
+//Advocates are in contempt with a countersuit or unconstitutional state law or congressional law other than name(riots & invasion)
+
+//audit phosph nucleic, amino
+//I want immunofluorecent amino 
