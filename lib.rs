@@ -80,7 +80,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //headers.set("x-foo", "waffles")?;
         return Ok(Response::ok("waffles")?.with_headers(res_headers));
     }*/
-    let result = Router::with_data(info) // if no data is needed, pass `()` or any other valid data
+    let _result = Router::with_data(info) // if no data is needed, pass `()` or any other valid data
         /*if (request.method === "OPTIONS")
           return new Response(`preflight response for POST`, {
             status: 200,
@@ -174,12 +174,34 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //Ok(Response::ok/error()?) to resolve
             /*Some(url) => */
             return Response::ok(match url.host_str() {
+                None => "cannot host_str() ".to_owned() + "",
                 //Option resolution =>
                 Some(url) => {
                     //get, async move
-                    let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
-                    let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-                    return stub.fetch_with_str(url).await;
+                    let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
+                    return match binding.is_err() {
+                        false => Response::error("none", 405),
+                        true => {
+                            let namespace = binding?;
+                            let _stub =
+                                namespace.id_from_name("DurableObjectExample")?.get_stub()?;
+
+                            /*let mut opts = RequestInit::new();
+                            opts.method("GET");
+                            opts.mode(RequestMode::Cors);
+
+                            let url =
+                                format!("https://api.github.com/repos/{}/branches/master", repo);
+
+                            let request = Request::new_with_str_and_init(&url, &opts)?;
+
+                            request
+                                .headers()
+                                .set("Accept", "application/vnd.github.v3+json")?;*/
+                            return Response::ok(url);
+                            //return stub.fetch_with_str(&url).await;
+                        }
+                    };
                     /*return match stub.fetch_with_str(url).await? {
                         Some(account) => Response::ok(stub.fetch_with_str(url).await?),//Handle(account.onmessage()),
                         None => Response::error("Not found", 404),
@@ -191,7 +213,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     },
                     None => eprintln!("worker _req.url() match Ok host_str None"), //format!()*/
                 }
-                None => "cannot host_str() ".to_owned() + "",
             });
             /*None => Response::error(&("cannot req.url() ".to_owned() + ""), 505)?,
             });*/
@@ -233,7 +254,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         })
         .run(req, env)
         .await; //;
-    return result;
+    //return result;
+    return Response::ok("");
     //return Response::error("key missing", 400);
 }
 
@@ -255,24 +277,24 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
 //If an insignificant amount of people are without health insurance, is medicare for all to declare premium as fraud and payment installment surplus?
 
-//contempt constitutional 
+//contempt constitutional
 // prevent administrative abuse fine for successful appeal.
 
 //embargo payment installments btw!
 //Advocates are in contempt with a countersuit or unconstitutional state law or congressional law other than name(riots & invasion)
 
 //audit phosph nucleic, amino
-//I want immunofluorecent amino 
+//I want immunofluorecent amino
 
-//maybe foreign criminal can claim asylum for sharia law, 
+//maybe foreign criminal can claim asylum for sharia law,
 //only can kill conscripted citizen. should we take them in as asylum?
 //trump wants to death chair illegal pharmacy
 //bob "right-to-try" menendez
-//payment installment ANWR, UT/NM/RYm aooalachian
+//payment installment ANWR, UT/NM/RY appalachian
 
 //deposit with donee beneficiary is iffy (breakup fee)
 
-//irrelevant to the case finding is malfeasant and administrative abude for countersuit without 
+//irrelevant to the case finding is malfeasant and administrative abude for countersuit without
 //punition for abuse and contempt of justice. but for cop law!
 
 //is his company only woth that much because he owns it? just selll it, fraud
@@ -281,3 +303,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //shuffle non voters irv factions
 
 //wild
+
+//individuals square not round %
+//advocate collective-action referrenda
+//rolling case policy
+//advocates against false advertisement and countersuables
+
+//political prisoner diminunitive/unarmed gastroneuro
+//Is a legal threat an assault?
+//Is it 'best practice' to label assaults as schizophrenic?
+//Stand up to impropriety
+
+//eukaryote nucleic amino immunofluorecent
