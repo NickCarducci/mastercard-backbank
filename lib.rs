@@ -6,7 +6,7 @@
 // requests. This is useful if you have some global state or setup code, like a logger. This is
 // only called once for the entire lifetime of the worker.
 //use wasm_bindgen::JsValue;
-use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
+//use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
 //use web_sys::Url; //web_sys
 //use wasm_bindgen::prelude::wasm_bindgen;
 //use wasm_bindgen_futures::ResponseInit; wrong
@@ -17,14 +17,14 @@ use worker::{
 };
 
 mod index;
-mod utils;
+/*mod utils;
 static GLOBAL_STATE: AtomicBool = AtomicBool::new(false);
 #[event(start)]
 pub fn start() {
     utils::set_panic_hook();
     // Change some global state so we know that we ran our setup function.
     GLOBAL_STATE.store(true, Ordering::SeqCst);
-}
+}*/
 
 /*fn handle_a_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<Response> {
     Response::ok(&format!(
@@ -268,4 +268,16 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //only can kill conscripted citizen. should we take them in as asylum?
 //trump wants to death chair illegal pharmacy
 //bob "right-to-try" menendez
-//payment installment ANWR, UT/NM/RYm appalachian
+//payment installment ANWR, UT/NM/RYm aooalachian
+
+//deposit with donee beneficiary is iffy (breakup fee)
+
+//irrelevant to the case finding is malfeasant and administrative abude for countersuit without 
+//punition for abuse and contempt of justice. but for cop law!
+
+//is his company only woth that much because he owns it? just selll it, fraud
+//blind auction $100k/subsidiary
+
+//shuffle non voters irv factions
+
+//wild
