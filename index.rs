@@ -31,6 +31,7 @@ impl DurableObject for DurableObjectExample {
       self.initialized = true;
       //self.count = self.state.storage().get("count").await.unwrap_or(0);
     }
+    let _data = &self.data;
     //self.count += 10;
     //self.state.storage().put("count", self.count).await?;
     //if (!_req.url)
@@ -42,8 +43,8 @@ impl DurableObject for DurableObjectExample {
     let _env = &self.env;
     let lock: std::path::PathBuf = pathify("./exec.c");
     let durr: Vec<u8> = cc::Build::new().file(lock).expand();
-    self.data = String::from_utf8(durr).unwrap();
+    return /*self.data = */Response::ok(String::from_utf8(durr).unwrap());
     //self.data = data::to_string();//https://doc.rust-lang.org/std/macro.format.html
-    return Response::ok(&format!("{} data.", self.data));
+    //return Response::ok(&format!("{} data.", self.data));
   }
 }
