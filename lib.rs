@@ -6,7 +6,7 @@
 // requests. This is useful if you have some global state or setup code, like a logger. This is
 // only called once for the entire lifetime of the worker.
 //use wasm_bindgen::JsValue;
-//use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
+use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
 //use web_sys::Url; //web_sys
 //use wasm_bindgen::prelude::wasm_bindgen;
 //use wasm_bindgen_futures::ResponseInit; wrong
