@@ -35,9 +35,9 @@ bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObject
 [env.preview.durable_objects]
 bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
 
-# [[migrations]]
-# tag = "v1" # Should be unique for each entry
-# new_classes = ["DurableObjectExample"]
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["DurableObjectExample"]
 
 # [[migrations]]
 # tag = "v2"
