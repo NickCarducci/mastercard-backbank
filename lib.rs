@@ -263,3 +263,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
 //audit phosph nucleic, amino
 //I want immunofluorecent amino 
+
+//maybe foreign criminal can claim asylum for sharia law, 
+//only can kill conscripted citizen. should we take them in as asylum?
+//trump wants to death chair illegal pharmacy
+//bob "right-to-try" menendez
+//payment installment ANWR, UT/NM/RYm appalachian
