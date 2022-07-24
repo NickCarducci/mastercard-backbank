@@ -23,7 +23,7 @@ features = ["Response","Request", "Url" ]
 #edition = "2021"
 path = "lib.rs"
 crate-type = ["cdylib", "rlib"] # "rlib"
-name = "build"
+# name = "build"
 
 # https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
 
