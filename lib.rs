@@ -17,14 +17,14 @@ use worker::{
 };
 
 mod index;
-/*mod utils;
+mod utils;
 static GLOBAL_STATE: AtomicBool = AtomicBool::new(false);
 #[event(start)]
 pub fn start() {
     utils::set_panic_hook();
     // Change some global state so we know that we ran our setup function.
     GLOBAL_STATE.store(true, Ordering::SeqCst);
-}*/
+}
 
 /*fn handle_a_request<D>(req: Request, _ctx: RouteContext<D>) -> Result<Response> {
     Response::ok(&format!(
