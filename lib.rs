@@ -57,7 +57,7 @@ struct SomeSharedData {
 }
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
 #[event(fetch,respond_with_errors)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
-pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
+pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Response {
     /*fn origin_url(req_headers: &worker::Headers) -> std::string::String {
         return match req_headers.get("Origin").unwrap() {
             Some(value) => value,
@@ -67,10 +67,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let info = SomeSharedData {
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
-    //let _result =
-    Router::with_data(info) 
+    let router = Router::with_data(info) 
+   router
         .get("/", |_, _| {
-            Response::error(&("get (method?) ".to_owned() + ""), 405)
+           return Response::error(&("get (method?) ".to_owned() + ""), 405);
         });
         /*.options("/ *catchall", |_, ctx| {
             Response::ok(ctx.param("catchall").unwrap())
