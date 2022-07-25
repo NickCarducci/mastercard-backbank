@@ -141,7 +141,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
                             request
                                 .headers()
-                                .set("Accept", "application/vnd.github.v3+json")?;*/
+                                .set("Accept", "application/vnd.github.v3+json")?;* /
                             return Response::ok(url);
                             //return stub.fetch_with_str(&url).await;
                         }
@@ -168,7 +168,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             return Response::ok("waffles").map(|resp| resp.with_headers(res_headers));
         })
         .run(req, env)
-        .await; //;
+        .await; */
     //return result;
     return Response::ok("");
     //return Response::error("key missing", 400);
