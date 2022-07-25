@@ -63,12 +63,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             Some(value) => value,
             None => "".to_owned() + "", //Response::empty(),
         };
-    }
+    }*/
     let info = SomeSharedData {
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
     let _result = Router::with_data(info) 
-        .options("/ *catchall", |_, ctx| {
+        .get("/", |_, _| {
+            return Response::error(&("get (method?) ".to_owned() + ""), 405);
+        });
+        /*.options("/ *catchall", |_, ctx| {
             Response::ok(ctx.param("catchall").unwrap())
         })
         .options("/:id", |_, _| {
@@ -170,7 +173,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .run(req, env)
         .await; */
     //return result;
-    return Response::ok("");
+    //return Response::ok("");
     //return Response::error("key missing", 400);
 }
 
