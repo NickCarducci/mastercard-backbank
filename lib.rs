@@ -68,9 +68,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
     let router = Router::with_data(info);
-    router
+   router
         .get("/", |_, _| {
-           return Response::error(&("get (method?) ".to_owned() + ""), 405);
+          Response::error(&("get (method?) ".to_owned() + ""), 405)
         });
         /*.options("/ *catchall", |_, ctx| {
             Response::ok(ctx.param("catchall").unwrap())
