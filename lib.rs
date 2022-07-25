@@ -67,7 +67,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let info = SomeSharedData {
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
-    let _result = Router::with_data(info) 
+    //let _result =
+    return Router::with_data(info) 
         .get("/", |_, _| {
             return Response::error(&("get (method?) ".to_owned() + ""), 405);
         });
@@ -80,7 +81,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .options_async("/", |req, ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
             let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
-
             return match [
                 "https://sausage.vau.money",
                 "https://vau.money",
@@ -132,16 +132,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                             let namespace = binding?;
                             let _stub =
                                 namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-
                             / *let mut opts = RequestInit::new();
                             opts.method("GET");
                             opts.mode(RequestMode::Cors);
-
                             let url =
                                 format!("https://api.github.com/repos/{}/branches/master", repo);
-
                             let request = Request::new_with_str_and_init(&url, &opts)?;
-
                             request
                                 .headers()
                                 .set("Accept", "application/vnd.github.v3+json")?;* /
@@ -155,7 +151,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .or_else_any_method("/ *catchall", |req, ctx| {
             let req_headers = req.headers();
             let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
-
             let mut res_headers = worker::Headers::new();
             res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
             res_headers.set("Access-Control-Allow-Methods", "POST")?;
