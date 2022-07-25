@@ -67,7 +67,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Response {
     let info = SomeSharedData {
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
-    let router = Router::with_data(info) 
+    let router = Router::with_data(info);
    router
         .get("/", |_, _| {
            return Response::error(&("get (method?) ".to_owned() + ""), 405);
