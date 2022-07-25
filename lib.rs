@@ -68,10 +68,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
     //let _result =
-    return Ok(Router::with_data(info) 
+    Router::with_data(info) 
         .get("/", |_, _| {
-            return Response::error(&("get (method?) ".to_owned() + ""), 405);
-        }));
+            return Ok(Response::error(&("get (method?) ".to_owned() + ""), 405));
+        });
         /*.options("/ *catchall", |_, ctx| {
             Response::ok(ctx.param("catchall").unwrap())
         })
