@@ -70,7 +70,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     //let _result =
     Router::with_data(info) 
         .get("/", |_, _| {
-            return Ok(Response::error(&("get (method?) ".to_owned() + ""), 405));
+            Ok(Response::error(&("get (method?) ".to_owned() + ""), 405));
         });
         /*.options("/ *catchall", |_, ctx| {
             Response::ok(ctx.param("catchall").unwrap())
