@@ -68,7 +68,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
     let _result = Router::with_data(info) 
-        .options("/*catchall", |_, ctx| {
+        .options("/ *catchall", |_, ctx| {
             Response::ok(ctx.param("catchall").unwrap())
         })
         .options("/:id", |_, _| {
@@ -130,7 +130,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                             let _stub =
                                 namespace.id_from_name("DurableObjectExample")?.get_stub()?;
 
-                            /*let mut opts = RequestInit::new();
+                            / *let mut opts = RequestInit::new();
                             opts.method("GET");
                             opts.mode(RequestMode::Cors);
 
@@ -149,7 +149,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 }
             });
         })
-        .or_else_any_method("/*catchall", |req, ctx| {
+        .or_else_any_method("/ *catchall", |req, ctx| {
             let req_headers = req.headers();
             let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
 
