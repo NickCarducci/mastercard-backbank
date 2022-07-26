@@ -56,26 +56,26 @@ struct SomeSharedData {
     //data: u8, //regex::Regex,
 }
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
-#[event(fetch,respond_with_errors)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
+#[event(fetch, respond_with_errors)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
-    /*fn origin_url(req_headers: &worker::Headers) -> std::string::String {
+    fn origin_url(req_headers: &worker::Headers) -> std::string::String {
         return match req_headers.get("Origin").unwrap() {
             Some(value) => value,
             None => "".to_owned() + "", //Response::empty(),
         };
-    }*/
+    }
     let info = SomeSharedData {
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
     let router = Router::with_data(info);
-   router
+    router
         .get("/", |_, _| {
-          Response::error(&("get (method?) ".to_owned() + ""), 405)
+            Response::error(&("get (method?) ".to_owned() + ""), 405)
         })
         .options_async("/", |req, ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
             let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
-            match [
+            return match [
                 "https://sausage.vau.money",
                 "https://vau.money",
                 "https://jwi5k.csb.app",
@@ -101,23 +101,25 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     }
                     res_headers.set("Access-Control-Max-Age", "86400")?;
                     let req_method = req.method();
-                    Response::ok(req_method).map(|resp| resp.with_headers(res_headers));
+                    return Response::ok(req_method).map(|resp| resp.with_headers(res_headers));
                 }
                 false => Response::error(&("no access from ".to_owned() + cors_origin), 403), //&format!("no access from ")
             };
         })
         .post_async("/", |_req, ctx| async move {
-            match url.host_str() {
+            //let url = Url::new(&_req.url()?)?;
+            return match _req.url()?.host_str() {
                 None => Response::ok("cannot host_str() ".to_owned() + ""),
                 //Option resolution =>
                 Some(url) => {
                     //get, async move
                     let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
-                    match binding.is_err() {
+                    return match binding.is_err() {
                         false => Response::error("none", 405),
                         true => {
                             let namespace = binding?;
-                            let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
+                            let stub =
+                                namespace.id_from_name("DurableObjectExample")?.get_stub()?;
                             /*let mut opts = RequestInit::new();
                             opts.method("GET");
                             opts.mode(RequestMode::Cors);
@@ -132,42 +134,42 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         }
                     };
                 }
-            });
+            };
         })
         .run(req, env)
         .await
-        /*.options("/ *catchall", |_, ctx| {
-            Response::ok(ctx.param("catchall").unwrap())
-        })
-        .options("/:id", |_, _| {
-            return Response::error(&("option (where?) ".to_owned() + ""), 404);
-        })
-        .get("/:id", |_, _| {
-            return Response::error(&("get (where?) ".to_owned() + ""), 404);
-            //return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
-        })
-        .get("/", |_, _| {
-            return Response::error(&("get (method?) ".to_owned() + ""), 405);
-        })
-        .or_else_any_method("/ *catchall", |req, ctx| {
-            let req_headers = req.headers();
-            let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
-            let mut res_headers = worker::Headers::new();
-            res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
-            res_headers.set("Access-Control-Allow-Methods", "POST")?;
-            //headers.set("Vary", "Origin")?;
-            let origin = origin_url(req_headers);
-            for origin_element in cors_origin.split(',') {
-                if origin.eq(origin_element) {
-                    res_headers.set("Access-Control-Allow-Origin", &origin)?;
-                    break;
-                };
-            }
-            //return Response::ok("waffles")?.with_headers(res_headers);
-            return Response::ok("waffles").map(|resp| resp.with_headers(res_headers));
-        })
-        .run(req, env)
-        .await; */
+    /*.options("/ *catchall", |_, ctx| {
+        Response::ok(ctx.param("catchall").unwrap())
+    })
+    .options("/:id", |_, _| {
+        return Response::error(&("option (where?) ".to_owned() + ""), 404);
+    })
+    .get("/:id", |_, _| {
+        return Response::error(&("get (where?) ".to_owned() + ""), 404);
+        //return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
+    })
+    .get("/", |_, _| {
+        return Response::error(&("get (method?) ".to_owned() + ""), 405);
+    })
+    .or_else_any_method("/ *catchall", |req, ctx| {
+        let req_headers = req.headers();
+        let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
+        let mut res_headers = worker::Headers::new();
+        res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
+        res_headers.set("Access-Control-Allow-Methods", "POST")?;
+        //headers.set("Vary", "Origin")?;
+        let origin = origin_url(req_headers);
+        for origin_element in cors_origin.split(',') {
+            if origin.eq(origin_element) {
+                res_headers.set("Access-Control-Allow-Origin", &origin)?;
+                break;
+            };
+        }
+        //return Response::ok("waffles")?.with_headers(res_headers);
+        return Response::ok("waffles").map(|resp| resp.with_headers(res_headers));
+    })
+    .run(req, env)
+    .await; */
     //return result;
     //return Response::ok("");
     //return Response::error("key missing", 400);
@@ -229,3 +231,39 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //Stand up to impropriety
 
 //eukaryote nucleic amino immunofluorecent
+
+//Does public charity or private foundation not merely devalue claims on business inventory?
+
+//covenance... "'whatever comeas naturally'"
+
+//would a customer spoofable precinct police state borrow
+//simple reproducable (^) feature seeking
+
+//trying to slow roll Phillips==Demand/(Misery) Mom borrower (everything is paid for you just need to take credit and hunt)
+//gem inventory
+
+//blessings substitutive; bond not the cause of value for utility
+
+//do the richer get richer and the poor poorer not because of the phillips curve hours inflating by producer surplus payment installment value for utility?
+
+//lower than grandma for hour and price (Phillips/Misery)
+
+//motivated by something not in the world does not require ingredient nor apochrophical connection.
+//efficient labor market... a fundamental misery is not a study phillips
+//efficient labor market... hours should deflate - complementary
+
+//liberty riot
+//work harder to deflate by substitutive supply complementary demand
+//Make inelasticity natural again, hours make deflation again, substitutive market again. Misery/Phillips tech
+// canvass - NJ transit station assault (donate for results of poll of wise and new)
+//count loss of structures in GDP
+
+//borrowing not in line with customer spoofable geohash/month
+//$15k/customer/yr fits with kyc
+
+//can I talk on strategic retreats away from family
+//partisans nor voters
+
+//permission granted!
+
+//substitutive fixed costs is complementary to demand
