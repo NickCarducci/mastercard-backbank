@@ -70,7 +70,11 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let router = Router::with_data(info);
     router
         .get("/", |_, _| {
-            Response::error(&("get (method?) ".to_owned() + ""), 405)
+            let mut res_headers = worker::Headers::new();
+            res_headers.set("Access-Control-Allow-Origin", "*")?;
+            res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
+            res_headers.set("Access-Control-Allow-Methods", "POST")?;
+            Response::error(&("get (method?) ".to_owned() + ""), 405).map(|resp| resp.with_headers(res_headers))
         })
         .options_async("/", |req, ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
@@ -90,6 +94,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     //fn preflight_response(_,_)->Result<Response> {
                     let origin = origin_url(req_headers);
                     let mut res_headers = worker::Headers::new();
+                    res_headers.set("Access-Control-Allow-Origin", "*")?;
                     res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
                     res_headers.set("Access-Control-Allow-Methods", "POST")?;
                     //res_headers.set("Vary", "Origin")?;
