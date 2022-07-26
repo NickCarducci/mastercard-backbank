@@ -128,7 +128,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
         })
-        .post_async("/", |req, ctx| async move {
+        .post_async("/", |req, _ctx| async move {
             //let url = Url::new(&_req.url()?)?;
             //let url =  req.url()?;
             //let mut res_headers = worker::Headers::new();
@@ -136,10 +136,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             return match req.url()?.host_str() {
                 None => Response::error("cannot _req.url()?.host_str()".to_owned() + "", 505),
                 //Option(resolution) => {explicit return; resolves in closure}
-                Some(url) => {
-                    //Response::ok("url".to_owned() + url) //.map(|resp| resp.with_headers(res_headers));;
+                Some(url) => 
+                    Response::ok("url".to_owned() + url) //.map(|resp| resp.with_headers(res_headers));;
                     //get, async move
-                    let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
+                    /*let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
                     return match binding.is_err() {
                         false => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
                         true => {
@@ -158,8 +158,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                             Response::ok("_req.url()?.host_str(): ".to_owned() + url)
                             //return stub.fetch_with_str(&url).await;
                         }
-                    };
-                }
+                    };*/
+                
             };
         })
         .run(req, env)
@@ -295,3 +295,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //substitutive fixed costs is complementary to demand
 
 //"'jealous, successful, all have money.'"
+
+//take me as i come cause i can't stay long 
+
+//premium fraud starvation care
+
+//cogeolocation gift discount (date payer conf) / no refund (nor review.. would otherwise be emulated by another site?)
