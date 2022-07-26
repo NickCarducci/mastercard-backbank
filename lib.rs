@@ -111,7 +111,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .post_async("/", |_req, ctx| async move {
             //let url = Url::new(&_req.url()?)?;
             return match _req.url()?.host_str() {
-                None => Response::error("cannot host_str() ".to_owned() + "",505),
+                None => Response::error("cannot host_str() ".to_owned() + "", 505),
                 //Option resolution =>
                 Some(url) => {
                     //get, async move
@@ -132,7 +132,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                                 .headers()
                                 .set("Accept", "application/vnd.github.v3+json")?;*/
                             //return Response::ok(url);
-                            stub.fetch_with_str(&url).await
+                            return stub.fetch_with_str(&url).await;
                         }
                     };
                 }
