@@ -72,14 +72,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get("/", |_, _| {
           Response::error(&("get (method?) ".to_owned() + ""), 405)
         })
-        .run(req, env)
-        .await 
-        /*.options("/ *catchall", |_, ctx| {
-            Response::ok(ctx.param("catchall").unwrap())
-        })
-        .options("/:id", |_, _| {
-            return Response::error(&("option (where?) ".to_owned() + ""), 404);
-        })
         .options_async("/", |req, ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
             let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
@@ -114,16 +106,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 false => Response::error(&("no access from ".to_owned() + cors_origin), 403), //&format!("no access from ")
             };
         })
-        .get("/:id", |_, _| {
-            return Response::error(&("get (where?) ".to_owned() + ""), 404);
-            //return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
-        })
-        .get("/", |_, _| {
-            return Response::error(&("get (method?) ".to_owned() + ""), 405);
-        })
         .post_async("/", |_req, ctx| async move {
-            return Response::ok(match url.host_str() {
-                None => "cannot host_str() ".to_owned() + "",
+            return match url.host_str() {
+                None => Response::ok("cannot host_str() ".to_owned() + ""),
                 //Option resolution =>
                 Some(url) => {
                     //get, async move
@@ -134,7 +119,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                             let namespace = binding?;
                             let _stub =
                                 namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-                            / *let mut opts = RequestInit::new();
+                            /*let mut opts = RequestInit::new();
                             opts.method("GET");
                             opts.mode(RequestMode::Cors);
                             let url =
@@ -142,13 +127,28 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                             let request = Request::new_with_str_and_init(&url, &opts)?;
                             request
                                 .headers()
-                                .set("Accept", "application/vnd.github.v3+json")?;* /
-                            return Response::ok(url);
-                            //return stub.fetch_with_str(&url).await;
+                                .set("Accept", "application/vnd.github.v3+json")?;*/
+                            //return Response::ok(url);
+                            stub.fetch_with_str(&url).await
                         }
                     };
                 }
             });
+        })
+        .run(req, env)
+        .await
+        /*.options("/ *catchall", |_, ctx| {
+            Response::ok(ctx.param("catchall").unwrap())
+        })
+        .options("/:id", |_, _| {
+            return Response::error(&("option (where?) ".to_owned() + ""), 404);
+        })
+        .get("/:id", |_, _| {
+            return Response::error(&("get (where?) ".to_owned() + ""), 404);
+            //return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
+        })
+        .get("/", |_, _| {
+            return Response::error(&("get (method?) ".to_owned() + ""), 405);
         })
         .or_else_any_method("/ *catchall", |req, ctx| {
             let req_headers = req.headers();
