@@ -130,34 +130,37 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         })
         .post_async("/", |req, _ctx| async move {
             //let url = Url::new(&_req.url()?)?;
-           return Response::ok(req.url()?.to_string());
-            /*return match req.url()?.host_str() {
+            //let url =  req.url()?;
+            //let mut res_headers = worker::Headers::new();
+            //return Response::ok(url.host_str())//.map(|resp| resp.with_headers(res_headers));;
+            return match req.url()?.host_str() {
                 None => Response::error("cannot _req.url()?.host_str()".to_owned() + "", 505),
                 //Option(resolution) => {explicit return; resolves in closure}
                 Some(url) => {
-                    //get, async move
-                    let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
-                    return match binding.is_err() {
-                        false => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
-                        true => {
-                            let namespace = binding?;
-                            let _stub =
-                                namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-                            /*let mut opts = RequestInit::new();
-                            opts.method("GET");
-                            opts.mode(RequestMode::Cors);
-                            let url =
-                                format!("https://api.github.com/repos/{}/branches/master", repo);
-                            let request = Request::new_with_str_and_init(&url, &opts)?;
-                            request
-                                .headers()
-                                .set("Accept", "application/vnd.github.v3+json")?;*/
-                            return Response::ok("_req.url()?.host_str(): ".to_owned() + url);
-                            //return stub.fetch_with_str(&url).await;
-                        }
-                    };
+                    return Response::ok("url".to_owned() + url); //.map(|resp| resp.with_headers(res_headers));;
+                                                                 //get, async move
+                                                                 /*let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
+                                                                 return match binding.is_err() {
+                                                                     false => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
+                                                                     true => {
+                                                                         let namespace = binding?;
+                                                                         let _stub =
+                                                                             namespace.id_from_name("DurableObjectExample")?.get_stub()?;
+                                                                         /*let mut opts = RequestInit::new();
+                                                                         opts.method("GET");
+                                                                         opts.mode(RequestMode::Cors);
+                                                                         let url =
+                                                                             format!("https://api.github.com/repos/{}/branches/master", repo);
+                                                                         let request = Request::new_with_str_and_init(&url, &opts)?;
+                                                                         request
+                                                                             .headers()
+                                                                             .set("Accept", "application/vnd.github.v3+json")?;*/
+                                                                         return Response::ok("_req.url()?.host_str(): ".to_owned() + url);
+                                                                         //return stub.fetch_with_str(&url).await;
+                                                                     }
+                                                                 };*/
                 }
-            };*/
+            };
         })
         .run(req, env)
         .await // == Ok for Result<T> not return (hoist); https://stackoverflow.com/questions/60020738/expected-enum-stdresultresult-found
