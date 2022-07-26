@@ -117,8 +117,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         false => Response::error("none", 405),
                         true => {
                             let namespace = binding?;
-                            let _stub =
-                                namespace.id_from_name("DurableObjectExample")?.get_stub()?;
+                            let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
                             /*let mut opts = RequestInit::new();
                             opts.method("GET");
                             opts.mode(RequestMode::Cors);
