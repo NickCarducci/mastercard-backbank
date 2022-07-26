@@ -70,11 +70,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let router = Router::with_data(info);
     router
         .get("/", |_, _| {
-            let mut res_headers = worker::Headers::new();
-            res_headers.set("Access-Control-Allow-Origin", "*")?;
-            res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
-            res_headers.set("Access-Control-Allow-Methods", "POST")?;
-            Response::error(&("get (method?) ".to_owned() + ""), 405).map(|resp| resp.with_headers(res_headers))
+            Response::error(&("get (method?) ".to_owned() + ""), 405)
         })
         .options_async("/", |req, _ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
@@ -115,13 +111,13 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .post_async("/", |_req, ctx| async move {
             //let url = Url::new(&_req.url()?)?;
             return match _req.url()?.host_str() {
-                None => Response::ok("cannot host_str() ".to_owned() + ""),
+                None => Response::error("cannot host_str() ".to_owned() + "",505),
                 //Option resolution =>
                 Some(url) => {
                     //get, async move
                     let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
                     return match binding.is_err() {
-                        false => Response::error("none", 405),
+                        false => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
                         true => {
                             let namespace = binding?;
                             let stub =
