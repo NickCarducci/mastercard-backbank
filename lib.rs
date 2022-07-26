@@ -130,7 +130,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         })
         .post_async("/", |req, _ctx| async move {
             //let url = Url::new(&_req.url()?)?;
-           return Response::ok(req.url()?);
+           return Response::ok(req.url()?.to_string());
             /*return match req.url()?.host_str() {
                 None => Response::error("cannot _req.url()?.host_str()".to_owned() + "", 505),
                 //Option(resolution) => {explicit return; resolves in closure}
