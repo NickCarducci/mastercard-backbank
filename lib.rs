@@ -93,7 +93,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get("/", |_, _| {
             Response::error(&("get (method?) ".to_owned() + ""), 405)
         })
-        .options_async("/", |req, _ctx| async move {
+        /*.options_async("/", |req, _ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
             let cors_origin = origin_url(req_headers);
             //let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
@@ -127,7 +127,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 }
                 false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
-        })
+        })*/
         .post_async("/", |req, ctx| async move {
             //let url = Url::new(&_req.url()?)?;
             return match req.url()?.host_str() {
