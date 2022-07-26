@@ -110,15 +110,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     //options(req_headers, cors_origin)
                     //https://rodneylab.com/using-rust-cloudflare-workers/
                     //fn preflight_response(_,_)->Result<Response> {
-                    let origin = origin_url(req_headers);
                     let mut res_headers = worker::Headers::new();
                     res_headers.set("Access-Control-Allow-Origin", "*")?;
                     res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
                     res_headers.set("Access-Control-Allow-Methods", "POST")?;
                     //res_headers.set("Vary", "Origin")?;
                     for origin_element in cors_origin.split(',') {
-                        if origin.eq(origin_element) {
-                            res_headers.set("Access-Control-Allow-Origin", &origin)?;
+                        if cors_origin.eq(origin_element) {
+                            res_headers.set("Access-Control-Allow-Origin", &cors_origin)?;
                             break;
                         };
                     }
@@ -129,11 +128,11 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
         })
-        .post_async("/", |_req, ctx| async move {
+        .post_async("/", |req, ctx| async move {
             //let url = Url::new(&_req.url()?)?;
-            return match _req.url()?.host_str() {
+            return match req.url()?.host_str() {
                 None => Response::error("cannot _req.url()?.host_str()".to_owned() + "", 505),
-                //Option resolution =>
+                //Option(resolution) => {explicit return; resolves in closure}
                 Some(url) => {
                     //get, async move
                     let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
