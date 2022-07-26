@@ -67,7 +67,27 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let info = SomeSharedData {
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
-    let router = Router::with_data(info);
+    let router = Router::with_data(info);// if no data is needed, pass `()` or any other valid data
+        /*if (request.method === "OPTIONS")
+          return new Response(`preflight response for POST`, {
+            status: 200,
+            message: `preflight response for POST`,
+            headers: {
+              "Access-Control-Allow-Headers": [
+                //"Access-Control-Allow-Origin",
+                "Access-Control-Allow-Methods",
+                "Content-Type"
+                //"Origin",
+                //"X-Requested-With",
+                //"Accept"
+              ],
+              "Access-Control-Allow-Methods": ["POST", "OPTIONS"]
+            }
+          });
+        return await noException(request, env);*/
+          /*.options("/ *catchall", |_, ctx| {
+              Response::ok(ctx.param("catchall").unwrap())
+          })*/
     router
         .get("/", |_, _| {
             Response::error(&("get (method?) ".to_owned() + ""), 405)
@@ -111,7 +131,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .post_async("/", |_req, ctx| async move {
             //let url = Url::new(&_req.url()?)?;
             return match _req.url()?.host_str() {
-                None => Response::error("cannot host_str() ".to_owned() + "", 505),
+                None => Response::error("cannot _req.url()?.host_str()".to_owned() + "", 505),
                 //Option resolution =>
                 Some(url) => {
                     //get, async move
@@ -120,7 +140,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         false => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
                         true => {
                             let namespace = binding?;
-                            let stub =
+                            let _stub =
                                 namespace.id_from_name("DurableObjectExample")?.get_stub()?;
                             /*let mut opts = RequestInit::new();
                             opts.method("GET");
@@ -131,15 +151,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                             request
                                 .headers()
                                 .set("Accept", "application/vnd.github.v3+json")?;*/
-                            //return Response::ok(url);
-                            return stub.fetch_with_str(&url).await;
+                            return Response::ok("_req.url()?.host_str(): ".to_owned()+url);
+                            //return stub.fetch_with_str(&url).await;
                         }
                     };
                 }
             };
         })
         .run(req, env)
-        .await
+        .await// == Ok for Result<T> not return (hoist); https://stackoverflow.com/questions/60020738/expected-enum-stdresultresult-found
     /*.options("/ *catchall", |_, ctx| {
         Response::ok(ctx.param("catchall").unwrap())
     })
@@ -269,3 +289,5 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //permission granted!
 
 //substitutive fixed costs is complementary to demand
+
+//"'jealous, successful, all have money.'"
