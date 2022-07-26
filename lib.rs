@@ -75,7 +75,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .options_async("/", |req, ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
             let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
-            return match [
+            match [
                 "https://sausage.vau.money",
                 "https://vau.money",
                 "https://jwi5k.csb.app",
@@ -101,19 +101,19 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     }
                     res_headers.set("Access-Control-Max-Age", "86400")?;
                     let req_method = req.method();
-                    return Response::ok(req_method).map(|resp| resp.with_headers(res_headers));
+                    Response::ok(req_method).map(|resp| resp.with_headers(res_headers));
                 }
                 false => Response::error(&("no access from ".to_owned() + cors_origin), 403), //&format!("no access from ")
             };
         })
         .post_async("/", |_req, ctx| async move {
-            return match url.host_str() {
+            match url.host_str() {
                 None => Response::ok("cannot host_str() ".to_owned() + ""),
                 //Option resolution =>
                 Some(url) => {
                     //get, async move
                     let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
-                    return match binding.is_err() {
+                    match binding.is_err() {
                         false => Response::error("none", 405),
                         true => {
                             let namespace = binding?;
