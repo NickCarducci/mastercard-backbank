@@ -58,6 +58,7 @@ struct SomeSharedData {
 //https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
 #[event(fetch, respond_with_errors)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
+    //use the request parameter of the router instead else return closure/(pointer)
     fn origin_url(req_headers: &worker::Headers) -> std::string::String {
         return match req_headers.get("Origin").unwrap() {
             Some(value) => value,
@@ -67,34 +68,34 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let info = SomeSharedData {
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
-    let router = Router::with_data(info);// if no data is needed, pass `()` or any other valid data
-        /*if (request.method === "OPTIONS")
-          return new Response(`preflight response for POST`, {
-            status: 200,
-            message: `preflight response for POST`,
-            headers: {
-              "Access-Control-Allow-Headers": [
-                //"Access-Control-Allow-Origin",
-                "Access-Control-Allow-Methods",
-                "Content-Type"
-                //"Origin",
-                //"X-Requested-With",
-                //"Accept"
-              ],
-              "Access-Control-Allow-Methods": ["POST", "OPTIONS"]
-            }
-          });
-        return await noException(request, env);*/
-          /*.options("/ *catchall", |_, ctx| {
-              Response::ok(ctx.param("catchall").unwrap())
-          })*/
+    let router = Router::with_data(info); // if no data is needed, pass `()` or any other valid data
+                                          /*if (request.method === "OPTIONS")
+                                            return new Response(`preflight response for POST`, {
+                                              status: 200,
+                                              message: `preflight response for POST`,
+                                              headers: {
+                                                "Access-Control-Allow-Headers": [
+                                                  //"Access-Control-Allow-Origin",
+                                                  "Access-Control-Allow-Methods",
+                                                  "Content-Type"
+                                                  //"Origin",
+                                                  //"X-Requested-With",
+                                                  //"Accept"
+                                                ],
+                                                "Access-Control-Allow-Methods": ["POST", "OPTIONS"]
+                                              }
+                                            });
+                                          return await noException(request, env);*/
+    /*.options("/ *catchall", |_, ctx| {
+        Response::ok(ctx.param("catchall").unwrap())
+    })*/
     router
         .get("/", |_, _| {
             Response::error(&("get (method?) ".to_owned() + ""), 405)
         })
         .options_async("/", |req, _ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
-            let cors_origin = req_headers.get("Origin")?.unwrap();
+            let cors_origin = origin_url(req_headers);
             //let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
             return match [
                 "https://sausage.vau.money",
@@ -151,7 +152,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                             request
                                 .headers()
                                 .set("Accept", "application/vnd.github.v3+json")?;*/
-                            return Response::ok("_req.url()?.host_str(): ".to_owned()+url);
+                            return Response::ok("_req.url()?.host_str(): ".to_owned() + url);
                             //return stub.fetch_with_str(&url).await;
                         }
                     };
@@ -159,39 +160,39 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             };
         })
         .run(req, env)
-        .await// == Ok for Result<T> not return (hoist); https://stackoverflow.com/questions/60020738/expected-enum-stdresultresult-found
-    /*.options("/ *catchall", |_, ctx| {
-        Response::ok(ctx.param("catchall").unwrap())
-    })
-    .options("/:id", |_, _| {
-        return Response::error(&("option (where?) ".to_owned() + ""), 404);
-    })
-    .get("/:id", |_, _| {
-        return Response::error(&("get (where?) ".to_owned() + ""), 404);
-        //return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
-    })
-    .get("/", |_, _| {
-        return Response::error(&("get (method?) ".to_owned() + ""), 405);
-    })
-    .or_else_any_method("/ *catchall", |req, ctx| {
-        let req_headers = req.headers();
-        let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
-        let mut res_headers = worker::Headers::new();
-        res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
-        res_headers.set("Access-Control-Allow-Methods", "POST")?;
-        //headers.set("Vary", "Origin")?;
-        let origin = origin_url(req_headers);
-        for origin_element in cors_origin.split(',') {
-            if origin.eq(origin_element) {
-                res_headers.set("Access-Control-Allow-Origin", &origin)?;
-                break;
-            };
-        }
-        //return Response::ok("waffles")?.with_headers(res_headers);
-        return Response::ok("waffles").map(|resp| resp.with_headers(res_headers));
-    })
-    .run(req, env)
-    .await; */
+        .await // == Ok for Result<T> not return (hoist); https://stackoverflow.com/questions/60020738/expected-enum-stdresultresult-found
+               /*.options("/ *catchall", |_, ctx| {
+                   Response::ok(ctx.param("catchall").unwrap())
+               })
+               .options("/:id", |_, _| {
+                   return Response::error(&("option (where?) ".to_owned() + ""), 404);
+               })
+               .get("/:id", |_, _| {
+                   return Response::error(&("get (where?) ".to_owned() + ""), 404);
+                   //return Ok(Response::error(&("get (where?) ".to_owned() + ""), 404)?);
+               })
+               .get("/", |_, _| {
+                   return Response::error(&("get (method?) ".to_owned() + ""), 405);
+               })
+               .or_else_any_method("/ *catchall", |req, ctx| {
+                   let req_headers = req.headers();
+                   let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
+                   let mut res_headers = worker::Headers::new();
+                   res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
+                   res_headers.set("Access-Control-Allow-Methods", "POST")?;
+                   //headers.set("Vary", "Origin")?;
+                   let origin = origin_url(req_headers);
+                   for origin_element in cors_origin.split(',') {
+                       if origin.eq(origin_element) {
+                           res_headers.set("Access-Control-Allow-Origin", &origin)?;
+                           break;
+                       };
+                   }
+                   //return Response::ok("waffles")?.with_headers(res_headers);
+                   return Response::ok("waffles").map(|resp| resp.with_headers(res_headers));
+               })
+               .run(req, env)
+               .await; */
     //return result;
     //return Response::ok("");
     //return Response::error("key missing", 400);
