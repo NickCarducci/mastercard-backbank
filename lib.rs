@@ -76,9 +76,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             res_headers.set("Access-Control-Allow-Methods", "POST")?;
             Response::error(&("get (method?) ".to_owned() + ""), 405).map(|resp| resp.with_headers(res_headers))
         })
-        .options_async("/", |req, ctx| async move {
+        .options_async("/", |req, _ctx| async move {
             let req_headers = req.headers(); //<&worker::Headers>
-            let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
+            let cors_origin = req_headers.get("Origin")?.unwrap();
+            //let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
             return match [
                 "https://sausage.vau.money",
                 "https://vau.money",
@@ -108,7 +109,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     let req_method = req.method();
                     return Response::ok(req_method).map(|resp| resp.with_headers(res_headers));
                 }
-                false => Response::error(&("no access from ".to_owned() + cors_origin), 403), //&format!("no access from ")
+                false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
         })
         .post_async("/", |_req, ctx| async move {
