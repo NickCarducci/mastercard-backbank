@@ -71,7 +71,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
    router
         .get("/", |_, _| {
           Response::error(&("get (method?) ".to_owned() + ""), 405)
-        });
+        })
+        .run(req, env)
+        .await; 
         /*.options("/ *catchall", |_, ctx| {
             Response::ok(ctx.param("catchall").unwrap())
         })
