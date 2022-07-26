@@ -123,12 +123,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     }
                     res_headers.set("Access-Control-Max-Age", "86400")?;
                     let req_method = req.method();
-                    return Response::ok(req_method).map(|resp| resp.with_headers(res_headers));
+                    Response::ok(req_method).map(|resp| resp.with_headers(res_headers))
                 }
                 false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
         })
-        .post_async("/", |req, _ctx| async move {
+        .post_async("/", |req, ctx| async move {
             //let url = Url::new(&_req.url()?)?;
             //let url =  req.url()?;
             //let mut res_headers = worker::Headers::new();
@@ -137,28 +137,28 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 None => Response::error("cannot _req.url()?.host_str()".to_owned() + "", 505),
                 //Option(resolution) => {explicit return; resolves in closure}
                 Some(url) => {
-                    return Response::ok("url".to_owned() + url); //.map(|resp| resp.with_headers(res_headers));;
-                                                                 //get, async move
-                                                                 /*let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
-                                                                 return match binding.is_err() {
-                                                                     false => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
-                                                                     true => {
-                                                                         let namespace = binding?;
-                                                                         let _stub =
-                                                                             namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-                                                                         /*let mut opts = RequestInit::new();
-                                                                         opts.method("GET");
-                                                                         opts.mode(RequestMode::Cors);
-                                                                         let url =
-                                                                             format!("https://api.github.com/repos/{}/branches/master", repo);
-                                                                         let request = Request::new_with_str_and_init(&url, &opts)?;
-                                                                         request
-                                                                             .headers()
-                                                                             .set("Accept", "application/vnd.github.v3+json")?;*/
-                                                                         return Response::ok("_req.url()?.host_str(): ".to_owned() + url);
-                                                                         //return stub.fetch_with_str(&url).await;
-                                                                     }
-                                                                 };*/
+                    //Response::ok("url".to_owned() + url) //.map(|resp| resp.with_headers(res_headers));;
+                    //get, async move
+                    let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
+                    return match binding.is_err() {
+                        false => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
+                        true => {
+                            let namespace = binding?;
+                            let _stub =
+                                namespace.id_from_name("DurableObjectExample")?.get_stub()?;
+                            /*let mut opts = RequestInit::new();
+                            opts.method("GET");
+                            opts.mode(RequestMode::Cors);
+                            let url =
+                                format!("https://api.github.com/repos/{}/branches/master", repo);
+                            let request = Request::new_with_str_and_init(&url, &opts)?;
+                            request
+                                .headers()
+                                .set("Accept", "application/vnd.github.v3+json")?;*/
+                            Response::ok("_req.url()?.host_str(): ".to_owned() + url)
+                            //return stub.fetch_with_str(&url).await;
+                        }
+                    };
                 }
             };
         })
