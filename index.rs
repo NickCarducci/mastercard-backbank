@@ -10,17 +10,17 @@ pub struct DurableObjectExample {
   env: Env, // access `Env` across requests, use inside `fetch`
 }
 
-fn pathify(path: &str) -> std::path::PathBuf {
+/*fn pathify(path: &str) -> std::path::PathBuf {
   let mut input_file = std::path::PathBuf::new();
   let _arr: () = path.split("/").map(|x| input_file.push(x)).collect();
   return input_file;
-}
+}*/
 
 #[durable_object]
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
     Self {
-      app: "".to_owned(), //format!(""),vec![]
+      app: "initialapp".to_owned(), //format!(""),vec![]
       //https://www.hackertouch.com/how-to-create-and-check-string-is-empty-rust.html
       initialized: false,
       state: state,
@@ -39,14 +39,19 @@ impl DurableObject for DurableObjectExample {
       self.initialized = true;
       //self.app = self.state.storage().get("app").await.unwrap_or(0);
     }
+    Response::ok(&format!(
+            "[durable_object]: self.app: {}", //secret value: {}",
+            self.app,
+            //self.env.secret("SOME_SECRET")?.to_string()
+        ))
     //return Response::ok("");
-    let lock: std::path::PathBuf = pathify("./exec.c");
-    let _app = &self.app;//hardly any use to add the c>php code to the keyvalue storage
+    //let lock: std::path::PathBuf = pathify("./exec.c");
+    //let _app = &self.app;//hardly any use to add the c>php code to the keyvalue storage
     //self.app: Vec<v8> = extensionfrom cc::Build().expand
     //self.app: String = String::from_utf8(self.app).unwrap();
     //self.state.storage().put("app", self.app).await?;
-    let appel: Vec<u8> = cc::Build::new().file(lock).expand();
-    /*return*/ /*self.data = */Response::ok(String::from_utf8(appel).unwrap())
+    //let appel: Vec<u8> = cc::Build::new().file(lock).expand();
+    /*return*/ /*self.data = *///Response::ok(String::from_utf8(appel).unwrap())
     //self.data = data::to_string();//https://doc.rust-lang.org/std/macro.format.html
     //return Response::ok(&format!("{} data.", self.data));
   }
