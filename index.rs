@@ -4,23 +4,23 @@ use worker::{
 };
 #[durable_object]
 pub struct DurableObjectExample {
-  //app: String,//Vec<u8>,
+  app: String,//Vec<u8>,
   initialized: bool,
   state: State, 
   env: Env, // access `Env` across requests, use inside `fetch`
 }
 
-/*fn pathify(path: &str) -> std::path::PathBuf {
+fn pathify(path: &str) -> std::path::PathBuf {
   let mut input_file = std::path::PathBuf::new();
   let _arr: () = path.split("/").map(|x| input_file.push(x)).collect();
   return input_file;
-}*/
+}
 
 #[durable_object]
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
     Self {
-      //app: "".to_owned(), //format!(""),vec![]
+      app: "".to_owned(), //format!(""),vec![]
       //https://www.hackertouch.com/how-to-create-and-check-string-is-empty-rust.html
       initialized: false,
       state: state,
@@ -64,3 +64,6 @@ impl DurableObject for DurableObjectExample {
 //repo credit purchases, inventory no debit in debenture/stock fiduciary... only by royalty gives debenture a different name
 
 //worked at it through the generations
+//Is propensity exclusively genetic part of athleticism potential?
+
+//the shim is my business partner
