@@ -6,7 +6,7 @@ use worker::{
 pub struct DurableObjectExample {
   //app: String,//Vec<u8>,
   initialized: bool,
-  state: State,
+  state: State, 
   env: Env, // access `Env` across requests, use inside `fetch`
 }
 
@@ -39,14 +39,14 @@ impl DurableObject for DurableObjectExample {
       self.initialized = true;
       //self.app = self.state.storage().get("app").await.unwrap_or(0);
     }
-    return Response::ok("");
-    /*let lock: std::path::PathBuf = pathify("./exec.c");
+    //return Response::ok("");
+    let lock: std::path::PathBuf = pathify("./exec.c");
     let _app = &self.app;//hardly any use to add the c>php code to the keyvalue storage
     //self.app: Vec<v8> = extensionfrom cc::Build().expand
     //self.app: String = String::from_utf8(self.app).unwrap();
     //self.state.storage().put("app", self.app).await?;
     let appel: Vec<u8> = cc::Build::new().file(lock).expand();
-    return /*self.data = */Response::ok(String::from_utf8(appel).unwrap());*/
+    /*return*/ /*self.data = */Response::ok(String::from_utf8(appel).unwrap())
     //self.data = data::to_string();//https://doc.rust-lang.org/std/macro.format.html
     //return Response::ok(&format!("{} data.", self.data));
   }
@@ -62,3 +62,5 @@ impl DurableObject for DurableObjectExample {
 //if I cannot say kill russians on facebook but likely cannot donate without being red flagged
 //asylum for conscripts
 //repo credit purchases, inventory no debit in debenture/stock fiduciary... only by royalty gives debenture a different name
+
+//worked at it through the generations
