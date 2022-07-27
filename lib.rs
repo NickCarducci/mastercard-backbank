@@ -138,12 +138,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
         })
-        .post("/", |req, _ctx| {
+        .post("/", |_req, _ctx| {
             //let url = Url::new(&_req.url()?)?;
             //let url =  req.url()?;
             //let mut res_headers = worker::Headers::new();
             //return Response::ok(url.host_str())//.map(|resp| resp.with_headers(res_headers));;
-            return match req.url()?.host_str() {
+
+            return Response::from_json(&Product{url: "stub.fetch_with_str(https://mastercard-backbank.backbank.workers.dev/).await".to_string()});
+            /*return match req.url()?.host_str() {
                 None => Response::from_json(&Error{err:"cannot _req.url()?.host_str()".to_string()}),//,505
                 //Option(resolution) => {explicit return; resolves in closure}
                 Some(url) => 
@@ -170,7 +172,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         }
                     };*/
                 
-            };
+            };*/
         })
         .run(req, env)
         .await // == Ok for Result<T> not return (hoist); https://stackoverflow.com/questions/60020738/expected-enum-stdresultresult-found
