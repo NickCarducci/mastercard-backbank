@@ -52,6 +52,16 @@ pub fn handle(option:Option<String>) ->Resultt<webRes,worker::Error>  {
     return webRes::new_with_opt_str(option);//webRes::new_with_opt_str(None, &init);
 }*/
 
+
+use serde::{/*Deserialize, */Serialize};
+#[derive(Serialize)]
+struct Product {
+    url: String,
+}
+#[derive(Serialize)]
+struct Error {
+    err: String,
+}
 struct SomeSharedData {
     //data: u8, //regex::Regex,
 }
@@ -91,7 +101,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     })*/
     router
         .get("/", |_, _| {
-            Response::error(&("get (method?) ".to_owned() + ""), 405)
+            Response::error(&("{error:get (method?) ".to_owned() + "}"+""), 405)
         })
         .options("/", |req, _ctx| {
             let req_headers = req.headers(); //<&worker::Headers>
@@ -133,11 +143,11 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //let url =  req.url()?;
             //let mut res_headers = worker::Headers::new();
             //return Response::ok(url.host_str())//.map(|resp| resp.with_headers(res_headers));;
-            return match &req.url()?.host_str() {
-                None => Response::error("{error:cannot _req.url()?.host_str()".to_owned() + "}", 505),
+            return match req.url()?.host_str() {
+                None => Response::from_json(&Error{err:"cannot _req.url()?.host_str()".to_string()}),//,505
                 //Option(resolution) => {explicit return; resolves in closure}
                 Some(url) => 
-                    Response::ok("{url:".to_owned() + url + "}") //.map(|resp| resp.with_headers(res_headers));;
+                    Response::from_json(&Product{url: url.to_string()}) //.map(|resp| resp.with_headers(res_headers));;
                     //get, async move
                     /*let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
                     return match binding.is_err() {
@@ -315,3 +325,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //who is history?
 
 //"allen west, don't drop in a joint, that would be wrong, without teachers taking care of them."
+
+//dowry, divorced a few times, mahr, before and after, you know, Saudi prince 2020
+
+//gays wouldn't even make it to Quran just after remarks. just borrowed Satan reenunciations for cools
