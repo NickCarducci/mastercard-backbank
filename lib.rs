@@ -164,8 +164,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //get, async move
             let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
             return match binding.is_err() {
-                false => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
-                true => {
+                true => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
+                false => {
                     let namespace = binding?;
                     let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
                     /*let mut opts = RequestInit::new();
