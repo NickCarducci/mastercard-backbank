@@ -133,7 +133,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //let url =  req.url()?;
             //let mut res_headers = worker::Headers::new();
             //return Response::ok(url.host_str())//.map(|resp| resp.with_headers(res_headers));;
-            return match req.url()?.host_str() {
+            return match &req.url()?.host_str() {
                 None => Response::error("cannot _req.url()?.host_str()".to_owned() + "", 505),
                 //Option(resolution) => {explicit return; resolves in closure}
                 Some(url) => 
