@@ -93,7 +93,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get("/", |_, _| {
             Response::error(&("get (method?) ".to_owned() + ""), 405)
         })
-        .options_async("/", |req, _ctx| async move {
+        .options("/", |req, _ctx| {
             let req_headers = req.headers(); //<&worker::Headers>
             let cors_origin = origin_url(req_headers);
             //let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
@@ -128,7 +128,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
         })
-        .post_async("/", |req, _ctx| async move {
+        .post("/", |req, _ctx| {
             //let url = Url::new(&_req.url()?)?;
             //let url =  req.url()?;
             //let mut res_headers = worker::Headers::new();
@@ -313,3 +313,5 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //abrogation by assimilatable context
 
 //who is history?
+
+//"allen west, don't drop in a joint, that would be wrong, without teachers taking care of them."
