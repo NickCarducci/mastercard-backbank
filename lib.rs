@@ -134,10 +134,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //let mut res_headers = worker::Headers::new();
             //return Response::ok(url.host_str())//.map(|resp| resp.with_headers(res_headers));;
             return match &req.url()?.host_str() {
-                None => Response::error("cannot _req.url()?.host_str()".to_owned() + "", 505),
+                None => Response::error("{error:cannot _req.url()?.host_str()".to_owned() + "}", 505),
                 //Option(resolution) => {explicit return; resolves in closure}
                 Some(url) => 
-                    Response::ok("url".to_owned() + url) //.map(|resp| resp.with_headers(res_headers));;
+                    Response::ok("{url:".to_owned() + url + "}") //.map(|resp| resp.with_headers(res_headers));;
                     //get, async move
                     /*let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
                     return match binding.is_err() {
@@ -301,3 +301,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //premium fraud starvation care
 
 //cogeolocation gift discount (date payer conf) / no refund (nor review.. would otherwise be emulated by another site?)
+//prude conservative
+//is incel to cuckoldry as involuntarily polygamist?
+//assault merely a threat unless sexual
+
+//material need surplus value profit parts in poverty income less national despondency
+//police state jobs progressive job equality technologist destroyer
+//amortized marginal labor or inflation
+//Malik related to me from Ibn Shihab that gave a judgment that the rapist had to pay the raped woman her bride-price.
+//https://adailyimpeachment.quora.com/What-does-abrogation-mean-1
+//abrogation by assimilatable context
+
+//who is history?
