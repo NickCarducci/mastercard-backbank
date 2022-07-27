@@ -4,9 +4,9 @@ use worker::{
 };
 #[durable_object]
 pub struct DurableObjectExample {
-  app: String,//Vec<u8>,
+  app: String, //Vec<u8>,
   initialized: bool,
-  state: State, 
+  state: State,
   env: Env, // access `Env` across requests, use inside `fetch`
 }
 
@@ -35,15 +35,22 @@ impl DurableObject for DurableObjectExample {
 
     //let url = new URL(_req.url);
     //let  value = null;
+    //self.state.storage().put("app", self.app).await?;
     if !self.initialized {
       self.initialized = true;
-      //self.app = self.state.storage().get("app").await.unwrap_or(0);
+      self.app = self
+        .state
+        .storage()
+        .get("app")
+        .await
+        .unwrap_or(self.app.to_owned());//uses the default from new
     }
+    self.state.storage().put("app", &self.app).await?;
     Response::ok(&format!(
-            "[durable_object]: self.app: {}", //secret value: {}",
-            self.app,
-            //self.env.secret("SOME_SECRET")?.to_string()
-        ))
+      "[durable_object]: self.app: {}", //secret value: {}",
+      self.app,
+      //self.env.secret("SOME_SECRET")?.to_string()
+    ))
     //return Response::ok("");
     //let lock: std::path::PathBuf = pathify("./exec.c");
     //let _app = &self.app;//hardly any use to add the c>php code to the keyvalue storage
