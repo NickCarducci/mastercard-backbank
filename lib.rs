@@ -12,7 +12,8 @@ use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
 //use wasm_bindgen_futures::ResponseInit; wrong
 //use web_sys::{ResponseInit,Response as webRes};
 
-use worker::{
+//use url::{Url};
+use worker::{Url,
     /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result, Router,
 };
 
@@ -159,7 +160,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 err: "cannot _req.url()?.host_str()".to_string(),
             }), //,505
             //Option(resolution) => {explicit return; resolves in closure}
-            Some(url) => {*/
+            Some(url) => {*/ //unwrap
             //Response::from_json(&Product{url: url.to_string()}) //.map(|resp| resp.with_headers(res_headers));;
             //get, async move
             let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
@@ -178,7 +179,8 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         .headers()
                         .set("Accept", "application/vnd.github.v3+json")?;*/
                     //Response::ok("_req.url()?.host_str(): ".to_owned() + url)
-                    stub.fetch_with_str("https://mastercard-backbank.backbank.workers.dev/")
+                    let href = Url::parse("https://mastercard-backbank.backbank.workers.dev/")?;
+                    stub.fetch_with_str(href.host_str().unwrap())
                         .await //this is not like fetching the resource again, just the stub
                     /*A full URL must be used (when calling fetch on a Durable Object).
                     Also, a wrangler.toml compatibility flag can opt-in to[ the otherwise] 
