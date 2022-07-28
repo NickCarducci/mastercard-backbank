@@ -162,9 +162,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             }), //,505
             //Option(resolution) => {explicit return; resolves in closure}
             Some(url) => {*/
- //unwrap
- //Response::from_json(&Product{url: url.to_string()}) //.map(|resp| resp.with_headers(res_headers));;
- //get, async move
+            //unwrap
+            //Response::from_json(&Product{url: url.to_string()}) //.map(|resp| resp.with_headers(res_headers));;
+            //get, async move
             let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
             return match binding.is_err() {
                 true => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
@@ -182,15 +182,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         .set("Accept", "application/vnd.github.v3+json")?;*/
                     //Response::ok("_req.url()?.host_str(): ".to_owned() + url)
                     let href = Url::parse("https://mastercard-backbank.backbank.workers.dev")?;
-                    let fullyquality = href.host_str().unwrap().to_owned() + ".";
+                    let fullyquality = "https://".to_owned() + href.host_str().unwrap() + ".";
                     stub.fetch_with_str(&fullyquality).await //this is not like fetching the resource again, just the stub
-                                                   /*A full URL must be used (when calling fetch on a Durable Object).
-                                                   Also, a wrangler.toml compatibility flag can opt-in to[ the otherwise]
-                                                   [older behavior](https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url).
+                                                             /*A full URL must be used (when calling fetch on a Durable Object).
+                                                             Also, a wrangler.toml compatibility flag can opt-in to[ the otherwise]
+                                                             [older behavior](https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url).
 
-                                                   Astonishingly, I would have figured out to ask this sooner if Post requests could enable
-                                                   [textual resolutions](https://community.cloudflare.com/t/fetch-post-type-error-failed-to-execute-function/311016/3?u=carducci).
-                                                   */
+                                                             Astonishingly, I would have figured out to ask this sooner if Post requests could enable
+                                                             [textual resolutions](https://community.cloudflare.com/t/fetch-post-type-error-failed-to-execute-function/311016/3?u=carducci).
+                                                             */
                 }
             };
             //}}
