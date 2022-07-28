@@ -1,7 +1,16 @@
+use serde::Serialize;
 use worker::{
   async_trait, durable_object, js_sys, wasm_bindgen, wasm_bindgen_futures, worker_sys, Env,
   Request, Response, Result, State,
 };
+#[derive(Serialize)]
+struct Product {
+  ivity: String,
+}
+#[derive(Serialize)]
+struct Noth {
+  ing: String,
+}
 #[durable_object]
 pub struct DurableObjectExample {
   app: String, //Vec<u8>,
@@ -38,29 +47,34 @@ impl DurableObject for DurableObjectExample {
     //self.state.storage().put("app", self.app).await?;
     if !self.initialized {
       self.initialized = true;
-      self.app = self
-        .state
-        .storage()
-        .get("app")
-        .await
-        .unwrap_or(self.app.to_owned());//uses the default from new
+      self.app = self.state.storage().get("app").await?;
+      //self.app = self.app.unwrap_or(self.app.to_owned()); //uses the default from new
     }
     self.state.storage().put("app", &self.app).await?;
-    Response::ok(&format!(
-      "[durable_object]: self.app: {}", //secret value: {}",
-      self.app,
-      //self.env.secret("SOME_SECRET")?.to_string()
-    ))
-    //return Response::ok("");
-    //let lock: std::path::PathBuf = pathify("./exec.c");
-    //let _app = &self.app;//hardly any use to add the c>php code to the keyvalue storage
-    //self.app: Vec<v8> = extensionfrom cc::Build().expand
-    //self.app: String = String::from_utf8(self.app).unwrap();
-    //self.state.storage().put("app", self.app).await?;
-    //let appel: Vec<u8> = cc::Build::new().file(lock).expand();
-    /*return*/ /*self.data = *///Response::ok(String::from_utf8(appel).unwrap())
-    //self.data = data::to_string();//https://doc.rust-lang.org/std/macro.format.html
-    //return Response::ok(&format!("{} data.", self.data));
+    async move {
+      match _req.path().as_str() {
+        "/" => Response::from_json(&Product {
+          ivity: self.app.to_string(),
+        }),
+        &_ => Response::from_json(&Noth { ing: "".to_owned() }), /*"/" => Response::ok(&format!(
+                                                                   "[durable_object]: self.app: {}", //secret value: {}",
+                                                                   self.app,
+                                                                   //self.env.secret("SOME_SECRET")?.to_string()
+                                                                 ))*/
+      }
+      //return Response::ok("");
+      //let lock: std::path::PathBuf = pathify("./exec.c");
+      //let _app = &self.app;//hardly any use to add the c>php code to the keyvalue storage
+      //self.app: Vec<v8> = extensionfrom cc::Build().expand
+      //self.app: String = String::from_utf8(self.app).unwrap();
+      //self.state.storage().put("app", self.app).await?;
+      //let appel: Vec<u8> = cc::Build::new().file(lock).expand();
+      /*return*/ /*self.data = *///Response::ok(String::from_utf8(appel).unwrap())
+      //self.data = data::to_string();//https://doc.rust-lang.org/std/macro.format.html
+      //return Response::ok(&format!("{} data.", self.data));
+    }
+    .await
+    .or_else(|err| Response::error(err.to_string(), 500))
   }
 }
 //advocates against false advertisement and countersuables
