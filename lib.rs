@@ -179,7 +179,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         .headers()
                         .set("Accept", "application/vnd.github.v3+json")?;*/
                     //Response::ok("_req.url()?.host_str(): ".to_owned() + url)
-                    let href = Url::parse("https://mastercard-backbank.backbank.workers.dev/")?;
+                    let href = Url::parse("https://mastercard-backbank.backbank.workers.dev")?;
                     stub.fetch_with_str(href.host_str().unwrap())
                         .await //this is not like fetching the resource again, just the stub
                     /*A full URL must be used (when calling fetch on a Durable Object).
