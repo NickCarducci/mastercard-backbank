@@ -24,7 +24,12 @@ pub struct DurableObjectExample {
   let _arr: () = path.split("/").map(|x| input_file.push(x)).collect();
   return input_file;
 }*/
-
+/*struct Closure1 {
+    client: (),
+}
+impl FnOnce for Closure1 {
+    type Output = ();
+}*/
 #[durable_object]
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
@@ -50,9 +55,24 @@ impl DurableObject for DurableObjectExample {
       self.app = self.state.storage().get("app").await?;
       //self.app = self.app.unwrap_or(self.app.to_owned()); //uses the default from new
     }
+    //dyn std::future::Future<worker::Response>
+    /*pub trait FnOnce<Args> {
+      type Output;
+
+      extern "rust-call" fn call_once(self, args: Args) -> Self::Output;
+    }
+    fn consume_with_relish<F>(func: F)
+    where
+      F: FnOnce() -> worker::Response,
+    {
+      call_once()
+      //func() then use of moved value` error
+    }*/
     self.state.storage().put("app", &self.app).await?;
+    //.and_then(consume_with_relish(relish));
+    //let relish =
     async move {
-      match _req.path().as_str() {
+      return match _req.path().as_str() {
         "/" => Response::from_json(&Product {
           ivity: self.app.to_string(),
         }),
@@ -61,7 +81,7 @@ impl DurableObject for DurableObjectExample {
                                                                    self.app,
                                                                    //self.env.secret("SOME_SECRET")?.to_string()
                                                                  ))*/
-      }
+      };
       //return Response::ok("");
       //let lock: std::path::PathBuf = pathify("./exec.c");
       //let _app = &self.app;//hardly any use to add the c>php code to the keyvalue storage
@@ -74,7 +94,7 @@ impl DurableObject for DurableObjectExample {
       //return Response::ok(&format!("{} data.", self.data));
     }
     .await
-    .or_else(|err| Response::error(err.to_string(), 500))
+    //.or_else(|err| Response::error(err.to_string(), 500));
   }
 }
 //advocates against false advertisement and countersuables
