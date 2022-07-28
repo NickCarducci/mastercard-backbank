@@ -15,7 +15,7 @@ use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
 //use url::{Url};
 use worker::{
     /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result,
-    Router, Url,
+    Router//, Url,
 };
 
 mod index;
@@ -181,7 +181,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         .headers()
                         .set("Accept", "application/vnd.github.v3+json")?;*/
                     //Response::ok("_req.url()?.host_str(): ".to_owned() + url)
-                    stub.fetch_with_request(&req).await
+                    stub.fetch_with_request(req).await
                     /*let href = Url::parse("https://mastercard-backbank.backbank.workers.dev")?;
                     let fullyquality = "https://www.".to_owned() + href.host_str().unwrap() + "/.";
                     stub.fetch_with_str(&fullyquality).await*/ //this is not like fetching the resource again, just the stub
