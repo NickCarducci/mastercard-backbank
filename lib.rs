@@ -139,7 +139,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
         }) //https://community.cloudflare.com/t/fetch-post-type-error-failed-to-execute-function/311016/3?u=carducci
-        .post_async("/", |_req, ctx| async move {
+        .post_async("/", |req, ctx| async move {
             //async may ask for pointer/(closure) with (1) both _[vars] like _req,_ctx, as well as (2) expression `return;`
             /*UX for Post requests should enable textual resolutions
              I would like to suggest a UX solution that would be least astonishing, and bring this into the workflow of your products in other facets,
@@ -181,9 +181,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         .headers()
                         .set("Accept", "application/vnd.github.v3+json")?;*/
                     //Response::ok("_req.url()?.host_str(): ".to_owned() + url)
-                    let href = Url::parse("https://mastercard-backbank.backbank.workers.dev/")?;
-                    let fullyquality = "https://www.".to_owned() + href.host_str().unwrap() + "/";
-                    stub.fetch_with_str(&fullyquality).await //this is not like fetching the resource again, just the stub
+                    stub.fetch_with_request(req).await
+                    /*let href = Url::parse("https://mastercard-backbank.backbank.workers.dev")?;
+                    let fullyquality = "https://www.".to_owned() + href.host_str().unwrap() + "/.";
+                    stub.fetch_with_str(&fullyquality).await*/ //this is not like fetching the resource again, just the stub
                                                              /*A full URL must be used (when calling fetch on a Durable Object).
                                                              Also, a wrangler.toml compatibility flag can opt-in to[ the otherwise]
                                                              [older behavior](https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url).
