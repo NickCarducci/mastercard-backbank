@@ -45,6 +45,7 @@ impl DurableObject for DurableObjectExample {
   async fn fetch(&mut self, _req: Request) -> Result<Response> {
     let _state = &self.state;
     let _env = &self.env;
+    let _req = req;
     //if (!_req.url)
     //return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
 
