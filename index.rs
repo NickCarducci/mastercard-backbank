@@ -1,8 +1,11 @@
+struct PotentialType<T>(T);
+
 use serde::Serialize;
 use worker::{
   async_trait, durable_object, js_sys, wasm_bindgen, wasm_bindgen_futures, worker_sys, Env,
   Request, Response, Result, State,
 };
+pub use worker_sys::{console_debug, console_error, console_log, console_warn};
 #[derive(Serialize)]
 struct Product {
   ivity: String,
@@ -33,13 +36,23 @@ impl FnOnce for Closure1 {
 
 use serde::Deserialize;
 #[derive(Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]//https://github.com/serde-rs/serde/issues/1435
-struct Body {//
-  page_offset: u8,
-  page_length: u8,
+#[serde(rename_all = "camelCase")] //https://github.com/serde-rs/serde/issues/1435
+struct Body {
+  //
+  page_offset: String,
+  page_length: String,
   postal_code: String,
 }
-//https://juliano-alves.com/2020/01/06/rust-deserialize-json-with-serde/
+struct IsString(String);
+impl std::fmt::Debug for IsString {
+  /*fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    Ok(())
+  } *///Self::Output
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    f.debug_tuple("IsString").field(&self.0).finish()
+  } //https://doc.rust-lang.org/std/fmt/trait.Debug.html
+} //https://stackoverflow.com/questions/22243527/how-to-implement-a-custom-fmtdebug-trait
+  //https://juliano-alves.com/2020/01/06/rust-deserialize-json-with-serde/
 #[durable_object]
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
@@ -63,14 +76,27 @@ impl DurableObject for DurableObjectExample {
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
     let mut s = req.clone()?;
-    let body: Body = s.json().await?; //.clone();//.clone()?;
+    let body: Body = match s.json().await?{
+      Ok(body)=>body,
+      Err(m)=>console_log!("{}",m)
+    }; //.clone();//.clone()?;
 
     let _page_offset = body.page_offset;
     let _page_length = body.page_length;
     let _postal_code = body.postal_code;
+
+    /*if IsString(_page_offset)//validreturn!(IsString(_page_offset), _page_offset)
+      && validreturn!(String, _page_offset)
+      && validreturn!(String, _page_offset)
+    {
+      console_log!(
+        "{}",
+        _page_offset.to_owned() + &_page_length + &_postal_code
+      )
+    };*/
     if !self.initialized {
       self.initialized = true;
-      self.app = self.state.storage().get("app").await?;
+      //self.app = self.state.storage().get("app").await?;
       //self.app = self.app.unwrap_or(self.app.to_owned()); //uses the default from new
     }
     self.env.secret("SOME_SECRET")?.to_string();
