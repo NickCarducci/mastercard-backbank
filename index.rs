@@ -10,10 +10,10 @@ pub use worker_sys::{console_debug, console_error, console_log, console_warn};
 struct Product {
   ivity: String,
 }
-#[derive(Serialize)]
+/*#[derive(Serialize)]
 struct Noth {
   ing: String,
-}
+}*/
 #[durable_object]
 pub struct DurableObjectExample {
   app: String, //Vec<u8>,
