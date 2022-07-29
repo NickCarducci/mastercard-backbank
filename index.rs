@@ -40,8 +40,9 @@ impl DurableObject for DurableObjectExample {
       state: state,
       env,
     }
-  }
-  async fn fetch(&mut self, _req: Request) -> Result<Response> {
+  }//https://github.com/cloudflare/durable-objects-template/issues/14
+  //"Can't read from request stream after response has been sent" or just read _req
+  async fn fetch(&mut self, req: Request) -> Result<Response> {
     let _state = &self.state;
     let _env = &self.env;
     //if (!_req.url)
@@ -72,7 +73,7 @@ impl DurableObject for DurableObjectExample {
     //.and_then(consume_with_relish(relish));
     //let relish =
     async move {
-      return match _req.path().as_str() {
+      return match req.path().as_str() {
         "/" => Response::from_json(&Product {
           ivity: self.app.to_string(),
         }),
