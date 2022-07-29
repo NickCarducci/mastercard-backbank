@@ -40,8 +40,8 @@ impl DurableObject for DurableObjectExample {
       state: state,
       env,
     }
-  }//https://github.com/cloudflare/durable-objects-template/issues/14
-  //"Can't read from request stream after response has been sent" or just read _req
+  } //https://github.com/cloudflare/durable-objects-template/issues/14
+    //"Can't read from request stream after response has been sent" or just read _req
   async fn fetch(&mut self, req: Request) -> Result<Response> {
     let _state = &self.state;
     let _env = &self.env;
@@ -73,7 +73,7 @@ impl DurableObject for DurableObjectExample {
     //.and_then(consume_with_relish(relish));
     //let relish =
     async move {
-      return match req.path().as_str() {
+      match req.path().as_str() {
         "/" => Response::from_json(&Product {
           ivity: self.app.to_string(),
         }),
@@ -82,7 +82,7 @@ impl DurableObject for DurableObjectExample {
                                                                    self.app,
                                                                    //self.env.secret("SOME_SECRET")?.to_string()
                                                                  ))*/
-      };
+      }
       //return Response::ok("");
       //let lock: std::path::PathBuf = pathify("./exec.c");
       //let _app = &self.app;//hardly any use to add the c>php code to the keyvalue storage
