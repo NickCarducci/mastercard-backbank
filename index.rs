@@ -42,7 +42,7 @@ impl DurableObject for DurableObjectExample {
     }
   } //https://github.com/cloudflare/durable-objects-template/issues/14
     //"Can't read from request stream after response has been sent" or just read _req (?)
-  async fn fetch(&mut self, _req: Request) -> Result<Response> {
+  async fn fetch(&mut self, req: Request) -> Result<Response> {
     let _state = &self.state;
     let _env = &self.env;
     let _req = req;
