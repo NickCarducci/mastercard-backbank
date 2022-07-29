@@ -169,38 +169,72 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //unwrap
             //Response::from_json(&Product{url: url.to_string()}) //.map(|resp| resp.with_headers(res_headers));;
             //get, async move
-            let handler = async move {
-                let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
-                return match binding.is_err() {
-                    true => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
-                    false => {
-                        let namespace = binding?;
-                        let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-                        /*let mut opts = RequestInit::new();
-                        opts.method("GET");
-                        opts.mode(RequestMode::Cors);
-                        let url =
-                            format!("https://api.github.com/repos/{}/branches/master", repo);
-                        let request = Request::new_with_str_and_init(&url, &opts)?;
-                        request
-                            .headers()
-                            .set("Accept", "application/vnd.github.v3+json")?;*/
-                        //Response::ok("_req.url()?.host_str(): ".to_owned() + url)
-                        stub.fetch_with_request(req).await
-                        /*let href = Url::parse("https://mastercard-backbank.backbank.workers.dev")?;
-                        let fullyquality = "https://www.".to_owned() + href.host_str().unwrap() + "/.";
-                        stub.fetch_with_str(&fullyquality).await*/ //this is not like fetching the resource again, just the stub
-                                                                   /*A full URL must be used (when calling fetch on a Durable Object).
-                                                                   Also, a wrangler.toml compatibility flag can opt-in to[ the otherwise]
-                                                                   [older behavior](https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url).
+            /*struct Sol (std::option::Option<worker::Stub>);
+            trait MyFunc<T> : FnOnce() -> T {}
 
-                                                                   Astonishingly, I would have figured out to ask this sooner if Post requests could enable
-                                                                   [textual resolutions](https://community.cloudflare.com/t/fetch-post-type-error-failed-to-execute-function/311016/3?u=carducci).
-                                                                   */
+            impl<T, U> MyFunc<T> for U where U: FnOnce() -> T {}
+                        impl Result<worker::Stub> for Sol {
+                            type Output;
+            fn ok_or_else (stub:worker::Stub)->worker::Stub{
+            stub
+            }*/
+            //async move {
+            let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
+            binding?
+                .id_from_name("DurableObjectExample")?
+                .get_stub()?
+                .fetch_with_request(req)
+                .await
+            /*match binding.is_err() {
+                true => async{}.await, //Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
+                false => {
+                    /*impl std::option::Option<worker::Stub>{
+                        type Output;
+                        fn ok_or_else (stub:worker::Stub)->worker::Stub{
+                        stub
+                        }
                     }
-                };
-            };
-            handler.await
+                    std::option::Option<worker::Stub> : */
+                    /*fn re(stub: Option<worker::Stub>) -> Vec<Result<worker::Stub>> {
+                        //let err: worker::Error =Error::from("")
+                        vec![stub.ok_or_else(|| worker::Error::from(""))]
+                    }*/
+                    //https://doc.rust-lang.org/rust-by-example/error/multiple_error_types/option_result.html
+                    //fn refro() -> dyn std::ops::FromResidual<worker::Stub> {
+                    //https://stackoverflow.com/questions/69640783/the-operator-can-only-be-used-in-an-async-block-that-returns-result-or-op
+                    //let stubfoot/*form*/=|req: worker::Stub|{
+                    //https://www.reddit.com/r/rust/comments/ajahh6/cant_capture_dynamic_environment_in_a_fn_item/
+                    match binding.ok() {
+                        //error propogation
+                        Some(namespace) => namespace.id_from_name("DurableObjectExample").ok()?.get_stub()?.fetch_with_request(req).await,
+                        None => async{}.await,
+                    } //https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html#where-the--operator-can-be-used
+                      //};
+                      /*let mut opts = RequestInit::new();
+                      opts.method("GET");
+                      opts.mode(RequestMode::Cors);
+                      let url =
+                          format!("https://api.github.com/repos/{}/branches/master", repo);
+                      let request = Request::new_with_str_and_init(&url, &opts)?;
+                      request
+                          .headers()
+                          .set("Accept", "application/vnd.github.v3+json")?;*/
+                    //Response::ok("_req.url()?.host_str(): ".to_owned() + url)
+                    //let stub = stubfoot();
+                    //stub.fetch_with_request(req).await
+                    /*let href = Url::parse("https://mastercard-backbank.backbank.workers.dev")?;
+                    let fullyquality = "https://www.".to_owned() + href.host_str().unwrap() + "/.";
+                    stub.fetch_with_str(&fullyquality).await*/ //this is not like fetching the resource again, just the stub
+                                                               /*A full URL must be used (when calling fetch on a Durable Object).
+                                                               Also, a wrangler.toml compatibility flag can opt-in to[ the otherwise]
+                                                               [older behavior](https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url).
+
+                                                               Astonishingly, I would have figured out to ask this sooner if Post requests could enable
+                                                               [textual resolutions](https://community.cloudflare.com/t/fetch-post-type-error-failed-to-execute-function/311016/3?u=carducci).
+                                                               */
+                }
+            }*/
+            //}.await
             //}}
         })
         .run(req, env)
@@ -361,3 +395,65 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
 //gays wouldn't even make it to Quran just after remarks. just borrowed Satan reenunciations for cools - Quardihd
 //finally, vax em up. riotous naming is constitutional virus
+
+//affinity (one at a time) vs nonpartisanship (bisummative[, by topic])
+
+//degree for schematics not style
+
+//is symmetry of extension sanity?
+
+//om nom nom amino lipid
+
+//insure the healthy DC BE THERE
+
+//non voters hate the docs
+
+//Marx was his own undoing calling communism socialism without government
+
+//stock value stoked by exclusion
+
+//ongoing upgrades/payment installments
+
+//small business owner age cohort wiling out with license to death wish
+//everything is causing me starvation
+//reasonable until not by embargoers
+
+//technological gains usurped by subsidy, exclusionary
+//"everyone aught to work" industrial class without ability need surplus
+//value by price control over propensity to consumer and so build
+//and payment
+
+//this chat turning into a loss for you but with my teachings
+
+//the private prison system makes money per diem loss of incarceration
+//jail should be a fiscal loss
+
+//homeless people suing... deterrance medicine homeless now
+
+//credit is fraud. free education. islamic bartenders
+//islamic in america? you can bartend
+//talaq "'subtle/astute smart/dumb this maybe that dance around heads, confused'" dannyhyphong as obama
+
+//spoof em!
+//selected by policy needs as if socialist communist without government, the undoing of proponents of proletariat riot
+
+//1 year to build 30 years to pay, hour/quality exclusionary estimate/premium fraud
+//we can make wework microfinance call implausible use lease 5 walled
+
+//councelor psychiatrist for homeless deterrance newsome
+
+//force builders to sell
+
+//communism is literally socialism without government, no exclusion (both) ability need value left over
+//i would rather market share tools tinkerings
+//no rent future as most. stop consonants
+//pathetic like strings. fiddle joker. neo
+
+//Will semiconductor production increase faster than consumption because of the subsidy (to export for expensive labor)?
+
+//send in the roops by is anomoly allowed to say that but I cannot? facebook are faggots homo not withstanding
+
+//"i just feel" - empatheric eric bolling
+
+//Is the government not liable for danger created by cops resigning over vaccination policy?
+//https://www.quora.com/unanswered/Do-psychiatrists-use-behavior-as-proof-when-giving-testimony
