@@ -66,4 +66,4 @@ pub fn start() -> Promise {
     wasm_bindgen_futures::future_to_promise(async { list().await.map_err(Into::into) })
 }
 ````
-# [Eglue](https://codesandbox.io/s/react-local-firebase-i7l8qe)
+# [Eglue](https://codesandbox.io/s/react-local-firebase-i7l8qe) - [repo](https://github.com/NickCarducci/eglue)
