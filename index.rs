@@ -30,6 +30,16 @@ pub struct DurableObjectExample {
 impl FnOnce for Closure1 {
     type Output = ();
 }*/
+
+use serde::Deserialize;
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]//https://github.com/serde-rs/serde/issues/1435
+struct Body {//
+  page_offset: u8,
+  page_length: u8,
+  postal_code: String,
+}
+//https://juliano-alves.com/2020/01/06/rust-deserialize-json-with-serde/
 #[durable_object]
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
@@ -43,20 +53,27 @@ impl DurableObject for DurableObjectExample {
   } //https://github.com/cloudflare/durable-objects-template/issues/14
     //"Can't read from request stream after response has been sent" or just read _req (?)
   async fn fetch(&mut self, req: Request) -> Result<Response> {
-    let _state = &self.state;
-    let _env = &self.env;
-    let _req = req;
+    //let _state = &self.state;
+    //let _env = &self.env;
+    //let _req = req; //.arrayBuffer();
     //if (!_req.url)
     //return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
 
     //let url = new URL(_req.url);
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
+    let mut s = req.clone()?;
+    let body: Body = s.json().await?; //.clone();//.clone()?;
+
+    let _page_offset = body.page_offset;
+    let _page_length = body.page_length;
+    let _postal_code = body.postal_code;
     if !self.initialized {
       self.initialized = true;
       self.app = self.state.storage().get("app").await?;
       //self.app = self.app.unwrap_or(self.app.to_owned()); //uses the default from new
     }
+    self.env.secret("SOME_SECRET")?.to_string();
     //dyn std::future::Future<worker::Response>
     /*pub trait FnOnce<Args> {
       type Output;
