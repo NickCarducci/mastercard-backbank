@@ -22,7 +22,7 @@ macro_rules! validreturn {
     //use super::displaytype;//https://www.tutorialspoint.com/super-and-self-keywords-in-rust-programming
     //struct PotentialType<T>(T);
         {
-            fn ass<T>(_: &T) -> String {
+           /* fn ass<T>(_: &T) -> String {
                 std::any::type_name::<T>().to_string()
             } //https://stackoverflow.com/questions/27769681/should-i-implement-display-or-tostring-to-render-a-type-as-a-string
             let erted = $(ass(&$assertion))*;
@@ -45,7 +45,7 @@ macro_rules! validreturn {
                     );
                     false
                 }
-            }
+            }*/
         }
     //match v {//https://github.com/Metaswitch/assert-type-eq-rs/blob/master/src/lib.rs}
     //}
@@ -513,4 +513,3 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //https://www.science.org/content/blog-post/spike-protein-behavior
 //We must understand the process of mRNA amino acid ‘exocytosis’ vaccine produces
 //(invokes) abnormal virus mutations as a transmembrane anchor region instead of actual release.
-
