@@ -1,4 +1,4 @@
-struct PotentialType<T>(T);
+//struct PotentialType<T>(T);
 
 use serde::Serialize;
 use worker::{
@@ -76,9 +76,17 @@ impl DurableObject for DurableObjectExample {
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
     let mut s = req.clone()?;
-    let body: Body = match s.json().await?{
-      Ok(body)=>body,
-      Err(m)=>console_log!("{}",m)
+    let body: Body = match s.json().await {
+      Ok(body) => body,
+      Err(m) => {
+        console_log!("{}", m);
+        let g: Body = Body {
+          page_offset: "0".to_owned(),
+          page_length: "1".to_owned(),
+          postal_code: "00000".to_owned(),
+        };
+        g
+      }
     }; //.clone();//.clone()?;
 
     let _page_offset = body.page_offset;
@@ -161,3 +169,4 @@ impl DurableObject for DurableObjectExample {
 //Is propensity exclusively genetic part of athleticism potential?
 
 //the shim is my business partner
+//you are making yourself look bad (NBER/truncatedwholesaletax.com) you don't think skirt
