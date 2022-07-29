@@ -1,6 +1,56 @@
 //https://github.com/cloudflare/workers-rs/issues/94
 //"you'll need to define the Durable Object in a separate module. ...this:"
 //"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
+//use paste::paste;
+//use std::assert_matches::assert_matches;
+//#![feature(assert_matches)]
+#[macro_export]
+macro_rules! validreturn {
+    /*($typetype:ty) => {
+        paste! {
+          fn |<displaytype| (type:$typetype) -> String {return format!("{:?}", type)}
+        }
+    };*///https://stackoverflow.com/questions/53580165/is-it-possible-to-let-a-macro-expand-to-a-struct-field
+    //ty=>tt "expected expression, found `String`"
+    ($($type:tt, $assertion:ident),*) => {
+        //($()*) allows rule-in-rule
+            //https://veykril.github.io/tlborm/decl-macros/patterns/internal-rules.html
+    //fn displaytype (type:$type) -> String {return format!("{:?}", type)}
+
+    /*paste! {
+    fn |<ass T>| (type:$typetype) -> String {return std::any::type_name::<T>()}*/
+    //use super::displaytype;//https://www.tutorialspoint.com/super-and-self-keywords-in-rust-programming
+    //struct PotentialType<T>(T);
+        {
+            fn ass<T>(_: &T) -> String {
+                std::any::type_name::<T>().to_string()
+            } //https://stackoverflow.com/questions/27769681/should-i-implement-display-or-tostring-to-render-a-type-as-a-string
+            let erted = $(ass(&$assertion))*;
+            let displaytype = format!("{:?}", $($type)*); //eval_str($($type)*).unwrap());
+                                                        //fn validreturn(v: Any) -> $type {
+                                                        //https://stackoverflow.com/questions/32289605/how-do-i-write-a-wrapper-for-a-macro-without-repeating-the-rules
+                                                        //match /*displaytype(*/assert_eq!(displaytype , erted) {
+                                                        /*true => displaytype,
+                                                        false => "'validreturn': " + erted + " type begging: " + displaytype*/
+            match matches!(displaytype, erted) {
+                true => {
+                    console_log!("displaytype {}", displaytype);
+                    true
+                }
+                false => {
+                    //https://stackoverflow.com/questions/21747136/how-do-i-print-the-type-of-a-variable
+                    console_log!(
+                        "validreturn {}",
+                        "'validreturn': ".to_owned() + &erted + " type begging: " + &displaytype
+                    );
+                    false
+                }
+            }
+        }
+    //match v {//https://github.com/Metaswitch/assert-type-eq-rs/blob/master/src/lib.rs}
+    //}
+    };
+}
 
 // We're able to specify a start event that is called when the WASM is initialized before any
 // requests. This is useful if you have some global state or setup code, like a logger. This is
@@ -457,3 +507,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
 //Is the government not liable for danger created by cops resigning over vaccination policy?
 //https://www.quora.com/unanswered/Do-psychiatrists-use-behavior-as-proof-when-giving-testimony
+
+//mind your own business, faggot charlie kirk, homo notwithstanding (fraud, narcotics, immigration/merchantilism)
+
+//https://www.science.org/content/blog-post/spike-protein-behavior
+//We must understand the process of mRNA amino acid ‘exocytosis’ vaccine produces
+//(invokes) abnormal virus mutations as a transmembrane anchor region instead of actual release.
+
