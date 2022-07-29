@@ -41,8 +41,8 @@ impl DurableObject for DurableObjectExample {
       env,
     }
   } //https://github.com/cloudflare/durable-objects-template/issues/14
-    //"Can't read from request stream after response has been sent" or just read _req
-  async fn fetch(&mut self, req: Request) -> Result<Response> {
+    //"Can't read from request stream after response has been sent" or just read _req (?)
+  async fn fetch(&mut self, _req: Request) -> Result<Response> {
     let _state = &self.state;
     let _env = &self.env;
     //if (!_req.url)
@@ -72,7 +72,7 @@ impl DurableObject for DurableObjectExample {
     self.state.storage().put("app", &self.app).await?;
     //.and_then(consume_with_relish(relish));
     //let relish =
-    async move {
+    /*async move {
       match req.path().as_str() {
         "/" => Response::from_json(&Product {
           ivity: self.app.to_string(),
@@ -94,7 +94,10 @@ impl DurableObject for DurableObjectExample {
       //self.data = data::to_string();//https://doc.rust-lang.org/std/macro.format.html
       //return Response::ok(&format!("{} data.", self.data));
     }
-    .await
+    .await*/
+    Response::from_json(&Product {
+      ivity: self.app.to_string(),
+    })
     //.or_else(|err| Response::error(err.to_string(), 500));
   }
 }
