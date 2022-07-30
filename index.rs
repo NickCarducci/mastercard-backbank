@@ -76,7 +76,7 @@ impl DurableObject for DurableObjectExample {
     //let url = new URL(_req.url);
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
-    let mut s = req.clone()?;//.unwrap();
+    let mut s = req;//.clone()?;//.unwrap();
     //serde_json::to_string(&s);
     //let body: Body = ResponseBody::Body(s.bytes().await?);
     let _body = serde_json::json!(s.bytes().await?); /*match s.json().await {
