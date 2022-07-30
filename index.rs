@@ -79,7 +79,7 @@ impl DurableObject for DurableObjectExample {
     let mut s = req.clone()?;//.unwrap();
     //serde_json::to_string(&s);
     //let body: Body = ResponseBody::Body(s.bytes().await?);
-    let body = serde_json::json!(s.bytes().await?); /*match s.json().await {
+    let _body = serde_json::json!(s.bytes().await?); /*match s.json().await {
                                                               Ok(body) => body,
                                                               Err(m) => {
                                                                 console_log!("{}", m);
@@ -93,12 +93,12 @@ impl DurableObject for DurableObjectExample {
                                                             };*/
     //.clone();//.clone()?; serialize as json
 
-    console_log!("{:?}", serde_json::to_string(&body));
+    //console_log!("{:?}", serde_json::to_string(&body));
     //serialize as json (with struct)
-    let body: Body = s.json().await.unwrap();
-    let _page_offset = body.page_offset;
-    let _page_length = body.page_length;
-    let _postal_code = body.postal_code;
+    let bodi: Body = s.json().await.unwrap();
+    let _page_offset = bodi.page_offset;
+    let _page_length = bodi.page_length;
+    let _postal_code = bodi.postal_code;
 
     /*if IsString(_page_offset)//validreturn!(IsString(_page_offset), _page_offset)
       && validreturn!(String, _page_offset)
