@@ -68,7 +68,7 @@ impl DurableObject for DurableObjectExample {
     //"Can't read from request stream after response has been sent" or just read _req (?)
   async fn fetch(&mut self, req: Request) -> Result<Response> {
     //let _state = &self.state;
-    //let _env = &self.env;
+    let _env = &self.env;
     //let _req = req; //.arrayBuffer();
     //if (!_req.url)
     //return R({ response: "abnormal" }, [400, "abnormal", dataHead]);
@@ -114,7 +114,7 @@ impl DurableObject for DurableObjectExample {
       //self.app = self.state.storage().get("app").await?;
       //self.app = self.app.unwrap_or(self.app.to_owned()); //uses the default from new
     }
-    self.env.secret("SOME_SECRET")?.to_string();
+    //self.env.secret("SOME_SECRET")?.to_string();
     //dyn std::future::Future<worker::Response>
     /*pub trait FnOnce<Args> {
       type Output;
@@ -226,3 +226,5 @@ after spending some time on that. This bio's prose is however more for the arc.*
 
 //social security office do not give a lick to the non-speaking developmentally disabled and injured
 //35.4% 5.2% 7% 48% age-related who can drive Uber with a diaper
+
+//How many conservatives would trade mercantilism for saving social programs on .3%+ of the potential population from immigration?
