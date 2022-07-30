@@ -38,7 +38,6 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")] //https://github.com/serde-rs/serde/issues/1435
 struct Body {
-  //
   page_offset: String,
   page_length: String,
   postal_code: String,
@@ -49,7 +48,8 @@ impl std::fmt::Debug for IsString {
     Ok(())
   } *///Self::Output
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    f.debug_tuple("IsString").field(&self.0).finish()
+    f.debug_tuple("IsString") /*.field(&self.0)*/
+      .finish()
   } //https://doc.rust-lang.org/std/fmt/trait.Debug.html
 } //https://stackoverflow.com/questions/22243527/how-to-implement-a-custom-fmtdebug-trait
   //https://juliano-alves.com/2020/01/06/rust-deserialize-json-with-serde/
@@ -170,3 +170,10 @@ impl DurableObject for DurableObjectExample {
 
 //the shim is my business partner
 //you are making yourself look bad (NBER/truncatedwholesaletax.com) you don't think skirt
+
+//politics is to choose the null move when the cohort can teach themselves (the thing)
+//don't talk over the nuts
+
+//shut up faggot ummah! Talaq brothers and sisters
+
+//need to move on from wall st, my _ rn
