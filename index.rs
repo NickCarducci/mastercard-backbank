@@ -42,7 +42,7 @@ struct Body {
   page_length: String,
   postal_code: String,
 }
-struct IsString(String);
+/*struct IsString(String);
 impl std::fmt::Debug for IsString {
   /*fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
     Ok(())
@@ -51,8 +51,9 @@ impl std::fmt::Debug for IsString {
     f.debug_tuple("IsString") /*.field(&self.0)*/
       .finish()
   } //https://doc.rust-lang.org/std/fmt/trait.Debug.html
-} //https://stackoverflow.com/questions/22243527/how-to-implement-a-custom-fmtdebug-trait
-  //https://juliano-alves.com/2020/01/06/rust-deserialize-json-with-serde/
+}*/
+//https://stackoverflow.com/questions/22243527/how-to-implement-a-custom-fmtdebug-trait
+//https://juliano-alves.com/2020/01/06/rust-deserialize-json-with-serde/
 #[durable_object]
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
@@ -75,21 +76,26 @@ impl DurableObject for DurableObjectExample {
     //let url = new URL(_req.url);
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
-    let mut s = req.clone()?;
-    let body: Body = s.json().await?;/*match s.json().await {
-      Ok(body) => body,
-      Err(m) => {
-        console_log!("{}", m);
-        let g: Body = Body {
-          page_offset: "0".to_owned(),
-          page_length: "1".to_owned(),
-          postal_code: "00000".to_owned(),
-        };
-        g
-      }
-    };*/ //.clone();//.clone()?;
-    console_log!("{:?}",body);
+    let mut s = req.clone().unwrap();
+    //serde_json::to_string(&s);
+    //let body: Body = ResponseBody::Body(s.bytes().await?);
+    let body = serde_json::json!(s.bytes().await.unwrap()); /*match s.json().await {
+                                                              Ok(body) => body,
+                                                              Err(m) => {
+                                                                console_log!("{}", m);
+                                                                let g: Body = Body {
+                                                                  page_offset: "0".to_owned(),
+                                                                  page_length: "1".to_owned(),
+                                                                  postal_code: "00000".to_owned(),
+                                                                };
+                                                                g
+                                                              }
+                                                            };*/
+    //.clone();//.clone()?;
 
+    console_log!("{:?}", serde_json::to_string(&body));
+
+    let body: Body = s.json().await.unwrap();
     let _page_offset = body.page_offset;
     let _page_length = body.page_length;
     let _postal_code = body.postal_code;
@@ -188,9 +194,26 @@ after spending some time on that. This bio's prose is however more for the arc.*
 //"run amock, do what they want, everything" ken belkin 10% for the big guy
 //declare 'it' properly/define ‘it’
 
-//harassment 
+//harassment
 
 //FEMA incentivizing illegal immigration with subsidy
 //as existing business does subsidy
 
 //millions of other customers would vote to love
+
+//NBER concentration income/institutional gifts and housing(retreats) employee benefits taxes
+
+//market concentration is destroyed by technology
+
+//destroy paywall, join WIPO, communist no gov
+
+//regulation like most fracking not paywal exclusionary non-substitutive
+//you can stop fraud, old people and youth victims
+//Well, if Hunter Biden actually made a deal AUXILIARY TO CONGRESSIONAL APPROPRIATIONS
+//with (1) gifts to Joe Biden, the (2) admitting to it though text messages would ACTUALLY
+//be incriminating (with grounds of selling his office) instead of ‘just politics’ or what have you that is merely rhetorical.
+
+//salaam talaq usury fraud bartenders must (Mahr)
+
+//need mahr/dowry or relent from it
+//sue him embezlement take your meds!
