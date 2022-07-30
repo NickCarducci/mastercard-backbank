@@ -76,7 +76,7 @@ impl DurableObject for DurableObjectExample {
     //let url = new URL(_req.url);
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
-    let mut s = req;//.clone()?;//.unwrap();
+    let mut s = req.clone()?;//.unwrap();
     //serde_json::to_string(&s);
     //let body: Body = ResponseBody::Body(s.bytes().await?);
     let _body = serde_json::json!(s.bytes().await?); /*match s.json().await {
@@ -95,7 +95,7 @@ impl DurableObject for DurableObjectExample {
 
     //console_log!("{:?}", serde_json::to_string(&body));
     //serialize as json (with struct)
-    let bodi: Body = s.json().await.unwrap();
+    let bodi: Body = s.json().await?;//.unwrap();
     let _page_offset = bodi.page_offset;
     let _page_length = bodi.page_length;
     let _postal_code = bodi.postal_code;
@@ -216,4 +216,13 @@ after spending some time on that. This bio's prose is however more for the arc.*
 //salaam talaq usury fraud bartenders must (Mahr)
 
 //need mahr/dowry or relent from it
-//sue him embezlement take your meds!
+//'sue [government]' embezzlement fiduciary [for not fining] take your meds!
+
+//elephants
+//mutations not inseminations
+//transaction records instead of sms supoena foreign agent [relational affairs]
+//biden is fracking more than ever
+//77 wabc consistently does disinformation this stuff can all be found online
+
+//social security office do not give a lick to the non-speaking developmentally disabled and injured
+//35.4% 5.2% 7% 48% age-related who can drive Uber with a diaper
