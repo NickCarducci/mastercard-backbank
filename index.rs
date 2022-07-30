@@ -76,7 +76,7 @@ impl DurableObject for DurableObjectExample {
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
     let mut s = req.clone()?;
-    let body: Body = match s.json().await {
+    let body: Body = s.json().await?;/*match s.json().await {
       Ok(body) => body,
       Err(m) => {
         console_log!("{}", m);
@@ -87,7 +87,8 @@ impl DurableObject for DurableObjectExample {
         };
         g
       }
-    }; //.clone();//.clone()?;
+    };*/ //.clone();//.clone()?;
+    console_log!("{:?}",body);
 
     let _page_offset = body.page_offset;
     let _page_length = body.page_length;
@@ -177,3 +178,19 @@ impl DurableObject for DurableObjectExample {
 //shut up faggot ummah! Talaq brothers and sisters
 
 //need to move on from wall st, my _ rn
+//you gotta want it
+
+//rape by no condom? duress(?)
+
+/*I sometimes think how my writing style is mandirin english
+after spending some time on that. This bio's prose is however more for the arc.*/
+
+//"run amock, do what they want, everything" ken belkin 10% for the big guy
+//declare 'it' properly/define ‘it’
+
+//harassment 
+
+//FEMA incentivizing illegal immigration with subsidy
+//as existing business does subsidy
+
+//millions of other customers would vote to love
