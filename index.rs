@@ -76,7 +76,7 @@ impl DurableObject for DurableObjectExample {
     //let url = new URL(_req.url);
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
-    let mut s = req.clone()?; //.unwrap();
+    //let mut s = req.clone()?; //.unwrap();
                               //serde_json::to_string(&s);
                               //let body: Body = ResponseBody::Body(s.bytes().await?);
                               /*let _body = serde_json::json!(s.bytes().await?); / *match s.json().await {
@@ -91,7 +91,7 @@ impl DurableObject for DurableObjectExample {
                                   g
                                 }
                               };*/
-    let _body = match s.bytes().await {
+    let _body = match req.bytes().await {
       Ok(app) => serde_json::json!(app),
       Err(a) => {
         let g = |a| a;
@@ -103,7 +103,7 @@ impl DurableObject for DurableObjectExample {
 
     //console_log!("{:?}", serde_json::to_string(&body));
     //serialize as json (with struct)
-    let bodi = match s.json().await {
+    let bodi = match req.json().await {
       Ok(app) => {
         let bodi: Body = app;
         bodi
@@ -363,3 +363,18 @@ after spending some time on that. This bio's prose is however more for the arc.*
 //these kinds of thinks for pitfall -"smears" you need to decide, your leader wanit want the issue is why it work, waste time misrepresent by ambiguity to claim others misrepresent
 
 //how is How do socialists spend the proletariat industrial class?
+
+//quantity demanded is not complementary leisure exchanged for ability need
+//price is dependent on quantity and independent to the individual revelative
+
+/*
+Have you not heard of marginal utility? Every entrant into the given market is 
+sorted by their propensity to enter by preference and fixed startup costs to supply 
+themselves and others. Supply can be complementary with demand more atomically than 
+the non accelerating inflationary rate of unemployment as atomicity begets (Phillips/misery).
+
+Why are you treating every marginal utility as the total utility itself instead of as its base?
+The individuals can be price takers as supply is inelastic, yet in an efficient market where supply 
+is complementary with demand the latter are price givers by budget constraints sorted-by/per preferences 
+and fixed startup costs to substitute as supply.
+*/
