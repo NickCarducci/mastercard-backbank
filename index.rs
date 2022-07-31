@@ -76,26 +76,26 @@ impl DurableObject for DurableObjectExample {
     //let url = new URL(_req.url);
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
-    let mut s = req.clone()?;//.unwrap();
-    //serde_json::to_string(&s);
-    //let body: Body = ResponseBody::Body(s.bytes().await?);
+    let mut s = req.clone()?; //.unwrap();
+                              //serde_json::to_string(&s);
+                              //let body: Body = ResponseBody::Body(s.bytes().await?);
     let _body = serde_json::json!(s.bytes().await?); /*match s.json().await {
-                                                              Ok(body) => body,
-                                                              Err(m) => {
-                                                                console_log!("{}", m);
-                                                                let g: Body = Body {
-                                                                  page_offset: "0".to_owned(),
-                                                                  page_length: "1".to_owned(),
-                                                                  postal_code: "00000".to_owned(),
-                                                                };
-                                                                g
-                                                              }
-                                                            };*/
+                                                       Ok(body) => body,
+                                                       Err(m) => {
+                                                         console_log!("{}", m);
+                                                         let g: Body = Body {
+                                                           page_offset: "0".to_owned(),
+                                                           page_length: "1".to_owned(),
+                                                           postal_code: "00000".to_owned(),
+                                                         };
+                                                         g
+                                                       }
+                                                     };*/
     //.clone();//.clone()?; serialize as json
 
     //console_log!("{:?}", serde_json::to_string(&body));
     //serialize as json (with struct)
-    let bodi: Body = s.json().await?;//.unwrap();
+    let bodi: Body = s.json().await?; //.unwrap();
     let _page_offset = bodi.page_offset;
     let _page_length = bodi.page_length;
     let _postal_code = bodi.postal_code;
@@ -111,23 +111,69 @@ impl DurableObject for DurableObjectExample {
     };*/
     if !self.initialized {
       self.initialized = true;
-      //self.app = self.state.storage().get("app").await?;
-      //self.app = self.app.unwrap_or(self.app.to_owned()); //uses the default from new
-    }
-    //self.env.secret("SOME_SECRET")?.to_string();
-    //dyn std::future::Future<worker::Response>
-    /*pub trait FnOnce<Args> {
-      type Output;
+      match self.state.storage().get("app").await {
+        Ok(app) => {
+          //'Some' when ? -> Option, 'Ok' when -> Result
+          self.app = app;
+         // app
+        } //uses the default from new //.unwrap_or(self.app.to_owned()
+        Err(a) => {
+          //struct St(String);
+          //.unwrap_or(self.app.to_owned()
+          //let g = a::fmt;//.backtrace;
 
-      extern "rust-call" fn call_once(self, args: Args) -> Self::Output;
+          /*impl std::fmt::Display for a {
+          fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            match *self {
+                Suit::Heart => write!(f, "♥"),
+                Suit::Diamond => write!(f, "♦"),
+                Suit::Spade => write!(f, "♠"),
+                Suit::Club => write!(f, "♣"),
+            }
+          }*/
+          //a::from();extracongressional//finance has ruined marriage as duress as well as homeless
+          let g = |a| a; //format!()
+
+          console_log!("{}", g(a)); //extend push append// [dummy,vec!(0)].concat()
+                                    //let dummy: Vec<String> = Vec::new();
+                                    //let s:Vec<String> = "   ".as_bytes().to_vec();
+          //vec!["".to_string()]
+          //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
+          //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
+        }
+      };
     }
-    fn consume_with_relish<F>(func: F)
-    where
-      F: FnOnce() -> worker::Response,
-    {
-      call_once()
-      //func() then use of moved value` error
-    }*/
+    /*
+        We can also handle the mapping as a std::borrow::Cow to make vec! macro [clone on write] last concurrently. I guess that's "lossy" for you:
+    declare a lossy clone-to-be `&str` literal array as bytes before .
+    let literally = ["", ""]
+      .into_iter()
+      .map(|x| String::from_utf8_lossy(x.as_bytes()).to_string())
+      .collect();
+    let s: Vec<String> = vec![literally];
+    I (am also new to rust and) have not checked all use cases (multiple slices of strings - ok?) but rustup with VirtualStudio code analyzer is telling my folder that `s` type-defined variable is std::vec::Vec<std::string::String>.
+    Probably trading process for modularity (by mapping over lossy bytes), if readability determinations were notwithstanding (unless this very thing is abstracted, which I doubt).
+        */
+
+    fn set(x: [&str; 2]) -> Vec<String> {
+      let literally: String = x.into_iter().map(String::from).collect();
+      vec![literally] //vec![literally];
+    }
+    let _s = set(["", ""]); //https://www.reddit.com/r/learnrust/comments/h82em8/best_way_to_create_a_vecstring_from_str/iibjabv/?context=3
+                           //self.env.secret("SOME_SECRET")?.to_string();
+                           //dyn std::future::Future<worker::Response>
+                           /*pub trait FnOnce<Args> {
+                             type Output;
+
+                             extern "rust-call" fn call_once(self, args: Args) -> Self::Output;
+                           }
+                           fn consume_with_relish<F>(func: F)
+                           where
+                             F: FnOnce() -> worker::Response,
+                           {
+                             call_once()
+                             //func() then use of moved value` error
+                           }*/
     self.state.storage().put("app", &self.app).await?;
     //.and_then(consume_with_relish(relish));
     //let relish =
@@ -228,3 +274,71 @@ after spending some time on that. This bio's prose is however more for the arc.*
 //35.4% 5.2% 7% 48% age-related who can drive Uber with a diaper
 
 //How many conservatives would trade mercantilism for saving social programs on .3%+ of the potential population from immigration?
+
+//i don't know who is going to disagree with you .. approval rate is the same people and adbusters' occupy corporate greed is otherwise
+
+//indirect mechanisms are fraudulent social choice program except for royalty contract, and
+//they aren't exclusionary as ascertainable monopoly by royalty payday
+
+//corporation representation buy a t shirt or hat
+//igg.me/at/occupywallstreet / fracking more than ever... revelative
+
+//hospital is for surgery not attenuation
+
+//all verticals are fixed startup costs of one another at the end of the day (not just semiconductors), even the unreal tax exempt
+//that allows the NBER recession to happen when people start paying tax exempt employee benefits uh after income
+//let's vote out Bob "right-to-try" Menendez with elastic supply named riots before we self stunt and resolve this
+//non-diplomatically. Should we take in Russian asylum for a mercantilist conservative perspective
+
+//truncated wholesale tax geohash month world peace protocol
+
+//$15/customer/yr discounted gifts
+
+/*I am injured ([by sports injury](https://www.google.com/maps/reviews/@40.226143,-74.010427,17z/data=!3m1!4b1!4m5!14m4!1m3!1m2!1s116647982166856941576!2s0x0:0x378cebad53d3cd2f?hl=en-US)) but was [called schizophrenic](https://www.google.com/maps/reviews/@40.3536779,-74.0639766,17z/data=!3m1!4b1!4m5!14m4!1m3!1m2!1s116647982166856941576!2s0x0:0xfe73b6ff732230da?hl=en-US).  I am a bartender, otherwise I will not take fraud as income. For this I looked into the 2018 National Beneficiary Survey (next one estimated release 2023) that says of 4062 reporters **35.4% are mentally ill, 5.2% with developmental disability, and 14.9% are injured** (or poisoned) in 2015. For a picture of the **Musculoskeletally-disordered of 42.1%**, we can use the [Center on Budget and Policy Priorities](https://www.cbpp.org/research/social-security/social-security-disability-insurance-0) [reports](https://www.cbpp.org/typical-disabled-worker-is-over-50-and-has-severe-mental-musculoskeletal-or-other-impairment-2) to get an age-related image. So, other than age, what injuries constitute a proper claim? Is it only when something (1) falls on you (2) on the job?
+
+[![Center on Budget and Policy Priorities][1]][1]
+
+[![National Beneficiary Survey, 2015][2]][2]
+
+
+  [1]: https://i.stack.imgur.com/jA38q.png
+  [2]: https://i.stack.imgur.com/4sOtJ.png*/
+
+//  "liberal and left left-ist" practice - pascal
+
+//adbusters is just politcal
+//conservatives hate parts of empire vertical costs
+//communist proletariat dictatorship non-chattle mercantilism
+//surplus ability needs ends
+
+//occupy is just political
+//salty socialist squirrels
+//no exclusion by corporate subsidy nor yet vulgar socialism but
+//for actual injury (including sports) "dougen anti-marxism, broadenism"
+//ban the governments
+
+//dougan marxist
+//"win/understand base, other side don't reject"
+
+//fraud "rsdym WWII flipped" "baristagate patriotic theories of surplus value, service workers are not industrial-proles"
+//"union health i" service = blue hair/pmc.. every vertical is in service of the other
+
+//Talaq implies Mahr/dowry... flog otherwise (including urusy).. defiling "cut off" ... torah "[death]" to flog to talaq
+//need to pay talaq/dowry lawyer before the death sentence
+
+//https://law.stackexchange.com/questions/82673/what-kinds-of-injuries-are-covered-by-social-security
+
+//make sure it is reciprocol force is never love, consent by duress is not but for surplus value. finance has ruined marriage as per consent
+
+//is a second opinon not embezzlement
+//is physical injury second opinon social security not embezzlement
+
+//constitution, system and what is right
+
+//plea duress/ civil suit/ cop admissible not evidence sure yet not motive as testimony
+
+//ask how much money? how to prove it did hapopen to desist no more than 1/12 (warning order// AJ meds)
+
+//FDA is animal abuse
+
+//minority "worth it" fiduciary embezzlement not fining judges for successful appeals
