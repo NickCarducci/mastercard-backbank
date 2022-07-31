@@ -285,7 +285,7 @@ impl DurableObject for DurableObjectExample {
     })*/
     Response::ok(&format!(
       "[durable_object]: self.app: {}", //, secret value: {}",
-      self.app,
+      &self.app,
       //self.env.secret("SOME_SECRET")?.to_string()
     ))
     //.or_else(|err| Response::error(err.to_string(), 500));
