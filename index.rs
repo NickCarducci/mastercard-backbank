@@ -77,33 +77,34 @@ impl DurableObject for DurableObjectExample {
     //let  value = null;
     //self.state.storage().put("app", self.app).await?;
     //let mut s = req.clone()?; //.unwrap();
-                              //serde_json::to_string(&s);
-                              //let body: Body = ResponseBody::Body(s.bytes().await?);
-                              /*let _body = serde_json::json!(s.bytes().await?); / *match s.json().await {
-                                Ok(body) => body,
-                                Err(m) => {
-                                  console_log!("{}", m);
-                                  let g: Body = Body {
-                                    page_offset: "0".to_owned(),
-                                    page_length: "1".to_owned(),
-                                    postal_code: "00000".to_owned(),
-                                  };
-                                  g
-                                }
-                              };*/
-    let _body = match req.bytes().await {
+    //serde_json::to_string(&s);
+    //let body: Body = ResponseBody::Body(s.bytes().await?);
+    /*let _body = serde_json::json!(s.bytes().await?); / *match s.json().await {
+      Ok(body) => body,
+      Err(m) => {
+        console_log!("{}", m);
+        let g: Body = Body {
+          page_offset: "0".to_owned(),
+          page_length: "1".to_owned(),
+          postal_code: "00000".to_owned(),
+        };
+        g
+      }
+    };*/
+    let _body = match req.clone()?.bytes().await {
       Ok(app) => serde_json::json!(app),
       Err(a) => {
         let g = |a| a;
 
         console_log!("{}", g(a));
+        serde_json::json!({})
       }
     };
     //.clone();//.clone()?; serialize as json
 
     //console_log!("{:?}", serde_json::to_string(&body));
     //serialize as json (with struct)
-    let bodi = match req.json().await {
+    let bodi = match req.clone()?.json().await {
       Ok(app) => {
         let bodi: Body = app;
         bodi
@@ -112,6 +113,11 @@ impl DurableObject for DurableObjectExample {
         let g = |a| a;
 
         console_log!("{}", g(a));
+        Body {
+          page_offset: "".to_string(),
+          page_length: "".to_string(),
+          postal_code: "".to_string(),
+        }
       }
     }; //.unwrap();
     let _page_offset = bodi.page_offset;
@@ -129,10 +135,10 @@ impl DurableObject for DurableObjectExample {
     };*/
     if !self.initialized {
       self.initialized = true;
-      match self.state.storage().get("app").await {
+     self.app = match self.state.storage().get("app").await {
         Ok(app) => {
           //'Some' when ? -> Option, 'Ok' when -> Result
-          self.app = app;
+           app
           // app
         } //uses the default from new //.unwrap_or(self.app.to_owned()
         Err(a) => {
@@ -158,6 +164,7 @@ impl DurableObject for DurableObjectExample {
                                     //vec!["".to_string()]
                                     //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
                                     //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
+          "".to_string()
         }
       };
     }
@@ -368,13 +375,13 @@ after spending some time on that. This bio's prose is however more for the arc.*
 //price is dependent on quantity and independent to the individual revelative
 
 /*
-Have you not heard of marginal utility? Every entrant into the given market is 
-sorted by their propensity to enter by preference and fixed startup costs to supply 
-themselves and others. Supply can be complementary with demand more atomically than 
+Have you not heard of marginal utility? Every entrant into the given market is
+sorted by their propensity to enter by preference and fixed startup costs to supply
+themselves and others. Supply can be complementary with demand more atomically than
 the non accelerating inflationary rate of unemployment as atomicity begets (Phillips/misery).
 
 Why are you treating every marginal utility as the total utility itself instead of as its base?
-The individuals can be price takers as supply is inelastic, yet in an efficient market where supply 
-is complementary with demand the latter are price givers by budget constraints sorted-by/per preferences 
+The individuals can be price takers as supply is inelastic, yet in an efficient market where supply
+is complementary with demand the latter are price givers by budget constraints sorted-by/per preferences
 and fixed startup costs to substitute as supply.
 */
