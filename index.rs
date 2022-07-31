@@ -158,7 +158,7 @@ impl DurableObject for DurableObjectExample {
     };*/
     if !self.initialized {
       self.initialized = true;
-      self.app = serde_json::json!(self.state.storage().get("app").await); /*match self.state.storage().get("app").await {
+      self.app = serde_json::json!(&self.state.storage().get("app").await); /*match self.state.storage().get("app").await {
                                                                              Ok(app) => {
                                                                                //'Some' when ? -> Option, 'Ok' when -> Result
                                                                                let app: Result<Response> = app;
@@ -227,7 +227,7 @@ impl DurableObject for DurableObjectExample {
     match self
       .state
       .storage()
-      .put("app", &serde_json::json!(self.app))
+      .put("app", &serde_json::json!(&self.app))
       .await
     {
       Ok(app) => {
@@ -291,7 +291,7 @@ impl DurableObject for DurableObjectExample {
     })*/
     Response::ok(&format!(
       "[durable_object]: self.app: {}", //, secret value: {}",
-      serde_json::json!(self.app)       //?.string(),
+      serde_json::json!(&self.app)       //?.string(),
                                         //self.env.secret("SOME_SECRET")?.to_string()
     ))
     //.or_else(|err| Response::error(err.to_string(), 500));
@@ -500,3 +500,14 @@ I think if you think evolution process product is to release from cells instead 
 //tax equally uniformly verticals important to eachother could be elastic fixed costs as ability meets needs
 
 //mercantilist seek to maximize exports by importing labor not by surplus value left over effort but depreciating work
+
+
+//you can code, I cannot even only but bartend
+
+//be happy or else. spits* islamic bartender 
+
+//asylym conscripts. don't stop advocating
+
+//"elected managers"
+//huge talq from eachother
+//we can protest with geohash above $15k/customer/yr by subsidiary (yet for worker?)
