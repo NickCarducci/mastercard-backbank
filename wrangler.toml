@@ -5,7 +5,7 @@ account_id = "9ddca7c9df604668fc6d14f079b2f066"
 # workers_dev = true #if using default subdomain, here: api ok
 workers_dev = false
 route = "*sausage.saltbank.org/*"
-zone_id = "$zoneid"
+zone_id = "6202e995eadc857cd8e97e8ba608286d"
 # wasm_modules={BACKBANK_WASM="./a.out.wasm"}# "./src/glue"}
 # webpack_config = "webpack.config.js"
 # route = "" #if not using default subdomain, here: api not needed, defaults err
