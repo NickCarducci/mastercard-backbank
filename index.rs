@@ -42,6 +42,23 @@ struct Body {
   page_length: String,
   postal_code: String,
 }
+/*const Leg: Body = Body { 
+          page_offset: "".to_string(),
+          page_length: "".to_string(),
+          postal_code: "".to_string(),
+          };
+enum Organ {
+    Leg
+}//console_log("{}",);console_log("{:?}",)
+`index::Body` doesn't implement `std::fmt::Display`
+`index::Body` cannot be formatted with the default formatter
+impl std::fmt::Display for Body {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    match *self {
+      Leg::page_offset(a) => write!(f,"{}",a)
+    }
+  }
+}*/
 /*struct IsString(String);
 impl std::fmt::Debug for IsString {
   /*fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
@@ -91,7 +108,7 @@ impl DurableObject for DurableObjectExample {
         g
       }
     };*/
-    let _body = match req.clone()?.bytes().await {
+    let body = match req.clone()?.bytes().await {
       Ok(app) => serde_json::json!(app),
       Err(a) => {
         let g = |a| a;
@@ -100,6 +117,7 @@ impl DurableObject for DurableObjectExample {
         serde_json::json!({})
       }
     };
+    console_log!("{}", body);
     //.clone();//.clone()?; serialize as json
 
     //console_log!("{:?}", serde_json::to_string(&body));
@@ -120,6 +138,7 @@ impl DurableObject for DurableObjectExample {
         }
       }
     }; //.unwrap();
+    console_log!("{:?}", bodi);
     let _page_offset = bodi.page_offset;
     let _page_length = bodi.page_length;
     let _postal_code = bodi.postal_code;
@@ -135,10 +154,10 @@ impl DurableObject for DurableObjectExample {
     };*/
     if !self.initialized {
       self.initialized = true;
-     self.app = match self.state.storage().get("app").await {
+      self.app = match self.state.storage().get("app").await {
         Ok(app) => {
           //'Some' when ? -> Option, 'Ok' when -> Result
-           app
+          app
           // app
         } //uses the default from new //.unwrap_or(self.app.to_owned()
         Err(a) => {
