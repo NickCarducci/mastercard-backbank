@@ -79,23 +79,41 @@ impl DurableObject for DurableObjectExample {
     let mut s = req.clone()?; //.unwrap();
                               //serde_json::to_string(&s);
                               //let body: Body = ResponseBody::Body(s.bytes().await?);
-    let _body = serde_json::json!(s.bytes().await?); /*match s.json().await {
-                                                       Ok(body) => body,
-                                                       Err(m) => {
-                                                         console_log!("{}", m);
-                                                         let g: Body = Body {
-                                                           page_offset: "0".to_owned(),
-                                                           page_length: "1".to_owned(),
-                                                           postal_code: "00000".to_owned(),
-                                                         };
-                                                         g
-                                                       }
-                                                     };*/
+                              /*let _body = serde_json::json!(s.bytes().await?); / *match s.json().await {
+                                Ok(body) => body,
+                                Err(m) => {
+                                  console_log!("{}", m);
+                                  let g: Body = Body {
+                                    page_offset: "0".to_owned(),
+                                    page_length: "1".to_owned(),
+                                    postal_code: "00000".to_owned(),
+                                  };
+                                  g
+                                }
+                              };*/
+    let _body = match s.bytes().await {
+      Ok(app) => serde_json::json!(app),
+      Err(a) => {
+        let g = |a| a;
+
+        console_log!("{}", g(a));
+      }
+    };
     //.clone();//.clone()?; serialize as json
 
     //console_log!("{:?}", serde_json::to_string(&body));
     //serialize as json (with struct)
-    let bodi: Body = s.json().await?; //.unwrap();
+    let bodi = match s.json().await {
+      Ok(app) => {
+        let bodi: Body = app;
+        bodi
+      }
+      Err(a) => {
+        let g = |a| a;
+
+        console_log!("{}", g(a));
+      }
+    }; //.unwrap();
     let _page_offset = bodi.page_offset;
     let _page_length = bodi.page_length;
     let _postal_code = bodi.postal_code;
@@ -115,7 +133,7 @@ impl DurableObject for DurableObjectExample {
         Ok(app) => {
           //'Some' when ? -> Option, 'Ok' when -> Result
           self.app = app;
-         // app
+          // app
         } //uses the default from new //.unwrap_or(self.app.to_owned()
         Err(a) => {
           //struct St(String);
@@ -137,9 +155,9 @@ impl DurableObject for DurableObjectExample {
           console_log!("{}", g(a)); //extend push append// [dummy,vec!(0)].concat()
                                     //let dummy: Vec<String> = Vec::new();
                                     //let s:Vec<String> = "   ".as_bytes().to_vec();
-          //vec!["".to_string()]
-          //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
-          //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
+                                    //vec!["".to_string()]
+                                    //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
+                                    //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
         }
       };
     }
@@ -160,20 +178,20 @@ impl DurableObject for DurableObjectExample {
       vec![literally] //vec![literally];
     }
     let _s = set(["", ""]); //https://www.reddit.com/r/learnrust/comments/h82em8/best_way_to_create_a_vecstring_from_str/iibjabv/?context=3
-                           //self.env.secret("SOME_SECRET")?.to_string();
-                           //dyn std::future::Future<worker::Response>
-                           /*pub trait FnOnce<Args> {
-                             type Output;
+                            //self.env.secret("SOME_SECRET")?.to_string();
+                            //dyn std::future::Future<worker::Response>
+                            /*pub trait FnOnce<Args> {
+                              type Output;
 
-                             extern "rust-call" fn call_once(self, args: Args) -> Self::Output;
-                           }
-                           fn consume_with_relish<F>(func: F)
-                           where
-                             F: FnOnce() -> worker::Response,
-                           {
-                             call_once()
-                             //func() then use of moved value` error
-                           }*/
+                              extern "rust-call" fn call_once(self, args: Args) -> Self::Output;
+                            }
+                            fn consume_with_relish<F>(func: F)
+                            where
+                              F: FnOnce() -> worker::Response,
+                            {
+                              call_once()
+                              //func() then use of moved value` error
+                            }*/
     self.state.storage().put("app", &self.app).await?;
     //.and_then(consume_with_relish(relish));
     //let relish =
@@ -342,3 +360,6 @@ after spending some time on that. This bio's prose is however more for the arc.*
 //FDA is animal abuse
 
 //minority "worth it" fiduciary embezzlement not fining judges for successful appeals
+//these kinds of thinks for pitfall -"smears" you need to decide, your leader wanit want the issue is why it work, waste time misrepresent by ambiguity to claim others misrepresent
+
+//how is How do socialists spend the proletariat industrial class?
