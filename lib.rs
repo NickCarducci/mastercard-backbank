@@ -64,8 +64,10 @@ use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
 
 //use url::{Url};
 use worker::{
+    //console_log,
     /*console_log, Headers,RequestInit, Fetch,*/ event,
     Env,
+    //Error,
     Request,
     Response,
     Result,
@@ -116,6 +118,36 @@ struct Product {
 #[derive(Serialize)]
 struct Error {
     err: String,
+}*/
+/*use std::fmt;
+#[derive(Debug)]
+struct MyError {
+    details: String
+}
+
+impl MyError {
+    fn new(msg: &str) -> MyError {
+        Error{details: msg.to_string()}
+    }
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,"{}",self.details)
+    }
+
+
+impl Error for MyError {
+    fn description(&self) -> &str {
+        &self.details
+    }
+}
+impl std::fmt::Display for Error {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    match *self {
+      Error::page_offset(a) => write!(f,"{}",a)
+    }
+  }
 }*/
 struct SomeSharedData {
     //data: u8, //regex::Regex,
@@ -229,12 +261,25 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             stub
             }*/
             //async move {
-            let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
-            binding?
-                .id_from_name("DurableObjectExample")?
-                .get_stub()?
-                .fetch_with_request(req)
-                .await
+            /*fn err() -> Result<Error> {
+                console_log!("{}", "");
+                Ok(())
+            }
+            let binding = match ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT") {
+                Err(a) => {
+                    console_log!("{}", a);
+                    Error::new("")
+                }
+                Ok(binding) => match binding.id_from_name("DurableObjectExample") {
+                    Ok(stub) => match stub.get_stub() {
+                        Ok(stub) => stub.fetch_with_request(req).await,
+                    },
+                },
+            };
+            binding*/
+            let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?; //binding?
+            let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
+            stub.fetch_with_request(req).await
             /*match binding.is_err() {
                 true => async{}.await, //Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
                 false => {
@@ -513,3 +558,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //https://www.science.org/content/blog-post/spike-protein-behavior
 //We must understand the process of mRNA amino acid ‘exocytosis’ vaccine produces
 //(invokes) abnormal virus mutations as a transmembrane anchor region instead of actual release.
+
+//not already continue
+
+//don't talk over
+
+//bancrupcy how to exercise donee beneficiary AJones 11/12 industry variable doubt
