@@ -9,14 +9,14 @@ pub use worker_sys::{console_debug, console_error, console_log, console_warn};
 /*#[derive(Serialize)]
 struct Product {
   ivity: String,
-}*/
-/*#[derive(Serialize)]
+}
+#[derive(Serialize)]
 struct Noth {
   ing: String,
 }*/
 #[durable_object]
 pub struct DurableObjectExample {
-  app: String, //Vec<u8>,
+  app: Result<Response>, //String, //Vec<u8>,
   initialized: bool,
   state: State,
   env: Env, // access `Env` across requests, use inside `fetch`
@@ -75,7 +75,7 @@ impl std::fmt::Debug for IsString {
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
     Self {
-      app: "initialapp".to_owned(), //format!(""),vec![]
+      app: Response::from_json(serde_json::json!({})), //"initialapp".to_owned(), //format!(""),vec![]
       //https://www.hackertouch.com/how-to-create-and-check-string-is-empty-rust.html
       initialized: false,
       state: state,
@@ -158,38 +158,39 @@ impl DurableObject for DurableObjectExample {
     };*/
     if !self.initialized {
       self.initialized = true;
-      self.app = match self.state.storage().get("app").await {
-        Ok(app) => {
-          //'Some' when ? -> Option, 'Ok' when -> Result
-          app
-          // app
-        } //uses the default from new //.unwrap_or(self.app.to_owned()
-        Err(a) => {
-          //struct St(String);
-          //.unwrap_or(self.app.to_owned()
-          //let g = a::fmt;//.backtrace;
+      self.app = serde_json::json!(self.state.storage().get("app").await); /*match self.state.storage().get("app").await {
+                                                                             Ok(app) => {
+                                                                               //'Some' when ? -> Option, 'Ok' when -> Result
+                                                                               let app: Result<Response> = app;
+                                                                               app
+                                                                               // app
+                                                                             } //uses the default from new //.unwrap_or(self.app.to_owned()
+                                                                             Err(a) => {
+                                                                               //struct St(String);
+                                                                               //.unwrap_or(self.app.to_owned()
+                                                                               //let g = a::fmt;//.backtrace;
 
-          /*impl std::fmt::Display for a {
-          fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            match *self {
-                Suit::Heart => write!(f, "♥"),
-                Suit::Diamond => write!(f, "♦"),
-                Suit::Spade => write!(f, "♠"),
-                Suit::Club => write!(f, "♣"),
-            }
-          }*/
-          //a::from();extracongressional//finance has ruined marriage as duress as well as homeless
-          let g = |a| a; //format!()
+                                                                               /*impl std::fmt::Display for a {
+                                                                               fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                                                                                 match *self {
+                                                                                     Suit::Heart => write!(f, "♥"),
+                                                                                     Suit::Diamond => write!(f, "♦"),
+                                                                                     Suit::Spade => write!(f, "♠"),
+                                                                                     Suit::Club => write!(f, "♣"),
+                                                                                 }
+                                                                               }*/
+                                                                               //a::from();extracongressional//finance has ruined marriage as duress as well as homeless
+                                                                               let g = |a| a; //format!()
 
-          console_log!("{}", g(a)); //extend push append// [dummy,vec!(0)].concat()
-                                    //let dummy: Vec<String> = Vec::new();
-                                    //let s:Vec<String> = "   ".as_bytes().to_vec();
-                                    //vec!["".to_string()]
-                                    //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
-                                    //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
-          "".to_string()
-        }
-      };
+                                                                               console_log!("{}", g(a)); //extend push append// [dummy,vec!(0)].concat()
+                                                                                                         //let dummy: Vec<String> = Vec::new();
+                                                                                                         //let s:Vec<String> = "   ".as_bytes().to_vec();
+                                                                                                         //vec!["".to_string()]
+                                                                                                         //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
+                                                                                                         //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
+                                                                               "".to_string()
+                                                                             }
+                                                                           };*/
     }
     /*
         We can also handle the mapping as a std::borrow::Cow to make vec! macro [clone on write] last concurrently. I guess that's "lossy" for you:
@@ -223,7 +224,12 @@ impl DurableObject for DurableObjectExample {
                               //func() then use of moved value` error
                             }*/
     /*let v = */
-    match self.state.storage().put("app", &self.app).await {
+    match self
+      .state
+      .storage()
+      .put("app", &serde_json::json!(self.app))
+      .await
+    {
       Ok(app) => {
         //'Some' when ? -> Option, 'Ok' when -> Result
         app
@@ -285,8 +291,8 @@ impl DurableObject for DurableObjectExample {
     })*/
     Response::ok(&format!(
       "[durable_object]: self.app: {}", //, secret value: {}",
-      &self.app,
-      //self.env.secret("SOME_SECRET")?.to_string()
+      serde_json::json!(self.app)       //?.string(),
+                                        //self.env.secret("SOME_SECRET")?.to_string()
     ))
     //.or_else(|err| Response::error(err.to_string(), 500));
   }
@@ -445,3 +451,52 @@ The individuals can be price takers as supply is inelastic, yet in an efficient 
 is complementary with demand the latter are price givers by budget constraints sorted-by/per preferences
 and fixed startup costs to substitute as supply.
 */
+
+//Why is there no insemination only mutations in immunofluorescent microscopy studies of amino acid in lipids' endocytosis of cells?
+/*
+
+I don't understand how (2) taxonomically (`paraphyletically`) virion may be without a last common ancestor nor (3) evolutionary reason, to boot the absence of `vivo` as `virion+cell` instead of `cell+mRNA`.
+
+My theory is that *virion is debris that antibodies have evolved* to **garbage collect** (to prevent cardiovascular clotting, my grandfather was a cardiologist-lawyer which might have imposed itself on my predilection, if it is just that).
+
+I think if you think evolution process product is to release from cells instead of out your rear end with bacteria. I would like a study of bacteria to virus in excrement, by the way, and the asymptomatic testing of covid has removed artifactual nature (sickness) of virion presentation correlation with sickness.
+*/
+
+//ostensious northern it
+
+//love that fucking tire.. it's a drum kit, idiot
+
+//free educaiton chore mercantilism without left over value//trade before surplus
+//talaq padrone chore
+
+//implausible use
+//rollover
+//exclusion if not fraud
+
+//c'mon man. malarkey
+//age related can diaper Uber 8% more to go
+//20.1% developmentally disabled and injured
+//school's out: shootings on the weekend
+//free education, otherwise: wipo
+//mercantilist without left over value
+
+//I will not support insurance
+//Implausible use rollover exclusion if not fraud is capitalist surplus value exchanged leisure
+//no protestor for m4a doesn't have it.Response//anti-fiancne on
+//anti-finance can only win as third party
+
+//irv rcv for grifting non voters to biparti talaw
+
+//abrogate finance "power for workers instead of corporate oppressors and ultra wealthy because they think they exploit instead of collab copp grift unerstatement."
+//JB Rev Blackout
+//finance cause starvation, left over value payment installs
+
+//overhead labor ability needs surplus value over leisure
+
+//everyone agree on ending insurance totally overlaps with reason for m4a chant rollover
+
+//degrowth. majority of people want to ban insurance
+
+//tax equally uniformly verticals important to eachother could be elastic fixed costs as ability meets needs
+
+//mercantilist seek to maximize exports by importing labor not by surplus value left over effort but depreciating work
