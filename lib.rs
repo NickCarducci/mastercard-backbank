@@ -67,8 +67,8 @@ use worker::{
     //console_log,
     /*console_log, Headers,RequestInit, Fetch,*/ event,
     Env,
-    //Error,
-    Request,
+    //Method,Error,
+    Request,//RequestInit,
     Response,
     Result,
     Router, //, Url,
@@ -279,7 +279,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             binding*/
             let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?; //binding?
             let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-            stub.fetch_with_request(req).await
+            let a = req.clone()?;
+            /*let app = Request::new_with_init(
+                "hello",
+                RequestInit::new()
+                    .with_body(a) //Some("lol".into())
+                    .with_method(Method::Post),
+            )?;*/
+            stub.fetch_with_request(a).await
             /*match binding.is_err() {
                 true => async{}.await, //Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
                 false => {
@@ -564,3 +571,5 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //don't talk over
 
 //bancrupcy how to exercise donee beneficiary AJones 11/12 industry variable doubt
+//we can define the constitution endlessly. oath
+//free education vote out menendez
