@@ -1,15 +1,15 @@
 //struct PotentialType<T>(T);
 
-use serde::Serialize;
+//use serde::Serialize;
 use worker::{
   async_trait, durable_object, js_sys, wasm_bindgen, wasm_bindgen_futures, worker_sys, Env,
   Request, Response, Result, State,
 };
 pub use worker_sys::{console_debug, console_error, console_log, console_warn};
-#[derive(Serialize)]
+/*#[derive(Serialize)]
 struct Product {
   ivity: String,
-}
+}*/
 /*#[derive(Serialize)]
 struct Noth {
   ing: String,
@@ -42,7 +42,7 @@ struct Body {
   page_length: String,
   postal_code: String,
 }
-/*const Leg: Body = Body { 
+/*const Leg: Body = Body {
           page_offset: "".to_string(),
           page_length: "".to_string(),
           postal_code: "".to_string(),
@@ -116,9 +116,9 @@ impl DurableObject for DurableObjectExample {
         console_log!("{}", g(a));
         serde_json::json!({})
       }
-    };/*[123,34,112,97,103,101,79,102,102,115,101,116,34,58,34,48,34,44,34,112,97,103,
-    101,76,101,110,103,116,104,34,58,34,49,48,34,44,34,112,111,115,116,97,108,67,111,
-    100,101,34,58,34,48,55,55,48,52,34,125];*/
+    }; /*[123,34,112,97,103,101,79,102,102,115,101,116,34,58,34,48,34,44,34,112,97,103,
+       101,76,101,110,103,116,104,34,58,34,49,48,34,44,34,112,111,115,116,97,108,67,111,
+       100,101,34,58,34,48,55,55,48,52,34,125];*/
     console_log!("{}", body);
     //.clone();//.clone()?; serialize as json
 
@@ -140,8 +140,8 @@ impl DurableObject for DurableObjectExample {
         }
       }
     }; //.unwrap();?catch
-    /*
-    "Body { page_offset: \"0\", page_length: \"10\", postal_code: \"07704\"*/
+       /*
+       "Body { page_offset: \"0\", page_length: \"10\", postal_code: \"07704\"*/
     console_log!("{:?}", bodi);
     let _page_offset = bodi.page_offset;
     let _page_length = bodi.page_length;
@@ -222,38 +222,39 @@ impl DurableObject for DurableObjectExample {
                               call_once()
                               //func() then use of moved value` error
                             }*/
-    /*let v = */match self.state.storage().put("app", &self.app).await {
-        Ok(app) => {
-          //'Some' when ? -> Option, 'Ok' when -> Result
-          app
-          // app
-        } //uses the default from new //.unwrap_or(self.app.to_owned()
-        Err(a) => {
-          //struct St(String);
-          //.unwrap_or(self.app.to_owned()
-          //let g = a::fmt;//.backtrace;
+    /*let v = */
+    match self.state.storage().put("app", &self.app).await {
+      Ok(app) => {
+        //'Some' when ? -> Option, 'Ok' when -> Result
+        app
+        // app
+      } //uses the default from new //.unwrap_or(self.app.to_owned()
+      Err(a) => {
+        //struct St(String);
+        //.unwrap_or(self.app.to_owned()
+        //let g = a::fmt;//.backtrace;
 
-          /*impl std::fmt::Display for a {
-          fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            match *self {
-                Suit::Heart => write!(f, "♥"),
-                Suit::Diamond => write!(f, "♦"),
-                Suit::Spade => write!(f, "♠"),
-                Suit::Club => write!(f, "♣"),
-            }
-          }*/
-          //a::from();extracongressional//finance has ruined marriage as duress as well as homeless
-          let g = |a| a; //format!()
+        /*impl std::fmt::Display for a {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+          match *self {
+              Suit::Heart => write!(f, "♥"),
+              Suit::Diamond => write!(f, "♦"),
+              Suit::Spade => write!(f, "♠"),
+              Suit::Club => write!(f, "♣"),
+          }
+        }*/
+        //a::from();extracongressional//finance has ruined marriage as duress as well as homeless
+        let g = |a| a; //format!()
 
-          console_log!("{}", g(a)); //extend push append// [dummy,vec!(0)].concat()
-                                    //let dummy: Vec<String> = Vec::new();
-                                    //let s:Vec<String> = "   ".as_bytes().to_vec();
-                                    //vec!["".to_string()]
-                                    //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
-                                    //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
-          //"".to_string()
-        }
-      };
+        console_log!("{}", g(a)); //extend push append// [dummy,vec!(0)].concat()
+                                  //let dummy: Vec<String> = Vec::new();
+                                  //let s:Vec<String> = "   ".as_bytes().to_vec();
+                                  //vec!["".to_string()]
+                                  //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
+                                  //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
+                                  //"".to_string()
+      }
+    };
     //.and_then(consume_with_relish(relish));
     //let relish =
     /*async move {
@@ -279,9 +280,14 @@ impl DurableObject for DurableObjectExample {
       //return Response::ok(&format!("{} data.", self.data));
     }
     .await*/
-    Response::from_json(&Product {
-      ivity: self.app.to_string(),
-    })
+    /*Response::from_json(&Product {
+      ivity: async {self.app}await.to_string(),
+    })*/
+    Response::ok(&format!(
+      "[durable_object]: self.app: {}", //, secret value: {}",
+      self.app,
+      //self.env.secret("SOME_SECRET")?.to_string()
+    ))
     //.or_else(|err| Response::error(err.to_string(), 500));
   }
 }
