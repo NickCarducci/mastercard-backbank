@@ -3,7 +3,8 @@ name = "mastercard-backbank-dev"
 type = "javascript" # webpack
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
 # workers_dev = true #if using default subdomain, here: api ok
-workers_dev = false
+workers_dev = false # "self-contained HTML (sorta like Pages)"
+# https://community.cloudflare.com/t/do-workers-bypass-firewall-rules/268046
 zone_id = "6202e995eadc857cd8e97e8ba608286d" # I seem to have to use workers' dash for custom domain
 # https://developers.cloudflare.com/pages/tutorials/build-an-api-with-workers#custom-domains
 # https://community.cloudflare.com/t/configure-workers-to-run-on-a-path-s-currently-served-by-cf-pages-any-plans-to-merge-pages-workers-sites/312550/2
