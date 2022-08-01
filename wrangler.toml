@@ -4,7 +4,6 @@ type = "javascript" # webpack
 account_id = "9ddca7c9df604668fc6d14f079b2f066"
 # workers_dev = true #if using default subdomain, here: api ok
 workers_dev = false
-route = "*sausage.saltbank.org/*"
 zone_id = "6202e995eadc857cd8e97e8ba608286d"
 # wasm_modules={BACKBANK_WASM="./a.out.wasm"}# "./src/glue"}
 # webpack_config = "webpack.config.js"
@@ -22,9 +21,11 @@ kv_namespaces = [
 # exclude = ["node_modules","*"]
 # include = ["dist/*","src/*"]
 name = "mastercard-backbank"
+route = "*sausage.saltbank.org/*"
 
 [env.staging]
 name = "mastercard-backbank-staging"
+route = "*sausage.saltbank.org/*"
 
 [durable_objects]
 bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
