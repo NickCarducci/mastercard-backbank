@@ -10,13 +10,36 @@ pub use worker_sys::{console_debug, console_error, console_log, console_warn};
 struct Product {
   ivity: String,
 }
-#[derive(Serialize)]
+struct Clo;
+impl Clone for worker::Response {
+  fn clone(&self) -> Self {
+    Foo {
+      a: self.a.clone(),
+      b: self.b.clone(),
+      c: self.c.clone(),
+    }
+  }
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(remote = "worker::Response")]
 struct Noth {
   ing: String,
+}
+
+//#[derive(Serialize, Deserialize)]
+//#[serde(remote = "diesel::result::Error")]
+#[derive(Deserialize)]
+struct Helper(#[serde(with = "Noth")] worker::Response);
+
+#[derive(Clone)]
+struct Reading<T> {
+    frequency: T,
 }*/
+
 #[durable_object]
 pub struct DurableObjectExample {
-  app: Result<Response>, //String, //Vec<u8>,
+  app: String, //usize,//Result<Response>, //String, //Vec<u8>,
   initialized: bool,
   state: State,
   env: Env, // access `Env` across requests, use inside `fetch`
@@ -33,15 +56,70 @@ pub struct DurableObjectExample {
 impl FnOnce for Closure1 {
     type Output = ();
 }*/
-
-use serde::Deserialize;
-#[derive(Deserialize, Debug)]
+/*const Leg: Body = Body {
+  page_offset: [""].map(String::from).to_vec(),
+  page_length: [""].map(String::from).to_vec(),
+  postal_code: [""].map(String::from).to_vec(),
+};
+#[derive(Copy)]
+enum Organ {
+  Leg,
+}*/
+trait Boody {
+  fn clone_dyn(&self) -> Box<dyn Boody>;
+}
+use serde::{Deserialize, Serialize};
+#[derive(Serialize, Deserialize, Debug, Clone)] //https://stackoverflow.com/questions/58422438/struct-with-partial-move-errors
 #[serde(rename_all = "camelCase")] //https://github.com/serde-rs/serde/issues/1435
 struct Body {
-  page_offset: String,
+  //miracle:Organ,
+  page_offset: Vec<String>,
+  page_length: Vec<String>,
+  postal_code: Vec<String>,
+}
+impl Boody for Body {
+  fn clone_dyn(&self) -> Box<dyn Boody> {
+    Box::new(Body {
+      page_offset: self.page_offset.clone(),
+      page_length: self.page_length.clone(),
+      postal_code: self.postal_code.clone(),
+    })
+  }
+}
+
+impl Clone for Box<dyn Boody> {
+  fn clone(&self) -> Self {
+    self.clone_dyn()
+  }
+} //https://stackoverflow.com/questions/67251470/type-does-not-implement-copy-error-when-using-supertrait-of-copy-in-an-enum
+
+//use serde::{Deserialize, Serialize};
+#[derive(Serialize, Deserialize, Debug, Clone)] //https://stackoverflow.com/questions/58422438/struct-with-partial-move-errors
+#[serde(rename_all = "camelCase")] //https://github.com/serde-rs/serde/issues/1435
+struct Bodi {
+  page_offset: Vec<String>,
+  page_length: Vec<String>,
+  postal_code: Vec<String>,
+}
+/*impl Clone for Body {
+    fn clone(&self) -> Self {
+        // *self
+  page_offset.clone(),
   page_length: String,
   postal_code: String,
-}
+    }
+}*///https://stackoverflow.com/questions/65677430/how-to-fix-string-field-does-not-implement-copy
+/*impl Copy for Body {}
+impl Clone for Body {
+  fn clone(&self) -> Body {
+    Body {
+      page_offset: self.page_offset.clone(),
+      page_length: self.page_length.clone(),
+      postal_code: self.postal_code.clone(),
+    }
+  } //camillia christine kinarsi , "hillary never attacked nurses advocate blacklists you"
+}*/
+//https://stackoverflow.com/questions/27876588/why-is-the-copy-trait-needed-for-default-struct-valued-array-initialization
 /*const Leg: Body = Body {
           page_offset: "".to_string(),
           page_length: "".to_string(),
@@ -75,7 +153,7 @@ impl std::fmt::Debug for IsString {
 impl DurableObject for DurableObjectExample {
   fn new(state: State, env: Env) -> Self {
     Self {
-      app: Response::from_json(serde_json::json!({})), //"initialapp".to_owned(), //format!(""),vec![]
+      app: "".to_string(), //0,//Response::from_json(serde_json::json!({})), //"initialapp".to_owned(), //format!(""),vec![]
       //https://www.hackertouch.com/how-to-create-and-check-string-is-empty-rust.html
       initialized: false,
       state: state,
@@ -126,17 +204,17 @@ impl DurableObject for DurableObjectExample {
     //serialize as json (with struct)
     let bodi = match req.clone()?.json().await {
       Ok(app) => {
-        let bodi: Body = app;
+        let bodi: Bodi = app;
         bodi
       }
       Err(a) => {
         let g = |a| a;
 
         console_log!("{}", g(a));
-        Body {
-          page_offset: "".to_string(),
-          page_length: "".to_string(),
-          postal_code: "".to_string(),
+        Bodi {
+          page_offset: [""].map(String::from).to_vec(),
+          page_length: [""].map(String::from).to_vec(),
+          postal_code: [""].map(String::from).to_vec(),
         }
       }
     }; //.unwrap();?catch
@@ -157,40 +235,50 @@ impl DurableObject for DurableObjectExample {
       )
     };*/
     if !self.initialized {
-      self.initialized = true;
-      self.app = serde_json::json!(&self.state.storage().get("app").await); /*match self.state.storage().get("app").await {
-                                                                             Ok(app) => {
-                                                                               //'Some' when ? -> Option, 'Ok' when -> Result
-                                                                               let app: Result<Response> = app;
-                                                                               app
-                                                                               // app
-                                                                             } //uses the default from new //.unwrap_or(self.app.to_owned()
-                                                                             Err(a) => {
-                                                                               //struct St(String);
-                                                                               //.unwrap_or(self.app.to_owned()
-                                                                               //let g = a::fmt;//.backtrace;
+      self.initialized = true; //serde_json::json!();::<Result<Response>>
+                               //let cop = bodi.clone(); //let cop = body.clone();
+      self.app = self
+        .state
+        .storage()
+        .get("app")
+        .await
+        .unwrap_or(serde_json::to_string(&Body {
+          page_offset: [""].map(String::from).to_vec(),
+          page_length: [""].map(String::from).to_vec(),
+          postal_code: [""].map(String::from).to_vec(),
+        })?); /*match self.state.storage().get("app").await {
+                Ok(app) => {
+                  //'Some' when ? -> Option, 'Ok' when -> Result
+                  let app: Result<Response> = app;
+                  app
+                  // app
+                } //uses the default from new //.unwrap_or(self.app.to_owned()
+                Err(a) => {
+                  //struct St(String);
+                  //.unwrap_or(self.app.to_owned()
+                  //let g = a::fmt;//.backtrace;
 
-                                                                               /*impl std::fmt::Display for a {
-                                                                               fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                                                                                 match *self {
-                                                                                     Suit::Heart => write!(f, "♥"),
-                                                                                     Suit::Diamond => write!(f, "♦"),
-                                                                                     Suit::Spade => write!(f, "♠"),
-                                                                                     Suit::Club => write!(f, "♣"),
-                                                                                 }
-                                                                               }*/
-                                                                               //a::from();extracongressional//finance has ruined marriage as duress as well as homeless
-                                                                               let g = |a| a; //format!()
+                  /*impl std::fmt::Display for a {
+                  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                    match *self {
+                        Suit::Heart => write!(f, "♥"),
+                        Suit::Diamond => write!(f, "♦"),
+                        Suit::Spade => write!(f, "♠"),
+                        Suit::Club => write!(f, "♣"),
+                    }
+                  }*/
+                  //a::from();extracongressional//finance has ruined marriage as duress as well as homeless
+                  let g = |a| a; //format!()
 
-                                                                               console_log!("{}", g(a)); //extend push append// [dummy,vec!(0)].concat()
-                                                                                                         //let dummy: Vec<String> = Vec::new();
-                                                                                                         //let s:Vec<String> = "   ".as_bytes().to_vec();
-                                                                                                         //vec!["".to_string()]
-                                                                                                         //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
-                                                                                                         //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
-                                                                               "".to_string()
-                                                                             }
-                                                                           };*/
+                  console_log!("{}", g(a)); //extend push append// [dummy,vec!(0)].concat()
+                                            //let dummy: Vec<String> = Vec::new();
+                                            //let s:Vec<String> = "   ".as_bytes().to_vec();
+                                            //vec!["".to_string()]
+                                            //let s: Vec<String> = vec![String::from_utf8_lossy(u8::from_be_bytes([]).as_bytes()).to_string()];
+                                            //.as_bytes().to_vec().iter().map(|&s|s.into()).collect();// String{vec:/*std::str::from_utf8(*/ "".as_bytes().to_vec()}; //[dummy,vec!(0)].concat()}//"".to_vec().as_bytes()).unwrap().to_string())}
+                  "".to_string()
+                }
+              };*/
     }
     /*
         We can also handle the mapping as a std::borrow::Cow to make vec! macro [clone on write] last concurrently. I guess that's "lossy" for you:
@@ -291,7 +379,7 @@ impl DurableObject for DurableObjectExample {
     })*/
     Response::ok(&format!(
       "[durable_object]: self.app: {}", //, secret value: {}",
-      serde_json::json!(&self.app)       //?.string(),
+      serde_json::json!(&self.app)      //?.string(),
                                         //self.env.secret("SOME_SECRET")?.to_string()
     ))
     //.or_else(|err| Response::error(err.to_string(), 500));
@@ -501,13 +589,17 @@ I think if you think evolution process product is to release from cells instead 
 
 //mercantilist seek to maximize exports by importing labor not by surplus value left over effort but depreciating work
 
-
 //you can code, I cannot even only but bartend
 
-//be happy or else. spits* islamic bartender 
+//be happy or else. spits* islamic bartender
 
 //asylym conscripts. don't stop advocating
 
 //"elected managers"
 //huge talq from eachother
 //we can protest with geohash above $15k/customer/yr by subsidiary (yet for worker?)
+
+//talaq usurers go to Hell
+
+//hourly wages are tipable not billable
+//bundle exclusionary nor payment install left over effort value
