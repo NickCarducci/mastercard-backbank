@@ -68,7 +68,7 @@ use worker::{
     /*console_log, Headers,RequestInit, Fetch,*/ event,
     Env,
     //Method,Error,
-    Request,//RequestInit,
+    Request, //RequestInit,
     Response,
     Result,
     Router, //, Url,
@@ -156,6 +156,7 @@ struct SomeSharedData {
 #[event(fetch, respond_with_errors)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     //use the request parameter of the router instead else return closure/(pointer)
+    //not cf.worker.upstream_zone in {"" "yourdomain.tld"}//https://support.cloudflare.com/hc/en-us/articles/115001635128
     fn origin_url(req_headers: &worker::Headers) -> std::string::String {
         return match req_headers.get("Origin").unwrap() {
             Some(value) => value,
@@ -195,10 +196,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             let cors_origin = origin_url(req_headers);
             //let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
             return match [
-                "https://sausage.vau.money",
-                "https://vau.money",
-                "https://jwi5k.csb.app",
-                "https://i7l8qe.csb.app", //,"https://mastercard-backbank.backbank.workers.dev"
+                "sausage.saltbank.org",
+                //"https://jwi5k.csb.app",
+                "i7l8qe.csb.app", //,"https://mastercard-backbank.backbank.workers.dev"
             ]
             .iter()
             .any(|&s| s == cors_origin)
@@ -208,7 +208,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     //https://rodneylab.com/using-rust-cloudflare-workers/
                     //fn preflight_response(_,_)->Result<Response> {
                     let mut res_headers = worker::Headers::new();
-                    res_headers.set("Access-Control-Allow-Origin", "*")?;
+                    res_headers.set("Access-Control-Allow-Origin", &cors_origin)?;//"*"
                     res_headers.set("Access-Control-Allow-Headers", "Content-Type")?;
                     res_headers.set("Access-Control-Allow-Methods", "POST")?;
                     //res_headers.set("Vary", "Origin")?;
@@ -277,16 +277,17 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 },
             };
             binding*/
+            let a = req.clone()?;
             let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?; //binding?
             let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-            let a = req.clone()?;
             /*let app = Request::new_with_init(
                 "hello",
                 RequestInit::new()
                     .with_body(a) //Some("lol".into())
                     .with_method(Method::Post),
             )?;*/
-            stub.fetch_with_request(a).await
+            let app = stub.fetch_with_request(a).await;
+            app
             /*match binding.is_err() {
                 true => async{}.await, //Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
                 false => {
@@ -573,3 +574,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 //bancrupcy how to exercise donee beneficiary AJones 11/12 industry variable doubt
 //we can define the constitution endlessly. oath
 //free education vote out menendez
+//chomp it off all getting face fucked
+//alex jones exercising donee beneficiary tort reform
+//11/12 too
+
+//fraud ricardian/laffer revenue by deficit. only part
+//merely an oath define endlessly
+//expected by average
+
+//Is there an unrealistic size requirement to this potential strategy of mine I should be weary of?
+
+//talaq royalty novation exclusion nor payment installs
