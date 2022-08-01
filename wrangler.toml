@@ -28,7 +28,7 @@ route = "*sausage.saltbank.org/*"
 
 [env.staging]
 name = "mastercard-backbank-staging"
-route = "*sausage.saltbank.org/*"
+route = "*sausage.saltbank.org/api/*"
 
 [durable_objects]
 bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
