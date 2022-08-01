@@ -196,9 +196,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             let cors_origin = origin_url(req_headers);
             //let cors_origin = &ctx.var("CORS_ORIGIN")?.to_string(); //<&str>
             return match [
-                "sausage.saltbank.org",
+                "https://sausage.saltbank.org",
                 //"https://jwi5k.csb.app",
-                "i7l8qe.csb.app", //,"https://mastercard-backbank.backbank.workers.dev"
+                "https://i7l8qe.csb.app", //,"https://mastercard-backbank.backbank.workers.dev"
             ]
             .iter()
             .any(|&s| s == cors_origin)
