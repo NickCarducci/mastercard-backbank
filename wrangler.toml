@@ -24,11 +24,11 @@ kv_namespaces = [
 # exclude = ["node_modules","*"]
 # include = ["dist/*","src/*"]
 name = "mastercard-backbank"
-route = "*sausage.saltbank.org/api*"
+route = "sausage.saltbank.org/api*"
 
 [env.staging]
 name = "mastercard-backbank-staging"
-route = "*sausage.saltbank.org/api*"
+route = "sausage.saltbank.org/api*"
 
 [durable_objects]
 bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
