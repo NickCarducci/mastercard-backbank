@@ -20,7 +20,7 @@ kv_namespaces = [
   {binding="backbank",id="e4609a2b6fa943aab9e44185293dae3a"}
 ]
 [env.production.vars]
-CF_API_KEY = $CF_API_KEY
+CF_API_KEY = ${{CF_API_KEY}}
 
 [env.production]
 # exclude = ["node_modules","*"]
