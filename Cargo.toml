@@ -1,0 +1,148 @@
+[package]
+edition = "2021"
+name = "eglue" # "src/source/eglue"
+version = "0.1.0"    # obey semver
+authors = ["Nick Carducci <nmcarducci@gmail.com>"]
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+#functions in traits cannot be declared `async`
+#https://github.com/rust-lang/socket2/issues/35
+#target.'cfg(not(target_arch = "wasm32"))'.
+[dependencies]
+# futures = "0.3"
+# web-sys = "0.3.57"
+wasm-bindgen = "0.2.81"
+# workers-rs = "0.0.10"
+# worker-build = "0.0.4"
+cc = "1.0"
+worker = "0.0.10"
+# wasm-bindgen-futures = "0.4.31"
+url = "2.2.2" 
+# ensure = "0.3.0"
+cfg-if = "1.0.0"
+console_error_panic_hook = { version = "0.1.7", optional = true }
+# assert-type-eq = "0.1.0"
+serde = { version = "1.0.137", features = ["derive"] }
+serde_json = "1.0.81"
+# paste = "1.0.7"
+# assert_matches = "1.5.0"
+# meval = "0.2.0"
+#https://github.com/cloudflare/cloudflare-rs GET + ?query before Wrangler 2 service bindings
+# cloudflare = "0.9.1"
+# http = "0.2"
+#wrangler = "1.19.12" # "2.0.25"
+# reqwest = { version = "0.11.3", features = ["blocking", "json", "multipart"] }
+# anyhow = "1.0" # anyhow = { version = "1.0", features = ["backtrace"] }
+# config = { version = "0.11.0", default-features = false, features = ["toml", "json", "yaml", "ini"]  }
+# log = "0.4.11"
+# async-trait = "0.1.57"
+# wasm-bindgen-macro-support = "0.2.82"
+js-sys = "0.3.59"
+threadpool = "1.8.1" 
+futures = "0.3.23"
+
+# target.'cfg(not(target_arch = "wasm32"))'.
+[dependencies.web-sys]
+version = "0.3"
+features = ["Response", "Request", "Url", "Window", "Document",
+  'Element',
+  'HtmlElement',
+  'Node', ] #https://rustwasm.github.io/wasm-bindgen/examples/dom.html
+# ResponseInit 
+
+[lib]
+#edition = "2021"
+name = "build"
+dir = "src"
+path = "lib.rs"
+crate-type = ["cdylib", "rlib"] # "rlib"
+
+##[cfg(not(target_arch = "wasm32"))]
+# https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/template-deep-dive/cargo-toml.html
+
+#classification surge!
+
+# Does subsidy bring environmentally sound industry online without demand nor ban? rare non industry
+
+# consenting age is not applicable to a personal relation, ...yet wisdom is to be had
+
+# henry makow is the bad jewish guy! communism talmud law - they are both good for fatherly frugalism and depraved men
+
+# salt is for revenge, acidic is for jealous rhetoric. nuclear explosive documents rump in on it if nothing given evidence of undisclosed docs.
+# follow along tards
+# you don't need to be developmentally disabled to be egghead tard
+#clearly but not certainly "planting evidence" maybe he grabbed the wrong doc?
+# maybe def
+
+# if you aren't racist, then you want visa fees
+
+# terminal is obtuse; VS Code is too (for rust)
+
+# in quotes as tentative new or old
+
+#I can squirm to press the issue but I cannot guide - when I can, I might not If my might cannot help
+
+# again/st reprise/eive courts' criminality - comulse/ell antitrust (debenture) capital bourgeoning commerce/ial (establishment) credit
+
+# "big gas is not small"
+
+#(primary source) bad advice is not inculpability by judicial hypocrisy otherwise
+#"grand jury political ag" -b tolman "intent/possession[ pres. rec act, espionage temp room-secure declassifieds]
+
+#never created virus, amino acid from nucleic tides of one phosphate group,
+#a ribose or deoxyribose, and 1 of 5 nitrogenous bases (Prof. Barry Gehm)
+#Are the proteins of a virus not nucleic acids?
+#7% of Americans believe Bill Gates created virus in a lab
+
+#we have ceded coal to China, gas to Russia because of the idle work of finance
+#hiring new companies (profits for existing shareholders and maternity doctors, services merchants, manufacturers etc. industrial class) 
+#and tax attorneys to prosecute instead of stop like why do we not jjail for civil suits
+#What is the reason why they are not punishable by imprisonment lol
+#and don't tell me false advertising, bad advice ending with primary source is not constitutional or scaping hypocrisy grounds
+#https://www.quora.com/unanswered/Have-we-not-ceded-coal-to-China-and-gas-to-Russia-because-of-the-idle-work-of-finance
+#https://www.quora.com/unanswered/Does-inflation-not-happen-when-bonds-are-bought-by-private-investors
+#https://occupyrepublicans.quora.com/Whys-pro-growth-of-short-term-velocity-fiscally-responsible-to-Larry-Kudlow
+
+#tort reform means jail upon double desist
+
+#advice pit primary source
+
+#who does it hurt, deselect whistleblowers. only gimps/ are you made fortunate partnering with competitors
+# entrapment is not bad advice on the matter. who does it hurt. the law is not ethics of jury. fine appeal and jail civilly. public docket
+# darwain enthusiast purpose of virus
+# I cannot be poor and an insider traderat the same time tool. Don't sell your will soul notwithstanding. A job means corporate. good/evil to kill bastard G-ds
+# G-ds are plural while standards point to diff definitions mkay
+# exculp maybe polytheism not actually but theory
+
+# musk is relevant but subsidies are not
+#relevant bonk/bunk subjectnoun/objectverb. instated governments committee rents. stateless machinery compulsory competition.
+# GOP don't think inflation happens when bonds are bought by private investors
+# labor employment shorter atomic as ever recessions
+# the instated satan
+
+# here is a link let's check it out I like how
+
+# you can bet that
+#boycotting real velocity, wholesale level as well as growth above even inflation (burp) replace
+#allow
+#comission devil soul for will G-ds polytheism is the problem no? better angel parts, finally caught up pitfall or help
+#hypocrisy as grounds implies flogging borrowers and state trust over commerce but without compulsory competition
+#named riot permit
+#polls can excuse UX" Max B
+#all this for named riots
+#chill easy, amend disqualify abrogated
+
+#nego no expiry
+#lower copay isn't price control free privacy
+#5 per landlord 30 days
+
+#lawfree prem price controls
+#free long term unemployment grows for paying industrial, merchant and manufacturer hours
+#exclusion from substitutive complementary demand negotiating mechanism honestly blind and direct outright
+#repentant vs indicting hypocrisy
+#would make a great app realvelocity.app
+
+#2x wage labor productivity vaults.biz/party
+#half more hour have less pay total
+#"absurdist-nonsequiter"

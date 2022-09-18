@@ -1,0 +1,10 @@
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/indicatif-e4bbde6f1ff84cb3.rmeta: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/format.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/iter.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/progress.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/style.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/utils.rs
+
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/indicatif-e4bbde6f1ff84cb3.d: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/format.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/iter.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/progress.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/style.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/utils.rs
+
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/lib.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/format.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/iter.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/progress.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/style.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.15.0/src/utils.rs:

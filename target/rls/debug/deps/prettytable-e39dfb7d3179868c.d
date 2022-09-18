@@ -1,0 +1,10 @@
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/prettytable-e39dfb7d3179868c.rmeta: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/cell.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/row.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/format.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/utils.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/csv.rs
+
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/prettytable-e39dfb7d3179868c.d: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/cell.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/row.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/format.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/utils.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/csv.rs
+
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/lib.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/cell.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/row.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/format.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/utils.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/prettytable-rs-0.8.0/src/csv.rs:

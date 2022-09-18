@@ -1,0 +1,11 @@
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/console-c00cf56e2fb2a679.rmeta: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/common_term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/kb.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/unix_term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/utils.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/ansi.rs
+
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/console-c00cf56e2fb2a679.d: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/common_term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/kb.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/unix_term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/utils.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/ansi.rs
+
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/lib.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/common_term.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/kb.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/term.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/unix_term.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/utils.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.15.1/src/ansi.rs:

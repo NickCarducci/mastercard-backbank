@@ -1,0 +1,10 @@
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/console-374efb77c7c61090.rmeta: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/common_term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/kb.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/unix_term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/utils.rs
+
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/console-374efb77c7c61090.d: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/common_term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/kb.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/unix_term.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/utils.rs
+
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/lib.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/common_term.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/kb.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/term.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/unix_term.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/console-0.9.2/src/utils.rs:

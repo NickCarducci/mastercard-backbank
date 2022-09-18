@@ -1,0 +1,112 @@
+compatibility_date = "2022-07-22"
+name = "mastercard-backbank-dev"
+#type = "javascript" # webpack 
+account_id = "9ddca7c9df604668fc6d14f079b2f066" 
+# workers_dev = true #if using default subdomain, here: api ok
+workers_dev = false # "self-contained HTML (sorta like Pages)"
+# https://community.cloudflare.com/t/do-workers-bypass-firewall-rules/268046
+#Wrangler 2 no zone (auto by route) https://github.com/NickCarducci/bear/blob/maintenance/wrangler.toml
+zone_id = "6202e995eadc857cd8e97e8ba608286d" # I seem to have to use workers' dash for custom domain
+# https://developers.cloudflare.com/pages/tutorials/build-an-api-with-workers#custom-domains
+# https://community.cloudflare.com/t/configure-workers-to-run-on-a-path-s-currently-served-by-cf-pages-any-plans-to-merge-pages-workers-sites/312550/2
+# wasm_modules={BACKBANK_WASM="./a.out.wasm"}# "./src/glue"}
+# webpack_config = "webpack.config.js"
+# route = "" #if not using default subdomain, here: api not needed, defaults err
+# zone_id = "" #if not using default subdomain, here: api not needed
+# [site]
+# bucket = "./dist"
+# entry-point = "workers-site"
+#https://developers.cloudflare.com/workers/wrangler/configuration/
+#route = { pattern = "https://sausage.saltbank.org/api*", zone_id = "6202e995eadc857cd8e97e8ba608286d" }
+main = "build/worker/shim.mjs"
+
+#kv_namespaces = [
+  #{binding="backbank",id="e4609a2b6fa943aab9e44185293dae3a"}
+#]
+#[[]]
+
+# [env.production.vars]
+# CF_API_KEY = "${{CF_API_KEY}}"
+# https://github.com/NickCarducci/bear
+
+kv_namespaces = [
+  {binding="backbank",id="e4609a2b6fa943aab9e44185293dae3a"}
+]
+[env.production]
+# exclude = ["node_modules","*"]
+# include = ["dist/*","src/*"]
+name = "mastercard-backbank"
+#route = "https://sausage.saltbank.org/api*"
+route = { pattern = "https://sausage.saltbank.org/api*", zone_id = "6202e995eadc857cd8e97e8ba608286d" }
+
+#[env.staging]
+#name = "mastercard-backbank-staging"
+#route = "https://sausage.saltbank.org/api*" # use "sausage.saltbank.org" for referer firewall rule Block
+# https://community.cloudflare.com/t/calling-a-worker-from-a-worker-on-the-same-domain/337053
+# https://community.cloudflare.com/t/is-a-worker-allowed-to-make-requests-to-another-worker/194733
+
+[durable_objects]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
+# ,{ name = "REQUIRE_CLASS_DURABLE_OBJECT", class_name = "Require" }
+
+[env.staging.durable_objects]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
+
+[env.production.durable_objects]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
+
+[env.preview.durable_objects]
+bindings = [{ name = "EXAMPLE_CLASS_DURABLE_OBJECT", class_name = "DurableObjectExample" }]
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["DurableObjectExample"]
+
+[[migrations]]
+tag = "v2"
+new_classes = ["Require"]
+
+[[migrations]]
+tag = "v3"
+deleted_classes = ["Require"]
+
+# [build.upload.rules]
+# type = "CommonJS"
+# globs = ["**/*.js", "**/*.cjs"]
+
+#[vars]
+#WORKERS_RS_VERSION = "0.0.10"
+
+#[build.upload]
+#format = "modules" # "service-workers"
+#dir = "build/worker" # dist for libraries...
+#main = "./shim.mjs"
+# Your provided upload_dir build/worker does not exist.workers/dist
+[build]
+# command = "curl https://sh.rustup.rs -sSf | sh -s -- -y && source \"$HOME/.cargo/env\" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild && worker-build --release"
+# command = "cargo install -q worker-build && worker-build --release"
+command = "worker-build --release" 
+# command = "PATH=\"$PATH:$HOME/.cargo/bin\" cargo install -q worker-build && worker-build --release"
+# command = "curl https://sh.rustup.rs -sSf | sh -s -- -y && export PATH=\"/root/.cargo/bin:$PATH\" && cargo install -q worker-build && worker-build --release"
+# command = "curl https://sh.rustup.rs -sSf | sh -s -- -y && export PATH=\"$HOME/.cargo/bin:$PATH\" && cargo install -q worker-build && worker-build --release"
+# command = "npx browserify src/index.js > src/index.js && npx parcel build src/index.js"
+# command = "ln -s ./a.out.wasm src/a.out.wasm && npm install && npm run build"
+# command = "npx parcel build src/index.js"
+# command = "node build.js"
+# command = "npx rollup src/index.js --file dist/index.js --format es"
+
+#[miniflare]
+#global_async_io = true 
+
+#wrangler2
+#"The default module rule {"type":"CompiledWasm","globs":["**/*.wasm"]} has the same type as a previous rule"
+#[[build.upload.rules]]
+#globs = ["**/*.wasm"]
+#type = "CompiledWasm"
+
+
+#Is the burden of this feature availing in [miniflare](https://community.cloudflare.com/t/using-authorization-credential-bearer-in-lieu-of-same-origin/409702) `global_async_io`.
+#= note: `async` trait functions are not currently supported [576](https://github.com/NickCarducci/mastercard-backbank/runs/7797953689?check_suite_focus=true#step:6:577)
+#= note: consider using the `async-trait` crate: https://crates.io/crates/async-trait
+
+#VSCODE IS OBTUSE: close as you would terminal to as rustup update _thereafter as well_

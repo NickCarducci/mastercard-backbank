@@ -1,0 +1,11 @@
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/oauth2-ee8e67d7e09c9e9d.rmeta: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/basic.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/devicecode.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/revocation.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/helpers.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/reqwest.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/types.rs
+
+/Users/nicholascarducci/Desktop/mastercard-backbank/target/rls/debug/deps/oauth2-ee8e67d7e09c9e9d.d: /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/lib.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/basic.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/devicecode.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/revocation.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/helpers.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/reqwest.rs /Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/types.rs
+
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/lib.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/basic.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/devicecode.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/revocation.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/helpers.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/reqwest.rs:
+/Users/nicholascarducci/.cargo/registry/src/github.com-1ecc6299db9ec823/oauth2-4.2.3/src/types.rs:
